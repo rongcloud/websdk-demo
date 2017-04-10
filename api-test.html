@@ -74,10 +74,12 @@ h1,h2{
 }
 </style>
 
-<!-- <script src="RongIMLib-2.2.5.js"></script> -->
 <script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
+
+
+
 
 
 <!-- 
@@ -85,7 +87,11 @@ check.js是做一些环境监测用的临时代码，仅限开发调试使用
 -->
 <script src="js/pre-check.js"></script>
 
-<!-- <script src="//cdn.ronghub.com/RongIMLib-dev-1.0.2.js"></script> -->
+
+
+
+
+
 <script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
@@ -93,6 +99,7 @@ check.js是做一些环境监测用的临时代码，仅限开发调试使用
 
 
 <script>
+"use strict";
 function showTips(data){
 	var dom = document.getElementById("show");
 		dom.style.display = "block";
@@ -125,13 +132,8 @@ function getTimer(begin){
 用户数据，群组数据，好友关系 必须有应用服务器提供
 显示会话信息需要从融云和应用服务器共同获取数据才能完整显示
 
-本地存储问题
-
-访问协议，禁止file:///
 
 
--->
-<!--
 开发环境 
 	默认appkey = 8w7jv4qb78a9y，已上线
 	当前用户：user8
