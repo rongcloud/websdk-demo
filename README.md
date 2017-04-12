@@ -1,4 +1,6 @@
-# websdk-demo
+# WebSDK demo
+
+SDK require load: [https://rongcloud.github.io/websdk-demo/require.html](https://rongcloud.github.io/websdk-demo/require.html)
 
 Connect + Receive Message: [https://rongcloud.github.io/websdk-demo/connect-check.html](https://rongcloud.github.io/websdk-demo/connect-check.html)
 
