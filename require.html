@@ -29,20 +29,42 @@ showInfo("开始加载");
 	
 <script>
 "use strict";
-require.config({
-    paths: {
-    	protobuf: '//cdn.ronghub.com/protobuf-2.1.5.min',
-    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.2.4.min'
-    }
-});
 
-require(['protobuf','RongIMLib'], function(protobuf,RongIMLib) {
-    showInfo("require done");
+var isSupportSocket = (function(ws){
+	return ws.toString() == "function WebSocket() { [native code] }";
+})(window.WebSocket || function(){});
 
-    var RongIMClient = RongIMLib.RongIMClient;
+if(isSupportSocket){
+	require.config({
+	    paths: {
+	    	protobuf: '//cdn.ronghub.com/protobuf-2.1.5.min',
+	    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.2.5.min'
+	    }
+	});
 
-    init(RongIMLib,RongIMClient);
-});
+	require(['protobuf','RongIMLib'], function(protobuf,RongIMLib) {
+	    showInfo("require done");
+
+	    var RongIMClient = RongIMLib.RongIMClient;
+
+	    init(RongIMLib,RongIMClient);
+	});
+}else{
+	require.config({
+	    paths: {
+	    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.2.5.min'
+	    }
+	});
+
+	require(['RongIMLib'], function(RongIMLib) {
+	    showInfo("require done");
+
+	    var RongIMClient = RongIMLib.RongIMClient;
+
+	    init(RongIMLib,RongIMClient);
+	});
+}
+
 
 
 
@@ -149,7 +171,7 @@ function init(RongIMLib,RongIMClient){
 			showInfo("链接成功，用户id：" + userId);
 		},
 		onTokenIncorrect: function() {
-			console.log('token无效');
+			showInfo('token无效');
 		},
 		onError:function(errorCode){
 		  var info = '';
