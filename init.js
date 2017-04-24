@@ -1,7 +1,7 @@
 function init(params,callbacks){	
 	var appKey = params.appKey;
 	var token = params.token;
-	var navi = params.navi;
+	var navi = params.navi || "";
 
 	if(navi !== ""){
 		//私有云

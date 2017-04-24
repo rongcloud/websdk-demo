@@ -10,6 +10,9 @@
 body{
     font-family:arial;
 }
+.wrapper{
+    visibility:hidden;
+}
 .wrapper input{
   margin:10px;
 }
@@ -60,67 +63,43 @@ body{
 #acceptVideo,
 #acceptAudio,
 #hungup,
-#exchangeWin{
+#switchVideoWindows{
     display: none;
 }
 
 </style>
 
 <div class="wrapper">
-    <div id="main">
-    </div>
+    <div id="main"></div>
 
     <input type="button" value="视频通话" id="video">
     <input type="button" value="音频通话" id="audio">
 
-    
-    
-    <input type="button" value="视频转音频" id="convert">
-    
+    <input type="button" value="视频转音频" id="convert">    
     <input type="button" value="静音" id="mute">
     
     <input type="button" value="接通视频" id="acceptVideo">
     <input type="button" value="接通音频" id="acceptAudio">
     <input type="button" value="挂断" id="hungup">
-    <input type="button" value="窗口切换" id="exchangeWin">
-
+    <input type="button" value="窗口切换" id="switchVideoWindows">
 </div>
+
 <div class="notice">
 使用说明：<br>
     1、下载代码 <br>
     2、请使用自己已经开通VoIP服务的 appKey 和 users[至少要有两个用户]<br>
     3、根据实际访问地址和 userid 修改 主叫访问地址 和 被叫访问地址<br>
-    4、部署测试，主叫: http://yourhost/voip.html，被叫: http://yourhost/voip.html?userId=receiver
+    4、部署测试，主叫: http://yourhost/voip.html，被叫: http://yourhost/voip.html?userId=receiver <br>
+    5、官方文档 <a href="http://www.rongcloud.cn/docs/web_calllib.html">http://www.rongcloud.cn/docs/web_calllib.html</a>
 </div>
 
+<script src="lib/jquery-3.1.1.js"></script>
 
 <script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
 <script src="//cdn.ronghub.com/RongCallLib-2.2.0.min.js"></script>
-<script src="lib/jquery-3.1.1.js"></script>
+
+<script src="init.js"></script>
 <script>
-var changeWin = function(){
-    var myScreen, otherScreen, canvas;
-    if($("#main > div:first").attr('id') === undefined){
-        myScreen = $("#main > div:first");
-        otherScreen = $("#main > div:eq(1)");
-    } else {
-        myScreen = $("#main > div:eq(1)");
-        otherScreen = $("#main > div:first");
-    }
-    myScreen.toggleClass('mainSmall');
-    otherScreen.toggleClass('big');
-}
-
-var video = $('#video'),
-    audio = $('#audio'),
-    mute = $('#mute'),
-    convert = $('#convert'),
-    acceptVideo = $('#acceptVideo'),
-    acceptAudio = $('#acceptAudio'),
-    hungup = $('#hungup');
-    exchangeWin = $('#exchangeWin');
-
-
 var show = function(nodes){
     $(nodes).each(function (index, item){
         item.show();
@@ -133,14 +112,6 @@ var hide = function(nodes){
     });
 };
 
-
-
-/*
-音视频流量问题，声网提供了具体数据：
-时间单位每分钟：音频 40kbps,   SD 200-400 kbsp, HD  500-1000kbps HD+ >1000kpbs
-*/ 
-
-var appKey = '8w7jv4qb78a9y';
 //两个测试用户
 var users = [
     {
@@ -157,89 +128,44 @@ var users = [
 //默认主叫方用户id
 var userId = users[0].userid;
 
-//默认被叫放用户id,可以多个
-var inviteUserIds = users[1].userid;
-var userToken = users[0].token;
+//默认被叫放用户id
+var inviteUserId = users[1].userid;
+var token = users[0].token;
 
 //为了方便演示,根据访问地址呼唤主叫方和被叫方
 if(location.search.indexOf("userId") > -1){
     userId = users[1].userid;
-    inviteUserIds = users[0].userid;
-    userToken = users[1].token;
+    inviteUserId = users[0].userid;
+    token = users[1].token;
 }
-var targetId = inviteUserIds;
-
-
 
 
 // 初始化 WebSDK 
-RongIMClient.init(appKey);
-
-//链接
-RongIMClient.connect(userToken, {
-    onSuccess: function(userId) {
-        connected();
-        console.log("Login successfully." + userId);
-    },
-    onError:function(errorCode){
-        console.log(errorCode);
-    }
-});
-
-
-var connected = function(){
-    // $(".wrapper").show();
+var params = {
+    appKey : '8w7jv4qb78a9y',
+    token : token
 };
 
-//状态监听
-RongIMClient.setConnectionStatusListener({
-    onChanged: function(status) {
-        //console.log(status);
-    }
-});
-
-//新消息监听
-RongIMClient.setOnReceiveMessageListener({
-    onReceived: function(message) {
-        if (message.offLineMessage){
-            return;
-        }
+var callbacks = {
+    getInstance : function(instance){
+        //instance.sendMessage
+        console.log("链接成功，可进行音视频通话测试！")
+        $(".wrapper").css("visibility","visible");
+    },
+    getCurrentUser : function(userInfo){
+        console.log(userInfo.userId);
+        console.log("链接成功；userid=" + userInfo.userId);
+    },
+    receiveNewMessage : function(message){
+        console.log("new message");
         console.log(message);
-        switch (message.messageType) {
-            case RongIMClient.MessageType.InviteMessage:
-                console.log("InviteMessage");
-                var isVideo = message.content.mediaType == mediaVideo;
-                var node = isVideo ? acceptVideo : acceptAudio;
-                show([node, hungup]);
-                hide([video, audio]);
-            break; 
-
-            case RongIMClient.MessageType.SummaryMessage:
-                // 通话信息，挂断收到此消息
-                console.log("SummaryMessage");
-                hide([hungup, convert, acceptAudio, acceptVideo, mute, exchangeWin]);
-                show([video, audio]);
-            break;
-            
-            case RongIMClient.MessageType.RingingMessage:
-                // 对方接到视频指令，己方播放响铃
-                console.log("RingingMessage");
-            break;
-          
-            case RongIMClient.MessageType.AcceptMessage:
-                console.log("AcceptMessage");
-                show([convert, mute, hungup, exchangeWin]);
-                hide([audio, video]);
-            break;
-
-            case RongIMClient.MessageType.MediaModifyMessage:
-                console.log("MediaModifyMessage");
-                // 音视频切换
-            break;
-        }
     }
-});
+};
 
+init(params,callbacks);
+
+
+//call lib 部分代码
 var options = {
   container : "main",   //主视频容器 id
   childScreenCls : "small"   //小窗口容器 css 样式
@@ -253,12 +179,27 @@ var mediaVideo = RongIMLib.VoIPMediaType.MEDIA_VEDIO; //视频通话
 var mediaAudio = RongIMLib.VoIPMediaType.MEDIA_AUDIO; //音频通话
 var ErrorCode = RongIMLib.ErrorCode;
 
-var converType = RongIMLib.ConversationType.PRIVATE;
+var conversationType = RongIMLib.ConversationType.PRIVATE;
 //消息体中的附加信息,用于消息的扩展
 var extra = "";  
 
-var startConversation = function(converType, targetId, inviteUserIds, mediaType, extra){
-    CallLib.startCall(converType, targetId, inviteUserIds, mediaType, extra, {
+var targetId = inviteUserId;
+
+var video = $('#video'),
+    audio = $('#audio'),
+    mute = $('#mute'),
+    convert = $('#convert'),
+    acceptVideo = $('#acceptVideo'),
+    acceptAudio = $('#acceptAudio'),
+    hungup = $('#hungup');
+    switcher = $('#switchVideoWindows');
+
+/*
+音视频流量问题，声网提供了具体数据：
+时间单位每分钟：音频 40kbps,   SD 200-400 kbsp, HD  500-1000kbps HD+ >1000kpbs
+*/ 
+var startConversation = function(conversationType, targetId, inviteUserId, mediaType, extra){
+    CallLib.startCall(conversationType, targetId, inviteUserId, mediaType, extra, {
       onSuccess:function(){
          show([hungup]);
          hide([video, audio]);
@@ -271,16 +212,29 @@ var startConversation = function(converType, targetId, inviteUserIds, mediaType,
 
 // 发起视频通话
 video.click(function(){
-    startConversation(converType, targetId, [inviteUserIds], mediaVideo, extra);
+    startConversation(conversationType, targetId, [inviteUserId], mediaVideo, extra);
 });
 
 // 发起音频通话
 audio.click(function(){
-    startConversation(converType, targetId, [inviteUserIds], mediaAudio, extra);
+    startConversation(conversationType, targetId, [inviteUserId], mediaAudio, extra);
 });
 
+var switchVideoWindows = function(){
+    var myScreen, otherScreen, canvas;
+    if($("#main > div:first").attr('id') === undefined){
+        myScreen = $("#main > div:first");
+        otherScreen = $("#main > div:eq(1)");
+    } else {
+        myScreen = $("#main > div:eq(1)");
+        otherScreen = $("#main > div:first");
+    }
+    myScreen.toggleClass('mainSmall');
+    otherScreen.toggleClass('big');
+}
+
 // 音视频互转 TODO 功能未调通
-var convertItem = {
+var conversationItem = {
     method: 'videoToAudio',
     videoToAudio: function(btn){
         btn.val('音频转视频');
@@ -293,14 +247,14 @@ var convertItem = {
 };
 
 convert.click(function(){
-   var method = convertItem.method;
-   CallLib[method](converType, targetId, function(){
-     convertItem[method](convert);
+   var method = conversationItem.method;
+   CallLib[method](conversationType, targetId, function(){
+     conversationItem[method](convert);
    });
 });
 
-exchangeWin.click(function(){
-   changeWin();
+switcher.click(function(){
+   switchVideoWindows();
 });
 
 // 静音、取消静音
@@ -326,7 +280,7 @@ mute.click(function(){
 acceptVideo.click(function(){
     CallLib.joinCall(mediaVideo,{
        onSuccess:function(){
-         show([mute, convert, exchangeWin]);     
+         show([mute, convert, switchVideoWindows]);     
          hide([video, audio, acceptVideo]);   
        },
        onError:function(err){
@@ -339,7 +293,7 @@ acceptVideo.click(function(){
 acceptAudio.click(function(){
     CallLib.joinCall(mediaAudio,{
        onSuccess:function(){
-         show([mute, convert, exchangeWin]); 
+         show([mute, convert, switchVideoWindows]); 
          hide([video, audio, acceptAudio]);       
        },
        onError:function(err){
@@ -350,9 +304,8 @@ acceptAudio.click(function(){
 
 // 挂断
 hungup.click(function(){
-    CallLib.hungupCall(converType,targetId, ErrorCode.HANGUP);
+    CallLib.hungupCall(conversationType,targetId, ErrorCode.HANGUP);
 });
-
 </script>   
 </body>
 </html>
