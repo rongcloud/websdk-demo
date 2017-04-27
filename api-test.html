@@ -1202,7 +1202,8 @@ function getBase64Image(){
 		context.font = "20pt Arial";    			
 		context.fillStyle = "blue"; 
 		context.fillText("RongCloud.cn", 10, 20);
-	var content = canvas.toDataURL("image/png");
+	var content = canvas.toDataURL("image/jpeg");
+		content = content.replace("data:image/jpeg;base64,","");
 	return content;
 }
 </script>

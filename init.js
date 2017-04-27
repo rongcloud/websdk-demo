@@ -7,10 +7,14 @@ function init(params,callbacks){
 		//私有云
 		var config = {
 			navi : navi
-		}
+		};
+		console.log("私有云");
+		console.log(params);
 		RongIMLib.RongIMClient.init(appKey,null,config);
 	}else{
 		//公有云
+		console.log("公有云");
+		console.log(params);
 		RongIMLib.RongIMClient.init(appKey);
 	}
 
