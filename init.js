@@ -18,8 +18,7 @@ function init(params,callbacks){
 		RongIMLib.RongIMClient.init(appKey);
 	}
 
-	RongIMLib.RongIMClient.init(appKey);
-	instance = RongIMClient.getInstance();
+	var instance = RongIMClient.getInstance();
 
 	// 连接状态监听器
 	RongIMClient.setConnectionStatusListener({
