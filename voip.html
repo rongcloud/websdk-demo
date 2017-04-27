@@ -25,7 +25,7 @@ body{
     margin-bottom:20px;
 }
     
-.small{
+.rong-calllib-remote{
     height: 150px;
     width: 200px;
     border:1px solid #ccc;
@@ -96,10 +96,21 @@ body{
 <script src="lib/jquery-3.1.1.js"></script>
 
 <script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
-<script src="//cdn.ronghub.com/RongCallLib-2.2.0.min.js"></script>
+<!-- <script src="//cdn.ronghub.com/RongCallLib-2.2.0.min.js"></script> -->
+<script src="./lib/RongCallLib-2.3.0.min.js"></script>
 
 <script src="init.js"></script>
 <script>
+
+var video = $('#video'),
+    audio = $('#audio'),
+    mute = $('#mute'),
+    convert = $('#convert'),
+    acceptVideo = $('#acceptVideo'),
+    acceptAudio = $('#acceptAudio'),
+    hungup = $('#hungup');
+    switcher = $('#switchVideoWindows');
+
 var show = function(nodes){
     $(nodes).each(function (index, item){
         item.show();
@@ -113,16 +124,28 @@ var hide = function(nodes){
 };
 
 //两个测试用户
+// var users = [
+//     {
+//         "userid": "user9", 
+//         "token": "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg=="
+//     }, 
+//     {
+//         "userid": "user10", 
+//         "token": "4FGCL0oQ/E72nU4ivbui8uHR/ySxKaD1cAX2biXsYR6RsLYO9xAA4ooa+q3n42JnVTQyMAdFUiDsjFRDYZaQeg=="
+//     }
+// ];
+
 var users = [
     {
-        "userid": "user9", 
-        "token": "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg=="
+        "userid": "22", 
+        "token": "wauJbncZeKNovpWspFfQjj9mhd99ZpWeKnnjvyii9624oCw+lkizZZk2cDm5E0mmTc83XNfC9mhiO52BDGatrQ=="
     }, 
     {
-        "userid": "user10", 
-        "token": "4FGCL0oQ/E72nU4ivbui8uHR/ySxKaD1cAX2biXsYR6RsLYO9xAA4ooa+q3n42JnVTQyMAdFUiDsjFRDYZaQeg=="
+        "userid": "11", 
+        "token": "4PvJGtvvu3ljOOfnBEKXSN35nVOQAyW8ozA3fv/v/QPNYFH1OgiiSObsbNy2zw0xIn/9dEDeXIac2fD1lhG7pQ=="
     }
 ];
+
 //注意根据上述users 修改页面被叫访问地址中参数值
 
 //默认主叫方用户id
@@ -141,9 +164,46 @@ if(location.search.indexOf("userId") > -1){
 
 
 // 初始化 WebSDK 
+// var params = {
+//     appKey : '8w7jv4qb78a9y',
+//     token : token
+// };
+
 var params = {
-    appKey : '8w7jv4qb78a9y',
+    appKey : '0vnjpoadnpisz',
     token : token
+};
+
+
+var messageHandler = function(messageType){
+    var handler = {
+        InviteMessage: function(message){
+            var isVideo = message.content.mediaType == mediaVideo;
+            var node = isVideo ? acceptVideo : acceptAudio;
+            show([node, hungup]);
+            hide([video, audio]);
+        },
+        SummaryMessage: function(message){
+             // 通话信息，挂断收到此消息
+            hide([hungup, convert, acceptAudio, acceptVideo, mute, switcher]);
+            show([video, audio]);
+        },
+        RingingMessage: function(message){
+            // 对方接到视频指令，己方播放响铃
+        },
+        AcceptMessage: function(message){
+            show([convert, mute, hungup]);
+            hide([audio, video]);
+        },
+        MediaModifyMessage: function(message){
+            // 音视频切换
+        },
+        otherMessage: function(message){
+            console.log('other-message', message);
+        }
+    };
+
+    return messageType in handler ? handler[messageType] : handler.otherMessage;
 };
 
 var callbacks = {
@@ -157,8 +217,11 @@ var callbacks = {
         console.log("链接成功；userid=" + userInfo.userId);
     },
     receiveNewMessage : function(message){
-        console.log("new message");
-        console.log(message);
+       if (message.offLineMessage){
+            return;
+        }
+        var messageType = message.messageType;
+        messageHandler(messageType)(message);
     }
 };
 
@@ -166,9 +229,12 @@ init(params,callbacks);
 
 
 //call lib 部分代码
+
+var localWindow = $('#main')[0];
 var options = {
-  container : "main",   //主视频容器 id
-  childScreenCls : "small"   //小窗口容器 css 样式
+  container : {
+    local: localWindow
+  }
 };
 
 // 初始化 WebCallLib
@@ -184,15 +250,6 @@ var conversationType = RongIMLib.ConversationType.PRIVATE;
 var extra = "";  
 
 var targetId = inviteUserId;
-
-var video = $('#video'),
-    audio = $('#audio'),
-    mute = $('#mute'),
-    convert = $('#convert'),
-    acceptVideo = $('#acceptVideo'),
-    acceptAudio = $('#acceptAudio'),
-    hungup = $('#hungup');
-    switcher = $('#switchVideoWindows');
 
 /*
 音视频流量问题，声网提供了具体数据：
@@ -280,7 +337,7 @@ mute.click(function(){
 acceptVideo.click(function(){
     CallLib.joinCall(mediaVideo,{
        onSuccess:function(){
-         show([mute, convert, switchVideoWindows]);     
+         show([mute, convert, switcher]);     
          hide([video, audio, acceptVideo]);   
        },
        onError:function(err){
@@ -293,7 +350,7 @@ acceptVideo.click(function(){
 acceptAudio.click(function(){
     CallLib.joinCall(mediaAudio,{
        onSuccess:function(){
-         show([mute, convert, switchVideoWindows]); 
+         show([mute, convert, switcher]); 
          hide([video, audio, acceptAudio]);       
        },
        onError:function(err){
