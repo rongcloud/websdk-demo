@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no">
+    <title>public demo</title>
+    <link rel="stylesheet" href="../reset.css">
+    <link rel="stylesheet" href="public.css?0414">
+
+    <script src="../lib/jquery-3.1.1.js"></script>
+    <script src="../lib/vue-2.1.4.js"></script>
+    <script src="js/public-common.js"></script>
+    <!--<script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>-->
+    <script src="../lib/RongIMLib-2.2.5.js"></script>
+    <script src="//cdn.ronghub.com/RongEmoji-2.2.5.min.js"></script>
+
+
+    <script src="../init.js"></script>
+
+    <script src="js/public-chat.js"></script>
+    <script src="js/public-info.js"></script>
+    <script src="js/public-list.js"></script>
+    <script src="js/public-search.js"></script>
+    <script src="js/public-article.js"></script>
+</head>
+<body>
+<div id="publicPage">
+    <!--公众号搜索页->搜索
+    公众号列表页
+    公众号信息页->搜索结果 点击关注 取消关注公众号
+    公众号消息详情页->接收公众号推送-->
+
+    <component :is="stat.currentView" :stat="stat"></component>
+
+
+</div>
+</body>
+<script type="text/javascript">
+    //初始化
+    var publicApp;
+    var userInfo = {
+        appKey: "e0x9wycfeazyq",
+        token: "RMmWBeca3K1iQ4yVKrWy6OKSeuOyOAQ/XPr4sUlvw/p2OWJL0P5SG28RhmHYnEOOK2NQ8457HM0="
+    };
+    var callbacks = {
+        CONNECTED: function (instance) { //传入实例参数
+            publicApp=initVue(instance);
+
+        },
+        Success: function (id) {
+        },
+        Received: function (message) {
+            if (message.messageType == RongIMClient.MessageType.TextMessage || message.messageType == "PublicServiceMultiRichContentMessage"){
+                publicApp.stat.msgList.push(message);
+            }
+        }
+    };
+    init(userInfo, callbacks);
+    function initVue(instance) {
+        var publicPage = new Vue({
+            el: '#publicPage',
+            data: {
+                stat: {
+                    currentView: 'publicList',
+                    publicList: [],
+                    searchVal: 'e',
+                    searchList: [],
+                    searchResult: true,
+                    currentPublic: {},
+                    sendMsgVal: '',
+                    msgList: [],
+                    userInfo: '',
+                    articleUrl: ''
+
+                }
+            },
+            components: {
+                publicChat: getPublicChat(instance),
+                publicInfo: getPublicInfo(instance),
+                publicList: getPublicList(instance),
+                publicSearch: getPublicSearch(instance),
+                publicArticle: getPublicArticle(instance)
+            },
+            methods: {}
+        });
+
+        //转换emoji表情
+        Vue.filter('transEmoji', function (input) {
+            return RongIMLib.RongIMEmoji.symbolToEmoji(input)
+        });
+
+        return publicPage;
+    }
+
+</script>
+</html>

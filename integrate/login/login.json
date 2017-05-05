@@ -1,0 +1,10 @@
+{
+	"code": 200,
+	"result": {
+		"id": "rongcloud",
+		"token": "C4nEgo1TK0Ly6xxxxxx",
+
+		"name" : "融云",
+		"portraitUri" : "https://developer.rongcloud.cn/static/imgs/logo.png"
+	}
+}

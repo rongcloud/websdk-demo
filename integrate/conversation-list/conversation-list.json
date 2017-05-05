@@ -1,0 +1,229 @@
+{
+  "userInfos": {
+    "user1": {
+      "id": "user1",
+      "nickname": "产品",
+      "region": "86",
+      "phone": "13269772701",
+      "portraitUri": "http://img.duoziwang.com/2016/12/08/18594927932.jpg"
+    },
+    "user2": {
+      "id": "user2",
+      "nickname": "开发",
+      "region": "86",
+      "phone": "13269772702",
+      "portraitUri": "http://www.tshseo.com/uploads/allimg/141012/21130U347-12.jpg"
+    },
+    "user3": {
+      "id": "user3",
+      "nickname": "测试",
+      "region": "86",
+      "phone": "13269772703",
+      "portraitUri": "http://www.yangshuai.net/wp-content/uploads/2012/01/812.jpg"
+    }
+  },
+  "groupInfos": {
+    "workGroup": {
+      "id": "workGroup",
+      "name": "工作群",
+      "portraitUri": "http://intern.wargaming.net/wp-content/uploads/2016/04/community-icon-01-1.png",
+      "creatorId": "user1",
+      "memberCount": 3,
+      "maxMemberCount": 500
+    }
+  },
+  "conversation": [
+    {
+      "conversationType": 1,
+      "latestMessage": {
+        "content": {
+          "messageName": "TextMessage",
+          "content": "  你好 ",
+          "extra": "helloExtra"
+        },
+        "conversationType": 1,
+        "objectName": "RC:TxtMsg",
+        "messageDirection": 2,
+        "messageId": "1_5709252",
+        "receivedStatus": 1,
+        "receivedTime": 1493029390272,
+        "senderUserId": "user3",
+        "sentTime": 1493027215795,
+        "targetId": "user3",
+        "messageType": "TextMessage",
+        "messageUId": "5DPU-MQPM-C43A-D3E6",
+        "offLineMessage": true
+      },
+      "latestMessageId": "1_5709252",
+      "objectName": "RC:TxtMsg",
+      "receivedStatus": 1,
+      "sentTime": 1493027215795,
+      "targetId": "user3",
+      "unreadMessageCount": 0
+    },
+    {
+      "conversationType": 1,
+      "latestMessage": {
+        "content": {
+          "messageName": "TextMessage",
+          "content": "  你好 ",
+          "extra": "helloExtra"
+        },
+        "conversationType": 1,
+        "objectName": "RC:TxtMsg",
+        "messageDirection": 2,
+        "messageId": "1_2422848",
+        "receivedStatus": 1,
+        "receivedTime": 1493029390272,
+        "senderUserId": "user2",
+        "sentTime": 1493027180162,
+        "targetId": "user2",
+        "messageType": "TextMessage",
+        "messageUId": "5DPU-MMEG-843A-D3E6",
+        "offLineMessage": true
+      },
+      "latestMessageId": "1_2422848",
+      "objectName": "RC:TxtMsg",
+      "receivedStatus": 1,
+      "sentTime": 1493027180162,
+      "targetId": "user2",
+      "unreadMessageCount": 0
+    },
+    {
+      "conversationType": 3,
+      "latestMessage": {
+        "content": {
+          "messageName": "TextMessage",
+          "content": "hello",
+          "extra": "helloExtra"
+        },
+        "conversationType": 3,
+        "objectName": "RC:TxtMsg",
+        "messageDirection": 2,
+        "messageId": "3_13985191",
+        "receivedStatus": 1,
+        "receivedTime": 1493029390271,
+        "senderUserId": "user2",
+        "sentTime": 1493024687146,
+        "targetId": "workGroup",
+        "messageType": "TextMessage",
+        "messageUId": "5DPU-D645-8CVQ-Q0FE",
+        "offLineMessage": true
+      },
+      "latestMessageId": "3_13985191",
+      "objectName": "RC:TxtMsg",
+      "receivedStatus": 1,
+      "sentTime": 1493024687146,
+      "targetId": "workGroup",
+      "unreadMessageCount": 0
+    }
+  ],
+  "translate-conversation": [
+    {
+      "conversationType": 1,
+      "latestMessage": {
+        "content": {
+          "messageName": "TextMessage",
+          "content": "  你好 ",
+          "extra": "helloExtra"
+        },
+        "conversationType": 1,
+        "objectName": "RC:TxtMsg",
+        "messageDirection": 2,
+        "messageId": "1_5709252",
+        "receivedStatus": 1,
+        "receivedTime": 1493029390272,
+        "senderUserId": "user3",
+        "sentTime": 1493027215795,
+        "targetId": "user3",
+        "messageType": "TextMessage",
+        "messageUId": "5DPU-MQPM-C43A-D3E6",
+        "offLineMessage": true
+      },
+      "latestMessageId": "1_5709252",
+      "objectName": "RC:TxtMsg",
+      "receivedStatus": 1,
+      "sentTime": 1493027215795,
+      "targetId": "user3",
+      "unreadMessageCount": 0,
+      "userInfo": {
+        "id": "user3",
+        "nickname": "测试",
+        "region": "86",
+        "phone": "13269772703",
+        "portraitUri": "http://www.yangshuai.net/wp-content/uploads/2012/01/812.jpg"
+      }
+    },
+    {
+      "conversationType": 1,
+      "latestMessage": {
+        "content": {
+          "messageName": "TextMessage",
+          "content": "  你好 ",
+          "extra": "helloExtra"
+        },
+        "conversationType": 1,
+        "objectName": "RC:TxtMsg",
+        "messageDirection": 2,
+        "messageId": "1_2422848",
+        "receivedStatus": 1,
+        "receivedTime": 1493029390272,
+        "senderUserId": "user2",
+        "sentTime": 1493027180162,
+        "targetId": "user2",
+        "messageType": "TextMessage",
+        "messageUId": "5DPU-MMEG-843A-D3E6",
+        "offLineMessage": true
+      },
+      "latestMessageId": "1_2422848",
+      "objectName": "RC:TxtMsg",
+      "receivedStatus": 1,
+      "sentTime": 1493027180162,
+      "targetId": "user2",
+      "unreadMessageCount": 0,
+      "userInfo": {
+        "id": "user2",
+        "nickname": "开发",
+        "region": "86",
+        "phone": "13269772702",
+        "portraitUri": "http://www.tshseo.com/uploads/allimg/141012/21130U347-12.jpg"
+      }
+    },
+    {
+      "conversationType": 3,
+      "latestMessage": {
+        "content": {
+          "messageName": "TextMessage",
+          "content": "hello",
+          "extra": "helloExtra"
+        },
+        "conversationType": 3,
+        "objectName": "RC:TxtMsg",
+        "messageDirection": 2,
+        "messageId": "3_13985191",
+        "receivedStatus": 1,
+        "receivedTime": 1493029390271,
+        "senderUserId": "user2",
+        "sentTime": 1493024687146,
+        "targetId": "workGroup",
+        "messageType": "TextMessage",
+        "messageUId": "5DPU-D645-8CVQ-Q0FE",
+        "offLineMessage": true
+      },
+      "latestMessageId": "3_13985191",
+      "objectName": "RC:TxtMsg",
+      "receivedStatus": 1,
+      "sentTime": 1493024687146,
+      "targetId": "workGroup",
+      "unreadMessageCount": 0,
+      "userInfo": {
+        "id": "workGroup",
+        "name": "工作群",
+        "portraitUri": "http://intern.wargaming.net/wp-content/uploads/2016/04/community-icon-01-1.png",
+        "creatorId": "user1",
+        "memberCount": 3,
+        "maxMemberCount": 500
+      }
+    }
+  ]
+}
