@@ -17,4 +17,4 @@ VoIP test: [https://rongcloud.github.io/websdk-demo/voip.html](https://rongcloud
 Upload: [https://github.com/rongcloud/rongcloud-web-im-upload](https://github.com/rongcloud/rongcloud-web-im-upload)
 
 
-Integrate Guide: [https://github.com/rongcloud/integrate/guide.html](https://github.com/rongcloud/integrate/guide.html)
+Integrate Guide: [https://rongcloud.github.io/websdk-demo/integrate/guide.html](https://rongcloud.github.io/websdk-demo/integrate/guide.html)
