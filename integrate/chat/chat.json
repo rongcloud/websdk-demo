@@ -1,0 +1,42 @@
+{
+  "historyMessage": [
+    {
+      "content": {
+        "messageName": "TextMessage",
+        "content": "欢迎关注融云公众号！融云提供的即时通讯云服务是将即时通讯技术封装成 SDK 供全球开发者下载使用，并向开发者提供平台环境、技术支持以及后期运维等服务，使开发者的业务能够快速获得即时通讯的能力，实现单聊、群聊等功能，满足社交、客服、聊天室等场景需要。",
+        "extra": "helloExtra"
+      },
+      "conversationType": 1,
+      "objectName": "RC:TxtMsg",
+      "messageDirection": 2,
+      "messageId": "1_8667435",
+      "receivedStatus": 1,
+      "receivedTime": 1493257272432,
+      "senderUserId": "user2",
+      "sentTime": 1493200373450,
+      "targetId": "user2",
+      "messageType": "TextMessage",
+      "messageUId": "5DQJ-BC6P-843A-D3E6",
+      "offLineMessage": true
+    },
+    {
+      "content": {
+        "messageName": "TextMessage",
+        "content": "好的",
+        "extra": "附加信息"
+      },
+      "conversationType": 1,
+      "objectName": "RC:TxtMsg",
+      "messageDirection": 1,
+      "messageId": "1_148333",
+      "receivedStatus": 1,
+      "receivedTime": 1493257272432,
+      "senderUserId": "user1",
+      "sentTime": 1493201413193,
+      "targetId": "",
+      "messageType": "TextMessage",
+      "messageUId": "5DQJ-FB49-443A-D3E7",
+      "offLineMessage": true
+    }
+  ]
+}

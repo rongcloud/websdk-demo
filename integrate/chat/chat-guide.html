@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天窗口 集成引导</title>
+</head>
+<link rel="stylesheet" href="../integrate.css">
+<body>
+<div class="wrap">
+    <h1>聊天窗口 集成引导</h1>
+	<p>聊天窗口由两部分组成，历史消息的列表以及发送消息的窗口，getHistroyMessage，sendMessage，消息旁的用户信息与会话列表处理方式一致</p>
+	<p>获取历史消息文档: <a href="http://www.rongcloud.cn/docs/web.html#history_message">http://www.rongcloud.cn/docs/web.html#history_message</a></p>
+    <p>发送消息文档: <a href="http://www.rongcloud.cn/docs/web_api_demo.html#message_send">http://www.rongcloud.cn/docs/web_api_demo.html#message_send</a></p>
+	<p>集成 demo: <a href="chat.html">chat.html</a></p>
+    <div class="guide">
+        <div class="steps">
+            <h2>1.历史消息列表</h2>
+            <div class="content">
+				<p>模拟的历史消息数据: <a href="chat.json">chat.json</a> 中的 "historyMessage"</p>
+<pre>
+/*
+ * getHistoryMessages 拉取本地历史消息记录，如果本地没有历史消息，会自动从融云服务器拉去历史消息。
+ * @param  {ConversationType}          conversationType 会话类型
+ * @param  {string}                    targetId         用户 Id
+ * @param  {number|null}               pullMessageTime  拉取历史消息起始位置(格式为毫秒数)，可以为 null
+ * @param  {number}                    count            历史消息数量
+ * @param  {ResultCallback "Message[]"} callback         回调函数
+ */
+instance.getHistoryMessages(conversationType, targetId, null, 20, {
+	onSuccess: function (list, hasMsg) {
+		// list 为拉取到的历史消息列表
+		// hasMsg 为 boolean 值，如果为 true 则表示还有剩余历史消息可拉取，为 false 的话表示没有剩余历史消息可供拉取。
+		// renderHistoryMessages 为自定义的渲染页面方法
+		renderHistoryMessages(list, hasMsg, instance);
+	}
+});
+</pre>
+            </div>
+        </div>
+
+		<div class="steps">
+			<h2>2.发送消息窗口</h2>
+			<div class="content">
+<pre>
+/*
+ * sendMessage 发送消息。
+ * @param  {ConversationType}        conversationType 会话类型
+ * @param  {string}                  targetId         目标 Id
+ * @param  {MessageContent}          messageContent   消息类型
+ * @param  {SendMessageCallback}     sendCallback
+ * @param  {ResultCallback "Message"} resultCallback   返回值，函数回调
+ */
+instance.sendMessage(conversationType, targetId, msg, {
+		// 发送消息成功
+		onSuccess: function (message) {
+		}
+	}
+);
+</pre>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+
+</body>
+</html>

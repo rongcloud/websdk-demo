@@ -1,0 +1,127 @@
+<div class="public-chat">
+    <header class="header">
+        <i class="icons icon-return" @touchend="goPublicList" @click="goPublicList"></i>
+        <h2 class="title">{{stat.currentPublic.name}}</h2>
+        <button type="button" class="icons public-info-btn" @touchend="goPublicInfo"  @click="goPublicInfo">信息</button>
+    </header>
+
+    <div class="chat-content">
+        <div class="message-wrapper">
+            <!--<div class="message-item message-multi" @touchend="goPublicArticle">
+                <div class="message-multi-first">
+                    <div class="material-cover-img">
+                        <img src="http://rongcloud-file.ronghub.com/e2d9ef4d0185f7ea5d.jpeg?attname=1.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:WaY6IRF10KAJI-8AH8tD11XF_Ac=.jpeg">
+                    </div>
+                    <div class="material-title">
+                        如果你来过了北京，就等于去了全世界！
+                    </div>
+                </div>
+                <div class="message-multi-second">
+                    <div class="material-title">
+                        厉害了，北京交通又将大爆发，全国都羡慕！
+                    </div>
+                    <div class="material-cover-img">
+                        <img src="http://rongcloud-file.ronghub.com/37852c41c6a2909050.jpeg?attname=7.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:-Wk2QaYWCupt1GOaS2dPUfFbf28=">
+                    </div>
+                </div>
+                <div class="message-multi-second">
+                    <div class="material-title">
+                        走过帝都这几座古桥，你已经历了宋朝，度过了明朝 ...
+                    </div>
+                    <div class="material-cover-img">
+                        <img src="http://rongcloud-file.ronghub.com/bdc7634574888cfc4a.jpeg?attname=8.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:DbrGVrCshcxwYRvhhujOaScwlB0=">
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="message-item your-msg">
+                <div class="message-text">
+                    <div class="rong-avatar">&lt;!&ndash;:src="item.portraitUri"&ndash;&gt;
+                        <img src="http://public.rongcloud.cn/static/uploadImage/2015/11/23/rc_80x80_1c7cd4dd_1448247905.png" class="rong-avatar-bd">
+                    </div>
+                    <div class="message-body">
+                        <pre class="user-msg">hello</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-item my-msg">
+                <div class="message-text">
+                    <div class="rong-avatar">&lt;!&ndash;:src="item.portraitUri"&ndash;&gt;
+                        <img src="http://img.duoziwang.com/2016/12/08/18594927932.jpg" class="rong-avatar-bd">
+                    </div>
+                    <div class="message-body">
+                        <pre class="user-msg">hello</pre>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="message-item" v-for="msg in stat.msgList"
+                 :class="[msg.messageDirection == 1 ? 'my-msg' : 'your-msg']">
+
+                <div v-if="msg.messageType == 'TextMessage'" class="message-text">
+                    <div class="rong-avatar"><!--:src="item.portraitUri"-->
+                        <img v-if="msg.messageDirection == 1" :src="stat.userInfo.user1.portraitUri"
+                             class="rong-avatar-bd">
+                        <img v-else :src="stat.currentPublic.portraitUri" class="rong-avatar-bd">
+                    </div>
+                    <div class="message-body">
+                        <pre class="user-msg" v-if="msg.content.messageName == 'TextMessage'">{{msg.content.content | transEmoji}}</pre>
+                        <img class="image-message" :src="msg.content.imageUri" alt="image"
+                             v-if="msg.content.messageName == 'ImageMessage'">
+                    </div>
+                </div>
+
+                <div v-if="msg.messageType == 'PublicServiceMultiRichContentMessage'" class="message-multi">
+
+                    <div v-for="(article , index) in msg.content.richContentMessages.articles"
+                         :class="index == 0 ? 'message-multi-first' : 'message-multi-second' "
+                         @touchend="goPublicArticle(article.url)" @click="goPublicArticle(article.url)">
+                        <div class="material-cover-img">
+                            <img :src="article.picurl">
+                        </div>
+                        <div class="material-title">
+                            {{article.title}}
+                        </div>
+                    </div>
+                    <!--<div class="message-multi-first">
+                        <div class="material-cover-img">
+                            <img src="http://rongcloud-file.ronghub.com/e2d9ef4d0185f7ea5d.jpeg?attname=1.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:WaY6IRF10KAJI-8AH8tD11XF_Ac=.jpeg">
+                        </div>
+                        <div class="material-title">
+                            如果你来过了北京，就等于去了全世界！
+                        </div>
+                    </div>
+                    <div class="message-multi-second">
+                        <div class="material-cover-img">
+                            <img src="http://rongcloud-file.ronghub.com/37852c41c6a2909050.jpeg?attname=7.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:-Wk2QaYWCupt1GOaS2dPUfFbf28=">
+                        </div>
+                        <div class="material-title">
+                            厉害了，北京交通又将大爆发，全国都羡慕！
+                        </div>
+                    </div>
+                    <div class="message-multi-second">
+                        <div class="material-cover-img">
+                            <img src="http://rongcloud-file.ronghub.com/bdc7634574888cfc4a.jpeg?attname=8.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:DbrGVrCshcxwYRvhhujOaScwlB0=">
+                        </div>
+                        <div class="material-title">
+                            走过帝都这几座古桥，你已经历了宋朝，度过了明朝 ...
+                        </div>
+                    </div>-->
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="message-wrap"><textarea v-model="stat.sendMsgVal" id="message-content" placeholder="请输入文字..."
+                                            class="message-content"></textarea></div>
+        <span class="send-btn" @touchend="sendMsg"  @click="sendMsg">发送</span>
+    </footer>
+</div>

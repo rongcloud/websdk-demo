@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发送消息的功能增强 集成引导</title>
+</head>
+<link rel="stylesheet" href="../integrate.css">
+<body>
+<div class="wrap">
+    <h1>发送消息的功能增强 集成引导</h1>
+	<p>图片消息，文件消息，自定义消息</p>
+	<p>消息接口文档: <a href="http://www.rongcloud.cn/docs/web_api_demo.html#message">http://www.rongcloud.cn/docs/web_api_demo.html#message</a></p>
+	<p>集成 demo: <a href="message.html">message.html</a></p>
+    <div class="guide">
+        <div class="steps">
+            <h2>1.图片消息</h2>
+            <div class="content">
+				<p>模拟接收图片消息的数据: <a href="message.json">message.json</a> 中的 "messageType" 为 "ImageMessage"</p>
+				<p>模拟发送服务器图片: <a href="//developer.rongcloud.cn">开发者站点</a> => API 调试 => 发送单聊消息 =>   "objectName" == "RC:ImgMsg"</p>
+				<p>1.上传图片,</p>
+				<p>上传插件文档: <a href="http://www.rongcloud.cn/docs/web.html#upload_widget">http://www.rongcloud.cn/docs/web.html#upload_widget</a></p>
+				<p>图片上传插件以七牛云为例，依次引入 <a href="upload/qiniu.js">qiniu.js</a>，<a href="upload/upload.js">upload.js</a>，<a href="upload/uploadInit.js">uploadInit.js</a>，为上传按钮添加监听事件，<a href="message.js">message.js</a> 中 watchUpload 方法</p>
+				<p>2.上传图片后，生成图片消息 createMessage</p>
+				<p>3.调用 sendMessage 发送图片消息</p>
+<pre>
+instance.sendMessage(conversationType, targetId, msg, {
+		onSuccess: function (message) {
+			console.log("Send successfully");
+		}
+	}
+);
+</pre>
+
+            </div>
+        </div>
+
+		<div class="steps">
+			<h2>2.文件消息</h2>
+			<div class="content">
+				<p>模拟接收文件消息的数据 : <a href="message.json">message.json</a> 中的 "messageType" 为 "FileMessage"</p>
+				<p>实现方法同图片消息</p>
+			</div>
+		</div>
+
+
+		<div class="steps">
+			<h2>3.自定义消息</h2>
+			<div class="content">
+				<p>1.定义消息类型</p>
+<pre>
+var messageName = "PersonMessage"; // 消息名称。
+var objectName = "s:person"; // 消息内置名称，请按照此格式命名。
+var mesasgeTag = new RongIMLib.MessageTag(true,true);// 消息是否保存是否计数，true true 保存且计数，false false 不保存不计数。
+var propertys = ["name","age"]; // 消息类中的属性名。
+RongIMClient.registerMessageType(messageName,objectName,mesasgeTag,propertys);
+</pre>
+				<p>2.发送消息</p>
+<pre>
+var conversationType = RongIMLib.ConversationType.PRIVATE; //私聊,其他会话选择相应的消息类型即可。
+var msg = new RongIMClient.RegisterMessage.PersonMessage({name:"zhang",age:12});
+instance.sendMessage(conversationType,targetId, msg, {
+    onSuccess: function (message) {
+    }
+});
+</pre>
+				<p>3.接收消息</p>
+				<p>接收消息与其他内置消息一致，在上文中提到的 setOnReceiveMessageListener 中 onReceived 获取</p>
+				<br>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<div class="public-list">
+    <header class="header"><!--<i class="icons icon-return"></i>--><h2 class="title">公众号</h2>
+        <!--<button type="button" class="icons icon-search">搜索</button>-->
+        <button type="button" class="public-add-btn icons icon-add" @touchend="publicAdd" @click="publicAdd">添加</button>
+    </header>
+    <ul class="public-list-content">
+        <li v-if="stat.publicList.length == 0" class="public-list-item item-without">暂无订阅号消息</li>
+
+
+        <li v-else class="public-list-item" v-for="item in stat.publicList" @touchend="goPublicChat( item )" @click="goPublicChat( item )">
+            <div class="rong-conversation-aside">
+                <div class="rong-avatar"><img :src="item.portraitUri" class="rong-avatar-bd"></div>
+            </div>
+            <div class="rong-item-main">
+
+                <div class="rong-conversation-attr"><em class="rong-conversation-name">{{item.name}}</em><span
+                        class="rong-conversation-time">{{item.time}}</span></div>
+                <div class="rong-conversation-message">{{item.latestMessage}}</div>
+            </div>
+        </li>
+
+
+    </ul>
+</div>
