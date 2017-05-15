@@ -1,0 +1,217 @@
+<div class="public-article">
+    <header class="header">
+        <i class="icons icon-return" @touchend="goPublicChat"  @click="goPublicChat"></i>
+        <h2 class="title">{{stat.currentPublic.name}}</h2>
+    </header>
+
+    <div class="public-article-content">
+        <iframe frameborder="0" :src="stat.articleUrl" width="100%" height="100%"></iframe>
+        <!--<h2 class="article-title">如果你来过了北京，就等于去了全世界！</h2>
+        <div class="article-attr"><span class="article-time">2017-04-14</span><span class="article-author"> 北京旅游</span>
+        </div>
+        <div class="rich_media_content">
+
+
+            <p style="text-align: center; line-height: 2em;"><span style="line-height: 1.6;"></span></p>
+            <p style="text-align: center; line-height: 2em;">世界那么大，好想去看看！</p>
+            <p style="text-align: center; line-height: 2em;">可是出国花费高，时间也不够，</p>
+            <p style="text-align: center; line-height: 2em;">怎么办呢？</p>
+            <p style="text-align: center; line-height: 2em;"><strong style="line-height: 2em;">其实根本不用出北京，</strong></p>
+            <p style="text-align: center; line-height: 2em;"><strong>我们就可以环游世界啊！</strong></p>
+            <p style="text-align: center; line-height: 2em;">不信的话，泥萌自己看咯！</p>
+            <p style="text-align: center; line-height: 2em;"><span
+                    style="color: rgb(62, 62, 62); font-size: 16px; line-height: 28px; text-align: center;  background-color: rgb(255, 255, 255);">☟</span><span
+                    style="color: rgb(62, 62, 62); font-size: 16px; line-height: 28px; text-align: center;  background-color: rgb(255, 255, 255);">☟</span><span
+                    style="color: rgb(62, 62, 62); font-size: 16px; line-height: 28px; text-align: center;  background-color: rgb(255, 255, 255);">☟</span>
+            </p>
+            <section style="box-sizing: border-box; background-color: rgb(255, 255, 255);">
+                <section class="" style="   box-sizing: border-box; " powered-by="xiumi.us">
+                    <section class=""
+                             style=" margin-top: 0.5em; margin-bottom: 0.5em; text-align: center;  box-sizing: border-box; ">
+                        <section class="" style="display: inline-block; box-sizing: border-box;">
+                            <section style="display: inline-block; vertical-align: top; box-sizing: border-box;">
+                                <section
+                                        style="display: inline-block; vertical-align: top; border-right-width: 0.5em; border-right-style: solid; border-bottom-width: 1em; border-bottom-style: solid; border-right-color: rgb(199, 122, 246); border-bottom-color: rgb(199, 122, 246); border-left-width: 0.5em !important; border-left-style: solid !important; border-left-color: transparent !important; border-top-width: 1em !important; border-top-style: solid !important; border-top-color: transparent !important; box-sizing: border-box;"></section>
+                                <section class=""
+                                         style="display: inline-block; vertical-align: top; height: 2em; padding-right: 0.5em; padding-left: 0.5em; line-height: 2em; overflow: hidden; color: rgb(255, 255, 255); box-sizing: border-box; min-width: 6em !important; max-width: 7.5em !important; background-color: rgb(199, 122, 246);">
+                                    <p style="box-sizing: border-box;"><strong
+                                            style="box-sizing: border-box;">美国</strong></p></section>
+                            </section>
+                            <section style="display: inline-block; vertical-align: top; box-sizing: border-box;">
+                                <section class=""
+                                         style="display: inline-block; vertical-align: top; height: 2em; padding-right: 0.5em; padding-left: 0.5em; line-height: 2em; overflow: hidden; color: rgb(255, 255, 255); box-sizing: border-box; min-width: 6em !important; max-width: 7.5em !important; background-color: rgb(19, 246, 231);">
+                                    <p style="box-sizing: border-box;"><strong
+                                            style="box-sizing: border-box;">北京</strong></p></section>
+                                <section
+                                        style="display: inline-block; vertical-align: top; border-left-width: 0.5em; border-left-style: solid; border-top-width: 1em; border-top-style: solid; border-left-color: rgb(19, 246, 231); border-top-color: rgb(19, 246, 231); border-right-width: 0.5em !important; border-right-style: solid !important; border-right-color: transparent !important; border-bottom-width: 1em !important; border-bottom-style: solid !important; border-bottom-color: transparent !important; box-sizing: border-box;"></section>
+                            </section>
+                            <section style="margin-top: -2.25em; box-sizing: border-box;">
+                                <section class=""
+                                         style="overflow: hidden; display: inline-block; vertical-align: top; width: 2.5em; height: 2.5em; line-height: 2.5em; margin: auto; border-radius: 100%; box-sizing: border-box; background-color: rgb(254, 255, 255);">
+                                    <section style="box-sizing: border-box;">VS</section>
+                                </section>
+                            </section>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <p style="font-size: 16px; white-space: normal; max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); line-height: 25.6px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                        style="max-width: 100%; font-size: 14px; box-sizing: border-box !important; word-wrap: break-word !important;"><br></span></strong>
+            </p>
+            <p style="font-size: 16px; white-space: normal; max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="font-size: 16px;"><strong
+                        style="color: rgb(87, 87, 87); line-height: 25.6px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">美国·纽约</span></strong></span><br>
+            </p>
+            <p style="font-size: 16px; white-space: normal; max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="max-width: 100%; font-size: 10px; color: rgb(87, 87, 87); box-sizing: border-box !important; word-wrap: break-word !important;">▼</span>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); line-height: 25.6px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                        style="max-width: 100%; font-size: 14px; box-sizing: border-box !important; word-wrap: break-word !important;"><img
+                        style="font-size: 16px; white-space: normal; color: rgb(62, 62, 62); font-family: 微软雅黑; line-height: 25.6px; box-sizing: border-box !important; word-wrap: break-word !important; visibility: visible !important; width: auto !important; height: auto !important;"
+                        width="auto" _width="auto"
+                        src="http://rongcloud-file.ronghub.com/e2d9ef4d0185f7ea5d.jpeg?attname=1.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:WaY6IRF10KAJI-8AH8tD11XF_Ac=.jpeg"></span></strong>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); line-height: 25.6px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                        style="max-width: 100%; font-size: 14px; box-sizing: border-box !important; word-wrap: break-word !important;"><br></span></strong>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="font-size: 16px;"><strong
+                        style="color: rgb(87, 87, 87); line-height: 25.6px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"></span></strong></span>
+            </p>
+            <p style="font-size: 16px; white-space: normal; max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="max-width: 100%; color: rgb(87, 87, 87); font-size: 16px; box-sizing: border-box !important; word-wrap: break-word !important;"><strong
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">北京·CBD</strong></span>
+            </p>
+            <p style="font-size: 16px; white-space: normal; max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="max-width: 100%; color: rgb(87, 87, 87); font-size: 16px; box-sizing: border-box !important; word-wrap: break-word !important;">▼</span>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <img style="color: rgb(62, 62, 62); font-family: 微软雅黑; font-size: 16px; line-height: 25.6px; white-space: normal; box-sizing: border-box !important; word-wrap: break-word !important; visibility: visible !important; width: 640px !important; height: 375px !important;"
+                     src="http://rongcloud-file.ronghub.com/98c12b4b29b4e7990b.jpeg?attname=2.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:4-fmjpx10bkvuREglOL6F7ESQU4="><strong
+                    style="color: rgb(87, 87, 87); line-height: 25.6px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                    style="max-width: 100%; font-size: 14px; box-sizing: border-box !important; word-wrap: break-word !important;"><br></span></strong>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <br></p>
+            <p style="text-align: center; line-height: 2em;">区域内摩天大楼林立，</p>
+            <p style="text-align: center; line-height: 2em;">国际感、现代感、时尚感十足。</p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <br></p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); line-height: 25.6px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                        style="max-width: 100%; font-size: 14px; box-sizing: border-box !important; word-wrap: break-word !important;">美国·大峡谷空中走廊</span></strong><br>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="max-width: 100%; font-size: 10px; color: rgb(87, 87, 87); box-sizing: border-box !important; word-wrap: break-word !important;">▼</span>
+            </p>
+            <p><img data-ratio="0.7490909090909091" data-s="300,640"
+                    data-src="http://mmbiz.qpic.cn/mmbiz/I3ujV0JnQKgtKrTFPDPicO0QKrptFP6Wjkn0bmKyS2CqiaJonTgMv2AWEJN0MBjWD20fYmkd4oCbu40mvpCIGib9A/640?wx_fmt=jpeg"
+                    data-type="jpeg" data-w="550"
+                    style="color: rgb(62, 62, 62); font-size: 16px; line-height: 25.6px; text-align: center; white-space: normal; box-sizing: border-box !important; word-wrap: break-word !important; visibility: visible !important; width: 550px !important; height: 412px !important;"
+                    width="auto" _width="auto"
+                    src="http://rongcloud-file.ronghub.com/ca29774d43a23f9476.jpeg?attname=3.jpeg&e=2147483647&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:6kwR_i4ew2Me78p5RkCRVwHAQ8Q=">
+            </p>
+            <p><br></p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="max-width: 100%; font-size: 14px; color: rgb(87, 87, 87); box-sizing: border-box !important; word-wrap: break-word !important;"><strong
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">北京·平谷石林峡玻璃观景台</span></strong></span>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="max-width: 100%; font-size: 10px; color: rgb(87, 87, 87); box-sizing: border-box !important; word-wrap: break-word !important;">▼</span>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="max-width: 100%; font-size: 10px; color: rgb(87, 87, 87); box-sizing: border-box !important; word-wrap: break-word !important;"><img
+                        data-ratio="0.5609375" data-s="300,640"
+                        data-src="http://mmbiz.qpic.cn/mmbiz/I3ujV0JnQKgtKrTFPDPicO0QKrptFP6WjjJITN1TrBXMj3gx1HEZAvNpugwYRpvbYdaEMJ3x6QPp9k5huU5giauQ/640?wx_fmt=jpeg"
+                        data-type="jpeg" data-w="640"
+                        style="color: rgb(136, 136, 136); font-family: 微软雅黑; font-size: 14px; line-height: 24.8889px; text-align: center; white-space: normal; box-sizing: border-box !important; word-wrap: break-word !important; visibility: visible !important; width: 640px !important; height: 359px !important; background-color: rgb(255, 255, 255);"
+                        width="auto" _width="auto"
+                        src="http://rongcloud-file.ronghub.com/6c9ad44674b672fbe5.jpeg?attname=4.jpeg&e=2147483647&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:hPu-Q2VKi0WDX78KjzXBHlMvTPs="></span>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <br></p>
+            <p style="text-align: center; line-height: 2em;">这座悬空跨度32.8米的观景台，</p>
+            <p style="text-align: center; line-height: 2em;">比美国科罗拉多大峡谷的廊桥还长11.4米；</p>
+            <p style="text-align: center; line-height: 2em;">415平米的载员面积，</p>
+            <p style="text-align: center; line-height: 2em;">是迄今为止世界上面积最大的观景平台<span style="line-height: 2em;">。</span>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <br></p>
+            <p style="font-size: 16px; white-space: normal; max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); line-height: 25.6px; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><span
+                        style="max-width: 100%; font-size: 14px; box-sizing: border-box !important; word-wrap: break-word !important;">美国·火鸡</span></strong><br>
+            </p>
+            <p style="font-size: 16px; white-space: normal; max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <span style="max-width: 100%; font-size: 10px; color: rgb(87, 87, 87); box-sizing: border-box !important; word-wrap: break-word !important;">▼</span>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; line-height: 25.6px; text-align: center; white-space: normal; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);"><span
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><img
+                        class="" data-ratio="1"
+                        data-src="http://mmbiz.qpic.cn/mmbiz_jpg/eMweGmfI9SJzHxmfsy7eMdE8mkCzIMzbAdvQMiahiaTb5O5hhfdhVdxaSP2VnvVjxmaHECmPeKOtBmvhMMQlwEkg/640?wx_fmt=jpeg"
+                        data-type="jpeg" data-w="500"
+                        style="color: rgb(62, 62, 62); font-family: 微软雅黑; font-size: 16px; line-height: 25.6px; text-align: center; white-space: normal; box-sizing: border-box !important; word-wrap: break-word !important; visibility: visible !important; width: 500px !important; height: 500px !important;"
+                        width="auto" _width="auto"
+                        src="http://rongcloud-file.ronghub.com/464a50408b819d9cb2.jpeg?attname=5.jpeg&e=2147483647&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:9SC75zUMKd5yLSwpLVm-t08NIzo="></span></strong><br>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; line-height: 25.6px; text-align: center; white-space: normal; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);"><span
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><br></span></strong>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; line-height: 25.6px; text-align: center; white-space: normal; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);"><span
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">北京·烤鸭</span></strong>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; line-height: 25.6px; text-align: center; white-space: normal; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);"><span
+                        style="max-width: 100%; color: rgb(87, 87, 87); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; font-size: 13.3333px; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">▼</span></strong>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <strong style="color: rgb(87, 87, 87); font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; font-size: 14px; line-height: 25.6px; text-align: center; white-space: normal; max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);"><span
+                        style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;"><img
+                        data-ratio="0.571875" data-s="300,640"
+                        data-src="http://mmbiz.qpic.cn/mmbiz_jpg/I3ujV0JnQKjTI1lAEMtxqAJRwEwKicERJmtJU0DEE9xsWh7QT0x6pYgOucJ8jgADuSOzwQwEHDWFonBA4JYHcAA/640?wx_fmt=jpeg"
+                        data-type="jpeg" data-w="640"
+                        style="color: rgb(62, 62, 62); font-family: 微软雅黑; font-size: 16px; line-height: 25.6px; text-align: center; white-space: normal; box-sizing: border-box !important; word-wrap: break-word !important; visibility: visible !important; width: 640px !important; height: 366px !important;"
+                        width="auto" _width="auto"
+                        src="http://rongcloud-file.ronghub.com/3a6ff946a29968924a.jpeg?attname=6.jpeg&e=2147483647&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:N37S5NM9YB2awZNoeCh9q-h80eM="></span></strong>
+            </p>
+            <p style="max-width: 100%; min-height: 1em; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; font-family: 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif; line-height: 25.6px; text-align: center; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <br></p>
+            <p style="text-align: left;">我大北京美食中的金字招牌，皮十分香脆，这也是其最吸引食客的地方，内里肉质鲜嫩多汁，用小薄饼卷上，再配以葱段和海鲜酱或甜面酱，味道更是一绝！</p>
+            <section data-id="85927" data-color="rgb(89, 195, 249)" data-custom="rgb(30, 155, 232)"
+                     style="max-width: 100%; color: rgb(62, 62, 62); font-size: 16px; white-space: normal; line-height: 25.6px; font-family: 微软雅黑; box-sizing: border-box !important; word-wrap: break-word !important; background-color: rgb(255, 255, 255);">
+                <section
+                        style="margin-top: 10px; margin-bottom: 10px; max-width: 100%; box-sizing: border-box; word-wrap: break-word !important;">
+                    <section data-width="100%"
+                             style="padding: 0.3em 0.5em; max-width: 100%; box-sizing: border-box; display: inline-block; width: 556px; font-size: 14px; color: rgb(255, 255, 255); word-wrap: break-word !important; background-color: rgb(89, 195, 249);">
+                        <span style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">精彩推荐</span>
+                    </section>
+                    <section
+                            style="padding: 10px; max-width: 100%; box-sizing: border-box; border: 1px solid rgb(89, 195, 249); word-wrap: break-word !important;">
+                        <p style="max-width: 100%; min-height: 1em; line-height: 25.6px; box-sizing: border-box !important; word-wrap: break-word !important;">
+                            <a href="http://mp.weixin.qq.com/s?__biz=MjM5NDcxMTE2NA==&amp;mid=2656831712&amp;idx=1&amp;sn=49ac8e90af65bfbf8ff1687c58a36cd0&amp;chksm=bd2b3bf38a5cb2e524fa446bffe4864887fdc9f99db962f496be89a83b979e0e03fa0da7018e&amp;scene=21#wechat_redirect"
+                               target="_blank"
+                               data_ue_src="http://mp.weixin.qq.com/s?__biz=MjM5NDcxMTE2NA==&amp;mid=2656831712&amp;idx=1&amp;sn=49ac8e90af65bfbf8ff1687c58a36cd0&amp;chksm=bd2b3bf38a5cb2e524fa446bffe4864887fdc9f99db962f496be89a83b979e0e03fa0da7018e&amp;scene=21#wechat_redirect">天上掉馅饼了！北京人下月去这个省高速全免、所有景点都免费玩！</a><br
+                                style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
+                        </p>
+                        <p style="max-width: 100%; min-height: 1em; line-height: 25.6px; box-sizing: border-box !important; word-wrap: break-word !important;">
+                            <br style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
+                        </p>
+                        <p style="max-width: 100%; min-height: 1em; line-height: 25.6px; box-sizing: border-box !important; word-wrap: break-word !important;">
+                            <a href="http://mp.weixin.qq.com/s?__biz=MjM5NDcxMTE2NA==&amp;mid=2656831531&amp;idx=1&amp;sn=8af0b6ef80b4d894d8c20f405c3f2d7d&amp;chksm=bd2b3b388a5cb22e01bbe6678b8f8e97dbaaeff9a5bbb325bb4c2124074425ad7aaef9774e33&amp;scene=21#wechat_redirect"
+                               target="_blank"
+                               data_ue_src="http://mp.weixin.qq.com/s?__biz=MjM5NDcxMTE2NA==&amp;mid=2656831531&amp;idx=1&amp;sn=8af0b6ef80b4d894d8c20f405c3f2d7d&amp;chksm=bd2b3b388a5cb22e01bbe6678b8f8e97dbaaeff9a5bbb325bb4c2124074425ad7aaef9774e33&amp;scene=21#wechat_redirect">全北京最不可错过的12碗销魂饭，吃完幸福满满！</a><br
+                                style="max-width: 100%; box-sizing: border-box !important; word-wrap: break-word !important;">
+                        </p></section>
+                </section>
+            </section>
+        </div>-->
+    </div>
+</div>

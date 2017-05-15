@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no">
+    <title>message demo</title>
+    <link rel="stylesheet" href="../reset.css">
+    <link rel="stylesheet" href="message.css">
+
+    <script src="../lib/jquery-3.1.1.js"></script>
+    <script src="../lib/vue-2.1.4.js"></script>
+    <script src="upload/qiniu.js"></script>
+    <script src="upload/upload.js"></script>
+    <script src="upload/uploadInit.js"></script>
+    <script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
+
+
+    <script src="../init.js"></script>
+    <script src="message.js"></script>
+
+</head>
+<body>
+<div id="messagePage">
+    <component :is="stat.currentView" :stat="stat"></component>
+</div>
+</body>
+<template id="message">
+    <div class="message">
+        <!--header-->
+        <header class="header">
+            <h2 class="title">{{stat.currentUserInfo.nickname}}</h2>
+        </header>
+        <!--header-->
+
+        <!--chat-content-->
+        <div class="chat-content">
+            <div class="message-wrapper">
+                <div class="message-item" v-for="msg in stat.messageList"
+                     :class="[msg.messageDirection == 1 ? 'my-msg' : 'your-msg']">
+                    <div v-if="msg.messageType == 'TextMessage'" class="message-text">
+                        <div class="rong-avatar">
+                            <img v-if="msg.messageDirection == 1" :src="stat.currentUserInfo.portraitUri"
+                                 class="rong-avatar-bd">
+                            <img v-else :src="stat.targetUserInfo.portraitUri" class="rong-avatar-bd">
+                        </div>
+                        <div class="message-body">
+                            <pre class="user-msg">{{msg.content.content}}</pre>
+                        </div>
+                    </div>
+
+                    <div v-if="msg.messageType == 'ImageMessage'" class="message-img">
+                        <div class="rong-avatar">
+                            <img v-if="msg.messageDirection == 1" :src="stat.currentUserInfo.portraitUri"
+                                 class="rong-avatar-bd">
+                            <img v-else :src="stat.targetUserInfo.portraitUri" class="rong-avatar-bd">
+                        </div>
+                        <div class="message-body">
+                            <img class="image-message" :src="msg.content.imageUri" alt="image">
+                        </div>
+                    </div>
+
+                    <div v-if="msg.messageType == 'FileMessage'" class="message-file">
+                        <div class="rong-avatar">
+                            <img v-if="msg.messageDirection == 1" :src="stat.currentUserInfo.portraitUri"
+                                 class="rong-avatar-bd">
+                            <img v-else :src="stat.targetUserInfo.portraitUri" class="rong-avatar-bd">
+                        </div>
+                        <div class="message-body">
+                            <div class="file-ava"><img ng-src="assets/img/undefined.png" src="http://web.sealtalk.im/assets/img/undefined.png"></div>
+                            <div class="file-info"><p class="file-name">{{msg.content.name}}</p><p class="file-size">{{msg.content.size/1000}} K</p></div>
+                            <a class="file-download" :href="msg.content.fileUrl" target="_blank">下载</a>
+                        </div>
+                    </div>
+
+                    <div v-if="msg.messageType == 'PersonMessage'" class="message-text">
+                        <div class="rong-avatar">
+                            <img v-if="msg.messageDirection == 1" :src="stat.currentUserInfo.portraitUri"
+                                 class="rong-avatar-bd">
+                            <img v-else :src="stat.targetUserInfo.portraitUri" class="rong-avatar-bd">
+                        </div>
+                        <div class="message-body">
+                            <pre class="user-msg">{{msg.content.content}}（自定义消息）</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--chat-content-->
+
+        <!--footer-->
+        <footer class="footer">
+            <div class="message-wrap"><textarea v-model="stat.sendMsgVal" id="message-content" placeholder="请输入文字..."
+                                                class="message-content"></textarea></div>
+
+            <span class="send-img"><input type="file" id="upload-img" value="upload-file" class="upload-img">图片</span>
+            <span class="send-file"><input type="file" id="upload-file" value="upload-file" class="upload-file">文件</span>
+            <span class="send-btn" @touchend="sendMsg">发送</span>
+            <span class="send-btn" @touchend="sendPersonal">自定义</span>
+        </footer>
+        <!--footer-->
+    </div>
+</template>
+<script type="text/javascript">
+
+    //初始化
+    var app;
+    var userInfo = {
+        appKey: "82hegw5u8mqwx",
+        token: "oUh0wcHH6E2LiuTpEKp/+jCvQwRQ4mI0ws9X674LamLVDfNK14vl8UoEcZT0otHeuyNsIi1T4wZ8UwVl0ZqyZA=="
+    };
+    var callbacks = {
+        CONNECTED: function (instance) { //传入实例参数
+            //注册自定义消息
+            registerMessage();
+
+            //获取历史消息
+            var conversationType = RongIMLib.ConversationType.PRIVATE;
+            var targetId = 'user2';
+            instance.getHistoryMessages(conversationType, targetId, null, 20, {
+                onSuccess: function (list, hasMsg) {
+                    console.log(list);
+                    //渲染会话列表
+                    app = renderHistoryMessages(list, hasMsg, instance);
+                }
+            }, null);
+
+        },
+        Success: function (id) {
+
+        },
+        Received: function (message) {
+            console.log(message);
+            app.stat.messageList.push(message);
+        }
+    };
+    init(userInfo, callbacks);
+</script>
+</html>

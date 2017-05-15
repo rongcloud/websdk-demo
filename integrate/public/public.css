@@ -1,0 +1,592 @@
+@charset "utf-8";
+
+html, body {
+    height: 100%;
+}
+
+.hide {
+    display: none !important;
+}
+
+.header {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1.16rem;
+    line-height: 1.16rem;
+    background: #393a3f;
+    z-index: 99;
+    color: #fff;
+}
+
+.header .title {
+    flex: 1;
+    font-size: 0.45rem;
+    padding-left: 0.3rem;
+}
+
+#publicPage {
+    width: 100%;
+    height: 100%;
+}
+
+#publicPage em {
+    font-style: normal;
+}
+
+.icons {
+    display: inline-block;
+    width: 1.16rem;
+    height: 1.16rem;
+    background-color: transparent;
+    background-image: url(images/public-icons.png?11);
+    background-size: 1.2rem auto;
+    background-repeat: no-repeat;
+    background-position: 0.35rem 0.35rem;
+}
+
+.icon-return:after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 0.76rem;
+    background-color: #2e2d32;
+    margin-left: 1.16rem;
+    margin-top: 0.2rem;
+}
+
+.icon-search,
+.icon-add {
+    color: #fff;
+    border: none;
+    font-size: 0;
+}
+
+.icon-search {
+    background-position: 0.35rem -0.8rem
+}
+
+.icon-add {
+    background-position: 0.35rem -3.02rem;
+    margin-right: 0.1rem;
+}
+
+.public-search-btn {
+    display: inline-block;
+    width: 1.4rem;
+    height: 0.7rem;
+    font-size: 0.4rem;
+    color: #fff;
+    border: 1px solid #179e16;
+    border-radius: 3px;
+    background-color: #1aad19;
+
+}
+
+/* 公众号列表页 */
+.public-list-content {
+    margin-top: 1.16rem;
+    overflow-y: auto;
+}
+
+.public-list-item {
+    display: flex;
+    align-items: center;
+    padding: 0.3rem;
+    font-size: 0.4rem;
+    border-top: 1px solid #dfdfdf;
+}
+
+.public-list-item.item-without {
+    justify-content: center;
+    background: none;
+    margin-top: 2rem;
+    font-size: 0.42rem;
+    border: 0;
+}
+
+.public-list-item .rong-avatar {
+    border-radius: 0;
+    border: 0;
+}
+
+.rong-item-main {
+    overflow: hidden;
+    width: 100%;
+}
+
+.public-letter-title {
+    width: 100%;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    background-color: #ebebeb;
+    padding-left: 0.5rem;
+    font-size: 0.3rem;
+}
+
+.public-letter-content {
+    padding: 0 0.5rem;
+}
+
+.rong-avatar {
+    border: 1px solid #d2d0ce;
+    border-radius: 50%;
+    width: 1.1rem;
+    height: 1.1rem;
+    overflow: hidden;
+}
+
+.public-item-content {
+    display: flex;
+    width: 100%;
+    padding: 0.25rem 0;
+    font-size: 0.4rem;
+    align-items: center;
+}
+
+.rong-avatar img {
+    width: 100%;
+}
+
+.rong-conversation-attr {
+    margin-left: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.rong-conversation-name {
+    color: #363636;
+    font-size: 0.4rem;
+}
+
+.rong-conversation-time {
+    color: #bbbbbb;
+    font-size: 0.25rem;
+}
+
+.rong-conversation-message {
+    margin-left: 0.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 1.5rem;
+    color: #989898;
+    font-size: 0.35rem;
+    margin-top: 0.05rem;
+}
+
+/*
+.public-item-content:nth-child(n+1) {
+    border-top: 1px solid #e1e1e1;
+}*/
+
+/* 公众号搜索页 */
+.public-search-wrap {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #45bf1b;
+    width: 100%;
+    margin: 0.15rem 0.3rem;
+}
+
+.public-search-field {
+    display: inline-block;
+    vertical-align: top;
+    border: 0;
+    background: transparent;
+    font-size: 0.4rem;
+    width: 80%;
+    height: 0.7rem;
+    text-indent: 0.2rem;
+    color: #fff;
+}
+
+.public-search-result {
+    background-color: #fdfdfd;
+    margin-top: 1.16rem;
+    padding: 0.4rem;
+}
+
+.public-search-result .title {
+    font-size: 0.44rem;
+    color: #a0a0a0;
+    height: 1rem;
+}
+
+.public-search-item {
+    display: flex;
+    align-items: center;
+    padding: 0.3rem;
+    font-size: 0.4rem;
+    overflow: hidden;
+}
+
+.public-search-item:nth-child(n+1) {
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.public-search-item .rong-avatar {
+    border: 0;
+}
+
+.public-search-item .rong-conversation-message {
+    padding-right: 0;
+    display: -webkit-box;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+/* 公众号信息页面 */
+.public-info {
+    width: 100%;
+    height: 100%;
+    background-color: #ebebeb;
+}
+
+.public-info-con {
+    margin-top: 1.16rem;
+}
+
+.public-info-avatar {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.public-info-avatar .rong-avatar {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.public-info-name {
+    margin-left: 0.5rem;
+    font-size: 0.6rem;
+    overflow: hidden;
+    color: #353535;
+}
+
+.public-info-intro {
+    display: flex;
+    background-color: #fff;
+    padding: 0.4rem 0.4rem;
+}
+
+.public-info-intro .title {
+    font-size: 0.45rem;
+    color: #353535;
+    white-space: nowrap;
+}
+
+.public-introduction {
+    font-size: 0.4rem;
+    margin-left: 0.4rem;
+    color: #999999;
+}
+
+.public-info-history {
+    display: flex;
+    background-color: #fff;
+    padding: 0.4rem 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.public-info-history .title {
+    font-size: 0.45rem;
+    color: #353535;
+    white-space: nowrap;
+}
+
+.subscribePublic,
+.enterPublic,
+.unsubscribePublic {
+    display: inline-block;
+    width: 100%;
+    padding: 0 0.3rem;
+    height: 1.2rem;
+    vertical-align: top;
+    font-size: 0.4rem;
+    border: 1px solid #179e16;
+    border-radius: 3px;
+    background: #1aad19;
+    color: #fff;
+    margin-bottom: 0.4rem;
+}
+
+.public-info-btns {
+    margin-top: 0.5rem;
+    padding: 0 0.4rem;
+}
+
+/* 公众号消息页面 */
+.public-info-btn {
+    font-size: 0;
+    border: 0;
+    background-position: 0.25rem -4.2rem;
+}
+
+.chat-content {
+    position: absolute;
+    z-index: 1;
+    top: 1.16rem;
+    bottom: 1.21rem;
+    left: 0;
+    width: 100%;
+    overflow-y: scroll;
+    background-color: #ebebeb;
+}
+
+.chat-content .message-wrapper {
+    padding: 0 0.5rem;
+}
+
+.message-item:nth-child(n+1) {
+    margin-top: 0.4rem;
+}
+
+.message-text {
+    display: flex;
+    /*padding: 0.3rem 0;*/
+    font-size: 0.4rem;
+}
+
+.my-msg .message-text {
+    flex-direction: row-reverse;
+}
+
+.you-msg .message-text {
+    padding-left: 1.39rem;
+}
+
+.message-text .rong-avatar {
+    border-radius: 0;
+    border: 0;
+}
+
+.message-text .message-body {
+    flex: 1;
+    position: relative;
+    color: #353535;
+    padding: 0.25rem;
+    max-width: 100%;
+    min-height: 1em;
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+.message-text .message-body pre{
+    white-space: normal;
+}
+.my-msg .message-text .message-body {
+    margin-right: 0.25rem;
+    background: #b2e281;
+}
+
+.my-msg .message-text .message-body:after {
+    position: absolute;
+    top: 0.32rem;
+    right: -0.3rem;
+    border: 0.2rem solid transparent;
+    content: " ";
+    border-left-color: #b2e281;
+    border-left-width: 0.15rem;
+}
+
+.your-msg .message-text .message-body {
+    margin-left: 0.25rem;
+    background: #fff;
+}
+
+.your-msg .message-text .message-body:before {
+    position: absolute;
+    top: 0.32rem;
+    left: -0.3rem;
+    border: 0.2rem solid transparent;
+    content: " ";
+    border-right-color: #fff;
+    border-right-width: 0.15rem;
+
+}
+
+.message-multi {
+    background-color: #fff;
+    border: 1px solid #d2d2d2;
+    padding: 0.4rem;
+    font-size: 0.4rem;
+}
+
+.message-multi-first {
+    position: relative;
+    margin-bottom: 0.3rem;
+}
+
+.message-multi-first .material-cover-img {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    height: 4rem;
+}
+
+.message-multi-first .material-cover-img img {
+    height: 4rem;
+    width: 100%;
+}
+
+.message-multi-first .material-title {
+    display: -webkit-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 1.4rem;
+    line-height: 1.4;
+    color: #fff;
+    font-size: 0.36rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 0.9;
+    padding: 0.15rem 0.2rem;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
+}
+
+.message-multi-second {
+    display: flex;
+    flex-direction: row-reverse;
+    border-top: 1px solid #d8d8d8;
+    padding: 0.3rem 0;
+}
+
+.message-multi-second .material-cover-img {
+    width: 1.3rem;
+    height: 1.3rem;
+    overflow: hidden;
+    margin-left: 0.5rem;
+
+}
+
+.message-multi-second .material-cover-img img {
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
+.message-multi-second .material-title {
+    flex: 1;
+    padding-right: 0;
+    padding-top: 0.15rem;
+    display: -webkit-box;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.message-multi-second:last-child {
+    padding-bottom: 0;
+}
+
+.footer {
+    display: flex;
+    height: 1.20625rem;
+    line-height: 1.20625rem;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 99;
+    background-color: #f8f8f8;
+}
+
+.footer .message-wrap {
+    flex: 1;
+    overflow: hidden;
+    padding: 0.321538rem 0;
+}
+
+.footer .message-content {
+    padding: 0 0.386rem;
+    width: 100%;
+    background-color: #f8f8f8;
+    resize: none;
+    line-height: 0.6369rem;
+    border: none;
+    font-size: 0.375rem;
+}
+
+.footer .send-btn {
+    display: inline-block;
+    width: 1.4rem;
+    height: 0.7rem;
+    font-size: 0.4rem;
+    color: #fff;
+    border: 1px solid #179e16;
+    border-radius: 3px;
+    background-color: #1aad19;
+    line-height: 0.7rem;
+    margin-top: 0.25rem;
+    margin-right: 0.4rem;
+}
+
+/* 公众号文章页面 */
+.public-article {
+    height: 100%;
+}
+
+.public-article-content {
+    height: 100%;
+    margin-top: 1.16rem;
+    /*padding: 0.5rem;*/
+}
+
+.article-title {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    font-weight: 400;
+    font-size: 0.6rem;
+    color: #000;
+}
+
+.article-attr {
+    display: flex;
+    margin-bottom: 0.6rem;
+}
+
+.article-time {
+    font-size: 0.4rem;
+    color: #8c8c8c;
+    margin-right: 0.3rem;
+}
+
+.article-author {
+    font-size: 0.4rem;
+    color: #0099ff;
+}
+
+.rich_media_content {
+    font-size: 0.4rem;
+    width: 100%;
+    overflow: hidden;
+}
+
+.rich_media_content * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    -webkit-box-sizing: border-box !important;
+    word-wrap: break-word !important;
+    font-size: 0.4rem;
+}

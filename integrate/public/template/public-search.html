@@ -1,0 +1,30 @@
+<div class="public-search">
+
+    <header class="header">
+        <i class="icons icon-return" @touchend="goPublicList" @click="goPublicList"></i>
+        <div class="public-search-wrap">
+            <span class="icons icon-search">搜索公众号</span>
+            <input type="text" placeholder="搜索公众号" class="public-search-field" v-model="stat.searchVal">
+            <button v-if="stat.searchVal !== ''" type="button" class="public-search-btn" @touchend="publicSearch" @click="publicSearch">搜索
+            </button>
+        </div>
+    </header>
+
+    <div class="public-search-result">
+        <ul class="public-search-list">
+            <li v-if="stat.searchList.length !== 0" class="public-search-item" v-for="item in stat.searchList"
+                @touchend="goPublicInfo( item )" 
+                @click="goPublicInfo( item )">
+                <div class="rong-conversation-aside">
+                    <div class="rong-avatar"><img :src="item.portraitUri" class="rong-avatar-bd"></div>
+                </div>
+                <div class="rong-item-main">
+                    <div class="rong-conversation-attr"><em class="rong-conversation-name">{{item.name}}</em></div>
+                    <div class="rong-conversation-message">{{item.introduction}}</div>
+                </div>
+            </li>
+            <li v-show="!stat.searchResult" class="public-search-item">搜索不到公众号</li>
+        </ul>
+    </div>
+
+</div>

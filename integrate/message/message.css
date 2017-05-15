@@ -1,0 +1,262 @@
+/* header */
+
+.header {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1.16rem;
+    line-height: 1.16rem;
+    background: #393a3f;
+    z-index: 99;
+    color: #fff;
+}
+
+.header .title {
+    flex: 1;
+    font-size: 0.45rem;
+    padding:0 0.3rem;
+    text-align: center;
+}
+
+/* chat */
+.chat-content {
+    position: absolute;
+    z-index: 1;
+    top: 1.16rem;
+    bottom: 1.21rem;
+    left: 0;
+    width: 100%;
+    overflow-y: scroll;
+    background-color: #ebebeb;
+}
+
+.chat-content .message-wrapper {
+    padding: 0 0.5rem;
+}
+
+.message-item:nth-child(n+1) {
+    margin-top: 0.4rem;
+}
+
+.message-item:last-child {
+    margin-bottom: 0.4rem;
+}
+
+.message-text {
+    display: flex;
+    font-size: 0.4rem;
+}
+
+.my-msg .message-text {
+    flex-direction: row-reverse;
+}
+
+.you-msg .message-text {
+    padding-left: 1.39rem;
+}
+
+.message-item .rong-avatar {
+    flex-shrink: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    overflow: hidden;
+}
+
+.message-item .rong-avatar img {
+    width: 100%;
+}
+
+.message-text .message-body {
+    position: relative;
+    color: #353535;
+    padding: 0.25rem;
+    max-width: 100%;
+    min-height: 1em;
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+.message-text .message-body pre {
+    white-space: normal;
+}
+
+.my-msg .message-text .message-body {
+    margin-right: 0.25rem;
+    background: #b2e281;
+}
+
+.my-msg .message-text .message-body:after {
+    position: absolute;
+    top: 0.32rem;
+    right: -0.3rem;
+    border: 0.2rem solid transparent;
+    content: " ";
+    border-left-color: #b2e281;
+    border-left-width: 0.15rem;
+}
+
+.your-msg .message-text .message-body {
+    margin-left: 0.25rem;
+    background: #fff;
+}
+
+.your-msg .message-text .message-body:before {
+    position: absolute;
+    top: 0.32rem;
+    left: -0.3rem;
+    border: 0.2rem solid transparent;
+    content: " ";
+    border-right-color: #fff;
+    border-right-width: 0.15rem;
+
+}
+
+.message-img {
+    display: flex;
+}
+
+.message-img img {
+    width: 100%;
+}
+
+.my-msg .message-img {
+    flex-direction: row-reverse;
+}
+
+.my-msg .message-img .message-body {
+    margin-right: 0.25rem;
+}
+
+.your-msg .message-img .message-body {
+    margin-left: 0.25rem;
+}
+
+
+.message-file {
+    display: flex;
+    font-size: 0.4rem;
+}
+.message-file img {
+    width: 100%;
+}
+
+.message-file .message-body{
+    display: flex;
+    border: 1px solid #ccc;
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+}
+.file-ava{
+    flex-shrink: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-right: 0.2rem;
+}
+.file-info{
+    margin-right: 0.2rem;
+}
+.file-name{
+    color: #343434;
+}
+.file-size{
+    color: #8e969f;
+    font-size: 0.36rem;
+}
+.file-download{
+    width: 0.7rem;
+    height: 0.7rem;
+    flex-shrink: 0;
+    background-image: url("http://web.sealtalk.im/assets/img/uploadbtn.png");
+    background-repeat: no-repeat;
+    background-position: 0 -0.73rem;
+    background-size: 1.44rem auto;
+    font-size: 0;
+    align-self: center;
+}
+.my-msg .message-file {
+    flex-direction: row-reverse;
+}
+
+.my-msg .message-file .message-body {
+    margin-right: 0.25rem;
+}
+
+.your-msg .message-file .message-body {
+    margin-left: 0.25rem;
+}
+/* footer */
+.footer {
+    display: flex;
+    height: 1.20625rem;
+    line-height: 1.20625rem;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 99;
+    background-color: #f8f8f8;
+}
+
+.footer .message-wrap {
+    flex: 1;
+    overflow: hidden;
+    padding: 0.321538rem 0;
+}
+
+.footer .message-content {
+    padding: 0 0.386rem;
+    width: 100%;
+    background-color: #f8f8f8;
+    resize: none;
+    line-height: 0.6369rem;
+    border: none;
+    font-size: 0.375rem;
+}
+
+.footer .send-btn,
+.footer .send-img,
+.footer .upload-img,
+.footer .send-file,
+.footer .upload-file {
+    display: inline-block;
+    width: 1.4rem;
+    height: 0.7rem;
+    font-size: 0.4rem;
+    color: #fff;
+    border: 1px solid #179e16;
+    border-radius: 3px;
+    background-color: #1aad19;
+    line-height: 0.7rem;
+    margin-top: 0.25rem;
+    margin-right: 0.4rem;
+}
+
+.footer .send-img {
+    position: relative;
+}
+
+.footer .upload-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    margin: 0;
+}
+.footer .send-file {
+    position: relative;
+}
+
+.footer .upload-file {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    margin: 0;
+}

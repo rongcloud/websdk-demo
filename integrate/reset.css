@@ -1,0 +1,90 @@
+/* 清除内外边距 */
+body, div, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
+dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+pre, /* text formatting elements 文本格式元素 */
+fieldset, lengend, button, input, textarea, form,/* form elements 表单元素 */
+th, td , header, footer{ /* table elements 表格元素 */
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-text-size-adjust: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* 设置默认字体 */
+body, button, input, select, textarea { /* for ie */
+    color: #495d64;
+    font:0.75rem/1.42857143  "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    outline:0;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%
+}
+
+.button{
+    border-radius:10px;
+    outline:none;
+    padding:5px 20px;
+    margin:10px 0;
+    cursor:pointer;
+}
+
+code, kbd, pre, samp, tt {
+    font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+/* 重置列表元素 */
+ul, ol {
+    list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-size: 100%;
+    font-weight: normal;
+}
+
+/* 重置表格元素 */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+img {
+    vertical-align: top;
+    border: 0;
+}
+
+a {
+    color: #2b98fc;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus {
+    color: #2a6496;
+    text-decoration: none;
+    outline: none;
+}
+
+@media only screen and ( max-width:319px ) {    /*老式安卓手机                 */
+    html { font-size: 31.9px; }
+}
+@media only screen and ( width:320px ) {        /*iphone4/4s/5/5s竖屏         */
+    html { font-size: 32px; }
+}
+@media only screen and ( min-width:360px ) {    /*小米、三星note系列专用竖屏    */
+    html { font-size: 36px; }
+}
+@media only screen and ( min-width:375px ) {    /*iphone6                    */
+    html { font-size: 37.5px; }
+}
+@media only screen and ( min-width:414px )  {   /*iphone6 plus               */
+    html { font-size: 41.4px; }
+}
+@media only screen and ( min-width:481px ) {    /*大部分安卓手机以及其他手机      */
+    html { font-size: 48.1px; }
+}
+@media only screen and ( min-width:500px ) {    /*大部分安卓手机以及其他手机      */
+    html { font-size: 50px; }
+}

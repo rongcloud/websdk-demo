@@ -1,0 +1,33 @@
+<div class="public-info">
+    <header class="header">
+        <i class="icons icon-return" @touchend="goPublicSearch"  @click="goPublicSearch"></i>
+        <h2 class="title">详情资料</h2>
+    </header>
+    <div class="public-info-con">
+        <div class="public-info-avatar">
+            <div class="rong-avatar"><img :src="stat.currentPublic.portraitUri" class="rong-avatar-bd"></div>
+            <div class="public-info-name">{{stat.currentPublic.name}}</div>
+        </div>
+
+        <div class="public-info-intro">
+            <span class="title">功能介绍</span>
+            <div class="public-introduction">
+                {{stat.currentPublic.introduction}}
+            </div>
+        </div>
+
+        <div class="public-info-history">
+            <span class="title">查看历史消息</span>
+        </div>
+
+        <div v-if="stat.currentPublic.hasFollowed" class="public-info-btns">
+            <button type="button" class="enterPublic" @touchend="goPublicChat"  @click="goPublicChat">进入公众号</button>
+            <br>
+            <button type="button" class="unsubscribePublic" @touchend="unsubscribePublic"  @click="unsubscribePublic">取消订阅公众号</button>
+        </div>
+
+        <div v-else class="public-info-btns">
+            <button type="button" class="subscribePublic" @touchend="subscribePublic" @click="subscribePublic">订阅公众号</button>
+        </div>
+    </div>
+</div>
