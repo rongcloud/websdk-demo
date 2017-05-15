@@ -1,0 +1,140 @@
+{
+  "publicList": [
+    {
+      "conversationType": 8,
+      "introduction": "北京吃货--专注北京本地美食推荐、分享、试吃、活动。配合探店、线下活动、爆料等。【北京吃货】北京地区第一美食微信平台！",
+      "name": "北京吃货",
+      "menu": [],
+      "portraitUri": "http://rongcloud-file.ronghub.com/4a962843f4b0a43230.jpeg?attname=bjch.jpeg&e=2147483647&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:yzX_Dk3ZcvajMk9H715dwBZ-LIs=",
+      "publicServiceId": "beijingchihuo",
+      "hasFollowed": true,
+      "isGlobal": false
+    },
+    {
+      "conversationType": 8,
+      "introduction": "认准仅此一号！！其余都是山寨！！！我们致力于打造成为北京地区最具影响力和最有价值的新媒体。新浪微博@北京全攻略 唯一公众平台。",
+      "name": "北京全攻略",
+      "menu": [],
+      "portraitUri": "http://rongcloud-file.ronghub.com/3629434a209b942faf.jpeg?attname=bjqgl.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:14AC6jMdam60M4_yS53WE_8BFeE=",
+      "publicServiceId": "beijingquangonglv",
+      "hasFollowed": true,
+      "isGlobal": false
+    }
+  ],
+  "searchList":[
+    {
+      "conversationType": 8,
+      "introduction": "北京旅游官方微信，订门票，查攻略，品美食，给您推荐京郊哪好玩儿，周末去哪玩儿，还有免费门票大派送！是玩货们必备的公众号！",
+      "name": "北京旅游",
+      "menu": [],
+      "portraitUri": "http://rongcloud-file.ronghub.com/48d1b84d1eb2d50f36.jpeg?attname=bjly.jpeg&e=2147483647&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:1z1wIXiLBVFJoQzv2tahCoTCChs=",
+      "publicServiceId": "beijinglvyou",
+      "hasFollowed": false,
+      "isGlobal": false
+    },
+    {
+      "conversationType": 8,
+      "introduction": "认准大脸头像的啊！！！其余都是山寨！！！",
+      "name": "吃喝玩乐在北京",
+      "menu": [],
+      "portraitUri": "http://rongcloud-file.ronghub.com/6cafd84689bdbeb278.jpeg?attname=chwl.jpeg&e=2147483647&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:rfAEX7TpJCs7VkfGVrzMLlsAuIE=",
+      "publicServiceId": "beijingchihe",
+      "hasFollowed": false,
+      "isGlobal": false
+    },
+    {
+      "conversationType": 8,
+      "introduction": "北京吃货--专注北京本地美食推荐、分享、试吃、活动。配合探店、线下活动、爆料等。【北京吃货】北京地区第一美食微信平台！",
+      "name": "北京吃货",
+      "menu": [],
+      "portraitUri": "http://rongcloud-file.ronghub.com/4a962843f4b0a43230.jpeg?attname=bjch.jpeg&e=2147483647&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:yzX_Dk3ZcvajMk9H715dwBZ-LIs=",
+      "publicServiceId": "beijingchihuo",
+      "hasFollowed": true,
+      "isGlobal": false
+    },
+    {
+      "conversationType": 8,
+      "introduction": "认准仅此一号！！其余都是山寨！！！我们致力于打造成为北京地区最具影响力和最有价值的新媒体。新浪微博@北京全攻略 唯一公众平台。",
+      "name": "北京全攻略",
+      "menu": [],
+      "portraitUri": "http://rongcloud-file.ronghub.com/3629434a209b942faf.jpeg?attname=bjqgl.jpeg&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:14AC6jMdam60M4_yS53WE_8BFeE=",
+      "publicServiceId": "beijingquangonglv",
+      "hasFollowed": true,
+      "isGlobal": false
+    }
+  ],
+  "userInfo":{
+    "user1": {
+      "appKey": "82hegw5u8mqwx",
+      "userId": "1",
+      "userToken": "pQn8OduE596/gGzLZVUheTCvQwRQ4mI0ws9X674LamI4CpgvufNZRf5krbtH6T1AuPrNawarRocdJ9HGgnMMVA==",
+      "userName": "user1",
+      "portraitUri": "http://img.duoziwang.com/2016/12/08/18594927932.jpg"
+    }
+  },
+  "msgList":[
+    {
+      "content": {
+        "messageName": "PublicServiceMultiRichContentMessage",
+        "richContentMessages": {
+          "articles": [
+            {
+              "digest": "",
+              "picurl": "http://7xi6ox.com1.z0.glb.clouddn.com/22c7962d13ca81da353f003e4af42347",
+              "title": "如果你来过了北京，就等于去了全世界!",
+              "url": "//public.rongcloud.cn/view/5F3DBDAAEE94639438CC1AFF2601A035"
+            },
+            {
+              "digest": "",
+              "picurl": "http://www.rongcloud.cn/images/newVersion/ewm.png?0721",
+              "title": "融云 SDK 版本更新（ Android 2.8.9 Stable；iOS 2.8.9 Stable ）",
+              "url": "//public.rongcloud.cn/view/95B92A7E6DA604E6AADDE20A8110067E"
+            }
+          ],
+          "extra": "",
+          "user": {
+            "id": "",
+            "name": "",
+            "portrait": ""
+          }
+        }
+      },
+      "conversationType": 8,
+      "objectName": "RC:PSMultiImgTxtMsg",
+      "messageDirection": 2,
+      "messageId": "8_2526138",
+      "receivedStatus": 0,
+      "receivedTime": 1492566484293,
+      "senderUserId": "Ddaijia",
+      "sentTime": 1492566483541,
+      "targetId": "Ddaijia",
+      "messageType": "PublicServiceMultiRichContentMessage",
+      "messageUId": "5DO7-P929-L2KP-MC3I",
+      "offLineMessage": false
+    },
+    {
+      "content": {
+        "messageName": "TextMessage",
+        "content": "欢迎关注融云公众号！融云提供的即时通讯云服务是将即时通讯技术封装成 SDK 供全球开发者下载使用，并向开发者提供平台环境、技术支持以及后期运维等服务，使开发者的业务能够快速获得即时通讯的能力，实现单聊、群聊等功能，满足社交、客服、聊天室等场景需要。",
+        "extra": "",
+        "user": {
+          "id": "",
+          "name": "",
+          "portrait": ""
+        }
+      },
+      "conversationType": 8,
+      "objectName": "RC:TxtMsg",
+      "messageDirection": 2,
+      "messageId": "8_9610526",
+      "receivedStatus": 0,
+      "receivedTime": 1492567191203,
+      "senderUserId": "Ddaijia",
+      "sentTime": 1492567169609,
+      "targetId": "Ddaijia",
+      "messageType": "TextMessage",
+      "messageUId": "5DO7-RSQ9-5000-001H",
+      "offLineMessage": true
+    }
+  ]
+}

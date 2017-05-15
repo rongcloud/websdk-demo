@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Super </title>
+    <style>
+        .input{
+            margin-left: 30px;
+        }
+        .video-main{
+            width: 40%;
+            height: 500px;
+            border: 1px solid gray;
+            float: left;
+        }
+        .video-main video{
+            width: 100%;
+            height: inherit;
+        }
+
+        .video-box{
+            width: 40%;
+            height: 500px;
+            float: right;
+            overflow-y: auto;
+            border: 1px solid gray;
+        }
+        .voide-child{
+            float:left;
+            margin-left: 30px;
+            margin-top: 5px;
+            width: 200px;
+            height: 150px;
+            border: 2px solid gray;
+        }
+
+        .video-bar{
+            float: right;
+            margin-right: 10px;
+            height: 20px;
+            width: 20px;
+        }
+
+        .tool-bar{
+            clear: both;
+            padding: 20px;
+        }
+        .voide-child video{
+            height: 125px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="video-main"> </div>
+
+    <div class="video-box"> </div>
+
+    <div class="tool-bar">
+        <input type="button" value="call" onclick="call()">
+        <input type="button" value="hungup" onclick="hungup()">
+
+        <input type="button" value="accept" onclick="acceptCall()">
+        <input type="button" value="reject" onclick="reject()">
+        
+        <input type="button" value="mute" onclick="mute()">
+        <input type="button" value="unmute" onclick="unmute()">
+
+        <input type="button" value="videoToAudio" onclick="videoToAudio()">
+        <input type="button" value="audioToVideo" onclick="audioToVideo()">
+
+    </div>
+
+    <script src="//cdn.ronghub.com/RongIMLib-2.2.5.js"></script>
+</body>
+
+    <script src="../init.js"></script>
+
+    <script src="../jquery-3.1.1.js"></script>
+    
+    <script src="./adapter.js"></script>
+    <script src="./blinkEngine.js"></script>
+
+    <script src="../underscore-1.8.3.js"></script>
+
+    <script src="../rong-calllib-util.js"></script>
+    <script src="./rong-calllib-blink.js"></script>
+
+    <script src="../rong-calllib-sendmsg.js"></script>
+
+    <script src="../rong-calllib.js"></script>
+
+    <script>
+        var users = [ {
+            userid:"JFTfwU5Zc",
+            token:"ft8/LHieXILRRNZBNp8iHDVgZOtrWuESz8LGXFTVIuFcJZApQcPoPZqOh0pjHpHmSZEC9Cx8dxUlfulz0k/xGQ=="
+        }, {
+            userid:"xNlpDTUmw",
+            token:"htqthJKH19O8IJAFpnXiCMXZO74SCBcJ+lQ6rhLFlLvHvRhXS9LdQ05/Lafc99fS67AQVOCKuFcRA5MmG3vI+qARbCoc5lmW"
+        }, {
+            userid:"ljgMZJKas",
+            token:"zaZEtQWfsPXocFceD1UQj8XZO74SCBcJ+lQ6rhLFlLvHvRhXS9LdQxqV635meqlhkvrPn22sYtmZIV0rVan1dqARbCoc5lmW"
+        }];
+
+        var userId = users[0].userid;
+        var inviteUserIds = [users[1].userid, users[2].userid];
+        var token = users[0].token;
+
+        if(location.search.indexOf("peer1") > -1){
+            userId = users[1].userid;
+            inviteUserIds = [users[0].userid, users[2].userid];
+            token = users[1].token;
+        }
+
+        if(location.search.indexOf("peer2") > -1){
+            userId = users[2].userid;
+            inviteUserIds = [users[0].userid, users[1].userid];
+            token = users[2].token;
+        }
+
+        var conversationType = 3;
+        var targetId = 'Pw51mKYJq';
+
+        function onInitcomplete(error, callLib){
+            console.log(callLib);
+        }
+
+        var callbacks = {
+            getInstance : function(instance){
+               
+            },
+            getCurrentUser : function(userInfo){
+                console.log(userInfo.userId);
+            }
+        };
+
+        var params = {
+            // appKey : '8luwapkvucoil',
+            // appKey : 'e0x9wycfx7flq',
+            // navi: '119.254.111.49:9100',
+            appKey: 'c9kqb3rdkbb8j',
+            navi: 'navqa.cn.ronghub.com',
+            token : token
+        };
+        
+        var mediaType = RongIMLib.MediaType;
+
+        QuickRongIM.init(params,callbacks);
+    </script>
+    <script src="./demo.js"></script>
+</html> 

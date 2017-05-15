@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会话列表 集成引导</title>
+</head>
+<link rel="stylesheet" href="../integrate.css">
+<body>
+<div class="wrap">
+    <h1>会话列表 集成引导</h1>
+	<p>文档: <a href="http://www.rongcloud.cn/docs/web_api_demo.html#conversation">http://www.rongcloud.cn/docs/web_api_demo.html#conversation</a>（请注意一定要开启 单群聊消息云端存储功能
+		<a href="http://www.rongcloud.cn/pricing/#pay">收费详情</a>）</p>
+	<p>集成 demo: <a href="conversation-list.html">conversation-list.html</a></p>
+	<p>
+		会话列表的数据分两部分，<br>
+		一部分是会话列表（包含最后一条消息），SDK 提供了 getConversationList 方法获取数据；<br>
+		另外一部分是会话对象（联系人，群等）的基本信息，需要应用服务器提供接口
+	</p>
+    <div class="guide">
+        <div class="steps">
+            <h2>1.用户登录成功后，获取 appKey，token，链接云端</h2>
+            <div class="content">
+				<p>模拟的用户及群组信息数据: <a href="conversation-list.json">conversation-list.json</a> 中的 "userInfos,groupInfos"</p>
+				<p>调用 init() 初始化，链接云端</p>
+<pre>
+var userInfo = {
+	appKey: "",
+	token: ""
+};
+var callbacks = {
+	CONNECTED: function (instance) {
+	},
+	Success: function (id) {
+	},
+	Received: function (message) {
+	}
+};
+init(userInfo, callbacks);
+</pre>
+            </div>
+        </div>
+
+		<div class="steps">
+			<h2>2.获取会话列表，处理会话列表（拼接应用服务器提供的用户或群组信息），渲染会话列表</h2>
+			<div class="content">
+				<p>模拟的会话列表数据: <a href="conversation-list.json">conversation-list.json</a> 中的 "conversation"</p>
+				<p>拼接后会话列表数据: <a href="conversation-list.json">conversation-list.json</a> 中的 "translate-conversation"</p>
+
+<pre>
+//同步会话列表
+//@param  {ResultCallback} callback 返回值，参数回调
+//@param {array} conversationTypes 可选参数，可以获取指定会话类型的会话，默认请传 null
+instance.getConversationList({
+	onSuccess: function (conversations) {
+		//处理会话列表
+		transConversations(conversations, function (translatedConversations) {
+			//处理完成后，渲染会话列表
+			renderConversationView(translatedConversations,instance);
+		})
+	}
+}, null);
+</pre>
+			</div>
+		</div>
+
+
+		<div class="steps">
+			<h2>3.删除指定会话/清除会话列表</h2>
+			<div class="content">
+<pre>
+instance.removeConversation(conversationType,targetId,{
+	onSuccess:function(bool){
+		//删除会话成功。
+		console.log(bool);
+	},
+	onError:function(error){
+		// error => 删除会话的错误码
+		console.log(error);
+	}
+});
+</pre>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+</body>
+</html>

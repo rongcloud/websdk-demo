@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>token check</title>
+</head>
+<body>
+<style>
+body{
+	font-size:80%;
+}
+.panel span{
+	display:inline-block;	
+	width:60px;
+}
+.show{
+	width:98%;
+	display:inline-block;
+	overflow:hidden;
+	border:1px solid #ccc;
+}
+.show h3{
+	text-indent:10px;
+}
+.show pre{
+	border-top:1px dotted #ccc;
+	padding:5px 0 0 10px;
+}
+</style>
+
+<script>
+function showResult(id,message){
+	var dom = document.getElementById(id);
+	dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  message.content.content + '</pre>';
+	//JSON.stringify(message,null,"\t")
+}	
+</script>
+
+
+<script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
+
+<script>
+function init(params,callbacks){	
+	var appKey = params.appKey;
+	var token = params.token;
+	var navi = params.navi;
+
+	if(navi !== ""){
+		//私有云
+		var config = {
+			navi : navi
+		}
+		RongIMLib.RongIMClient.init(appKey,null,config);
+	}else{
+		//公有云
+		RongIMLib.RongIMClient.init(appKey);
+	}
+
+	RongIMLib.RongIMClient.init(appKey);
+	instance = RongIMClient.getInstance();
+
+	// 连接状态监听器
+	RongIMClient.setConnectionStatusListener({
+		onChanged: function (status) {
+			console.log(status);
+		    switch (status) {
+		        case RongIMLib.ConnectionStatus.CONNECTED:
+		            callbacks.getInstance && callbacks.getInstance(instance);
+		            break;
+		        }
+		}
+	});
+
+
+	RongIMClient.setOnReceiveMessageListener({
+		// 接收到的消息
+		onReceived: function (message) {
+		    // 判断消息类型
+		    console.log("新消息: " + message.targetId);
+            console.log(message);
+            callbacks.receiveNewMessage && callbacks.receiveNewMessage(message);
+		}
+	});
+
+	//开始链接
+	RongIMClient.connect(token, {
+		onSuccess: function(userId) {
+			callbacks.getCurrentUser && callbacks.getCurrentUser({userId:userId});
+			console.log("链接成功，用户id：" + userId);
+		},
+		onTokenIncorrect: function() {
+			//console.log('token无效');
+		},
+		onError:function(errorCode){
+		  console.log("=============================================");
+		  console.log(info);
+		}
+	});
+}
+
+function startInit(user,targetId){
+	var params = {
+		appKey : getValue("appKey"),
+		token : getValue("token"),
+		navi : getValue("navi")
+	};
+
+	var callbacks = {
+		getInstance : function(instance){
+			//instance.sendMessage
+		},
+		getCurrentUser : function(userInfo){
+			console.log(userInfo.userId);
+			alert("链接成功；userid=" + userInfo.userId);
+		},
+		receiveNewMessage : function(message){
+			showResult("show1",message);
+		}
+	};
+
+	init(params,callbacks);
+}
+
+function getValue(id){
+	return document.getElementById(id).value;
+}
+</script>
+
+
+<h1>token check</h1>
+<div class="panel" id="panel">
+	<p>
+		<span>appkey</span>
+		<input type="text" id="appKey" size="20" value="8w7jv4qb78a9y">
+	</p>
+	<p>
+		<span>token</span>
+		<input type="text" id="token" size="110" value="ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==">
+	</p>
+	<p>
+		<span>navi</span>
+		<input type="text" id="navi" size="20" value=""> <b>此配置项仅针对私有部署，公有云请置空，格式为10.10.10.10:8080，不带http(s)://前缀，</b>
+	</p>
+	<p>
+		<span>&#160;</span>
+		<input type="button" onclick="startInit()" value="start check">
+	</p>
+</div>
+
+<p></p>
+
+<div class="show" id="show1">
+	<h3>消息接收结果</h3>
+</div>
+
+</body>
+</html>

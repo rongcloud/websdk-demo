@@ -13,3 +13,8 @@ Voice test: [https://rongcloud.github.io/websdk-demo/voice.html](https://rongclo
 
 
 VoIP test: [https://rongcloud.github.io/websdk-demo/voip.html](https://rongcloud.github.io/websdk-demo/voip.html)
+
+Upload: [https://github.com/rongcloud/rongcloud-web-im-upload](https://github.com/rongcloud/rongcloud-web-im-upload)
+
+
+Integrate Guide: [https://rongcloud.github.io/websdk-demo/integrate/guide.html](https://rongcloud.github.io/websdk-demo/integrate/guide.html)

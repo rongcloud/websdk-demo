@@ -451,7 +451,8 @@ function sendImageMessage(){
 
 	上传插件文档: http://rongcloud.cn/docs/web.html#上传插件
 
-	需要自行解决文件上传、获取base64码的缩略图，建议不大于100K
+	需要自行解决文件上传
+	缩略图必须是base64码的jpg图，而且不带前缀"data:image/jpeg;base64,"，不得超过100K
 
 	upload组件：https://github.com/rongcloud/rongcloud-web-im-upload
 	*/
@@ -595,6 +596,8 @@ function sendRegisterMessage(){
 function sendLocationMessage(){
 	/*
 	文档：http://www.rongcloud.cn/docs/api/js/LocationMessage.html
+
+	缩略图必须是base64码的jpg图，而且不带前缀"data:image/jpeg;base64,"，不得超过100K
 
 	注意事项：
 		1：需要自己做显示效果

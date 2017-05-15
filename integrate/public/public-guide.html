@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>公众号 集成引导</title>
+</head>
+<link rel="stylesheet" href="../integrate.css">
+<script src="../lib/jquery-3.1.1.js"></script>
+<body>
+<div class="wrap">
+    <h1>公众号 集成引导</h1>
+
+    <div class="guide">
+        <div class="steps">
+            <h2>1.准备工作</h2>
+            <div class="content">
+                <p>公众号创建流程: </p>
+                <ol>
+                    <li>1.在公众号系统: <a href="http://public.rongcloud.cn">http://public.rongcloud.cn</a>  创建公众号并更新发布</li>
+                    <li>2.登录 开发者管理后台 <a href="https://developer.rongcloud.cn">https://developer.rongcloud.cn</a> 通过 “公众服务平台 => 添加私有公众号”给 app 添加公众号,添加私有公众号需要应用申请上线，上线后页面右上角出现添加私有公众号按钮（公众号为填写公众平台 => 公众号设置 => 公众号，公众号识别码为公众平台 => APP 接入模式设置 => 私有模式 => 当前识别码）</li>
+                    <li>3.用户可以在第二步的添加结果里进行搜索和关注操作，关注后可以通过消息监听接受公众号的推送，用户也可以给公众号留言，具体细节参考页面里的示例代码和注释。</li>
+                </ol>
+                <p>调试 demo: <a href="https://rongcloud.github.io/websdk-demo/api-test.html">https://rongcloud.github.io/websdk-demo/api-test.html</a></p>
+				<p>集成 demo: <a href="public.html">public.html</a></p>
+            </div>
+        </div>
+
+		<div class="steps">
+			<h2>2.集成的思路</h2>
+			<div class="content">
+				<p>页面分配</p>
+				<ol>
+					<li>0.公众号模板主页 <a href="public.html">public.html</a></li>
+					<li>1.公众号列表页 <a class="transSource" href="template/public-list.html">public-list.html</a></li>
+					<li>2.公众号搜索页 <a class="transSource" href="template/public-search.html">public-search.html</a></li>
+					<li>3.公众号详情页 <a class="transSource" href="template/public-info.html">public-info.html</a></li>
+					<li>4.公众号聊天页 <a class="transSource" href="template/public-chat.html">hpublic-chat.html</a></li>
+					<li>5.公众号推送文章页 <a class="transSource" href="template/public-article.html">public-article.html</a></li>
+				</ol>
+
+			</div>
+		</div>
+
+		<div class="steps">
+			<h2>3.引入 SDK，并完成初始化、链接云端</h2>
+			<div class="content">
+				<p>初始化参考: <a href="../init.js">init.js</a></p>
+<pre>
+var userInfo = {
+	appKey: "",
+	token: ""
+};
+var callbacks = {
+	CONNECTED: function (instance) {
+	},
+	Success: function (id) {
+	},
+	Received: function (message) {
+	}
+};
+init(userInfo, callbacks);
+</pre>
+			</div>
+		</div>
+
+		<div class="steps">
+			<h2>4.公众号列表页</h2>
+			<div class="content">
+				<p>html: <a class="transSource" href="template/public-list.html">public-list.html</a></p>
+				<p>js: <a href="js/public-list.js">public-list.js</a></p>
+				<p>公众号列表数据模型 <a href="public-mock-data.json">public-mock-data.json</a> 中的 "publicList"</p>
+				<p>变量解释: </p>
+				<ol>
+					<li>conversationType : 7, 私有云里只有应用公众服务（MC） 8, 公有公众服务（MP）</li>
+					<li>hasFollowed : 是否关注 </li>
+					<li>introduction : 功能描述</li>
+					<li>isGlobal : 是否全局</li>
+					<li>menu : 自定义菜单</li>
+					<li>name : 昵称</li>
+					<li>portraitUri : 头像 url</li>
+					<li>publicServiceId : 公众号 id</li>
+				</ol>
+<pre>
+//获取已关注公众号
+RongIMClient.getInstance().getPublicServiceList({
+	onSuccess: function (list) {
+		console.log("获取已关注公众号成功");
+	}
+});
+</pre>
+
+
+			</div>
+		</div>
+
+		<div class="steps">
+			<h2>5.公众号搜索页</h2>
+			<div class="content">
+				<p>html: <a class="transSource" href="template/public-search.html">public-search.html</a></p>
+				<p>js: <a href="js/public-search.js">public-search.js</a></p>
+				<p>公众号搜索数据模型 <a href="public-mock-data.json">public-mock-data.json</a> 中的 "searchList"</p>
+<pre>
+//根据用户输入关键字搜索未关注公众号
+var keywords = this.stat.searchVal;
+var searchType = 1; //[0-exact 1-fuzzy]
+RongIMClient.getInstance().searchPublicService(searchType, keywords, {
+	onSuccess: function (list) {
+		//console.log("查找公众号成功");
+		//list 为匹配到的所以结果
+		//that.stat.searchList=list;
+		var listUnFollowed = [];
+		$(list).each(function () {
+			this.hasFollowed == false && listUnFollowed.push(this);
+		});
+	}
+});
+</pre>
+			</div>
+		</div>
+
+		<div class="steps">
+			<h2>6.公众号详情页</h2>
+			<div class="content">
+				<p>html: <a class="transSource" href="template/public-info.html">public-info.html</a></p>
+				<p>js: <a href="js/public-info.js">public-info.js</a></p>
+				<p>公众号详情数据模型 <a href="public-mock-data.json">public-mock-data.json</a> "searchList" 中的对象</p>
+<pre>
+//订阅公众号
+var publicServiceType = RongIMLib.ConversationType.PUBLIC_SERVICE;
+RongIMClient.getInstance().subscribePublicService(publicServiceType, publicServiceId, {
+	onSuccess: function (list) {
+		console.log("订阅公众号成功");
+	}
+});
+
+//取消订阅公众号
+RongIMClient.getInstance().unsubscribePublicService(publicServiceType, publicServiceId, {
+	onSuccess: function (list) {
+		console.log("取消订阅公众号成功");
+	}
+});
+</pre>
+			</div>
+		</div>
+
+		<div class="steps">
+			<h2>7.公众号聊天页</h2>
+			<div class="content">
+				<p>html: <a class="transSource" href="template/public-chat.html">public-chat.html</a></p>
+				<p>js: <a href="js/public-chat.js">public-chat.js</a></p>
+				<p>公众号回复用户消息在 <a href="http://public.rongcloud.cn">公众平台</a> => 用户回复</p>
+				<p>公众号聊天消息数据模型 <a href="public-mock-data.json">public-mock-data.json</a> "msgList" 中 "messageType" = "TextMessage" 为文本消息，"messageType" = "PublicServiceMultiRichContentMessage"为公众号推送多图文消息</p>
+				<p>变量解释: </p>
+				<ol>
+					<li>messageDirection : 1, 发送消息方 2, 接收消息方</li>
+					<li>messageType : 消息类型 </li>
+					<li>articles : 公众号推送图文</li>
+					<li>picurl : 文章预览图 url 地址</li>
+					<li>title : 文章标题</li>
+					<li>url : 文章地址</li>
+				</ol>
+<pre>
+//发送消息
+var text = this.stat.sendMsgVal ;
+var msg = new RongIMLib.TextMessage({content: text, extra: "公众号"});
+RongIMClient.getInstance().sendMessage(conversationtype, publicServiceId, msg, {
+	onSuccess: function (message) {
+		//发送成功后 渲染已发送消息
+		that.stat.msgList.push(message);
+	}
+});
+</pre>
+			</div>
+		</div>
+
+		<div class="steps">
+			<h2>8.公众号推送文章页</h2>
+			<div class="content">
+				<p>html: <a class="transSource" href="template/public-article.html">public-article.html</a></p>
+				<p>js: <a href="js/public-article.js">public-article.js</a></p>
+				<p>公众号向用户推送文章在 <a href="http://public.rongcloud.cn">公众平台</a> => 消息推送</p>
+				<p>公众号推送文章地址为 <a href="public-mock-data.json">public-mock-data.json</a> "msgList" 中 "messageType" = "PublicServiceMultiRichContentMessage" 公众号推送多图文消息 articles.url</p>
+<pre>
+//文章内容嵌套在 iframe 中
+&lt;iframe :src="stat.articleUrl">&lt;/iframe>
+</pre>
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no">
+    <title>chat demo</title>
+    <link rel="stylesheet" href="../reset.css">
+    <link rel="stylesheet" href="chat.css">
+
+    <script src="../lib/jquery-3.1.1.js"></script>
+    <script src="../lib/vue-2.1.4.js"></script>
+    <script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
+
+
+    <script src="../init.js"></script>
+    <script src="chat.js"></script>
+
+</head>
+<body>
+<div id="chatPage">
+    <component :is="stat.currentView" :stat="stat"></component>
+</div>
+</body>
+<template id="chat">
+    <div class="chat">
+        <!--header-->
+        <header class="header">
+            <h2 class="title">{{stat.currentUserInfo.nickname}}</h2>
+        </header>
+        <!--header-->
+
+        <!--chat-content-->
+        <div class="chat-content">
+            <div class="message-wrapper">
+                <div class="message-item" v-for="msg in stat.messageList"
+                     :class="[msg.messageDirection == 1 ? 'my-msg' : 'your-msg']">
+                    <div v-if="msg.messageType == 'TextMessage'" class="message-text">
+                        <div class="rong-avatar">
+                            <img v-if="msg.messageDirection == 1" :src="stat.currentUserInfo.portraitUri"
+                                 class="rong-avatar-bd">
+                            <img v-else :src="stat.targetUserInfo.portraitUri" class="rong-avatar-bd">
+                        </div>
+                        <div class="message-body">
+                            <pre class="user-msg" v-if="msg.content.messageName == 'TextMessage'">{{msg.content.content}}</pre>
+                            <img class="image-message" :src="msg.content.imageUri" alt="image"
+                                 v-if="msg.content.messageName == 'ImageMessage'">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--chat-content-->
+
+        <!--footer-->
+        <footer class="footer">
+            <div class="message-wrap"><textarea v-model="stat.sendMsgVal" id="message-content" placeholder="请输入文字..."
+                                                class="message-content"></textarea></div>
+            <span class="send-btn" @touchend="sendMsg">发送</span>
+        </footer>
+        <!--footer-->
+    </div>
+</template>
+<script type="text/javascript">
+
+    //初始化
+    var userInfo = {
+        appKey: "82hegw5u8mqwx",
+        token: "oUh0wcHH6E2LiuTpEKp/+jCvQwRQ4mI0ws9X674LamLVDfNK14vl8UoEcZT0otHeuyNsIi1T4wZ8UwVl0ZqyZA=="
+    };
+    var callbacks = {
+        CONNECTED: function (instance) { //传入实例参数
+            //获取历史消息
+            var conversationType = RongIMLib.ConversationType.PRIVATE;
+            var targetId = 'user2';
+            instance.getHistoryMessages(conversationType, targetId, null, 20, {
+                onSuccess: function (list, hasMsg) {
+                    //渲染会话列表
+                    renderHistoryMessages(list, hasMsg, instance);
+                }
+            }, null);
+
+        },
+        Success: function (id) {
+        },
+        Received: function (message) {
+        }
+    };
+    init(userInfo, callbacks);
+</script>
+</html>
