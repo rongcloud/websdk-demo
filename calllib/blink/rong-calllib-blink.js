@@ -1,4 +1,4 @@
-"use strict";;
+"use strict";
 (function(dependencies) {
     var BlinkEngine = dependencies.BlinkEngine;
     var BlinkEngineEventHandle = dependencies.BlinkEngineEventHandle;
@@ -13,7 +13,7 @@
         minRate: 450,
         frameRate: 15
     };
-
+ 
     var createVideo = function(src, id) {
         var video = document.createElement('video');
 
@@ -41,7 +41,8 @@
     var joinRoom = function(params, callback) {
         callback = callback || util.noop;
 
-        videoRoom = new BlinkEngine();
+        var url = params.url || '';
+        videoRoom = new BlinkEngine(url);
         var roomHandler = new BlinkEngineEventHandle();
 
         var errorInfo = null;
@@ -50,10 +51,14 @@
             add: function(data) {
 
                 var stream = data.data;
-                var userId = getId(data.userId);
+                
+                var userId = data.userId;
+                var videoId = getId(data.userId);
 
-                var video = createVideo(stream, userId);
+                var video = createVideo(stream, videoId);
 
+                video.setAttribute('userid', userId);
+                
                 var result = {
                     type: 'added',
                     data: video,
@@ -149,12 +154,22 @@
             frameRate: config.frameRate
         };
 
+        var closeVideoItem = {
+            1: function(){
+                return true;
+            },
+            2: function(){
+                return false;
+            }
+        };
+
+        var mediaType = params.mediaType;
         videoRoom.setVideoParameters({
             VIDEO_PROFILE : constraints,
             VIDEO_MAX_RATE : config.maxRate,
             VIDEO_MIN_RATE : config.minRate,
             USER_TYPE : 1,
-            IS_CLOSE_VIDEO : false
+            IS_CLOSE_VIDEO : closeVideoItem[mediaType]()
         });
 
         var token = params.token;
