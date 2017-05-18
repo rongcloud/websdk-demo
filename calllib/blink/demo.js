@@ -66,12 +66,22 @@ RongCallLib.commandWatch(function(command) {
 
 var CallType = RongIMLib.VoIPMediaType;
 
-function call() {
-    var params = {
+function callVideo() {
+    var mediaType = CallType.MEDIA_VEDIO;
+    call(mediaType);
+}
+
+function callAudio() {
+    var mediaType = CallType.MEDIA_AUDIO;
+    call(mediaType);  
+}
+
+function call(mediaType){
+     var params = {
         conversationType: conversationType,
         targetId: targetId,
         inviteUserIds: inviteUserIds,
-        mediaType: CallType.MEDIA_VEDIO
+        mediaType: mediaType
     };
     RongCallLib.call(params, function(error) {
         console.log(error);
@@ -89,7 +99,16 @@ function hungup() {
     });
 }
 
-function acceptCall() {
+function acceptAudio() {
+    var params = {
+        conversationType: conversationType,
+        targetId: targetId,
+        mediaType: CallType.MEDIA_AUDIO
+    };
+    RongCallLib.accept(params);
+}
+
+function acceptVideo() {
     var params = {
         conversationType: conversationType,
         targetId: targetId,
