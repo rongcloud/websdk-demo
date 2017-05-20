@@ -310,7 +310,7 @@
             summayTimer.start();
         },
         HungupMessage: function(message) {
-    
+
         },
         MediaModifyMessage: function(message) {
             console.log(message);
@@ -395,6 +395,7 @@
                 var key = 'REMOTE_NO_RESPONSE15';
                 var reason = Reason.get(key);
                 callback(reason);
+                room.reset();
             }, timeout);
 
         });
@@ -535,6 +536,8 @@
         quitRoom({
             roomId: callId
         });
+
+        room.reset();
     };
 
     var hungup = function(params, callback) {
