@@ -43,6 +43,11 @@
         var targetId = params.targetId;
 
         var im = RongIMClient.getInstance();
+
+        var isMentioned = false;
+        var pushText = '';
+        var appData = params.appData || '';
+
         im.sendMessage(conversationType, targetId, msg, {
             onSuccess: function(message) {
                 var error = null;
@@ -51,20 +56,34 @@
             onError: function(code) {
                 callback(code);
             }
-        });
+        }, isMentioned, pushText, appData);
     };
 
     var commandItem = {
-          /*
+        /*
             params.conversationType
             params.targetId
             params.content
          */
         invite: function(params, callback) {
             params.messageType = 'InviteMessage';
+            
+            var content = params.content;
+            
+            var mediaType = content.mediaType;
+            var inviteUserIds = content.inviteUserIds;
+            var callId = content.callId;
+
+            var appData = {
+                mediaType: mediaType,
+                userIdList: inviteUserIds,
+                callId: callId
+            };
+
+            params.appData = JSON.stringify(appData);
             sendMessage(params, callback);
         },
-        ringing: function(params, callback){
+        ringing: function(params, callback) {
             params.messageType = 'RingingMessage';
             sendMessage(params, callback);
         },
@@ -78,11 +97,11 @@
             sendMessage(params, callback);
         },
 
-         /*
-            params.conversationType
-            params.targetId
-            params.content
-         */
+        /*
+           params.conversationType
+           params.targetId
+           params.content
+        */
         hungup: function(params, callback) {
             params.messageType = 'HungupMessage';
             sendMessage(params, callback);
@@ -100,7 +119,7 @@
             params.messageType = 'MediaModifyMessage';
             sendMessage(params, callback);
         },
-        getToken: function(params, callback){
+        getToken: function(params, callback) {
             var im = RongIMClient.getInstance();
             var engineType = 3;
             var channelId = params.channelId;
