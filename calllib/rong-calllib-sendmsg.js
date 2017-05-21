@@ -45,7 +45,7 @@
         var im = RongIMClient.getInstance();
 
         var isMentioned = false;
-        var pushText = '';
+        var pushText = params.pushText || '';
         var appData = params.appData || '';
 
         im.sendMessage(conversationType, targetId, msg, {
@@ -80,6 +80,11 @@
                 callId: callId
             };
 
+            var pushItem = {
+                1: '您有一条音频通话',
+                2: '您有一条视频通话'
+            };
+            params.pushText = pushItem[mediaType];
             params.appData = JSON.stringify(appData);
             sendMessage(params, callback);
         },
