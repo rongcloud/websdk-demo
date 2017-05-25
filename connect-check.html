@@ -31,13 +31,14 @@ body{
 <script>
 function showResult(id,message){
 	var dom = document.getElementById(id);
-	dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  message.content.content + '</pre>';
+	dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  RongIMLib.RongIMEmoji.emojiToHTML(message.content.content) + '</pre>';
 	//JSON.stringify(message,null,"\t")
 }	
 </script>
 
 
 <script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
+<script src="//cdn.ronghub.com/RongEmoji-2.2.5.min.js"></script>
 <script src="./init.js"></script>
 <script>
 function startInit(user,targetId){
@@ -49,6 +50,7 @@ function startInit(user,targetId){
 
 	var callbacks = {
 		getInstance : function(instance){
+			RongIMLib.RongIMEmoji.init();
 			//instance.sendMessage
 		},
 		getCurrentUser : function(userInfo){
