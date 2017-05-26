@@ -6,6 +6,9 @@
 </head>
 <body>
 <style>
+*{
+	font-family:arial;
+}
 body{
 	font-size:80%;
 }
@@ -25,13 +28,17 @@ body{
 .show pre{
 	border-top:1px dotted #ccc;
 	padding:5px 0 0 10px;
+	line-height:1.5;
+	color:#333;
+	background:#f5f5f5;
 }
 </style>
 
 <script>
 function showResult(id,message){
 	var dom = document.getElementById(id);
-	dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  RongIMLib.RongIMEmoji.emojiToHTML(message.content.content) + '</pre>';
+	// dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  RongIMLib.RongIMEmoji.emojiToHTML(message.content.content) + '</pre>';
+	dom.innerHTML += '<pre>' + JSON.stringify(message,null,"\t") + '</pre>';
 	//JSON.stringify(message,null,"\t")
 }	
 </script>
@@ -94,7 +101,7 @@ function getValue(id){
 <p></p>
 
 <div class="show" id="show1">
-	<h3>消息接收结果</h3>
+	<h3>消息接收结果(新消息在最下)</h3>
 </div>
 
 </body>
