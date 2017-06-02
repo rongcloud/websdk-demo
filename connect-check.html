@@ -43,6 +43,7 @@ function showResult(id,message){
 }	
 </script>
 
+<script src="js/message-output.js"></script>
 
 <script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.5.min.js"></script>
@@ -66,6 +67,7 @@ function startInit(user,targetId){
 		},
 		receiveNewMessage : function(message){
 			showResult("show1",message);
+			messageOutput(message);
 		}
 	};
 
