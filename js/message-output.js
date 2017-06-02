@@ -52,12 +52,21 @@ function messageOutput(message){
 	};
 
 	messageOutput["list"].push(JSON.stringify(msg) + "\n");
-}
 
-messageOutput.show = function(){
-	var list = messageOutput["list"];
-	var file = new Blob(list, { "type" : "text\/plain" }); // the blob
+	var id = "messageOutputBtn";
+	var target = document.getElementById(id);
+	if(!target){
+		target = document.createElement("span");
+		target.id = id;
+		target.style.cssText = "position:fixed;right:1em;top:1em;border:1px solid #ccc;background:#f5f5f5;border-radius:5px;font-size:14px;padding:10px;cursor:pointer;";
+		document.body.appendChild(target);
+		target.onclick = function(){
+			var list = messageOutput["list"];
+			var file = new Blob(list, { "type" : "text\/plain" }); // the blob
 
-	var url = window.URL.createObjectURL(file);
-	window.open(url);
+			var url = window.URL.createObjectURL(file);
+			window.open(url);
+		}
+	}
+	target.innerHTML = "导出消息(" + messageOutput["list"].length + ")";
 }
