@@ -37,8 +37,9 @@ body{
 <script>
 function showResult(id,message){
 	var dom = document.getElementById(id);
-	// dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  RongIMLib.RongIMEmoji.emojiToHTML(message.content.content) + '</pre>';
-	dom.innerHTML += '<pre>' + JSON.stringify(message,null,"\t") + '</pre>';
+	// alert(message.content.content)
+	dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  RongIMLib.RongIMEmoji.emojiToHTML(message.content.content + "") + '</pre>';
+	// dom.innerHTML += '<pre>' + JSON.stringify(message,null,"\t") + '</pre>';
 	//JSON.stringify(message,null,"\t")
 }	
 </script>
