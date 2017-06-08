@@ -54,7 +54,7 @@ function init(params,callbacks){
 		},
 		onError:function(errorCode){
 		  console.log("=============================================");
-		  console.log(info);
+		  console.log(errorCode);
 		}
 	});
 }
