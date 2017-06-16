@@ -22,7 +22,24 @@ function showInfo(str){
 	t.innerHTML += dt + str + "<br>";
 }
 
-showInfo("开始加载");	
+showInfo("开始加载");
+
+
+function isSupport(APIName){
+	var d = document, w = window;
+	var id = "RongCloudCloud-API-Test" + new Date().getTime;
+	var iframe = d.getElementById(id);
+	if(!iframe){
+		iframe = d.createElement("iframe");
+		iframe.id = id;
+		iframe.style.display = "none";
+		d.body.appendChild(iframe);
+	}
+	var nativeAPI = iframe.contentWindow[APIName];
+	var API = w[APIName];
+
+	return nativeAPI.toString() == API.toString();
+}	
 </script>
 
 <script src="lib/require.js"></script>
@@ -30,9 +47,7 @@ showInfo("开始加载");
 <script>
 "use strict";
 
-var isSupportSocket = (function(ws){
-	return ws.toString() == "function WebSocket() { [native code] }";
-})(window.WebSocket || function(){});
+var isSupportSocket = isSupport("WebSocket");
 
 if(isSupportSocket){
 	require.config({
