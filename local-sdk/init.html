@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>init</title>
+</head>
+<body>
+
+<h1>SDK下载到本地的使用方法</h1>
+
+<div id="result"></div>
+
+<script src="RongIMLib.js"></script>
+<script>
+(function(){
+	var appKey = "8w7jv4qb78a9y";
+	var token = "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==";
+	var config = {
+        protobuf: 'protobuf-2.1.5.min.js'
+    };
+
+	RongIMLib.RongIMClient.init(appKey,null,config);
+
+	var instance = RongIMClient.getInstance();
+
+	// 连接状态监听器
+	RongIMClient.setConnectionStatusListener({
+		onChanged: function (status) {
+			console.log(status);
+		    switch (status) {
+		        case RongIMLib.ConnectionStatus.CONNECTED:
+		            break;
+		        }
+		}
+	});
+
+	RongIMClient.setOnReceiveMessageListener({
+		// 接收到的消息
+		onReceived: function (message) {
+		    // 判断消息类型
+		    console.log("新消息");
+		}
+	});
+
+	//开始链接
+	RongIMClient.connect(token, {
+		onSuccess: function(userId) {
+            //链接成功后 才可 发送消息
+            document.getElementById("result").innerHTML += "链接成功，用户id：" + userId;
+            sendTextMessage();
+		},
+		onTokenIncorrect: function() {
+			//console.log('token无效');
+		},
+		onError:function(errorCode){
+		  console.log(errorCode);
+		}
+	});
+
+
+	//发送消息定义
+	function sendTextMessage(){
+		/*
+		文档： http://www.rongcloud.cn/docs/web.html#5_1、发送消息
+			   http://rongcloud.cn/docs/api/js/TextMessage.html
+		1: 单条消息整体不得大于128K
+		2: conversatinType 类型是 number，targetId 类型是 string
+		*/
+
+		var content = {
+			content:"文字内容 content",
+			extra:{
+				"name":"name",
+				"age" : 12
+			}
+		};
+
+		var conversationtype = RongIMLib.ConversationType.PRIVATE; // 私聊
+		var msg = new RongIMLib.TextMessage(content);
+		var targetId = "user10";
+		instance.sendMessage(conversationtype, targetId, msg, {
+	        onSuccess: function (message) {
+	        	document.getElementById("result").innerHTML += "<br>发送文字消息成功";
+	            console.log("发送文字消息成功");
+	            console.log(message);
+	        },
+	        onError: function (errorCode,message){
+	            console.log("发送文字消息失败");
+	            console.log(errorCode);
+	        }
+	    });
+	}
+})();	
+</script>
+
+</body>
+</html>
