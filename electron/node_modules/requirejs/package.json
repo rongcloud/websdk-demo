@@ -1,0 +1,54 @@
+{
+  "name": "requirejs",
+  "description": "Node adapter for RequireJS, for loading AMD modules. Includes RequireJS optimizer",
+  "version": "2.3.3",
+  "homepage": "http://github.com/jrburke/r.js",
+  "author": {
+    "name": "James Burke",
+    "email": "jrburke@gmail.com",
+    "url": "http://github.com/jrburke"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrburke/r.js.git"
+  },
+  "main": "./bin/r.js",
+  "bin": {
+    "r.js": "./bin/r.js",
+    "r_js": "./bin/r.js"
+  },
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "bugs": {
+    "url": "https://github.com/jrburke/r.js/issues"
+  },
+  "_id": "requirejs@2.3.3",
+  "scripts": {},
+  "_shasum": "aa59fd3a0287eaf407959a138228044b5dd6a6a3",
+  "_from": "requirejs@latest",
+  "_npmVersion": "3.10.3",
+  "_nodeVersion": "6.7.0",
+  "_npmUser": {
+    "name": "jrburke",
+    "email": "jrburke@gmail.com"
+  },
+  "dist": {
+    "shasum": "aa59fd3a0287eaf407959a138228044b5dd6a6a3",
+    "tarball": "https://registry.npmjs.org/requirejs/-/requirejs-2.3.3.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "jrburke",
+      "email": "jrburke@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/requirejs-2.3.3.tgz_1487524083275_0.3237284303177148"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/requirejs/-/requirejs-2.3.3.tgz",
+  "readme": "ERROR: No README data found!"
+}

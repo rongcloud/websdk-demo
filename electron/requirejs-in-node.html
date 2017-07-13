@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>requirejs in electron</title>
+</head>
+<body>
+<script>
+function showInfo(str){
+	var t = document.getElementById("show");
+		t.innerHTML += "\n" + str;
+}	
+</script>
+<h1>requirejs in electron</h1>
+<p>请下载代码，在本地electron里运行</p>
+<p>Require文档：<a href="http://requirejs.org/docs/node.html">http://requirejs.org/docs/node.html</a></p>
+<p>Electron文档：<a href="https://electron.atom.io/docs/">https://electron.atom.io/docs/</a></p>
+
+<pre id="show"></pre>
+
+<script src="sdk/init.js"></script>
+<script>
+var requirejs = require('requirejs');
+
+requirejs.config({
+	// nodeRequire: require,
+    paths: {
+        byteBuffer: './sdk/byteBuffer',
+    	protobuf: './sdk/protobuf-2.1.5.min',
+    	RongIMLib: './sdk/RongIMLib-local'
+    }
+});
+
+requirejs(['byteBuffer','protobuf','RongIMLib'], function(byteBuffer,protobuf,RongIMLib) {
+    showInfo("require done");
+
+    var RongIMClient = RongIMLib.RongIMClient;
+
+    init(RongIMLib,RongIMClient);
+});
+</script>
+
+</body>
+</html>

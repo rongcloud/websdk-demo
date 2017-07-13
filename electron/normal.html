@@ -1,0 +1,50 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+<meta charset="utf-8"> 
+<title>Normal SDK</title> 
+<base href="./"> 
+
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="icon" type="image/x-icon" href="favicon.ico"> 
+<!--基础css--> 
+
+<h1>src in electron</h1>
+<p>请下载代码，修改main.js里的win.loadURL后，在本地electron里运行</p>
+<p>Electron文档：<a href="https://electron.atom.io/docs/">https://electron.atom.io/docs/</a></p>
+
+
+<pre id="show"></pre>
+<script> 
+window.nodeRequire = require; 
+delete window.require;
+delete window.exports; 
+delete window.module; 
+</script> 
+
+<script type="text/javascript" src="http://cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script> 
+
+</head> 
+<body> 
+<script> 
+window.require = nodeRequire; 
+const electron = require('electron'); 
+// const sqlite3 = require('sqlite3'); 
+
+
+
+function showInfo(str){
+	var t = document.getElementById("show");
+		t.innerHTML += "\n" + str;
+}	
+</script> 
+
+<script src="sdk/init.js"></script>
+
+<script>
+var RongIMClient = RongIMLib.RongIMClient;
+init(RongIMLib,RongIMClient);	
+</script>
+<app-root></app-root> 
+</body> 
+</html> 
