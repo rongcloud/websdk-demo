@@ -16,6 +16,53 @@
 （3）RequireJS 加载 SDK demo: [https://rongcloud.github.io/websdk-demo/require.html](https://rongcloud.github.io/websdk-demo/require.html)
 
 
+### 集成 electron 问题 报错：Cannot find module 'ByteBuffer' 
+
+（1）由于 Electron 集成了 Node.js，有一些额外的符号被插入到 DOM，比如 module， exports， require。这对于某些库会引发问题，因为它们可能需要插入同名的符号。
+
+（2）在 Electron 中关闭 Node 集成
+
+```
+
+// In the main process.
+const {BrowserWindow} = require('electron')
+let win = new BrowserWindow({
+  webPreferences: {
+    nodeIntegration: false
+  }
+})
+win.show()
+
+```
+
+（3）确定 electron 引入 SDK 是通过 RequireJS 引入，或者通过 页面 引入的
+
+（4）如果是通过 RequireJS 引入的 SDK，参考 demo：[https://github.com/shuise/tech-research/blob/master/electron/requirejs-in-node.html](https://github.com/shuise/tech-research/blob/master/electron/requirejs-in-node.html)
+
+（5）如果是通过 页面直接引入的 SDK，如果保留使用 Node.js 和 Electron APIs 的能力，必须要在引用其它库之前在页面中重命名这些符号：
+
+```
+
+<head>
+<script>
+window.nodeRequire = require;
+delete window.require;
+delete window.exports;
+delete window.module;
+</script>
+<script type="text/javascript" src="jquery.js"></script>
+</head>
+
+```
+参考 demo：[https://github.com/shuise/tech-research/blob/master/electron/normal.html](https://github.com/shuise/tech-research/blob/master/electron/normal.html)
+
+（6）参考文档：
+
+[https://www.kancloud.cn/simon_chang/electron/227476](https://www.kancloud.cn/simon_chang/electron/227476)
+
+[http://requirejs.org/docs/node.html](http://requirejs.org/docs/node.html)
+
+
 ###  如何动态获取 token
 
 （1）动态获取 token 需要在 APP server 端获取
