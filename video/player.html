@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>video player</title>
+</head>
+<body>
+
+<!-- 
+https://github.com/flowplayer/flash
+http://flash.flowplayer.org/documentation/configuration/
+-->
+
+<style>
+.slight{
+	display:inline-block;
+	overflow:hidden;
+	border:10px solid #ccc;
+	font-size:0;
+	position:relative;
+}
+.slight img{
+	position:absolute;
+	left:0;
+	top:0;
+}	
+.slight img,
+.slight a,
+.slight video{
+	display:inline-block;
+	width:100%;
+	height:100%;
+	cursor: pointer;
+}
+</style>
+<script src="../lib/vue-2.1.4.js"></script>
+<script src="./flowplayer/flowplayer-3.2.13.js?new"></script>
+<script>
+function slight(){
+	flowplayer(".slight-flash-player", "./flowplayer/flowplayer-3.2.18.swf",{
+		clip:  {
+	        autoPlay: false,
+	        autoBuffering: true
+	    },
+	    plugins : {
+	    	controls : {
+	    		opacity : 0,
+	    		backgroundColor: 'transparent'
+	    	}
+	    }
+	});
+}
+function isSupportVideo(){
+	return window["HTMLVideoElement"];	
+}
+</script>	
+
+<div class="slight" v-bind:style="styleObject">
+	<!-- <img :src="content.image" alt="" @click="hide"> -->
+	<video v-if="isSupportVideo" @click="play" class="slight-video-player" :src="content.file"></video>
+	<a v-else="isSupportVideo" class="slight-flash-player" :href="content.file"></a> 
+</div>
+
+
+<script>
+var content = {
+	"file" : "../res/heal-the-world.mp4",
+	"image" : "../res/heal-the-world.jpg",
+	"width" : 400,
+	"height" : 300,
+	"name" : "Heal the world!"
+};
+
+var slightIns = new Vue({
+	el : ".slight",
+	data : {
+		isSupportVideo : isSupportVideo(),
+		content : content,
+		styleObject : {
+			width : content.width + "px",
+			height : content.height + "px"
+		}
+	},
+	methods : {
+		hide : function(event){
+			var _image = event.target;
+				_image.style.display = "none";
+				alert(_image)
+		},
+		play : function(event){
+			var _video = event.target;
+			if(_video.paused){
+				_video.play();
+			}else{
+				_video.pause();
+			}
+		}
+	}
+}); 
+
+slight();
+</script>	
+
+</body>
+</html>
