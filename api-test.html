@@ -252,6 +252,7 @@ function init(){
 		    showTips("新消息，类型为：" + message.messageType);
             // showResult("新消息",message,start);
 
+            console.log("messageUId:" + message.messageUId + ",   messageId:" + message.messageId);
             console.log(message);
 		    switch(message.messageType){
 		        case RongIMClient.MessageType.TextMessage:
