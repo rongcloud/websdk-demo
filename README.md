@@ -2,11 +2,13 @@
 
 SDK source: [https://github.com/rongcloud/rongcloud-web-im-sdk-v2](https://github.com/rongcloud/rongcloud-web-im-sdk-v2)
 
+FAQ: 
+
 Require SDK: [https://rongcloud.github.io/websdk-demo/require.html](https://rongcloud.github.io/websdk-demo/require.html)
 
-Require SDK in NodeJS: [https://rongcloud.github.io/websdk-demo/electron/requirejs-in-node.html](https://rongcloud.github.io/websdk-demo/electron/requirejs-in-node.html)
+Require SDK in NodeJS: [https://github.com/rongcloud/websdk-demo/tree/master/electron/requirejs-in-node.html](https://github.com/rongcloud/websdk-demo/tree/master/electron/requirejs-in-node.html)
 
-Normal SDK in NodeJS: [https://rongcloud.github.io/websdk-demo/electron/normal.html](https://rongcloud.github.io/websdk-demo/electron/normal.html)
+Normal SDK in NodeJS: [https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html](https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html)
 
 Connect,Message Listener: [https://rongcloud.github.io/websdk-demo/connect-check.html](https://rongcloud.github.io/websdk-demo/connect-check.html)
 
