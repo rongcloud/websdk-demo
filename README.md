@@ -1,18 +1,18 @@
 # WebSDK demo
 
-SDK source: [https://github.com/rongcloud/rongcloud-web-im-sdk-v2](https://github.com/rongcloud/rongcloud-web-im-sdk-v2)
+SDK源码: [https://github.com/rongcloud/rongcloud-web-im-sdk-v2](https://github.com/rongcloud/rongcloud-web-im-sdk-v2)
 
-FAQ: 
+常见问题: [https://github.com/rongcloud/websdk-demo/blob/master/faq.md](https://github.com/rongcloud/websdk-demo/blob/master/faq.md)
 
 Require SDK: [https://rongcloud.github.io/websdk-demo/require.html](https://rongcloud.github.io/websdk-demo/require.html)
 
-Require SDK in NodeJS: [https://github.com/rongcloud/websdk-demo/tree/master/electron/requirejs-in-node.html](https://github.com/rongcloud/websdk-demo/tree/master/electron/requirejs-in-node.html)
+Require SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/electron/requirejs-in-node.html](https://github.com/rongcloud/websdk-demo/tree/master/electron/requirejs-in-node.html)
 
-Normal SDK in NodeJS: [https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html](https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html)
+Normal SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html](https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html)
 
-Connect,Message Listener: [https://rongcloud.github.io/websdk-demo/connect-check.html](https://rongcloud.github.io/websdk-demo/connect-check.html)
+初始化、消息监听: [https://rongcloud.github.io/websdk-demo/connect-check.html](https://rongcloud.github.io/websdk-demo/connect-check.html)
 
-WebSDK API test: [https://rongcloud.github.io/websdk-demo/api-test.html](https://rongcloud.github.io/websdk-demo/api-test.html)
+WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test.html](https://rongcloud.github.io/websdk-demo/api-test.html)
 
 
 # Component
@@ -21,16 +21,16 @@ VoIP: [https://rongcloud.github.io/websdk-demo/voip.html](https://rongcloud.gith
 
 Emoji: 
 
-Video Player(Video + Flash): [https://rongcloud.github.io/websdk-demo/video/player.html](https://rongcloud.github.io/websdk-demo/video/player.html)
+视频播放(Video + Flash): [https://rongcloud.github.io/websdk-demo/video/player.html](https://rongcloud.github.io/websdk-demo/video/player.html)
 
-Voice Player: [https://rongcloud.github.io/websdk-demo/voice.html](https://rongcloud.github.io/websdk-demo/voice.html)
+声音播放: [https://rongcloud.github.io/websdk-demo/voice.html](https://rongcloud.github.io/websdk-demo/voice.html)
 
-Upload: [https://github.com/rongcloud/rongcloud-web-im-upload](https://github.com/rongcloud/rongcloud-web-im-upload)
+上传组件: [https://github.com/rongcloud/rongcloud-web-im-upload](https://github.com/rongcloud/rongcloud-web-im-upload)
 
 
-# Integration Products
+# 集成项目
 
-Integrate Guide: [https://rongcloud.github.io/websdk-demo/integrate/guide.html](https://rongcloud.github.io/websdk-demo/integrate/guide.html)
+集成指南: [https://rongcloud.github.io/websdk-demo/integrate/guide.html](https://rongcloud.github.io/websdk-demo/integrate/guide.html)
 
 Web IM(Angular): [https://github.com/rongcloud/rongcloud-web-im-widget](https://github.com/rongcloud/rongcloud-web-im-widget)
 
@@ -38,7 +38,7 @@ Web IM H5(Angular): [https://github.com/rongcloud/rongcloud-web-im-widget-h5](ht
 
 Web IM(jQuery): 
 
-Customer Service(jQuery): 
+客服(jQuery): 
 
 
 # SealTalk
