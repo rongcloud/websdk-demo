@@ -37,7 +37,7 @@ win.show()
 
 （3）确定 electron 引入 SDK 是通过 RequireJS 引入，或者通过 页面 引入的
 
-（4）如果是通过 RequireJS 引入的 SDK，参考 demo：[https://github.com/shuise/tech-research/blob/master/electron/requirejs-in-node.html](https://github.com/shuise/tech-research/blob/master/electron/requirejs-in-node.html)
+（4）如果是通过 RequireJS 引入的 SDK，参考 demo：[https://rongcloud.github.io/websdk-demo/electron/requirejs-in-node.html](https://rongcloud.github.io/websdk-demo/electron/requirejs-in-node.html)
 
 （5）如果是通过 页面直接引入的 SDK，如果保留使用 Node.js 和 Electron APIs 的能力，必须要在引用其它库之前在页面中重命名这些符号：
 
@@ -54,7 +54,8 @@ delete window.module;
 </head>
 
 ```
-参考 demo：[https://github.com/shuise/tech-research/blob/master/electron/normal.html](https://github.com/shuise/tech-research/blob/master/electron/normal.html)
+
+参考 demo ：[https://rongcloud.github.io/websdk-demo/electron/normal.html](https://rongcloud.github.io/websdk-demo/electron/normal.html)
 
 （6）参考文档：
 
@@ -315,7 +316,7 @@ var msg = new RongIMLib.ImageMessage(content);
 
 （3）与客服对话需要先发起握手消息
 
-（4）参考 demo ：[http://web.hitalk.im/widget/web/demo/index.html](http://web.hitalk.im/widget/web/demo/index.html)
+（4）参考 demo ：[https://rongcloud.github.io/rongcloud-web-im-widget/demo/customerservice/](https://rongcloud.github.io/rongcloud-web-im-widget/demo/customerservice/)
 
 （5）参考文档：[http://www.rongcloud.cn/docs/web.html#custom_service_widget](http://www.rongcloud.cn/docs/web.html#custom_service_widget)
 
@@ -593,7 +594,7 @@ var msg = new RongIMLib.ImageMessage(content);
 
 （2）消息接收 demo:[https://rongcloud.github.io/websdk-demo/connect-check.html](https://rongcloud.github.io/websdk-demo/connect-check.html)
 
-（3）聊天插件在线 demo：[http://web.hitalk.im/widget/web/demo/index.html](http://web.hitalk.im/widget/web/demo/index.html)
+（3）聊天插件在线 demo：[http://rongcloud.github.io/rongcloud-web-im-widget/demo/](http://rongcloud.github.io/rongcloud-web-im-widget/demo/)
 
 （4）RequireJS 加载 SDK demo: [https://rongcloud.github.io/websdk-demo/require.html](https://rongcloud.github.io/websdk-demo/require.html)
 
