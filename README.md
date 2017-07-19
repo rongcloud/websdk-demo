@@ -19,7 +19,7 @@ WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test.html](https
 
 VoIP: [https://rongcloud.github.io/websdk-demo/voip.html](https://rongcloud.github.io/websdk-demo/voip.html)
 
-Emoji: 
+Emoji: [https://rongcloud.github.io/websdk-demo/emoji.html](https://rongcloud.github.io/websdk-demo/emoji.html)
 
 视频播放(Video + Flash): [https://rongcloud.github.io/websdk-demo/video/player.html](https://rongcloud.github.io/websdk-demo/video/player.html)
 
