@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emoji</title>
+</head>
+<body>
+<link rel="stylesheet" href="./res/rongcloud.css">
+<a href="https://github.com/rongcloud/websdk-demo/blob/master/emoji.html" class="get-source">获取源码</a>
+
+<style>
+#supportList{
+	background:#f5f5f5;
+	font-size:12px;
+	line-height: 2;
+}	
+</style>
+	
+<script src="./lib/RongEmoji-dev.js"></script> 
+
+<h1>Emoji</h1>
+
+<h2>融云消息 message 里的 emoji 说明</h2>
+<ol>
+	<li>发消息 ，直接发送 😀 原生 emoji 字符</li>
+	<li>Web SDK 接收消息会被转码成 “uf600” 格式</li>
+	<li>emoji SDK 内置了128个emoji表情的图片，也可自行扩展配置</li>
+	<li>特殊说明：emoji图片提供的是一个质量很差的版本，因为版权问题，如果要商用，请自行解决版权问题。</li>
+	<li id="supportList"></li>
+</ol>
+
+
+
+<pre class="code" id="show"></pre>
+
+<script>
+//初始化
+/*
+http://www.fileformat.info/info/unicode/char/1f60e/index.htm
+*/ 
+
+//通过自定义扩展，解决对“狞笑”的支持 
+var emojiNew = {
+	dataSource: {
+		"u1F60E":{
+			"en":"smiling face with sunglasses",
+			"zh":"狞笑",
+			"tag":"\uD83D\uDE0E",
+			"bp":"0px 0px"
+		},
+	},
+	url: "http://emoji.fileformat.info/gemoji/sunglasses.png"
+};
+
+/*
+config = {
+	size : 24,
+	url : "//cdn.ronghub.com/css-sprite_bg-2.1.10.png"
+}
+*/ 
+var config = {
+	// size : 26,
+	// url : "http://emoji.fileformat.info/gemoji/sunglasses.png"
+};
+
+test(RongIMLib.RongIMEmoji);
+
+function test(RongIMEmoji){
+	RongIMEmoji.init(emojiNew,config);
+
+
+	var list = document.querySelector('#supportList');
+		list.innerHTML = "支持的128：" + RongIMEmoji.names.join(", ");
+
+	var t = document.querySelector('#show');
+
+	var str = "[狞笑] [露齿而笑]  测试Emoji";
+
+
+	//symbolToEmoji
+	t.innerHTML += "symbolToEmoji \n";
+
+	str = RongIMEmoji.symbolToEmoji(str);
+	t.innerHTML += "\t" + str + "\n\n";
+
+
+	//emojiToSymbol
+	t.innerHTML += "emojiToSymbol \n";
+
+	str = RongIMEmoji.emojiToSymbol(str);
+	t.innerHTML += "\t" + str + "\n\n";	
+
+
+
+	//emojiToHTML
+	var str = "我收到了一个表情 \uf600 \uf601 很酷";
+	t.innerHTML += "emojiToHTML \n";
+	str = RongIMEmoji.emojiToHTML(str);
+	t.innerHTML += "\t" + str + "\n\n";	
+
+
+
+	//symbolToHTML
+	t.innerHTML += "symbolToHTML \n";
+
+	var str = "[狞笑] [露齿而笑]  测试Emoji";
+	str = RongIMEmoji.symbolToHTML(str);
+	t.innerHTML +=  "\t" + str + "\n";
+}	
+</script>
+
+<!-- require load -->
+<!-- <script src="lib/require.js"></script>
+<script>
+require.config({
+    paths: {
+    	RongIMEmoji: './lib/RongEmoji-dev'
+    }
+});
+
+require(['RongIMEmoji'], function(RongIMEmoji) {
+    test(RongIMEmoji);
+});	
+</script> -->
+</body>
+</html>
