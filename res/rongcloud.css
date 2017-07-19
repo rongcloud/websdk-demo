@@ -11,3 +11,11 @@ body{
 	right:5px;
 	top:5px;
 }
+pre.code{
+	padding:5px;
+	border:1px solid #ccc;
+	background:#f5f5f5;
+	border-radius:3px;
+	font-family:arial;
+	line-height:2;
+}
