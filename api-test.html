@@ -88,7 +88,7 @@ check.js是做一些环境监测用的临时代码，仅限开发调试使用
 
 
 
-<script src="//cdn.ronghub.com/RongIMLib-2.2.5.min.js"></script>
+<script src="//cdn.ronghub.com/RongIMLib-2.2.6.js?20170719"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 
@@ -731,9 +731,9 @@ function getConversationList(){
 	var start = new Date().getTime();
 	instance.getConversationList({
 		onSuccess: function(list) {
-			list.sort(function(a,b){
-				return a.sentTime > b.sentTime;
-			});
+			// list.sort(function(a,b){
+			// 	return a.sentTime > b.sentTime;
+			// });
 
 			// list = jQuery.grep(list, function(n,i){
 			// 	return (n!== 5 && i>4)
@@ -753,6 +753,19 @@ function getConversationList(){
             showResult("获取会话失败",error,start);
 		}
     },conversationTypes,limit);
+}
+
+function removeConversation(){
+	var start = new Date().getTime();
+	instance.removeConversation(conversationtype, targetId, { 
+		onSuccess:function(result){ 
+            showResult("删除会话成功",result,start);
+		}, 
+		onError:function(error){ 
+		// error => 清除会话错误码。 
+		    showResult("删除会话失败",error,start);
+		} 
+	});
 }
 
 function clearConversation(){
@@ -1327,6 +1340,7 @@ function getBase64Image(){
 	<input type="button" value="会话未读数" onclick="getUnreadCount();"> 
 	<input type="button" value="会话未读总数" onclick="getTotalUnreadCount();"> 
 	<input type="button" value="清除会话未读数" onclick="clearUnreadCount();">
+	<input type="button" value="删除指定会话" onclick="removeConversation();">
 	<input type="button" value="清除会话" onclick="clearConversation();">
 
 	<br>
