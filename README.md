@@ -10,6 +10,8 @@ Require SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/e
 
 Normal SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html](https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html)
 
+引用本地 SDK: [https://rongcloud.github.io/websdk-demo/local-sdk/init.html](https://rongcloud.github.io/websdk-demo/local-sdk/init.html)
+
 初始化、消息监听: [https://rongcloud.github.io/websdk-demo/connect-check.html](https://rongcloud.github.io/websdk-demo/connect-check.html)
 
 WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test.html](https://rongcloud.github.io/websdk-demo/api-test.html)
