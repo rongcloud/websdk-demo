@@ -88,7 +88,7 @@ check.js是做一些环境监测用的临时代码，仅限开发调试使用
 
 
 
-<script src="//cdn.ronghub.com/RongIMLib-2.2.6.js"></script>
+<script src="//cdn.ronghub.com/RongIMLib-2.2.6-min.js"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 
@@ -145,6 +145,7 @@ var instance = null;
 var appKey = "";
 var token = "";
 
+var userId = "";
 /*
 消息全部用单聊，user8 -> user9
 */
@@ -324,8 +325,9 @@ function init(){
 
 	//开始链接
 	RongIMClient.connect(token, {
-		onSuccess: function(userId) {
-			showTips("链接成功，用户id：" + userId);
+		onSuccess: function(_userId) {
+			showTips("链接成功，用户id：" + _userId);
+			userId = _userId;
 		},
 		onTokenIncorrect: function() {
 			//console.log('token无效');
@@ -971,7 +973,7 @@ function sendMessageToChatroom(){
 
 
 var discussionName = "shuise`s discussion"; // 名称自定义
-var userIds = [targetId];//讨论组初始成员。
+var userIds = [userId,targetId];//讨论组初始成员。
 var discussionId;
 
 function getDiscussionInfo(discussionId,start){
@@ -1393,7 +1395,7 @@ function getBase64Image(){
 	<input type="button" value="讨论组加人" onclick="addMemberToDiscussion();"> 
 	<input type="button" value="讨论组踢人" onclick="removeMemberFromDiscussion();"> 
 	<input type="button" value="退出讨论组" onclick="quitDiscussion();"> 
-
+	<br><em style="margin-left:5em;">讨论组已经停止更新，强烈不推荐使用，建议使用群组替代</em>
 	<br>
 
 	公众服务：
