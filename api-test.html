@@ -41,13 +41,6 @@ h1,h2{
 .btns a{
 	font-size:12px;
 	margin:20px 10px 0 10px;
-}
-.other-demos{
-	display:block;
-	background:#f5f5f5;
-	border:1px solid #ccc;
-	padding:10px;
-	display:inline-block;
 }	
 .result{
 	display:none;
@@ -84,15 +77,12 @@ check.js是做一些环境监测用的临时代码，仅限开发调试使用
 <script src="js/pre-check.js"></script>
 
 
-
-
-
-
 <script src="//cdn.ronghub.com/RongIMLib-2.2.6.min.js"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 
-
+<!-- 二次封装的初始化代码 -->
+<script src="init.js"></script>
 
 <script>
 "use strict";
@@ -165,7 +155,7 @@ var conversationtype = RongIMLib.ConversationType.PRIVATE; // 私聊
 
 var begin = 0;
 
-function init(){
+function startInit(){
 	appKey = document.getElementById("appkey").value;
 	token = document.getElementById("token").value;
 
@@ -186,21 +176,35 @@ function init(){
 
 	begin = new Date().getTime()
 
-	/*
-	文档：http://www.rongcloud.cn/docs/web.html
-	*/
-	
-	//私有云初始化
-	// var appkey = "";
-	// var token = "";
-	// var config = {
-	// 	navi : "103.36.xxx.xxx"
-	// }
-	// RongIMLib.RongIMClient.init(appKey,null,config);
-
 	//公有云初始化
-	RongIMLib.RongIMClient.init(appKey);
-	instance = RongIMClient.getInstance();
+	var config = {
+        // protobuf: './local-sdk/protobuf-2.2.7.js' //下载部署后提供完成路径
+    };
+
+	var params = {
+		appKey : appKey,
+		token : token
+	};
+
+	var callbacks = {
+		getInstance : function(_instance){
+			instance = _instance;
+		},
+		receiveNewMessage : function(message){
+			// 判断消息类型
+		    showTips("新消息，类型为：" + message.messageType);
+            // showResult("新消息",message,start);
+
+            console.log("messageUId:" + message.messageUId + ",   messageId:" + message.messageId);
+            console.log(message);
+		},
+		getCurrentUser : function(userInfo){
+			showTips("链接成功 用户id：" + userInfo.userId + ", 耗时" + getTimer(begin));
+			userId = userInfo.userId;
+		    afterConnected();
+		}
+	};
+	init(params,callbacks,config);
 	showTips("初始化 应用 " + getTimer(begin));
 
 
@@ -210,150 +214,6 @@ function init(){
 
 	RongIMLib.RongIMVoice.init();
 	showTips("初始化 声音库 " + getTimer(begin));
-
-
-	// 连接状态监听器
-	RongIMClient.setConnectionStatusListener({
-		onChanged: function (status) {
-		    switch (status) {
-		        case RongIMLib.ConnectionStatus.CONNECTED:
-		            showTips("链接成功 "  + getTimer(begin));
-		            afterConnected();
-		            break;
-		        case RongIMLib.ConnectionStatus.CONNECTING:
-		            showTips('正在链接');
-		            break;
-		        case RongIMLib.ConnectionStatus.DISCONNECTED:
-		            showTips('断开连接');
-		            break;
-		        case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
-		            showTips('其他设备登录');
-		            break;
-		          case RongIMLib.ConnectionStatus.DOMAIN_INCORRECT:
-		            showTips('域名不正确');
-		            break;
-		        case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
-		        	showTips('网络不可用');
-		        	break;
-		        }
-		}
-	});
-
-	/*
-	文档：http://www.rongcloud.cn/docs/web.html#3、设置消息监听器
-
-	注意事项：
-		1：为了看到接收效果，需要另外一个用户向本用户发消息
-		2：判断会话唯一性 ：conversationType + targetId
-		3：显示消息在页面前，需要判断是否属于当前会话，避免消息错乱。
-		4：消息体属性说明可参考：http://rongcloud.cn/docs/api/js/index.html
-	*/
-	var start = new Date().getTime();
-	RongIMClient.setOnReceiveMessageListener({
-		// 接收到的消息
-		onReceived: function (message) {
-		    // 判断消息类型
-		    showTips("新消息，类型为：" + message.messageType);
-            // showResult("新消息",message,start);
-
-            console.log("messageUId:" + message.messageUId + ",   messageId:" + message.messageId);
-            console.log(message);
-		    switch(message.messageType){
-		        case RongIMClient.MessageType.TextMessage:
-		        	/*
-		        	显示消息方法： 
-		        	消息里是 原生emoji
-		        	RongIMLib.RongIMEmoji.emojiToHTML(message.content.content);
-		            */
-		            break;
-		        case RongIMClient.MessageType.VoiceMessage:
-		        	/*
-					引入SDK并初始化请参考文档 http://www.rongcloud.cn/docs/web.html#声音库
-
-					api文档： http://www.rongcloud.cn/docs/api/js/VoiceMessage.html
-
-					var audio = message.content.content //格式为 AMR 格式的 base64 码
-		            var duration = message.content.duration;
-
-					RongIMLib.RongIMVoice.preLoaded(audio,function(){
-					    RongIMLib.RongIMVoice.play(audio,duration);
-					});
-		        	*/
-
-		            
-		            break;
-		        case RongIMClient.MessageType.ImageMessage:
-		           // message.content.content => 图片缩略图 base64。
-		           // message.content.imageUri => 原图 URL。
-		           break;
-		        case RongIMClient.MessageType.DiscussionNotificationMessage:
-		           // message.content.extension => 讨论组中的人员。
-		           break;
-		        case RongIMClient.MessageType.LocationMessage:
-		           // message.content.latiude => 纬度。
-		           // message.content.longitude => 经度。
-		           // message.content.content => 位置图片 base64。
-		           break;
-		        case RongIMClient.MessageType.RichContentMessage:
-		           // message.content.content => 文本消息内容。
-		           // message.content.imageUri => 图片 base64。
-		           // message.content.url => 原图 URL。
-		           break;
-		        case RongIMClient.MessageType.InformationNotificationMessage:
-		            // do something...
-		           break;
-		        case RongIMClient.MessageType.ContactNotificationMessage:
-		            // do something...
-		           break;
-		        case RongIMClient.MessageType.ProfileNotificationMessage:
-		            // do something...
-		           break;
-		        case RongIMClient.MessageType.CommandNotificationMessage:
-		            // do something...
-		           break;
-		        case RongIMClient.MessageType.CommandMessage:
-		            // do something...
-		           break;
-		        case RongIMClient.MessageType.UnknownMessage:
-		            // do something...
-		           break;
-		        default:
-		            // do something...
-		    }
-		}
-	});
-
-	//开始链接
-	RongIMClient.connect(token, {
-		onSuccess: function(_userId) {
-			showTips("链接成功，用户id：" + _userId);
-			userId = _userId;
-		},
-		onTokenIncorrect: function() {
-			//console.log('token无效');
-		},
-		onError:function(errorCode){
-		  var info = '';
-		  switch (errorCode) {
-		    case RongIMLib.ErrorCode.TIMEOUT:
-		      info = '超时';
-		      break;
-		    case RongIMLib.ErrorCode.UNKNOWN_ERROR:
-		      info = '未知错误';
-		      break;
-		    case RongIMLib.ErrorCode.UNACCEPTABLE_PaROTOCOL_VERSION:
-		      info = '不可接受的协议版本';
-		      break;
-		    case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
-		      info = 'appkey不正确';
-		      break;
-		    case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
-		      info = '服务器不可用';
-		      break;
-		  }
-		  showTips(info);
-		}
-	});
 }
 
 function afterConnected(){
@@ -393,7 +253,7 @@ function reconnect(){
 		    case RongIMLib.ErrorCode.UNKNOWN_ERROR:
 		      info = '未知错误';
 		      break;
-		    case RongIMLib.ErrorCode.UNACCEPTABLE_PaROTOCOL_VERSION:
+		    case RongIMLib.ErrorCode.UNACCEPTABLE_PROTOCOL_VERSION:
 		      info = '不可接受的协议版本';
 		      break;
 		    case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
@@ -671,6 +531,7 @@ function sendRecallMessage(){
 		alert("请先发送任意一条消息会再执行撤回");
 		return;
 	}
+	//消息撤回服务器端没有时间限制，由客户端决定
 
 	var start = Date.now();
 	instance.sendRecallMessage(recallMessage, {
@@ -1339,7 +1200,7 @@ function getBase64Image(){
 	</p>
 	<p>
 		<span>&#160;</span>
-		<input type="button" onclick="init()" value="初始化">  &#160;&#160;<strong>所有业务方法都必须在 链接成功 之后执行</strong>
+		<input type="button" onclick="startInit()" value="初始化">  &#160;&#160;<strong>所有业务方法都必须在 链接成功 之后执行</strong>
 	</p>
 </div>
 
@@ -1376,7 +1237,7 @@ function getBase64Image(){
 	<input type="button" value="会话未读总数" onclick="getTotalUnreadCount();"> 
 	<input type="button" value="清除会话未读数" onclick="clearUnreadCount();">
 	<input type="button" value="删除指定会话" onclick="removeConversation();">
-	<input type="button" value="清除会话" onclick="clearConversation();">
+	<input type="button" value="删除所有会话" onclick="clearConversation();">
 
 	<br>
 
