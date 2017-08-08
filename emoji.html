@@ -186,8 +186,8 @@ require(['RongIMEmoji'], function(RongIMEmoji) {
 	panel.onclick = function(event){
 		var e = event || window.event;
 		var target = e.target || e.srcElement;
-		console.log(target)
-		console.log(target.parentNode)
+		// console.log(target)
+		// console.log(target.parentNode)
 		chatbox.innerHTML += target.parentNode.getAttribute("name");
 	}
 
