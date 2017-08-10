@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Json Viewer</title>
+
+<script type="text/javascript" src="http://admin.rongcloud.cn/assets/js/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<link rel="stylesheet" href="jsonview.css" />
+<script type="text/javascript" src="jquery.jsonview.js"></script>
+</head>
+<body>
+<br/>
+
+<button id="collapse-btn">Collapse</button>
+<button id="expand-btn">Expand</button>
+<button id="toggle-btn">Toggle</button>
+<button id="toggle-level1-btn">Toggle level1</button>
+<button id="toggle-level2-btn">Toggle level2</button>  
+
+<br>
+
+<div id="json"></div>
+<script>
+var json = {"hey": "guy","anumber": 243,"anobject": {"whoa": "nuts","anarray": [1,2,"thr<h1>ee"],"anotherarray": [1, 2], "more":"stuff"},"awesome": true,"bogus": false,"meaning": null, "japanese":"明日がある。", "link": "http://jsonview.com", "notLink": "http://jsonview.com is great"};
+    
+$(function() {
+  $('#json').JSONView(json);
+  
+  $('#collapse-btn').on('click', function() {
+    $('#json').JSONView('collapse');
+  });
+  
+  $('#expand-btn').on('click', function() {
+    $('#json').JSONView('expand');
+  });
+  
+  $('#toggle-btn').on('click', function() {
+    $('#json').JSONView('toggle');
+  });
+  
+  $('#toggle-level1-btn').on('click', function() {
+    $('#json').JSONView('toggle', 1);
+  });
+  
+  $('#toggle-level2-btn').on('click', function() {
+    $('#json').JSONView('toggle', 2);
+  });
+}); 
+</script>
+
+
+</body>
+</html>

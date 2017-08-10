@@ -15,7 +15,7 @@ body{
 	line-height:2;
 	color:#333;
 }
-h1,h2{
+h1,h2,h3{
 	margin:0;
 }
 .panel span{
@@ -55,16 +55,8 @@ h1,h2{
 	margin:0;
 	padding:0;
 }
-.result pre{
-	background:#fff;
-	border:1px solid #ccc;
-	padding:10px;
-	font-size:12px;
-	font-family:verdana;
-	margin:0;
-}
-.result pre h3{
-	margin:0;
+.result btn{
+	margin:5px;
 	padding:0;
 	color:#cd0000;
 }
@@ -75,6 +67,11 @@ h1,h2{
 check.js是做一些环境监测用的临时代码，仅限开发调试使用
 -->
 <script src="js/pre-check.js"></script>
+
+
+<script type="text/javascript" src="lib/jquery-3.1.1.js"></script>
+<link rel="stylesheet" href="json-view/jsonview.css" />
+<script type="text/javascript" src="json-view/jquery.jsonview.js"></script>
 
 
 <script src="//cdn.ronghub.com/RongIMLib-2.2.6.min.js"></script>
@@ -98,15 +95,40 @@ function showTips(data){
 function showResult(title,code,start){
 	var dom = document.getElementById("result-area");
 		dom.style.display = "block";
-	
 
 	var now = new Date().getTime();
-	var t = document.getElementById("result");
-		t.innerHTML = '<h3>' 
-					+ title + '  <small>执行时间：'  + (now - start) + 'ms</small>' 
-					+ '</h3>' 
-					+ JSON.stringify(code,null,"\t");
+	var t = document.getElementById("result-title");
+		t.innerHTML = title + '  <small>执行时间：'  + (now - start) + 'ms</small>';
+	jsonOprators(code);
 }
+
+function jsonOprators(json){
+	json = JSON.parse(JSON.stringify(json))
+	var jt = $('#result-body');
+
+	jt.JSONView(json);
+
+	$('#collapse-btn').on('click', function() {
+		jt.JSONView('collapse');
+	});
+
+	$('#expand-btn').on('click', function() {
+		jt.JSONView('expand');
+	});
+
+	$('#toggle-btn').on('click', function() {
+		jt.JSONView('toggle');
+	});
+
+	$('#toggle-level1-btn').on('click', function() {
+		jt.JSONView('toggle', 1);
+	});
+
+	$('#toggle-level2-btn').on('click', function() {
+		jt.JSONView('toggle', 2);
+	});
+}
+
 
 function getTimer(begin){
 	var now = new Date().getTime();
@@ -1001,7 +1023,7 @@ function sendToPublic(){
 	var msg = new RongIMLib.TextMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(publicServiceType, "Rong_shuise", msg, {
+	instance.sendMessage(publicServiceType, publicServiceId, msg, {
         onSuccess: function (message) {
             showTips("公众号留言 成功");
             showResult("公众号留言 成功",message,start);
@@ -1019,7 +1041,7 @@ function getPublicHistroyMessage(){
 	var timestrap = null; //0, 1483950413013
 
 	var start = new Date().getTime();
-	instance.getHistoryMessages(publicServiceType, "Rong_shuise", timestrap, count, {
+	instance.getHistoryMessages(publicServiceType, publicServiceId, timestrap, count, {
 		onSuccess: function(list, hasMsg) {
 			//可通过sort订制其他顺序
 			console.log(list.length);
@@ -1274,8 +1296,13 @@ function getBase64Image(){
 </div>
 
 <div class="result" id="result-area">
-	<!-- <h2>运行结果：</h2> -->
-	<pre id="result"></pre>
+	<h3 id="result-title">运行结果：</h3>
+	<button id="collapse-btn">Collapse</button>
+	<button id="expand-btn">Expand</button>
+	<button id="toggle-btn">Toggle</button>
+	<button id="toggle-level1-btn">Toggle level1</button>
+	<button id="toggle-level2-btn">Toggle level2</button>
+	<div id="result-body"></div>
 </div>
 
 
