@@ -158,12 +158,7 @@ var appKey = "";
 var token = "";
 
 var userId = "";
-/*
-消息全部用单聊，user8 -> user9
-*/
-var targetId = "user9"; // 目标 Id
-var targetId2 = "user10"; // 目标 Id
-//mock数据，实际项目从应用服务器获取
+
 var usersInfo = {
 	"user9" : {
 		"userId" : "user9",
@@ -173,7 +168,24 @@ var usersInfo = {
 	}
 };
 
+/*
+消息全部用单聊，user8 -> user9
+*/
 var conversationtype = RongIMLib.ConversationType.PRIVATE; // 私聊
+ /*
+ PRIVATE 			单聊
+ DISCUSSION 		讨论组
+ GROUP 				群组
+ CHATROOM 			聊天室
+ CUSTOMER_SERVICE 	客服
+ SYSTEM 			系统消息
+ APP_PUBLIC_SERVICE 应用公众账号（应用内私有）
+ PUBLIC_SERVICE 	公众账号 (公有)
+ */
+
+var targetId = "user9"; 
+var targetId2 = "user10";
+//消息接收方 Id，根据不同的 ConversationType，可能是用户 Id、讨论组 Id、群组 Id、聊天室 Id等。
 
 var begin = 0;
 
