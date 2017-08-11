@@ -14,6 +14,8 @@ Normal SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/el
 
 初始化、消息监听: [https://rongcloud.github.io/websdk-demo/connect-check.html](https://rongcloud.github.io/websdk-demo/connect-check.html)
 
+消息监听回调队列: [https://rongcloud.github.io/websdk-demo/init-muti.html](https://rongcloud.github.io/websdk-demo/init-muti.html)
+
 WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test.html](https://rongcloud.github.io/websdk-demo/api-test.html)
 
 
