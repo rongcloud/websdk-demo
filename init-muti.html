@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>im init</title>
+</head>
+<body>
+<style>
+td{
+	text-align:left;
+}	
+pre{
+	display:inline-block;
+	width:500px;
+	font-size:12px;	
+	line-height:1.5;
+	padding:5px;
+	background:#f5f5f5;
+	border:1px solid #333;
+	overflow:hidden;
+}
+</style>
+<h1>IM 初始化的回调队列</h1>
+<h3>发消息页面(使用默认配置) <a href="https://rongcloud.github.io/websdk-demo/api-test.html">https://rongcloud.github.io/websdk-demo/api-test.html</a></h3>
+
+<table>
+	<tr>
+		<td id="t1"></td>
+		<td id="t2"></td>
+	</tr>
+	<tr>
+		<td><pre id="m1"></pre></td>
+		<td><pre id="m2"></pre></td>
+	</tr>
+</table>
+
+
+<script src="./local-sdk/RongIMLib-2.2.6.min.js"></script>
+<script src="init-muti.js"></script>
+<script>
+var appInfo = {
+	appKey : "8w7jv4qb78a9y",
+	token : "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg=="
+};
+
+//第一次注册调用
+var message1 = [];
+var callbacks1 = {
+	onReady : function(instance){
+		console.log("第一次 instance");
+		console.log(instance);
+	},
+	onConnect : function(userInfo){
+		console.log("第一次 userInfo");
+		console.log(userInfo);				
+		userId = userInfo.data.userId;
+		document.getElementById("t1").innerHTML = "第一次调动，userId = " + userId;
+
+	},
+	onMessage : function(message){
+		console.log("第一次注册 接收新消息");
+		console.log(message.messageUId);
+		console.log(message);
+		message1.push(message);
+		message1 = message1.splice(0,10);
+		document.getElementById("m1").innerHTML = JSON.stringify(message1,null,"  ");
+	}
+};
+
+initMuti(callbacks1,appInfo);
+
+
+//第二次注册调用
+var message2 = [];
+var callbacks2 = {
+	onReady : function(instance){
+		console.log("第二次 instance");
+		console.log(instance);
+	},
+	onConnect : function(userInfo){
+		console.log("第二次 userInfo");
+		console.log(userInfo);
+		userId = userInfo.data.userId;
+		document.getElementById("t2").innerHTML = "第二次调动，userId = " + userId;
+
+	},
+	onMessage : function(message){
+		console.log("第二次注册 接收新消息");
+		console.log(message.messageUId);
+		console.log(message);
+		message2.push(message);
+		message2 = message2.splice(0,10);
+		document.getElementById("m2").innerHTML = JSON.stringify(message2,null,"  ");
+	}
+};
+
+//第二次无需appInfo
+setTimeout(function(){
+	initMuti(callbacks2);
+},0);
+
+</script>
+</body>
+</html>

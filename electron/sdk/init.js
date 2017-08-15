@@ -1,9 +1,16 @@
-function init(RongIMLib,RongIMClient){
+function init(RongIMLib,protobuf){
 	var appKey = "8w7jv4qb78a9y";
 	var token = "qyN3mb4PjM+ZXDOdW4f8KpltMLEfik9DxpqXaALr0RGROd6gPSiwQtBYfRPwWMBLjb+Q/sj37frDI5cUnfVAKg==";
 
+	var RongIMClient = RongIMLib.RongIMClient;
+
 	//初始化
-	RongIMClient.init(appKey);
+	var config = {};
+	if(protobuf){
+		config.protobuf = protobuf;
+	}
+
+	RongIMClient.init(appKey,null,config);
 
 	// 连接状态监听器
 	RongIMClient.setConnectionStatusListener({

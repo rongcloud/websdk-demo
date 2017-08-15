@@ -25,18 +25,14 @@ var requirejs = require('requirejs');
 requirejs.config({
 	// nodeRequire: require,
     paths: {
-        byteBuffer: './sdk/byteBuffer',
-    	protobuf: './sdk/protobuf-2.1.5.min',
-    	RongIMLib: './sdk/RongIMLib-local'
+    	protobuf: '../local-sdk/protobuf-2.2.7',
+    	RongIMLib: '../local-sdk/RongIMLib-2.2.7'
     }
 });
 
-requirejs(['byteBuffer','protobuf','RongIMLib'], function(byteBuffer,protobuf,RongIMLib) {
+requirejs(['protobuf','RongIMLib'], function(protobuf,RongIMLib) {
     showInfo("require done");
-
-    var RongIMClient = RongIMLib.RongIMClient;
-
-    init(RongIMLib,RongIMClient);
+    init(RongIMLib,protobuf);
 });
 </script>
 

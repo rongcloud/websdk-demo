@@ -20,13 +20,11 @@
 
 <h1>Emoji</h1>
 
-<h2>融云消息 message 里的 emoji 说明</h2>
+<h2>基础API方法</h2>
 <ol>
-	<li>发消息 ，直接发送 😀 原生 emoji 字符</li>
-	<li>Web SDK 接收消息会被转码成 “uf600” 格式</li>
 	<li>emoji SDK 内置了128个emoji表情的图片，也可自行扩展配置</li>
 	<li>特殊说明：emoji图片提供的是一个质量很差的版本，因为版权问题，如果要商用，请自行解决版权问题。</li>
-	<li id="supportList"></li>
+	<li>支持的128个表情：<span id="supportList"></span></li>
 </ol>
 
 
@@ -70,7 +68,7 @@ function test(RongIMEmoji){
 
 
 	var list = document.querySelector('#supportList');
-		list.innerHTML = "支持的128：" + RongIMEmoji.names.join(", ");
+		list.innerHTML = RongIMEmoji.names.join(", ");
 
 	var t = document.querySelector('#show');
 
@@ -122,5 +120,86 @@ require(['RongIMEmoji'], function(RongIMEmoji) {
     test(RongIMEmoji);
 });	
 </script> -->
+
+
+<h2>融云消息 message 里的 emoji 说明</h2>
+<ol>
+	<li>发消息 ，直接发送 😀 原生 emoji 字符</li>
+	<li>Web SDK 接收消息会被转码成 “uf600” 格式，需要再调用emojiToHTML才能正确显示</li>
+</ol>
+
+<style>
+.chatbox{
+	margin:3em;
+	display: inline-block;
+}	
+.chatbox-message{
+	border:1px solid #ccc;
+	outline:none;
+	width:900px;
+	height:100px;
+	padding:5px;
+	font-size:12px;
+}
+.chatbox-tools-emoji{
+	position:relative;
+}
+.chatbox-emoji-btn{
+	font-size:12px;
+}
+.chatbox-emoji-panel{
+	display:none;
+	border:1px solid #ccc;
+	padding:5px;
+	background:#fff;
+	position:absolute;
+	bottom:1em;
+	left:0;
+}
+</style>
+<div class="chatbox">
+	<h3>发送表情demo</h3>
+	<div class="chatbox-tools">
+		<div class="chatbox-tools-emoji">
+			<a href="#emoji" class="chatbox-emoji-btn" id="chatbox-emoji-btn">表情</a>
+			<div class="chatbox-emoji-panel" id="chatbox-emoji-panel"></div>
+		</div>
+	</div>
+	<textarea class="chatbox-message" id="chatbox-message">今天心情很不错[大笑]</textarea>
+	<p>	<a href="#" id="chatbox-send">发送</a></p>
+</div>
+<script>
+(function(){
+	var RongIMEmoji = RongIMLib.RongIMEmoji;
+	RongIMEmoji.init();
+	var chatbox = document.getElementById("chatbox-message");
+	var btn = document.getElementById("chatbox-emoji-btn");
+	var panel = document.getElementById("chatbox-emoji-panel");
+	btn.onclick = function(){
+		panel.style.display = "block";
+		var emojis = RongIMEmoji.emojis;
+		for(var i=0;i<emojis.length;i++){
+			panel.appendChild(emojis[i]);
+		}
+		return false;
+	}
+	panel.onclick = function(event){
+		var e = event || window.event;
+		var target = e.target || e.srcElement;
+		// console.log(target)
+		// console.log(target.parentNode)
+		chatbox.innerHTML += target.parentNode.getAttribute("name");
+	}
+
+	var send = document.getElementById("chatbox-send");
+	send.onclick = function(){
+		var message = chatbox.innerHTML;
+		message = RongIMEmoji.symbolToEmoji(message);
+		console.log(message);
+		alert("调用发送消息方法发送message即可");
+		return false;
+	}
+})();	
+</script>
 </body>
 </html>

@@ -22,14 +22,14 @@ delete window.exports;
 delete window.module; 
 </script> 
 
-<script type="text/javascript" src="http://cdn.ronghub.com/RongIMLib-2.2.6.min.js"></script> 
+<script type="text/javascript" src="../local-sdk/RongIMLib-2.2.7.js"></script> 
 
 </head> 
 <body> 
 <script> 
-window.require = nodeRequire; 
-const electron = require('electron'); 
-// const sqlite3 = require('sqlite3'); 
+// window.require = nodeRequire; 
+// const electron = require('electron'); 
+// // const sqlite3 = require('sqlite3'); 
 
 
 
@@ -42,8 +42,7 @@ function showInfo(str){
 <script src="sdk/init.js"></script>
 
 <script>
-var RongIMClient = RongIMLib.RongIMClient;
-init(RongIMLib,RongIMClient);	
+init(RongIMLib,"../local-sdk/protobuf-2.2.7.js");	
 </script>
 <app-root></app-root> 
 </body> 

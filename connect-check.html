@@ -40,8 +40,8 @@ body{
 function showResult(id,message){
 	var dom = document.getElementById(id);
 	console.log(message.content.content)
-	dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  RongIMLib.RongIMEmoji.emojiToHTML(message.content.content + "") + '</pre>';
-	// dom.innerHTML += '<pre>' + JSON.stringify(message,null,"\t") + '</pre>';
+	// dom.innerHTML += '<pre>' + message.senderUserId + ":   " +  RongIMLib.RongIMEmoji.emojiToHTML(message.content.content + "") + '</pre>';
+	dom.innerHTML += '<pre>' + JSON.stringify(message,null,"\t") + '</pre>';
 	//JSON.stringify(message,null,"\t")
 }	
 </script>
