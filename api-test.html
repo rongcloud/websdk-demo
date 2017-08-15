@@ -88,7 +88,8 @@ check.js是做一些环境监测用的临时代码，仅限开发调试使用
 
 
 
-<script src="//cdn.ronghub.com/RongIMLib-2.2.6.js"></script>
+<!-- <script src="//cdn.ronghub.com/RongIMLib-2.2.6.js"></script> -->
+<script src="./local-sdk/RongIMLib-10.js"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 
@@ -198,7 +199,10 @@ function init(){
 	// RongIMLib.RongIMClient.init(appKey,null,config);
 
 	//公有云初始化
-	RongIMLib.RongIMClient.init(appKey);
+	var config = {
+		protobuf: './local-sdk/protobuf-2.2.6.js'
+	};
+	RongIMLib.RongIMClient.init(appKey, null, config);
 	instance = RongIMClient.getInstance();
 	showTips("初始化 应用 " + getTimer(begin));
 
@@ -406,6 +410,53 @@ function reconnect(){
 	});
 }
 
+function autoReconnect(){
+	//docs   http://www.rongcloud.cn/docs/api/js/RongIMClient.html
+	begin = new Date().getTime();
+	var callback = {
+		onSuccess: function(userId) {
+			showTips("重新链接成功，用户id：" + userId + "; " + getTimer(begin));
+		},
+		onTokenIncorrect: function() {
+			//console.log('token无效');
+		},
+		onError:function(errorCode){
+		  var info = '';
+		  switch (errorCode) {
+		    case RongIMLib.ErrorCode.TIMEOUT:
+		      info = '超时';
+		      break;
+		    case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+		      info = '未知错误';
+		      break;
+		    case RongIMLib.ErrorCode.UNACCEPTABLE_PaROTOCOL_VERSION:
+		      info = '不可接受的协议版本';
+		      break;
+		    case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
+		      info = 'appkey不正确';
+		      break;
+		    case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
+		      info = '服务器不可用';
+		      break;
+		    case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
+		      info = '网络不可用';
+		      break;
+		  }
+		  showTips(info);
+		}
+	};
+	/*
+		config.auto: 默认 false, true 启用自动重连，启用则为必选参数
+        config.rate: 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
+        config.url: 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.6.min.js 可选
+	*/
+	var config = {
+		auto: true,
+		url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
+		rate: [100, 1000, 3000, 6000, 10000]
+	};
+	RongIMClient.reconnect(callback, config);
+}
 //消息撤回变量及设置
 var recallMessage = null;
 function setRecallMessage(message){
@@ -1345,6 +1396,7 @@ function getBase64Image(){
 	链接状态：
 	<input type="button" value="断开链接" onclick="disconnect();">
 	<input type="button" value="重新链接" onclick="reconnect();">
+	<input type="button" value="自动重链" onclick="autoReconnect();">
 
 	<br>
 
