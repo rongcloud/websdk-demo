@@ -13,14 +13,13 @@
 
 <div id="result"></div>
 
-<!-- 代码示例，请从官网下载正式版本 -->
-<script src="./RongIMLib-2.2.6.min.js"></script>
+<script src="./RongIMLib-2.2.7.js"></script>
 <script>
 (function(){
 	var appKey = "8w7jv4qb78a9y";
 	var token = "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==";
 	var config = {
-        protobuf: '//cdn.ronghub.com/protobuf-2.1.5.min.js' //下载部署后提供完成路径
+        protobuf: './protobuf-2.2.7.min.js' //也支持http全路径 http(s)://cdn.ronghub.com/protobuf-2.2.7.min.js
     };
 
 	RongIMLib.RongIMClient.init(appKey,null,config);

@@ -14,6 +14,7 @@ pre{
 	width:500px;
 	font-size:12px;	
 	line-height:1.5;
+	font-family:verdana;
 	padding:5px;
 	background:#f5f5f5;
 	border:1px solid #333;
@@ -35,7 +36,8 @@ pre{
 </table>
 
 
-<script src="./local-sdk/RongIMLib-2.2.6.min.js"></script>
+<!-- <script src="./local-sdk/RongIMLib-2.2.6.min.js"></script> -->
+<script src="//cdn.ronghub.com/RongIMLib-2.2.7.min.js"></script>
 <script src="init-muti.js"></script>
 <script>
 var appInfo = {
@@ -62,8 +64,8 @@ var callbacks1 = {
 		console.log(message.messageUId);
 		console.log(message);
 		message1.push(message);
-		message1 = message1.splice(0,10);
-		document.getElementById("m1").innerHTML = JSON.stringify(message1,null,"  ");
+		message1 = message1.splice(0,3);
+		document.getElementById("m1").innerHTML = JSON.stringify(message1,null,"    ");
 	}
 };
 
@@ -89,8 +91,8 @@ var callbacks2 = {
 		console.log(message.messageUId);
 		console.log(message);
 		message2.push(message);
-		message2 = message2.splice(0,10);
-		document.getElementById("m2").innerHTML = JSON.stringify(message2,null,"  ");
+		message2 = message2.splice(0,3);
+		document.getElementById("m2").innerHTML = JSON.stringify(message2,null,"    ");
 	}
 };
 
