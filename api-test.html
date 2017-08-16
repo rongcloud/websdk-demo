@@ -99,11 +99,12 @@ function showResult(title,code,start){
 	var now = new Date().getTime();
 	var t = document.getElementById("result-title");
 		t.innerHTML = title + '  <small>执行时间：'  + (now - start) + 'ms</small>';
+	
 	jsonOprators(code);
 }
 
 function jsonOprators(json){
-	json = JSON.parse(JSON.stringify(json))
+	json = JSON.stringify(json);
 	var jt = $('#result-body');
 
 	jt.JSONView(json);
@@ -212,7 +213,7 @@ function startInit(){
 
 	//公有云初始化
 	var config = {
-        // protobuf: './local-sdk/protobuf-2.2.7.js' //下载部署后提供完成路径
+        //protobuf: './local-sdk/protobuf-2.2.7.min.js' //下载部署后提供完成路径
     };
 
 	var params = {
@@ -300,6 +301,55 @@ function reconnect(){
 		  showTips(info);
 		}
 	});
+}
+
+
+function autoReconnect(){
+	//docs   http://www.rongcloud.cn/docs/api/js/RongIMClient.html
+	begin = new Date().getTime();
+	var callback = {
+		onSuccess: function(userId) {
+			showTips("重新链接成功，用户id：" + userId + "; " + getTimer(begin));
+		},
+		onTokenIncorrect: function() {
+			//console.log('token无效');
+		},
+		onError:function(errorCode){
+		  var info = '';
+		  switch (errorCode) {
+		    case RongIMLib.ErrorCode.TIMEOUT:
+		      info = '超时';
+		      break;
+		    case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+		      info = '未知错误';
+		      break;
+		    case RongIMLib.ErrorCode.UNACCEPTABLE_PaROTOCOL_VERSION:
+		      info = '不可接受的协议版本';
+		      break;
+		    case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
+		      info = 'appkey不正确';
+		      break;
+		    case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
+		      info = '服务器不可用';
+		      break;
+		    case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
+		      info = '网络不可用';
+		      break;
+		  }
+		  showTips(info);
+		}
+	};
+	/*
+		config.auto: 默认 false, true 启用自动重连，启用则为必选参数
+        config.rate: 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
+        config.url: 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.6.min.js 可选
+	*/
+	var config = {
+		auto: true,
+		url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
+		rate: [100, 1000, 3000, 6000, 10000]
+	};
+	RongIMClient.reconnect(callback, config);
 }
 
 //消息撤回变量及设置
@@ -1242,7 +1292,8 @@ function getBase64Image(){
 	链接状态：
 	<input type="button" value="断开链接" onclick="disconnect();">
 	<input type="button" value="重新链接" onclick="reconnect();">
-
+	<input type="button" value="自动重链" onclick="autoReconnect();">
+	
 	<br>
 
 

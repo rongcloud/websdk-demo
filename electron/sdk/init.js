@@ -101,12 +101,22 @@ function init(RongIMLib,protobuf){
 		}
 	});
 	
-	
+	function getConversationList(){
+		RongIMClient.getInstance().getConversationList({
+				onSuccess: function(list){
+					showInfo(JSON.stringify(list, null, '\t'));
+				},
+				onError:function(errorCode){
+					 showInfo(errorCode);
+				}
+			}, null, 2);
+	}
 	//开始链接
 	RongIMClient.connect(token, {
 		onSuccess: function(userId) {
 			console.log("链接成功，用户id：" + userId);
 			showInfo("链接成功，用户id：" + userId);
+			getConversationList();
 		},
 		onTokenIncorrect: function() {
 			console.log('token无效');
