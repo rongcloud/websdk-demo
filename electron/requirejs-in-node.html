@@ -26,13 +26,13 @@ requirejs.config({
 	// nodeRequire: require,
     paths: {
     	protobuf: '../local-sdk/protobuf-2.2.7',
-    	RongIMLib: '../local-sdk/RongIMLib-2.2.7'
+    	RongIMLib: '../local-sdk/RongIMLib-2.2.7.min'
     }
 });
 
 requirejs(['protobuf','RongIMLib'], function(protobuf,RongIMLib) {
     showInfo("require done");
-    init(RongIMLib,protobuf);
+    init(RongIMLib, protobuf);
 });
 </script>
 

@@ -12,7 +12,7 @@
 <h1>require demo</h1>
 <!-- <h2>请打开控制台查看运行结果</h2> -->
 
-<div id="show"</div>
+<pre id="show"></pre>
 
 
 <script>
@@ -57,22 +57,19 @@ var isSupportSocket = isSupport("WebSocket");
 if(isSupportSocket){
 	require.config({
 	    paths: {
-	    	protobuf: '//cdn.ronghub.com/protobuf-2.1.5.min',
-	    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.2.6.min'
+	    	protobuf: 'http://cdn.ronghub.com/protobuf-2.2.7.min',
+	    	RongIMLib: 'http://cdn.ronghub.com/RongIMLib-2.2.7.min'
 	    }
 	});
 
 	require(['protobuf','RongIMLib'], function(protobuf,RongIMLib) {
 	    showInfo("require done");
-
-	    var RongIMClient = RongIMLib.RongIMClient;
-
-	    init(RongIMLib,RongIMClient);
+	    init(RongIMLib, protobuf);
 	});
 }else{
 	require.config({
 	    paths: {
-	    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.2.6.min'
+	    	RongIMLib: 'local-sdk/RongIMLib-2.2.7'
 	    }
 	});
 
@@ -81,21 +78,25 @@ if(isSupportSocket){
 
 	    var RongIMClient = RongIMLib.RongIMClient;
 
-	    init(RongIMLib,RongIMClient);
+	    init(RongIMLib);
 	});
 }
 
 
 
-
-
-function init(RongIMLib,RongIMClient){
+function init(RongIMLib, protobuf){
 	var appKey = "8w7jv4qb78a9y";
 	var token = "qyN3mb4PjM+ZXDOdW4f8KpltMLEfik9DxpqXaALr0RGROd6gPSiwQtBYfRPwWMBLjb+Q/sj37frDI5cUnfVAKg==";
 
+	var RongIMClient = RongIMLib.RongIMClient;
+	var config = { };
+	if (protobuf) {
+		config.protobuf = protobuf;
+	}
 	//初始化
-	RongIMClient.init(appKey);
+	RongIMClient.init(appKey, null, config);
 
+	var _instance = RongIMClient.getInstance();
 	// 连接状态监听器
 	RongIMClient.setConnectionStatusListener({
 		onChanged: function (status) {
@@ -103,7 +104,6 @@ function init(RongIMLib,RongIMClient){
 		    switch (status) {
 		        case RongIMLib.ConnectionStatus.CONNECTED:
 		            showInfo("链接成功");
-		            // afterConnected();
 		            break;
 		        case RongIMLib.ConnectionStatus.CONNECTING:
 		            console.log('正在链接');
@@ -189,6 +189,8 @@ function init(RongIMLib,RongIMClient){
 	RongIMClient.connect(token, {
 		onSuccess: function(userId) {
 			showInfo("链接成功，用户id：" + userId);
+            sendMessage();
+            getConversationList();
 		},
 		onTokenIncorrect: function() {
 			showInfo('token无效');
@@ -215,7 +217,34 @@ function init(RongIMLib,RongIMClient){
 		  console.log(info);
 		}
 	});
+
+	function getConversationList(){
+		_instance.getConversationList({
+			onSuccess: function(list){
+				showInfo(JSON.stringify(list, null, '\t'));
+			},
+			onError:function(errorCode){
+				 showInfo(errorCode);
+			}
+		}, null, 2);
+	}
+	
+	function sendMessage(){
+		var msg = new RongIMLib.TextMessage({content:"hello RongCloud!",extra:"附加信息"});
+		var conversationtype = RongIMLib.ConversationType.PRIVATE;
+		var targetId = "tester";
+		_instance.sendMessage(conversationtype, targetId, msg, {
+		        onSuccess: function (message) {
+		        	console.log(message);
+		            showInfo(JSON.stringify(message, null, '\t'));
+		        },
+		        onError: function (errorCode,message) {
+		            showInfo(errorCode);
+		        }
+	    });
+	}
 }
+
 </script>
 </body>
 </html>
