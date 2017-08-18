@@ -74,7 +74,7 @@ check.js是做一些环境监测用的临时代码，仅限开发调试使用
 <script type="text/javascript" src="json-view/jquery.jsonview.js"></script>
 
 
-<script src="//cdn.ronghub.com/RongIMLib-2.2.7.min.js"></script>
+<script src="//cdn.ronghub.com/RongIMLib-2.2.7.js"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 
@@ -342,11 +342,11 @@ function autoReconnect(){
 	/*
 		config.auto: 默认 false, true 启用自动重连，启用则为必选参数
         config.rate: 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
-        config.url: 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.6.min.js 可选
+        config.url: 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.7.min.js 可选
 	*/
 	var config = {
 		auto: true,
-		url: 'cdn.ronghub.com/RongIMLib-2.2.6.min.js',
+		url: 'cdn.ronghub.com/RongIMLib-2.2.7.min.js',
 		rate: [100, 1000, 3000, 6000, 10000]
 	};
 	RongIMClient.reconnect(callback, config);
