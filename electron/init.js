@@ -1,109 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>require</title>
-</head>
-<body>
-<link rel="stylesheet" href="./res/rongcloud.css">
-<a href="https://github.com/rongcloud/websdk-demo/blob/master/require.html" class="get-source">获取源码</a>
-
-
-<h1>require demo</h1>
-<!-- <h2>请打开控制台查看运行结果</h2> -->
-
-<pre id="show"></pre>
-
-
-<script>
-"use strict";
-var t1 = new Date().getTime();
-
-function showInfo(str){
-	var t = document.getElementById("show");
-	var dt = new Date().getTime() - t1 + " ms 后: "
-	t.innerHTML += dt + str + "<br>";
-}
-
-showInfo("开始加载");
-
-
-function isSupport(APIName){
-	var d = document, w = window;
-	var id = "RongCloudCloud-API-Test" + new Date().getTime;
-	var iframe = d.getElementById(id);
-	if(!iframe){
-		iframe = d.createElement("iframe");
-		iframe.id = id;
-		iframe.style.display = "none";
-		d.body.appendChild(iframe);
-	}
-	var nativeAPI = iframe.contentWindow[APIName];
-	var API = w[APIName];
-	if(API && nativeAPI.toString() == API.toString()){
-		return true;
-	}
-	return false;
-}	
-</script>
-
-<script src="lib/require.js"></script>
-	
-<script>
-"use strict";
-
-var isSupportSocket = isSupport("WebSocket");
-
-if(isSupportSocket){
-	require.config({
-	    paths: {
-	    	protobuf: './local-sdk/protobuf-2.2.7.min',
-	    	RongIMLib: './local-sdk/RongIMLib-2.2.7'
-	    }
-	});
-
-	require(['protobuf','RongIMLib'], function(protobuf,RongIMLib) {
-	    showInfo("require done");
-	    init(RongIMLib, protobuf);
-	});
-}else{
-	require.config({
-	    paths: {
-	    	RongIMLib: 'local-sdk/RongIMLib-2.2.7'
-	    }
-	});
-
-	require(['RongIMLib'], function(RongIMLib) {
-	    showInfo("require done");
-
-	    // var RongIMClient = RongIMLib.RongIMClient;
-
-	    init(RongIMLib);
-	});
-}
-
-function init(RongIMLib, protobuf){
+function init(RongIMLib,protobuf){
 	var appKey = "8w7jv4qb78a9y";
 	var token = "qyN3mb4PjM+ZXDOdW4f8KpltMLEfik9DxpqXaALr0RGROd6gPSiwQtBYfRPwWMBLjb+Q/sj37frDI5cUnfVAKg==";
-	
-	var RongIMClient = RongIMLib.RongIMClient;
 
 	var RongIMClient = RongIMLib.RongIMClient;
-	var config = { };
-	if (protobuf) {
+
+	//初始化
+	var config = {};
+	if(protobuf){
 		config.protobuf = protobuf;
 	}
-	//初始化
-	RongIMClient.init(appKey,null,{protobuf:protobuf});
 
-	var _instance = RongIMClient.getInstance();
+	RongIMClient.init(appKey,null,config);
+
 	// 连接状态监听器
 	RongIMClient.setConnectionStatusListener({
 		onChanged: function (status) {
 			console.info(status)
 		    switch (status) {
 		        case RongIMLib.ConnectionStatus.CONNECTED:
+		            console.log("链接成功");
 		            showInfo("链接成功");
+		            // afterConnected();
 		            break;
 		        case RongIMLib.ConnectionStatus.CONNECTING:
 		            console.log('正在链接');
@@ -130,7 +47,6 @@ function init(RongIMLib, protobuf){
 		    // 判断消息类型
 		    // showTips("新消息，类型为：" + message.messageType);
             // showResult("新消息",message,start);
-            console.log(message);
 
 		    switch(message.messageType){
 		        case RongIMClient.MessageType.TextMessage:
@@ -189,12 +105,11 @@ function init(RongIMLib, protobuf){
 	//开始链接
 	RongIMClient.connect(token, {
 		onSuccess: function(userId) {
+			console.log("链接成功，用户id：" + userId);
 			showInfo("链接成功，用户id：" + userId);
-            sendMessage();
-            getConversationList();
 		},
 		onTokenIncorrect: function() {
-			showInfo('token无效');
+			console.log('token无效');
 		},
 		onError:function(errorCode){
 		  var info = '';
@@ -218,34 +133,4 @@ function init(RongIMLib, protobuf){
 		  console.log(info);
 		}
 	});
-
-	function getConversationList(){
-		_instance.getConversationList({
-			onSuccess: function(list){
-				showInfo(JSON.stringify(list, null, '\t'));
-			},
-			onError:function(errorCode){
-				 showInfo(errorCode);
-			}
-		}, null, 2);
-	}
-	
-	function sendMessage(){
-		var msg = new RongIMLib.TextMessage({content:"hello RongCloud!",extra:"附加信息"});
-		var conversationtype = RongIMLib.ConversationType.PRIVATE;
-		var targetId = "tester";
-		_instance.sendMessage(conversationtype, targetId, msg, {
-		        onSuccess: function (message) {
-		        	console.log(message);
-		            showInfo(JSON.stringify(message, null, '\t'));
-		        },
-		        onError: function (errorCode,message) {
-		            showInfo(errorCode);
-		        }
-	    });
-	}
 }
-
-</script>
-</body>
-</html>

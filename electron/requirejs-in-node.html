@@ -18,15 +18,15 @@ function showInfo(str){
 
 <pre id="show"></pre>
 
-<script src="sdk/init.js"></script>
+<script src="./init.js"></script>
 <script>
 var requirejs = require('requirejs');
 
 requirejs.config({
 	// nodeRequire: require,
     paths: {
-    	protobuf: '../local-sdk/protobuf-2.2.7',
-    	RongIMLib: '../local-sdk/RongIMLib-2.2.7.min'
+    	protobuf: '../local-sdk/protobuf-2.2.7.min',
+    	RongIMLib: '../local-sdk/RongIMLib-2.2.7'
     }
 });
 
