@@ -181,12 +181,16 @@ instance.removeConversation(conversationType,targetId,{
 	}
 });
 </pre>
-				<div class="helps">
+
+				<p>4.新消息接受</p>
+				<p><a href="https://github.com/rongcloud/websdk-demo/blob/master/connect-check.html">参考消息接受</a>， 消息都是统一接受的，需要开发者根据消息的conversationType和targetId来判断消息属于哪个会话并在对应会话中更新</p>
+				<p>在接受新消息后重新计算未读消息数，并根据用户操作清除未读数，最后再同步状态到多端。具体实现请参考：<a href="http://support.rongcloud.cn/kb/NjE0">消息状态及处理方式</a></p>
+				<!-- <div class="helps">
 					<h3>常见问题: </h3>
 					<ol>
 						<li><a href="#">会话的分页问题</a></li>
 					</ol>
-				</div>
+				</div> -->
 			</div>
 		</div>
 
