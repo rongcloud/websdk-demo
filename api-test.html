@@ -10,56 +10,56 @@
 <a href="https://github.com/rongcloud/websdk-demo/blob/master/api-test.html" class="get-source">获取源码</a>
 
 <style>
-body{
-	font-size:14px;
-	line-height:2;
-	color:#333;
-}
-h1,h2,h3{
-	margin:0;
-}
-.panel span{
-	display:inline-block;	
-	width:60px;
-}
-.show{
-	display:none;
-	font-size:12px;
-	border:1px solid #ccc;
-	padding:10px 30px;
-	width:300px;
-	overflow:auto;
-	position:fixed;
-	right:10px;
-	top:0;
-	bottom:10px;
-}
-.btns{
-	display:none;
-}
-.btns input,
-.btns a{
-	font-size:12px;
-	margin:20px 10px 0 10px;
-}	
-.result{
-	display:none;
-	background:#f5f5f5;
-	margin-top:30px;
-	width:730px;
-	padding:5px;
-	overflow:hidden;
-}
-.result h2{
-	font-size:14px;
-	margin:0;
-	padding:0;
-}
-.result btn{
-	margin:5px;
-	padding:0;
-	color:#cd0000;
-}
+	body{
+		font-size:14px;
+		line-height:2;
+		color:#333;
+	}
+	h1,h2,h3{
+		margin:0;
+	}
+	.panel span{
+		display:inline-block;	
+		width:60px;
+	}
+	.show{
+		display:none;
+		font-size:12px;
+		border:1px solid #ccc;
+		padding:10px 30px;
+		width:300px;
+		overflow:auto;
+		position:fixed;
+		right:10px;
+		top:0;
+		bottom:10px;
+	}
+	.btns{
+		display:none;
+	}
+	.btns input,
+	.btns a{
+		font-size:12px;
+		margin:20px 10px 0 10px;
+	}	
+	.result{
+		display:none;
+		background:#f5f5f5;
+		margin-top:30px;
+		width:730px;
+		padding:5px;
+		overflow:hidden;
+	}
+	.result h2{
+		font-size:14px;
+		margin:0;
+		padding:0;
+	}
+	.result btn{
+		margin:5px;
+		padding:0;
+		color:#cd0000;
+	}
 </style>
 
 
@@ -504,6 +504,37 @@ function sendVoiceMessage(){
             showResult("发送语音消息失败",message,start);
         }
     });
+}
+
+function sendAtMessage(){
+    /*
+    @ 消息对象
+    全部：RongIMLib.MentionedType.ALL；
+    部分：RongIMLib.MentionedType.PART
+    */
+    var mentioneds = new RongIMLib.MentionedInfo();
+	    mentioneds.type = RongIMLib.MentionedType.PART;
+    	mentioneds.userIdList = [targetId, targetId2];
+
+    var content = {
+    	content: "This is a at message!",
+    	extra: "extra info",
+    	mentionedInfo: mentioneds
+    };
+	var msg = new RongIMLib.TextMessage(content);
+
+	var start = new Date().getTime();
+	instance.sendMessage(conversationtype, targetId, msg, {
+		onSuccess: function (message) {
+		   //message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+            showTips("发送 @ 消息成功");
+            showResult("发送 @ 消息成功",message,start);
+		},
+		onError: function (errorCode,message) {
+            showTips(errorCode);
+            showResult("发送 @ 消息失败",message,start);
+        }
+	}, true);
 }
 
 function registerMessageType(type){
@@ -1302,6 +1333,7 @@ function getBase64Image(){
 	<input type="button" value="图片消息" onclick="sendImageMessage();">
 	<input type="button" value="文件消息" onclick="sendFileMessage();">
 	<input type="button" value="语音消息" onclick="sendVoiceMessage();">
+	<input type="button" value="@ 消息" onclick="sendAtMessage();"> 
 	<input type="button" value="自定义消息" onclick="sendRegisterMessage();">
 	<input type="button" value="位置消息" onclick="sendLocationMessage();"> 
 	<input type="button" value="消息撤回" onclick="sendRecallMessage();"> 
