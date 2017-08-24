@@ -374,10 +374,7 @@ function sendTextMessage(){
 			"name" : "张三",
 			"portraitUri" : "http://rongcloud.cn/images/newVersion/log_wx.png"
 		},
-		extra:{
-			"name":"name",
-			"age" : 12
-		}
+		extra:"{\"key\":\"value\", \"key2\" : 12, \"key3\":true}" //string
 	};
 
 	var msg = new RongIMLib.TextMessage(content);
