@@ -59,6 +59,8 @@ function startInit(user,targetId){
 		navi : getValue("navi")
 	};
 
+	var userId = "";
+
 	var callbacks = {
 		getInstance : function(instance){
 			RongIMLib.RongIMEmoji.init();
@@ -66,9 +68,18 @@ function startInit(user,targetId){
 		},
 		getCurrentUser : function(userInfo){
 			console.log(userInfo.userId);
+			userId = userInfo.userId;
 			alert("链接成功；userid=" + userInfo.userId);
 		},
 		receiveNewMessage : function(message){
+			//判断是否有 @ 自己的消息
+			var mentionedInfo = message.content.mentionedInfo || {};
+			var ids = mentionedInfo.userIdList || [];
+			for(var i=0; i < ids.length; i++){
+				if( ids[i] == userId){
+					alert("有人 @ 了你！");
+				}
+			}
 			showResult("show1",message);
 			messageOutput(message);
 		}
