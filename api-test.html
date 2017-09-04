@@ -60,6 +60,21 @@
 		padding:0;
 		color:#cd0000;
 	}
+	.result-code{
+		float:right;
+		margin:0 5px 5px 0;
+		color:#fff;
+		background:#000;
+		border:none;
+	}
+	#result-body{
+		position: relative;
+	}
+	.code-copy{
+		position:absolute;
+		right:5px;
+		top:5px;
+	}
 </style>
 
 
@@ -104,10 +119,16 @@ function showResult(title,code,start){
 }
 
 function jsonOprators(json){
-	json = JSON.stringify(json);
 	var jt = $('#result-body');
 
-	jt.JSONView(json);
+
+	if(typeof json == 'function'){
+		jt.html('<pre class="jsonview" id="result-code">' + json + '</pre>');
+			// <button class="code-copy">复制代码</button>
+	}else{
+		json = JSON.stringify(json);
+		jt.JSONView(json);
+	}
 
 	$('#collapse-btn').on('click', function() {
 		jt.JSONView('collapse');
@@ -1419,16 +1440,45 @@ function getBase64Image(){
 
 <div class="result" id="result-area">
 	<h3 id="result-title">运行结果：</h3>
-	<button id="collapse-btn">Collapse</button>
-	<button id="expand-btn">Expand</button>
-	<button id="toggle-btn">Toggle</button>
-	<button id="toggle-level1-btn">Toggle level1</button>
-	<button id="toggle-level2-btn">Toggle level2</button>
+
+	<div class="result-btns">
+		<button id="collapse-btn">Collapse</button>
+		<button id="expand-btn">Expand</button>
+		<button id="toggle-btn">Toggle</button>
+		<button id="toggle-level1-btn">Toggle level1</button>
+		<button id="toggle-level2-btn">Toggle level2</button>
+		
+		<button class="result-code" id="result-code-btn">查看代码</button>
+	</div>
+
 	<div id="result-body"></div>
 </div>
 
 
 <ol id="show" class="show"></ol>
+
+<script>
+(function(){
+	var t = document.getElementById("btns");
+	var _code = document.getElementById("result-code-btn");
+	var _funcName = "", _btnName = "";
+	t.onclick = function(event){
+		var e = event || window.event;
+		var node = e.target || e.srcElement;
+		var tagName = node.tagName.toLowerCase();
+		if(tagName == "input"){
+			_funcName = node.getAttribute("onclick").split("(")[0];
+			_btnName = node.innerHTML;
+		}
+	}
+	_code.onclick = function(){
+		var code = window[_funcName] + "";
+
+		var start = new Date().getTime();
+		showResult(_btnName, window[_funcName], start);
+	}
+})();	
+</script>
 
 </body>
 </html>
