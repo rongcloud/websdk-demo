@@ -28,6 +28,18 @@ function play(){
     RongIMVoice.preLoaded(voice);
     RongIMVoice.play(voice,duration);
 }
+
+function touchPlay(){
+    window.removeEventListener('touchstart', touchPlay, false);
+    play();
+}
+
+var isiOS = (/i(Phone|P(o|a)d)/.test(navigator.userAgent));
+
+if(isiOS){
+    window.addEventListener('touchstart', touchPlay, false);
+}
+
 </script>
 
 
