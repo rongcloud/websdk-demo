@@ -367,8 +367,8 @@ function sendTextMessage(){
 	*/
 
 	var content = {
-		// content:"hello " + encodeURIComponent('π，α，β'),
-		content:"阿拉伯语：الشرق الأوسط ，希伯来语：המזרח התיכון。 ，，，，hello 😊 " + ' π，α，β, » 数字单位部分字符 如：× 拉丁文所有字符 如：Ο Ρ σ Ï Æ 拼音所有字符 如： ě ì ň 英文音标部分字符 如 ： ə ʃ 俄文部分字符 如 ：ш ; ⊇ â Œ Š ™ ',
+		content:"00000000000000000000",
+		// content:"阿拉伯语：الشرق الأوسط ，希伯来语：המזרח התיכון。 ，，，，hello 😊 " + ' π，α，β, » 数字单位部分字符 如：× 拉丁文所有字符 如：Ο Ρ σ Ï Æ 拼音所有字符 如： ě ì ň 英文音标部分字符 如 ： ə ʃ 俄文部分字符 如 ：ш ; ⊇ â Œ Š ™ ',
 		user : {
 			"userId" : "this-is-a-test-id",
 			"name" : "张三",
@@ -618,6 +618,35 @@ function sendLocationMessage(){
     // }
 }
 
+function sendRichContentMessage(){
+	/*
+	http://www.rongcloud.cn/docs/api/js/RichContentMessage.html
+	*/ 
+	var content = {
+		"title":"sendRichContentMessage",
+		"content":"<a href=\"http://www.rongcloud.cn\">hello</a>",
+		"imageUri":"http://www.demo.com/1.jpg",
+		"url":"http://www.rongcloud.cn/",
+		"extra":"{\"key\":\"value\"}"
+	};
+
+	var msg = new RongIMLib.RichContentMessage(content);
+
+	var start = new Date().getTime();
+	instance.sendMessage(conversationtype, targetId, msg, {
+        onSuccess: function (message) {
+        	setRecallMessage(message);
+            showTips("发送图文消息成功");
+            showResult("发送图文消息成功",message,start);
+            // showMap(message);
+        },
+        onError: function (errorCode,message) {
+            showTips(errorCode);
+            showResult("发送图文消息失败",message,start);
+        }
+    });
+}
+
 function SendSyncReadStatusMessage(){
 	var sentTime = 1486975569605;// message 的 sentTime。
 	var content = {
@@ -733,8 +762,8 @@ function getConversationList(){
 		2：只有发过消息才能生成会话
 	*/
 
-	var conversationTypes = null;  //具体格式设置需要补充
-	var limit = 10; //获取会话的数量，不传或传null为全部，暂不支持分页
+	var conversationTypes = [1,2,3,4,5,6,7,8];  //具体格式设置需要补充
+	var limit = 1000; //获取会话的数量，不传或传null为全部，暂不支持分页
 	var start = new Date().getTime();
 	instance.getConversationList({
 		onSuccess: function(list) {
@@ -759,7 +788,7 @@ function getConversationList(){
             showTips("获取会话失败");
             showResult("获取会话失败",error,start);
 		}
-    },conversationTypes,limit);
+    }, conversationTypes, limit, true);
 }
 
 function removeConversation(){
@@ -1331,6 +1360,7 @@ function getBase64Image(){
 	<input type="button" value="文件消息" onclick="sendFileMessage();">
 	<input type="button" value="语音消息" onclick="sendVoiceMessage();">
 	<input type="button" value="@ 消息" onclick="sendAtMessage();"> 
+	<input type="button" value="富文本消息" onclick="sendRichContentMessage();">
 	<input type="button" value="自定义消息" onclick="sendRegisterMessage();">
 	<input type="button" value="位置消息" onclick="sendLocationMessage();"> 
 	<input type="button" value="消息撤回" onclick="sendRecallMessage();"> 
