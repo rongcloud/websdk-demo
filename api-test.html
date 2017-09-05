@@ -83,6 +83,11 @@ check.js是做一些环境监测用的临时代码，仅限开发调试使用
 -->
 <script src="js/pre-check.js"></script>
 
+<!-- 
+http://www.ghostchina.com/adding-syntax-highlighting-to-ghost-using-highlight-js/
+-->
+<link href="res/monokai_sublime.min.css" rel="stylesheet">  
+<script src="res/highlight.min.js"></script> 
 
 <script type="text/javascript" src="lib/jquery-3.1.1.js"></script>
 <link rel="stylesheet" href="json-view/jsonview.css" />
@@ -121,10 +126,10 @@ function showResult(title,code,start){
 function jsonOprators(json){
 	var jt = $('#result-body');
 
-
 	if(typeof json == 'function'){
-		jt.html('<pre class="jsonview" id="result-code">' + json + '</pre>');
+		jt.html('<pre class="jsonview"><code id="result-code">' + json + '</code></pre>');
 			// <button class="code-copy">复制代码</button>
+		hljs.initHighlightingOnLoad();
 	}else{
 		json = JSON.stringify(json);
 		jt.JSONView(json);
@@ -783,7 +788,7 @@ function getConversationList(){
 		2：只有发过消息才能生成会话
 	*/
 
-	var conversationTypes = [1,2,3,4,5,6,7,8];  //具体格式设置需要补充
+	var conversationTypes = null;  //具体格式设置需要补充
 	var limit = 1000; //获取会话的数量，不传或传null为全部，暂不支持分页
 	var start = new Date().getTime();
 	instance.getConversationList({
@@ -809,7 +814,21 @@ function getConversationList(){
             showTips("获取会话失败");
             showResult("获取会话失败",error,start);
 		}
-    }, conversationTypes, limit, true);
+    }, conversationTypes, limit);
+}
+
+function getConversation(){
+	//需在 getConversationList 方法执行之后执行，否则返回null
+	var start = new Date().getTime();
+
+	instance.getConversation(conversationtype, targetId, { 
+		onSuccess:function(result){ 
+            showResult("获取群组会话 成功", result, start);
+		}, 
+		onError:function(error){ 
+		    showResult("获取群组会话 失败", error, start);
+		} 
+	});
 }
 
 function removeConversation(){
@@ -1398,6 +1417,7 @@ function getBase64Image(){
 
 	会&nbsp;&nbsp;话：
 	<input type="button" value="会话列表" onclick="getConversationList();">
+	<input type="button" value="获取会话" onclick="getConversation();">
 	<input type="button" value="会话未读数" onclick="getUnreadCount();"> 
 	<input type="button" value="会话未读总数" onclick="getTotalUnreadCount();"> 
 	<input type="button" value="清除会话未读数" onclick="clearUnreadCount();">
@@ -1456,7 +1476,7 @@ function getBase64Image(){
 
 
 <ol id="show" class="show"></ol>
-
+<div id="show1"></div>
 <script>
 (function(){
 	var t = document.getElementById("btns");
@@ -1477,7 +1497,7 @@ function getBase64Image(){
 		var start = new Date().getTime();
 		showResult(_btnName, window[_funcName], start);
 	}
-})();	
+})();
 </script>
 
 </body>
