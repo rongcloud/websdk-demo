@@ -99,7 +99,7 @@ http://www.ghostchina.com/adding-syntax-highlighting-to-ghost-using-highlight-js
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 
 <!-- 声音样本文件 -->
-<script src="res/voice-amr-base64.json.js"></script>
+<script src="res/voice-amr-base64.json"></script>
 
 <!-- 二次封装的初始化代码 -->
 <script src="init.js"></script>
@@ -284,7 +284,6 @@ function startInit(){
 function afterConnected(){
 	document.getElementById("panel").style.display = "none";
 	document.getElementById("btns").style.display = "block";
-	// instance = RongIMClient.getInstance();
 }
 
 function disconnect(){
@@ -292,7 +291,9 @@ function disconnect(){
 	文档：http://www.rongcloud.cn/docs/api/js/RongIMClient.html
 	*/
 
+	var start = new Date().getTime();
 	instance.disconnect();
+	showResult("断开链接 成功", null , start);
 }
 
 function reconnect(){
@@ -301,14 +302,17 @@ function reconnect(){
 	2: 提示其他设备登录请勿调用重连方法。
  	3: docs   http://www.rongcloud.cn/docs/api/js/RongIMClient.html
 	*/
- 
+
+ 	var start = new Date().getTime();
 	begin = new Date().getTime();
 	RongIMClient.reconnect({
 		onSuccess: function(userId) {
 			showTips("重新链接成功，用户id：" + userId + "; " + getTimer(begin));
+			showResult("重新链接 成功", userId, start);
 		},
 		onTokenIncorrect: function() {
 			//console.log('token无效');
+			showResult("重新链接 失败", "token无效", start);
 		},
 		onError:function(errorCode){
 		  var info = '';
@@ -330,20 +334,25 @@ function reconnect(){
 		      break;
 		  }
 		  showTips(info);
+		  showResult("重新链接 失败", info, start);
 		}
 	});
 }
 
 
 function autoReconnect(){
-	//docs   http://www.rongcloud.cn/docs/api/js/RongIMClient.html
+	/*
+		会自动嗅探网络，并自动重新链接
+	*/ 
+
+	var start = new Date().getTime();
 	begin = new Date().getTime();
 	var callback = {
 		onSuccess: function(userId) {
-			showTips("重新链接成功，用户id：" + userId + "; " + getTimer(begin));
+			showResult("重新链接 成功", userId, start);
 		},
 		onTokenIncorrect: function() {
-			//console.log('token无效');
+			showResult("重新链接 失败", "token无效", start);
 		},
 		onError:function(errorCode){
 		  var info = '';
@@ -368,8 +377,10 @@ function autoReconnect(){
 		      break;
 		  }
 		  showTips(info);
+		  showResult("自动重链 失败", info, start);
 		}
 	};
+	
 	/*
 		config.auto: 默认 false, true 启用自动重连，启用则为必选参数
         config.rate: 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
@@ -399,22 +410,22 @@ function sendTextMessage(){
 
 	var content = {
 		content: [
-				"阿拉伯语：الشرق الأوسط ",
-				"希伯来语：המזרח התיכון",
-				"emoji: 😊 ",
-				"希腊字母： π，α，β, ",
-				"数字单位部分字符 如：× ",
-				"拉丁文所有字符 如：Ο Ρ σ Ï Æ ",
-				"拼音所有字符 如： ě ì ň ",
-				"英文音标部分字符 如 ： ə ʃ ",
-				"俄文部分字符 如 ：ш ; ⊇ â Œ Š ™ "
-			].join(","),
+			"阿拉伯语：الشرق الأوسط ",
+			"希伯来语：המזרח התיכון",
+			"emoji: 😊 ",
+			"希腊字母： π，α，β, ",
+			"数字单位部分字符 如：× ",
+			"拉丁文所有字符 如：Ο Ρ σ Ï Æ ",
+			"拼音所有字符 如： ě ì ň ",
+			"英文音标部分字符 如 ： ə ʃ ",
+			"俄文部分字符 如 ：ш ; ⊇ â Œ Š ™ "
+		].join(","),
 		user : {
 			"userId" : "this-is-a-test-id",	//不支持中文及特殊字符
 			"name" : "张三",
 			"portraitUri" : "http://rongcloud.cn/images/newVersion/log_wx.png"
 		},
-		extra: "{\"key\":\"value\", \"key2\" : 12, \"key3\":true}" //string
+		extra: "{\"key\":\"value\", \"key2\" : 12, \"key3\":true}"
 	};
 
 	var msg = new RongIMLib.TextMessage(content);
@@ -1238,7 +1249,7 @@ function getBase64Image(){
 }
 </script>
 
-<h1>Web SDK demo</h1>
+<h1>Web SDK demo <small><a href="connect-check.html">消息接收demo</a></small></h1>
 <div class="panel" id="panel">
 	<p>
 		<span>appkey</span>
