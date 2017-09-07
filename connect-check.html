@@ -52,6 +52,17 @@ function showResult(id,message){
 <script src="//cdn.ronghub.com/RongEmoji-2.2.5.min.js"></script>
 <script src="./init.js"></script>
 <script>
+//注册自定义消息
+
+function registerMessage(type){
+	var messageName = type; // 消息名称。
+	var objectName = "s:" + type; // 消息内置名称，请按照此格式命名 *:* 。
+	var mesasgeTag = new RongIMLib.MessageTag(true,true); //true true 保存且计数，false false 不保存不计数。
+	var propertys = ["name","age","gender"]; // 消息类中的属性名。
+
+	RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys);
+}
+
 function startInit(user,targetId){
 	var params = {
 		appKey : getValue("appKey"),
@@ -65,6 +76,7 @@ function startInit(user,targetId){
 		getInstance : function(instance){
 			RongIMLib.RongIMEmoji.init();
 			//instance.sendMessage
+			registerMessage("PersonMessage");
 		},
 		getCurrentUser : function(userInfo){
 			console.log(userInfo.userId);

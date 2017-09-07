@@ -439,7 +439,7 @@ function sendTextMessage(){
         onError: function (errorCode,message) {
             showResult("发送文字消息 失败",message,start);
         }
-    });
+    }, false, "pushData");
 }
 
 function sendImageMessage(){
@@ -565,7 +565,7 @@ function sendAtMessage(){
 	}, true);
 }
 
-function registerMessageType(type){
+function registerMessage(type){
 	var messageName = type; // 消息名称。
 	var objectName = "s:" + type; // 消息内置名称，请按照此格式命名 *:* 。
 	var mesasgeTag = new RongIMLib.MessageTag(true,true); //true true 保存且计数，false false 不保存不计数。
@@ -584,7 +584,7 @@ function sendRegisterMessage(){
 		3：需要自己做解析实现
 	*/
 
-	registerMessageType("PersonMessage");
+	registerMessage("PersonMessage");
 
 	var content = {
 		name:"RegisterMessage",
@@ -885,14 +885,15 @@ function receiveMessage(){
 
 //加入聊天室后，可以用任意一个发送消息的方法发送消息，只需要conversationType为CHATROOM
 var chatRoomId = "chatRoomId-008"; // 聊天室 Id,可任意指定，能区分不同聊天室即可
-var count = 10; //拉取最近的会话内容（最近 n ( n <= 50 )条） 
+var count = 10; //拉取最近的会话内容（最多50条），-1不拉取 
 
 function enterChatroom(){
 	/*
 	http://www.rongcloud.cn/docs/web_api_demo.html#聊天室
 
 	聊天室不支持通过 getHistoryMessages 方法获取历史消息，
-	可以在 joinChatRoom 时拉取最近的消息, 最多 50 条。
+
+	count：//拉取最近的会话内容（最多50条），-1不拉取 
 	*/
 
 	var start = new Date().getTime();
