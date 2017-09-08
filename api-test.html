@@ -408,6 +408,20 @@ function sendTextMessage(){
 	2: conversatinType 类型是 number，targetId 类型是 string
 	*/
 
+	/*
+		1、不要多端登陆，保证所有端都离线
+		2、接收 push 设备设置:
+			（1）打开系统通知提醒
+			（2）小米设置 “授权管理” －> “自己的应用” 为自启动
+			（3）应用内不要屏蔽新消息通知
+		3、内置消息类型，默认 push，自定义消息类型需要
+		   pushData 显示逻辑顺序：自定义 > 默认
+		4、发送其他消息类型与发送 TextMessage 逻辑、方式一致
+	*/
+	var pushData = "pushData" + Date.now();
+
+	var isMentioned = false;
+
 	var content = {
 		content: [
 			"阿拉伯语：الشرق الأوسط ",
@@ -439,7 +453,7 @@ function sendTextMessage(){
         onError: function (errorCode,message) {
             showResult("发送文字消息 失败",message,start);
         }
-    }, false, "pushData");
+    }, isMentioned, pushData);
 }
 
 function sendImageMessage(){
@@ -648,19 +662,7 @@ function sendRichContentMessage(){
 		"url": "http://www.rongcloud.cn/",
 		"extra": "{\"key\":\"value\"}"
 	};
-	/*
-		1、不要多端登陆，保证所有端都离线
-		2、接收 push 设备设置:
-			（1）打开系统通知提醒
-			（2）小米设置 “授权管理” －> “自己的应用” 为自启动
-			（3）应用内不要屏蔽新消息通知
-		3、内置消息类型，默认 push，自定义消息类型需要
-		   pushData 显示逻辑顺序：自定义 > 默认
-		4、发送其他消息类型与发送 TextMessage 逻辑、方式一致
-	*/
-	var pushData = "pushData" + Date.now();
 
-	var isMentioned = false;
 	var msg = new RongIMLib.RichContentMessage(content);
 
 	var start = new Date().getTime();
@@ -672,7 +674,7 @@ function sendRichContentMessage(){
         onError: function (errorCode,message) {
             showResult("发送图文消息失败", message, start);
         }
-    }, isMentioned, pushData);
+    });
 }
 
 function SendSyncReadStatusMessage(){
