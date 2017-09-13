@@ -10,15 +10,22 @@ function init(params, callbacks, modules){
 
 	var config = {};
 
-	//私有云
+	//私有云切换navi导航
 	if(navi !== ""){
 		config.navi = navi;
+	}
+
+	//私有云切换api
+	var api = params.api || "";
+	if(api !== ""){
+		config.api = api;
 	}
 
 	//support protobuf url + function
 	if(protobuf != null){
 		config.protobuf = protobuf;
 	};
+
 
 	RongIMLib.RongIMClient.init(appKey,null,config);
 
