@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Web SDK UnitTest</title>
+
+<link rel="stylesheet" type="text/css" href="lib/jasmine-1.2.0/jasmine.css?2">
+<script type="text/javascript" src="lib/jasmine-1.2.0/jasmine.js" id="jasmine"></script>
+<script type="text/javascript" src="lib/jasmine-1.2.0/jasmine-html.js"></script>
+<script type="text/javascript" src="lib/underscore.js"></script>
+
+
+<!-- lib -->
+<script>
+var AppConfig = {
+    appKey : "8w7jv4qb78a9y",
+    token : "4FGCL0oQ/E72nU4ivbui8uHR/ySxKaD1cAX2biXsYR6RsLYO9xAA4ooa+q3n42JnVTQyMAdFUiDsjFRDYZaQeg==",
+    targetIds : "user9,user8"
+};
+</script>
+<script type="text/javascript" src="src/RongIMLib-2.2.7.js"></script>
+
+
+<!--test files-->
+<script type="text/javascript" src="spec/staticCheckSpec.js"></script>
+<script type="text/javascript" src="spec/connectSpec.js"></script>
+<script type="text/javascript" src="spec/sendMessagesSpec.js"></script>
+
+
+<!-- 
+https://jasmine.github.io/api/2.8/global.html#expect
+http://underscorejs.org/#indexOf
+-->
+
+<script type="text/javascript">
+(function() {
+    var htmlReporter = new jasmine.HtmlReporter();
+
+    var jasmineEnv = jasmine.getEnv();
+        jasmineEnv.updateInterval = 1000;
+        jasmineEnv.addReporter(htmlReporter);
+
+        jasmineEnv.specFilter = function(spec) {
+            return htmlReporter.specFilter(spec);
+        };
+
+    window.onload = function(){
+        jasmineEnv.execute();
+    }
+
+})();
+</script>
+
+</head>
+<body>
+
+</body>
+</html>
