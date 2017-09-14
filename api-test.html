@@ -339,61 +339,6 @@ function reconnect(){
 	});
 }
 
-
-function autoReconnect(){
-	/*
-		会自动嗅探网络，并自动重新链接
-	*/ 
-
-	var start = new Date().getTime();
-	begin = new Date().getTime();
-	var callback = {
-		onSuccess: function(userId) {
-			showResult("重新链接 成功", userId, start);
-		},
-		onTokenIncorrect: function() {
-			showResult("重新链接 失败", "token无效", start);
-		},
-		onError:function(errorCode){
-		  var info = '';
-		  switch (errorCode) {
-		    case RongIMLib.ErrorCode.TIMEOUT:
-		      info = '超时';
-		      break;
-		    case RongIMLib.ErrorCode.UNKNOWN_ERROR:
-		      info = '未知错误';
-		      break;
-		    case RongIMLib.ErrorCode.UNACCEPTABLE_PaROTOCOL_VERSION:
-		      info = '不可接受的协议版本';
-		      break;
-		    case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
-		      info = 'appkey不正确';
-		      break;
-		    case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
-		      info = '服务器不可用';
-		      break;
-		    case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
-		      info = '网络不可用';
-		      break;
-		  }
-		  showTips(info);
-		  showResult("自动重链 失败", info, start);
-		}
-	};
-	
-	/*
-		config.auto: 默认 false, true 启用自动重连，启用则为必选参数
-        config.rate: 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
-        config.url: 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.7.min.js 可选
-	*/
-	var config = {
-		auto: true,
-		url: 'cdn.ronghub.com/RongIMLib-2.2.7.min.js',
-		rate: [100, 1000, 3000, 6000, 10000]
-	};
-	RongIMClient.reconnect(callback, config);
-}
-
 //消息撤回变量及设置
 var recallMessage = null;
 function setRecallMessage(message){
@@ -1300,7 +1245,6 @@ function getBase64Image(){
 	链接状态：
 	<input type="button" value="断开链接" onclick="disconnect();">
 	<input type="button" value="重新链接" onclick="reconnect();">
-	<input type="button" value="自动重链" onclick="autoReconnect();">
 	
 	<br>
 
