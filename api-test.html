@@ -190,19 +190,10 @@ var token = "";
 
 var userId = "";
 
-var usersInfo = {
-	"user9" : {
-		"userId" : "user9",
-		"name" : "张三",
-		"portraitUri" : "http://rongcloud.cn/images/newVersion/log_wx.png"
-
-	}
-};
-
 /*
 消息全部用单聊，user8 -> user9
 */
-var conversationtype = RongIMLib.ConversationType.PRIVATE; // 私聊
+var conversationType = RongIMLib.ConversationType.PRIVATE; // 私聊
  /*
  PRIVATE 				1		单聊
  DISCUSSION 			2		讨论组
@@ -339,61 +330,6 @@ function reconnect(){
 	});
 }
 
-
-function autoReconnect(){
-	/*
-		会自动嗅探网络，并自动重新链接
-	*/ 
-
-	var start = new Date().getTime();
-	begin = new Date().getTime();
-	var callback = {
-		onSuccess: function(userId) {
-			showResult("重新链接 成功", userId, start);
-		},
-		onTokenIncorrect: function() {
-			showResult("重新链接 失败", "token无效", start);
-		},
-		onError:function(errorCode){
-		  var info = '';
-		  switch (errorCode) {
-		    case RongIMLib.ErrorCode.TIMEOUT:
-		      info = '超时';
-		      break;
-		    case RongIMLib.ErrorCode.UNKNOWN_ERROR:
-		      info = '未知错误';
-		      break;
-		    case RongIMLib.ErrorCode.UNACCEPTABLE_PaROTOCOL_VERSION:
-		      info = '不可接受的协议版本';
-		      break;
-		    case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
-		      info = 'appkey不正确';
-		      break;
-		    case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
-		      info = '服务器不可用';
-		      break;
-		    case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
-		      info = '网络不可用';
-		      break;
-		  }
-		  showTips(info);
-		  showResult("自动重链 失败", info, start);
-		}
-	};
-	
-	/*
-		config.auto: 默认 false, true 启用自动重连，启用则为必选参数
-        config.rate: 重试频率 [100, 1000, 3000, 6000, 10000, 18000] 单位为毫秒，可选
-        config.url: 网络嗅探地址 [http(s)://]cdn.ronghub.com/RongIMLib-2.2.7.min.js 可选
-	*/
-	var config = {
-		auto: true,
-		url: 'cdn.ronghub.com/RongIMLib-2.2.7.min.js',
-		rate: [100, 1000, 3000, 6000, 10000]
-	};
-	RongIMClient.reconnect(callback, config);
-}
-
 //消息撤回变量及设置
 var recallMessage = null;
 function setRecallMessage(message){
@@ -435,9 +371,9 @@ function sendTextMessage(){
 			"俄文部分字符 如 ：ш ; ⊇ â Œ Š ™ "
 		].join(","),
 		user : {
-			"userId" : "this-is-a-test-id",	//不支持中文及特殊字符
+			"id" : "this-is-a-test-id",	//不支持中文及特殊字符
 			"name" : "张三",
-			"portraitUri" : "http://rongcloud.cn/images/newVersion/log_wx.png"
+			"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png"
 		},
 		extra: "{\"key\":\"value\", \"key2\" : 12, \"key3\":true}"
 	};
@@ -445,7 +381,7 @@ function sendTextMessage(){
 	var msg = new RongIMLib.TextMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
         	setRecallMessage(message);
             showResult("发送文字消息 成功",message,start);
@@ -474,7 +410,7 @@ function sendImageMessage(){
 	var msg = new RongIMLib.ImageMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
         	setRecallMessage(message);
             showResult("发送图片消息 成功",message,start);
@@ -509,7 +445,7 @@ function sendFileMessage(){
 	var msg = new RongIMLib.FileMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
         	setRecallMessage(message);
             showResult("发送文件消息成功",message,start);
@@ -536,7 +472,7 @@ function sendVoiceMessage(){
 	var msg = new RongIMLib.VoiceMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
         	setRecallMessage(message);
             showResult("发送语音消息成功",message,start);
@@ -568,7 +504,7 @@ function sendAtMessage(){
 	var msg = new RongIMLib.TextMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
 		onSuccess: function (message) {
 		   //message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
             showResult("发送 @ 消息成功",message,start);
@@ -609,7 +545,7 @@ function sendRegisterMessage(){
 	var msg = new RongIMClient.RegisterMessage.PersonMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
         	setRecallMessage(message);
             showResult("发送自定义消息成功",message,start);
@@ -639,7 +575,7 @@ function sendLocationMessage(){
 	var msg = new RongIMLib.LocationMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
         	setRecallMessage(message);
             showResult("发送自定义消息成功",message,start);
@@ -666,7 +602,7 @@ function sendRichContentMessage(){
 	var msg = new RongIMLib.RichContentMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
         	setRecallMessage(message);
             showResult("发送图文消息成功", message, start);
@@ -689,7 +625,7 @@ function SendSyncReadStatusMessage(){
 	var msg = new RongIMLib.SyncReadStatusMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, targetId, msg, {
+	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
             showResult("发送同步消息成功", message, start);
         },
@@ -757,7 +693,7 @@ function getHistroyMessage(){
 	var timestrap = null; //0, 1483950413013
 
 	var start = new Date().getTime();
-	instance.getHistoryMessages(conversationtype, targetId, timestrap, count, {
+	instance.getHistoryMessages(conversationType, targetId, timestrap, count, {
 		onSuccess: function(list, hasMsg) {
 			//可通过sort订制其他顺序
 			list.sort(function(a,b){
@@ -807,7 +743,7 @@ function getConversation(){
 	//需在 getConversationList 方法执行之后执行，否则返回null
 	var start = new Date().getTime();
 
-	instance.getConversation(conversationtype, targetId, { 
+	instance.getConversation(conversationType, targetId, { 
 		onSuccess:function(result){ 
             showResult("获取群组会话 成功", result, start);
 		}, 
@@ -819,7 +755,7 @@ function getConversation(){
 
 function removeConversation(){
 	var start = new Date().getTime();
-	instance.removeConversation(conversationtype, targetId, { 
+	instance.removeConversation(conversationType, targetId, { 
 		onSuccess:function(result){ 
             showResult("删除会话成功",result,start);
 		}, 
@@ -849,7 +785,7 @@ function getUnreadCount(){
 		每次接受新消息后通过重新调用此方法计算
 	 */
 	var start = new Date().getTime();
-	instance.getUnreadCount(conversationtype,targetId,{
+	instance.getUnreadCount(conversationType,targetId,{
 	    onSuccess:function(count){
 	       showResult("获取会话未读数成功", count, start);
 	    },
@@ -882,7 +818,7 @@ function clearUnreadCount(){
 	 */
 
 	var start = Date.now();
-	instance.clearUnreadCount(conversationtype,targetId,{
+	instance.clearUnreadCount(conversationType,targetId,{
 	    onSuccess:function(){
 	        showResult("清除未读数成功", "success", start);
 	    },
@@ -961,11 +897,11 @@ function sendMessageToChatroom(){
 		extra:"RongCloud"
 	};
 
-	var conversationtype = RongIMLib.ConversationType.CHATROOM; // 私聊
+	var conversationType = RongIMLib.ConversationType.CHATROOM; // 私聊
 	var msg = new RongIMLib.TextMessage(content);
 
 	var start = new Date().getTime();
-	instance.sendMessage(conversationtype, chatRoomId, msg, {
+	instance.sendMessage(conversationType, chatRoomId, msg, {
         onSuccess: function (message) {
             showResult("发送聊天室消息成功",message,start);
         },
@@ -1104,7 +1040,7 @@ var keywords = "Rong";
 
 /*
 用户给公众号发消息
-var conversationtype = RongIMLib.ConversationType.PUBLIC_SERVICE;
+var conversationType = RongIMLib.ConversationType.PUBLIC_SERVICE;
 var targetId = publicServiceId
 */
 
@@ -1300,7 +1236,6 @@ function getBase64Image(){
 	链接状态：
 	<input type="button" value="断开链接" onclick="disconnect();">
 	<input type="button" value="重新链接" onclick="reconnect();">
-	<input type="button" value="自动重链" onclick="autoReconnect();">
 	
 	<br>
 
