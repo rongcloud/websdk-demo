@@ -190,15 +190,6 @@ var token = "";
 
 var userId = "";
 
-var usersInfo = {
-	"user9" : {
-		"userId" : "user9",
-		"name" : "张三",
-		"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png"
-
-	}
-};
-
 /*
 消息全部用单聊，user8 -> user9
 */
@@ -380,7 +371,7 @@ function sendTextMessage(){
 			"俄文部分字符 如 ：ш ; ⊇ â Œ Š ™ "
 		].join(","),
 		user : {
-			"userId" : "this-is-a-test-id",	//不支持中文及特殊字符
+			"id" : "this-is-a-test-id",	//不支持中文及特殊字符
 			"name" : "张三",
 			"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png"
 		},
