@@ -9,7 +9,7 @@ describe("sendMessage", function() {
 
   var message = null;
 
-  it("sendTextMessage", function() {
+  it("text", function() {
     runs(function() {
         var instance = RongIMClient.getInstance();
         var content = {
@@ -75,11 +75,11 @@ describe("sendMessage", function() {
 		"messageUId": "5F7V-1M6L-843A-D3EE"
 	}*/
     runs(function() {
-		expect(typeof message).toEqual("object");
-		expect(message.conversationType).toEqual(1);
-		expect(message.objectName).toEqual("RC:TxtMsg");
-		expect(message.targetId).toEqual("user9");
-		expect(message.senderUserId).toEqual("user10");
+  		expect(typeof message).toEqual("object");
+  		expect(message.conversationType).toEqual(1);
+  		expect(message.objectName).toEqual("RC:TxtMsg");
+  		expect(message.targetId).toEqual("user9");
+  		expect(message.senderUserId).toEqual("user10");
     });
 
   });

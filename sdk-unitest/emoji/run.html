@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emoji SDK UnitTest</title>
+
+<link rel="stylesheet" type="text/css" href="../jasmine/1.2.0/jasmine.css">
+<script type="text/javascript" src="../jasmine/1.2.0/jasmine.js" id="jasmine"></script>
+<script type="text/javascript" src="../jasmine/1.2.0/jasmine-html.js"></script>
+<script type="text/javascript" src="../libs/underscore.js"></script>
+<script type="text/javascript" src="../libs/ua.js"></script>
+
+<script type="text/javascript" src="emoji.js"></script>
+
+
+<!--test files-->
+<script type="text/javascript" src="testcase.js"></script>
+
+<script type="text/javascript">
+(function() {
+    var htmlReporter = new jasmine.HtmlReporter();
+
+    var jasmineEnv = jasmine.getEnv();
+        jasmineEnv.updateInterval = 1000;
+        jasmineEnv.addReporter(htmlReporter);
+
+        jasmineEnv.specFilter = function(spec) {
+            return htmlReporter.specFilter(spec);
+        };
+
+    window.onload = function(){
+        jasmineEnv.execute();
+    }
+
+})();
+</script>
+
+</head>
+<body>
+
+</body>
+</html>
