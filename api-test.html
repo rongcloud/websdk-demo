@@ -723,7 +723,7 @@ function getConversationList(){
 	*/
 
 	var conversationTypes = null;  //具体格式设置需要补充
-	var limit = 1000; //获取会话的数量，不传或传null为全部，暂不支持分页
+	var limit = 150; //获取会话的数量，不传或传null为全部，暂不支持分页
 	var start = new Date().getTime();
 	instance.getConversationList({
 		onSuccess: function(list) {
