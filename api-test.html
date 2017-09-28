@@ -400,6 +400,7 @@ function sendImageMessage(){
 	上传插件（含获取缩略图方法）: https://github.com/rongcloud/rongcloud-web-im-upload
 	
 	缩略图必须是base64码的jpg图，而且不带前缀"data:image/jpeg;base64,"，不得超过100K
+	压缩：https://github.com/rongcloud/rongcloud-web-im-upload/blob/master/resize.html
 	*/
 
 	var content = {
@@ -722,7 +723,7 @@ function getConversationList(){
 	*/
 
 	var conversationTypes = null;  //具体格式设置需要补充
-	var limit = 1000; //获取会话的数量，不传或传null为全部，暂不支持分页
+	var limit = 150; //获取会话的数量，不传或传null为全部，暂不支持分页
 	var start = new Date().getTime();
 	instance.getConversationList({
 		onSuccess: function(list) {
