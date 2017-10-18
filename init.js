@@ -10,12 +10,12 @@ function init(params, callbacks, modules){
 
 	var config = {};
 
-	//私有云切换navi导航
+	//私有云切换navi导航，私有云格式 '120.92.10.214:8888'
 	if(navi !== ""){
 		config.navi = navi;
 	}
 
-	//私有云切换api
+	//私有云切换api,私有云格式 '172.20.210.38:81:8888'
 	var api = params.api || "";
 	if(api !== ""){
 		config.api = api;
@@ -34,12 +34,44 @@ function init(params, callbacks, modules){
 	// 连接状态监听器
 	RongIMClient.setConnectionStatusListener({
 		onChanged: function (status) {
-			console.log(status);
+			// console.log(status);
 		    switch (status) {
-		        case RongIMLib.ConnectionStatus.CONNECTED:
+		        case RongIMLib.ConnectionStatus["CONNECTED"]:
+		        case 0:
+		        	console.log("连接成功")
 		            callbacks.getInstance && callbacks.getInstance(instance);
 		            break;
-		        }
+
+		        case RongIMLib.ConnectionStatus["CONNECTING"]:
+		        case 1:
+		        	console.log("连接中")
+		            break;
+
+		        case RongIMLib.ConnectionStatus["DISCONNECTED"]:
+		        case 2:
+		        	console.log("当前用户主动断开链接")
+		            break;
+
+		        case RongIMLib.ConnectionStatus["NETWORK_UNAVAILABLE"]:
+		        case 3:
+		        	console.log("网络不可用")
+		            break;
+
+		        case RongIMLib.ConnectionStatus["CONNECTION_CLOSED"]:
+		        case 4:
+		        	console.log("未知原因，连接关闭")
+		            break;
+
+		        case RongIMLib.ConnectionStatus["KICKED_OFFLINE_BY_OTHER_CLIENT"]:
+		        case 6:
+		        	console.log("用户账户在其他设备登录，本机会被踢掉线")
+		            break;
+
+		        case RongIMLib.ConnectionStatus["DOMAIN_INCORRECT"]:
+		        case 12:
+		        	console.log("当前运行域名错误，请检查安全域名配置")
+		            break;
+		    }
 		}
 	});
 
