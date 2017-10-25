@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>voice</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
 </head>
 <body>
 <link rel="stylesheet" href="./res/rongcloud.css">
@@ -12,8 +13,15 @@
 <h1>声音库</h1>
 <h2><a href="http://www.rongcloud.cn/docs/web.html#声音库">http://www.rongcloud.cn/docs/web.html#声音库</a></h2>
 
+<!-- <script src="//cdn.ronghub.com/Libamr-2.2.5.min.js"></script> -->
+<!-- <script src="//cdn.ronghub.com/RongIMVoice-2.2.5.min.js"></script> -->
+
+<!--[if !IE]><!--> 
 <script src="//cdn.ronghub.com/Libamr-2.2.5.min.js"></script>
-<script src="//cdn.ronghub.com/RongIMVoice-2.2.5.min.js"></script>
+<!--<![endif]-->
+<!-- IE9下 swfobject 报错问题解决 -->
+<script type="text/javascript" src="RongIMVoice-2.2.6.js"></script>
+
 
 <!-- 引入base64编码的arm音频数据 -->
 <script src="./res/voice-amr-base64.json"></script>
