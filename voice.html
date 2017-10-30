@@ -34,8 +34,16 @@ var RongIMVoice = RongIMLib.RongIMVoice;
 function play(){
 	// 音频持续大概时间(秒)
 	var duration = voice.length/1024;
-    RongIMVoice.preLoaded(voice);
-    RongIMVoice.play(voice,duration);
+   
+	if(!!window.ActiveXObject || "ActiveXObject" in window){
+		//如果是 IE 浏览器
+    	RongIMVoice.preLoaded(voice);
+    	RongIMVoice.play(voice,duration);	
+	}else{
+		RongIMVoice.preLoaded(voice, function(){
+		    RongIMVoice.play(voice,duration);
+		});
+	}
 }
 
 function touchPlay(){
