@@ -7,59 +7,94 @@
 </head>
 <body>
 <link rel="stylesheet" href="./res/rongcloud.css">
-<a href="https://github.com/rongcloud/websdk-demo/blob/master/voice.html" class="get-source">获取源码</a>
 
-
-<h1>声音库</h1>
-<h2><a href="http://www.rongcloud.cn/docs/web.html#声音库">http://www.rongcloud.cn/docs/web.html#声音库</a></h2>
-<p>支持范围：Chrome、Firefox、Opera、Windows Edge、Windows IE9+、Mac Safari、iOS Safari、iOS 微信浏览器、安卓4.4+ 浏览器</p>
-
-<!-- <script src="//cdn.ronghub.com/Libamr-2.2.5.min.js"></script> -->
-<!-- <script src="//cdn.ronghub.com/RongIMVoice-2.2.5.min.js"></script> -->
-
+<script type="text/javascript" src="./lib/jquery-3.1.1.js"></script>
 <!--[if !IE]><!--> 
-<script src="//cdn.ronghub.com/Libamr-2.2.5.min.js"></script>
+<script src="./lib/Libamr-2.2.5.min.js"></script>
 <!--<![endif]-->
 <!-- IE9下 swfobject 报错问题解决 -->
 <script type="text/javascript" src="RongIMVoice-2.2.6.js"></script>
 
 
-<!-- 引入base64编码的arm音频数据 -->
-<script src="./res/voice-amr-base64.json"></script>
+<a href="https://github.com/rongcloud/websdk-demo/blob/master/voice.html" class="get-source">获取源码</a>
 
+<h1>声音库</h1>
+<h2><a href="http://www.rongcloud.cn/docs/web.html#声音库">http://www.rongcloud.cn/docs/web.html#声音库</a></h2>
+<p>支持范围：Chrome、Firefox、Opera、Windows Edge、Windows IE9+、Mac Safari、iOS Safari、iOS 微信浏览器、安卓4.4+ 浏览器</p>
+
+<button class="voiceInfo" messageUId="5FNN-5MIH-S1VP-FT2O">播放测试语音1 base64 </button>
+<button class="voiceInfo" messageUId="5FNN-5MSJ-068O-EPDH">播放测试语音2 base64</button>
+
+<!-- 引入base64编码的 amr 音频数据 -->
+<script src="./res/voice-amr-base64.json"></script>
 <script>
+/*
+	初始化声音库
+*/
 var RongIMVoice = RongIMLib.RongIMVoice;
 	RongIMVoice.init();
 
-function play(){
-	// 音频持续大概时间(秒)
-	var duration = voice.length/1024;
+/*
+	* play() 播放音频消息
+	* 参数 voice 为 amr 格式的 base64
+	* 示例: voice = "IyFBTVIKLNEafAAeef/hgmeAH8AD...";
+*/
+
+function play(voice){
+	if(voice){
+		var duration = voice.length/1024;    // 音频持续大概时间(秒)
    
-	if(!!window.ActiveXObject || "ActiveXObject" in window){
-		//如果是 IE 浏览器
-    	RongIMVoice.preLoaded(voice);
-    	RongIMVoice.play(voice,duration);	
+		if(!!window.ActiveXObject || "ActiveXObject" in window){
+			//如果是 IE 浏览器
+	    	RongIMVoice.preLoaded(voice);
+	    	RongIMVoice.play(voice,duration);
+		}else{
+			
+			RongIMVoice.preLoaded(voice, function(){
+			    RongIMVoice.play(voice,duration);
+			});
+		}
 	}else{
-		RongIMVoice.preLoaded(voice, function(){
-		    RongIMVoice.play(voice,duration);
-		});
+		console.error('请传入 amr 格式的 base64 音频文件');
 	}
 }
 
-function touchPlay(){
-    window.removeEventListener('touchstart', touchPlay, false);
-    play();
+/*
+    * messageData 为音频示例数据，在 voice-amr-base64.json 中
+    * 通过监听 button 的点击事件获取 消息的唯一标示 messageUId
+    * 根据 messageUId 获取到 音频消息的 base64 数据，然后执行 play() 方法
+    * iOS 需要等待用户的交互动作后才能播放，也就是说如果没有得到用户的 action 就播放的话会被拦截
+*/
+
+var theFirst = true;
+var isiOS = (/i(Phone|P(o|a)d)/.test(navigator.userAgent));    //判断是否为 iOS 浏览器
+
+function touchPlay(voiceData,_this){
+	if(theFirst){
+		play(voiceData);
+		_this.unbind("touchstart");	
+		theFirst = false;
+	}else{
+		play(voiceData);
+	}	
 }
 
-var isiOS = (/i(Phone|P(o|a)d)/.test(navigator.userAgent));
-
 if(isiOS){
-    window.addEventListener('touchstart', touchPlay, false);
+    $(".voiceInfo").on("touchstart click",function(){
+    	var _this = $(this);
+		var messageUId = _this.attr('messageUId');
+		var voiceData = messageData[messageUId].content.content;    //获取 base64 音频文件
+		touchPlay(voiceData,_this);
+	});
+}else{
+	$(".voiceInfo").on("click",function(){
+		var messageUId = $(this).attr('messageUId');
+		var voiceData = messageData[messageUId].content.content;    //获取 base64 音频文件
+		play(voiceData);
+	});
 }
 
 </script>
 
-
-<button onclick="play()">播放base64</button>
 </body>
 </html>
