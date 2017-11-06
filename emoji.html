@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <meta charset="UTF-8">
 <title>Emoji</title>
 </head>
 <body>
 <a href="https://github.com/rongcloud/websdk-demo/blob/master/emoji.html" class="get-source">获取源码</a>
-
 <style>
 body{
     font-family:arial;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.42857143;
 }
 .chatbox {
     margin-bottom: 20px;
@@ -37,6 +38,12 @@ p {
     margin: 5px;
     margin-left: 0;
 }
+h1 {
+    font-size: 36px;
+}
+h2 {
+    font-size: 30px;
+}
 ol li {
     margin-bottom: 10px;
 }
@@ -57,13 +64,35 @@ ol ol, ol ul, ul ol, ul ul {
 
 a {
     cursor: pointer;
+    color: #337ab7;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 
 pre {
     margin: 0;
     border: none;
+    background-color: #f5f5f5;
+    padding: 9.5px;
+    font-size: 13px;
+}
+.table-bordered, td, tr, th {
+    border: 1px solid #ddd;
 }
 
+.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+    border-top: none;
+}
+td, th {
+    padding: 8px;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+th {
+    vertical-align: bottom;
+}
 #chatbox-send {
     margin-left: 1%;
 }
@@ -76,11 +105,11 @@ pre {
     margin-left: 1%;
     width: 50%;
 }
-
 .chatbox-message {
     margin-left: 1%;
     width: 50%;
     height: 150px;
+    font-size: 14px;
 }
 .chatbox-show {
     float: right;
@@ -90,7 +119,6 @@ pre {
     overflow: auto;
     margin-right: 2%;
 }
-
 .chatbox-btn {
     margin-left: 1%;
     padding: 2px 5px;
@@ -98,7 +126,7 @@ pre {
 
 </style>
     
-<script src="//cdn.ronghub.com/RongEmoji-2.2.6.js"></script> 
+<script src="https://cdn.ronghub.com/RongEmoji-2.2.6.js"></script> 
 
 <h1>Emoji</h1>
 
@@ -112,48 +140,54 @@ pre {
     </li>
 </ol>
 
-<h2>SDK 说明</h2>
+<h2>Emoji 说明</h2>
 <ol>
     <li>
-        <p>emoji SDK 内置了128个emoji表情的图片, <strong>主要是为了做消息输入框的表情选项, </strong>也可自行扩展配置.</p>
+        <p>emoji 插件内置了128个emoji表情的图片, <strong>主要是为了做消息输入框的表情选项, </strong>也可自行扩展配置.</p>
     </li>
     <li>
         <p>
-            emoji SDK 支持范围: IE6+, Chrome, Safari, Firefox, Android, IOS
+            支持范围: 
+            <p>(1), IE7+、Edge、Chrome 30+、Firefox 30+、Safari 10+ 等主流桌面版浏览器</p>
+            <p>(2), Android 4.4+系统的Chrome浏览器以及微信浏览器</p>
+            <p>(3), iPhone 操作系统iOS 8.0+ 的Safari浏览器以及微信浏览器</p>
         </p>
     </li>
     <li>
-        <p><a onclick="setupExpand('initCode')">SDK 设置选项</a></p>
+        <p><a onclick="setupExpand('initCode')">Emoji 初始化设置</a></p>
         <pre id="initCode" style="display: none">
-    // 表情信息可参考 <a href="http://unicode.org/emoji/charts/full-emoji-list.html">http://unicode.org/emoji/charts/full-emoji-list.html</a>
-    
-    // <strong>1, 自定义设置</strong>
-    var config = {
-        size: '大小',
-        url: '所有emoji的背景地址',
-        lang: '选择的语言',
-        reg: '匹配unicode的正则表达式'
-    }; //属性都是可选的
-    RongIMLib.RongIMEmoji.setConfig(config);
+    // 直接初始化
+    RongIMLib.RongIMEmoji.init();
 
-    // <strong>2, 设置扩展表情, 设置扩展表情的信息</strong>
-    var emojis = {
-        dataSource: {
-            "表情unicode码":{
-                "en":"英文名称",
-                "zh":"中文名称",
-                "tag":"原生表情字符",
-                "position":"表情对应背景图的坐标"
+    // 通过配置初始化
+    // 表情信息可参考 <a href="http://unicode.org/emoji/charts/full-emoji-list.html">http://unicode.org/emoji/charts/full-emoji-list.html</a>
+    var config = {
+        size: 24, // 大小, 默认 24, 建议15 - 55
+        url: '//f2e.cn.ronghub.com/sdk/emoji-48.png', // 所有 emoji 的背景图片
+        lang: 'zh', // 选择的语言, 默认 zh
+        // 扩展表情
+        extension: {
+            dataSource: {
+                "u1F914":{  
+                    "en":"thinking face", // 英文名称
+                    "zh":"思考", // 中文名称
+                    "tag":"🤔", // 原生emoji
+                    "position":"0px 0px" // 所在背景图位置坐标
+                },
+                .....
+                .....
             },
-        },
-        url: "新增emoji背景图片地址"
+            // 新增 emoji 的背景图 url
+            url: 'https://emojipedia-us.s3.amazonaws.com/thumbs/160/apple/96/thinking-face_1f914.png'
+        }
     };
-    RongIMLib.RongIMEmoji.addEmojis(emojis);
+    RongIMLib.RongIMEmoji.init(config);
+
         </pre>
     </li>
 
     <li>
-        <p><a onclick="setupExpand('sdkFuc')">Emoji SDK API</a></p>
+        <p><a onclick="setupExpand('sdkFuc')">Emoji API</a></p>
         <table id="sdkFuc" class="table table-bordered" style="display: none; width: 97%">
             <thead>
                 <tr>
@@ -231,16 +265,6 @@ var isSupportEmoji = RongIMEmoji.isSupportEmoji;</pre>
                     </td>
                     <td>判断是否支持emoji的渲染</td>
                 </tr>
-                <tr>
-                    <td>adaptOldVersion</td>
-                    <td>
-<!-- start -->
-                        <pre>
-RongIMEmoji.adaptOldVersion();</pre>
-<!-- end -->                             
-                    </td>
-                    <td>兼容老版本RongIMEmoji</td>
-                </tr>
             </tbody>
         </table>
     </li>
@@ -252,7 +276,7 @@ RongIMEmoji.adaptOldVersion();</pre>
 function setupExpand(expandId) {
     var expandDom = document.getElementById(expandId);
     var display = expandDom.style.display;
-    display = display == "none" ? null : "none";
+    display = display === "none" ? "block" : "none";
     expandDom.style.display = display;
 }
 </script>
@@ -266,7 +290,7 @@ function setupExpand(expandId) {
         </div>
     </div>
     <ol class="chatbox-show" id="chatbox-show"></ol>
-    <textarea class="chatbox-message" id="chatbox-message">今天心情很不错[大笑]</textarea>
+    <textarea class="chatbox-message" id="chatbox-message">今天心情很不错[笑嘻嘻]</textarea>
     <p> 
         <a class="chatbox-btn" id="symbol-emoji">SymbolToEmoji</a>
         <a class="chatbox-btn" id="emoji-symbol" onclick="emojiToSymbol">EmojiToSymbol</a> 
@@ -278,44 +302,42 @@ function setupExpand(expandId) {
     </p>
 </div>
 
+
 <script>
+/*
+发送表情极简Demo
+ */
 (function(){
     var chatbox = document.getElementById("chatbox-message");
     var btn = document.getElementById("chatbox-emoji-btn");
     var panel = document.getElementById("chatbox-emoji-panel");
     var chatshow = document.getElementById("chatbox-show");
 
+    var RongIMEmoji = RongIMLib.RongIMEmoji;
+
     var config = {
-        size : 24,
-        lang: 'zh'
+        size: 24,
+        lang: 'zh',
+        extension: {
+            dataSource: {
+                u1F914: {
+                    zh: '思考',
+                    en: 'thinking face',
+                    tag: '🤔',
+                    position: '0px 0px'
+                }
+            },
+            url: 'https://emojipedia-us.s3.amazonaws.com/thumbs/160/apple/96/thinking-face_1f914.png'
+        }
     };
 
-    var RongIMEmoji = RongIMLib.RongIMEmoji;
-    RongIMEmoji.setConfig(config);
-    appendChild('setConfig: 自定义config');
+    RongIMEmoji.init(config);
+    appendChild('init: 初始化RongIMEmoji');
     
     btn.onclick = function(){
         panel.style.display = "block";
-        var emojis = (function() {
-            var shadowDomList = [];
-            for (var i = 0; i < RongIMEmoji.list.length; i++) {
-                var value = RongIMEmoji.list[i];
-                shadowDomList.push(value.shadowDom);
-            }
-            return shadowDomList;
-        })();
-        for(var i=0;i<emojis.length;i++){
-            var emojiHtml = emojis[i];
-            panel.appendChild(emojiHtml);
-            emojiHtml.onclick = function(event) {
-                var e = event || window.event;
-                var target = e.target || e.srcElement;
-                if (document.all && !document.addEventListener === false) {
-                    console.log(target);
-                }
-                chatbox.value = chatbox.value + target.getAttribute("name");
-            }
-        }
+        var emojis = getEmojiDetailList();
+        bindClickEmoji(emojis);
         return false;
     };
 
@@ -370,6 +392,33 @@ function setupExpand(expandId) {
         var child = div.childNodes[0];
         chatshow.appendChild(child);
     }
+
+    function getEmojiDetailList() {
+        var shadowDomList = [];
+        for (var i = 0; i < RongIMEmoji.list.length; i++) {
+            var value = RongIMEmoji.list[i];
+            shadowDomList.push(value.node);
+        }
+        return shadowDomList;
+    }
+
+    function bindClickEmoji(emojis) {
+        for(var i=0;i<emojis.length;i++){
+            var emojiHtml = emojis[i];
+            panel.appendChild(emojiHtml);
+            emojiHtml.onclick = clickEmoji;
+        }
+    }
+
+    function clickEmoji(event) {
+        var e = event || window.event;
+        var target = e.target || e.srcElement;
+        if (document.all && !document.addEventListener === false) {
+            console.log(target);
+        }
+        chatbox.value = chatbox.value + target.getAttribute("name");
+    }
+
 
 })();
 </script>
