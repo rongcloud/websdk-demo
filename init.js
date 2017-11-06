@@ -88,9 +88,9 @@ function init(params, callbacks, modules){
 		// 接收到的消息
 		onReceived: function (message) {
 		    // 判断消息类型
-		    console.log("新消息: " + message.targetId);
-            console.log(message);
-            callbacks.receiveNewMessage && callbacks.receiveNewMessage(message);
+			console.log("新消息: " + message.targetId);
+			console.log(message);
+			callbacks.receiveNewMessage && callbacks.receiveNewMessage(message);
 		}
 	});
 
@@ -101,11 +101,10 @@ function init(params, callbacks, modules){
 			console.log("链接成功，用户id：" + userId);
 		},
 		onTokenIncorrect: function() {
-			//console.log('token无效');
+			console.log('token无效');
 		},
 		onError:function(errorCode){
-		  console.log("=============================================");
-		  console.log(errorCode);
+			console.log(errorCode);
 		}
 	});
 }
