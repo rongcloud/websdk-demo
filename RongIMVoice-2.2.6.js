@@ -43,7 +43,7 @@ var RongIMLib; (function(RongIMLib) {
             } else {
                 var key = data.substr( - 10);
                 if (this.element[key]) {
-                    this.element[key].play()
+                    this.element[key].play();
                 }
                 me.onCompleted(duration)
             }
@@ -75,7 +75,8 @@ var RongIMLib; (function(RongIMLib) {
                 callback && callback();
                 return
             }
-            if (/android/i.test(navigator.userAgent) && /MicroMessenger/i.test(navigator.userAgent)) {
+            // if (/android/i.test(navigator.userAgent) && /MicroMessenger/i.test(navigator.userAgent)) {
+            if(false){    
                 var audio = new Audio();
                 audio.src = "data:audio/amr;base64," + base64Data;
                 me.element[str] = audio;
@@ -85,6 +86,13 @@ var RongIMLib; (function(RongIMLib) {
                     if (str in me.element) {
                         return
                     }
+                    var audio = new Audio();
+                    audio.src = "";
+                    var nopromise = {
+                       catch: new Function()
+                    };
+                    (audio.play() || nopromise).catch(function () { });  //解决浏览器报错 The play() request was interrupted by a new load request
+
                     var blob = me.base64ToBlob(base64Data, "audio/amr");
                     var reader = new FileReader();
                     reader.onload = function(e) {
@@ -95,12 +103,11 @@ var RongIMLib; (function(RongIMLib) {
                             channelCount: 1,
                             bytesPerSample: 2,
                             data: samples
-                        });
-                        var audio = new Audio();
+                        }); 
                         audio.src = "data:audio/wav;base64," + btoa(pcm);
                         me.element[str] = audio;
-                        callback && callback()
-                    };
+                        callback && callback() 
+                    };        
                     reader.readAsArrayBuffer(blob)
                 }
             }

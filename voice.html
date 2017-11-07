@@ -9,24 +9,29 @@
 <link rel="stylesheet" href="./res/rongcloud.css">
 
 <script type="text/javascript" src="./lib/jquery-3.1.1.js"></script>
+
+<!-- IE9下 swfobject 报错问题解决 -->
 <!--[if !IE]><!--> 
 <script src="./lib/Libamr-2.2.5.min.js"></script>
 <!--<![endif]-->
-<!-- IE9下 swfobject 报错问题解决 -->
 <script type="text/javascript" src="RongIMVoice-2.2.6.js"></script>
 
+<!-- 引入base64编码的 amr 音频数据 -->
+<script src="./res/voice-amr-base64.json"></script>
 
 <a href="https://github.com/rongcloud/websdk-demo/blob/master/voice.html" class="get-source">获取源码</a>
 
 <h1>声音库</h1>
 <h2><a href="http://www.rongcloud.cn/docs/web.html#声音库">http://www.rongcloud.cn/docs/web.html#声音库</a></h2>
-<p>支持范围：Chrome、Firefox、Opera、Windows Edge、Windows IE9+、Mac Safari、iOS Safari、iOS 微信浏览器、安卓4.4+ 浏览器</p>
+<div>支持范围：
+	<p>（1）IE9+、Windows Edge、Chrome、Firefox、Safari 等主流桌面版浏览器</p>
+	<p>（2）iOS Safari、iOS 微信浏览器 </p>
+	<p>（3）Android 4.4+ 默认浏览器、Android 微信浏览器</p>
+</div>
 
 <button class="voiceInfo" messageUId="5FNN-5MIH-S1VP-FT2O">播放测试语音1 base64 </button>
 <button class="voiceInfo" messageUId="5FNN-5MSJ-068O-EPDH">播放测试语音2 base64</button>
 
-<!-- 引入base64编码的 amr 音频数据 -->
-<script src="./res/voice-amr-base64.json"></script>
 <script>
 /*
 	初始化声音库
@@ -49,7 +54,6 @@ function play(voice){
 	    	RongIMVoice.preLoaded(voice);
 	    	RongIMVoice.play(voice,duration);
 		}else{
-			
 			RongIMVoice.preLoaded(voice, function(){
 			    RongIMVoice.play(voice,duration);
 			});
@@ -63,38 +67,15 @@ function play(voice){
     * messageData 为音频示例数据，在 voice-amr-base64.json 中
     * 通过监听 button 的点击事件获取 消息的唯一标示 messageUId
     * 根据 messageUId 获取到 音频消息的 base64 数据，然后执行 play() 方法
-    * iOS 需要等待用户的交互动作后才能播放，也就是说如果没有得到用户的 action 就播放的话会被拦截
 */
 
-var theFirst = true;
-var isiOS = (/i(Phone|P(o|a)d)/.test(navigator.userAgent));    //判断是否为 iOS 浏览器
+$(".voiceInfo").on("click",function(){
+	var messageUId = $(this).attr('messageUId');
+	var voiceData = messageData[messageUId].content.content;    //获取 base64 音频文件
+	play(voiceData);
+});
 
-function touchPlay(voiceData,_this){
-	if(theFirst){
-		play(voiceData);
-		_this.unbind("touchstart");	
-		theFirst = false;
-	}else{
-		play(voiceData);
-	}	
-}
-
-if(isiOS){
-    $(".voiceInfo").on("touchstart click",function(){
-    	var _this = $(this);
-		var messageUId = _this.attr('messageUId');
-		var voiceData = messageData[messageUId].content.content;    //获取 base64 音频文件
-		touchPlay(voiceData,_this);
-	});
-}else{
-	$(".voiceInfo").on("click",function(){
-		var messageUId = $(this).attr('messageUId');
-		var voiceData = messageData[messageUId].content.content;    //获取 base64 音频文件
-		play(voiceData);
-	});
-}
 
 </script>
-
 </body>
 </html>
