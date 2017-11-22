@@ -28,6 +28,8 @@ requirejs: http://requirejs.org/docs/whyamd.html
 
 	var APIs = {};
 	var domain = "http(s)://yourdomain";
+
+	APIs.userInfo = "/user/{ids}";
 	/*
 	获取用户信息接口，建议支持批量获取，如不支持，只能通过循环请求处理，后面会有示例
 	上行：ids = ["userId1","userId2",………………,"userIdN"].join(",");
@@ -50,8 +52,8 @@ requirejs: http://requirejs.org/docs/whyamd.html
 			}
 		];
 	*/
-	APIs.userInfo = "/user/{ids}";
 
+	APIs.groupInfo = "group/{ids}";
 	/*
 	获取群组信息接口，建议支持批量获取，如不支持，只能通过循环请求处理，后面会有示例
 	上行：ids = ["groupId1",………………,"groupIdN"].join(",");
@@ -72,7 +74,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 
 		];
 	*/
-	APIs.groupInfo = "group/{ids}";
+
 
 	//请求方法，只给出成功返回的情况，异常请自行处理
 	var request = function(url, pramas, callback){
@@ -86,14 +88,19 @@ requirejs: http://requirejs.org/docs/whyamd.html
 	var userInfoCache = {};
 
 	//获取用户信息方法的实现
-	var getUserInfo = function(ids, callback){
+	var getUserInfos = function(ids, callback){
+		//考虑到具体的应用场景，设计为 object，也可以根据业务特点设计成 array 等其他的数据格式
 		var userInfos = {};
+
 		var remoteUserIds = [];
 		for(var i = 0, len = ids.length; i<len; i++){
 			var userId = ids[i];
 			if(userInfoCache[userId]){
-				//如果本地命中，直接返回
+				//如果本地命中，直接放入结果等待一起返回
 				userInfos[userId] = userInfoCache[userId];
+
+				//如果需要立即返回，这种方法会不断执行回调，逐个返回，如果下面，此处以及request里的返回均可如此处理
+				callback({userid:userInfoCache[userId]});
 			}else{
 				//如果本地没有命中，过滤出 id，下一步从服务器请求
 				remoteUserIds.push(userId);
@@ -136,7 +143,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 				if(backNumbers == len){
 					callback(userInfos);
 				}
-			}
+			});
 		}
 	};
 
@@ -145,7 +152,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 	var groupInfoCache = {};
 
 	//获取群组信息实现，本方法不返回群组成员信息
-	var getGroupInfo = function(ids, callback){
+	var getGroupInfos = function(ids, callback){
 		var groupInfos = {};
 		var remoteGroupIds = [];
 		for(var i = 0, len = ids.length; i<len; i++){
@@ -181,7 +188,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 	}
 
 	//获取群组信息及成员信息，因为应用场景，此方法设计为逐个群组获取
-	var getGroupInfoWithMemberInfo = function(id, callback){
+	var getGroupInfosWithMemberInfo = function(id, callback){
 		getGroupInfo(id, function(groupInfo){
 			var ids = groupInfo.memberIds;
 			getUserInfo(ids, function(userInfos){
@@ -193,8 +200,8 @@ requirejs: http://requirejs.org/docs/whyamd.html
 
 
     return {
-    	getUserInfo : getUserInfo,
-    	getGroupInfo : getGroupInfo,
-    	getGroupInfoWithMemberInfo : getGroupInfoWithMemberInfo
+    	getUserInfos : getUserInfos,
+    	getGroupInfos : getGroupInfos,
+    	getGroupInfosWithMemberInfo : getGroupInfosWithMemberInfo
     }
 }, namespace);
