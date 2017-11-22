@@ -58,7 +58,7 @@ function messageOutput(message){
 	if(!target){
 		target = document.createElement("span");
 		target.id = id;
-		target.style.cssText = "position:fixed;right:1em;top:1em;border:1px solid #ccc;background:#f5f5f5;border-radius:5px;font-size:14px;padding:10px;cursor:pointer;";
+		target.style.cssText = "position:fixed;right:1em;top:4em;border:1px solid #ccc;background:#f5f5f5;border-radius:5px;font-size:14px;padding:10px;cursor:pointer;";
 		document.body.appendChild(target);
 		target.onclick = function(){
 			var list = messageOutput["list"];
