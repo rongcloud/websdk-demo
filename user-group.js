@@ -130,11 +130,13 @@ requirejs: http://requirejs.org/docs/whyamd.html
 		for(var i = 0, len = remoteUserIds.length; i<len; i++){
 			var remoteUserId = remoteUserIds[i];
 			request(url, remoteUserId, function(remoteUserInfo){
+				var userId = remoteUserInfo[id];
+
 				//放入本地缓存
-				userInfoCache[userId] = userInfo;
+				userInfoCache[userId] = remoteUserInfo;
 
 				//放入查询结果
-				userInfos[userId] = userInfo;
+				userInfos[userId] = remoteUserInfo;
 
 				//计数 +1
 				backNumbers += 1;
@@ -166,7 +168,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 			}
 		}
 
-		var url = domain + APIs[userInfo];
+		var url = domain + APIs[groupInfo];
 
 		//支持批量请求，返回群组数据
 		request(url, remoteGroupIds, function(remoteGroupInfos){
@@ -198,10 +200,11 @@ requirejs: http://requirejs.org/docs/whyamd.html
 		});
 	}
 
-
+	//返回需要对外暴露的方法
     return {
     	getUserInfos : getUserInfos,
     	getGroupInfos : getGroupInfos,
     	getGroupInfosWithMemberInfo : getGroupInfosWithMemberInfo
     }
 }, namespace);
+
