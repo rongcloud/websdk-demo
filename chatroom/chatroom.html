@@ -99,7 +99,7 @@ RongChatRoom.init(appInfo, chatRoomInfo, {
 		// 加入聊天室成功。
 		console.log("加入聊天室成功");
 		console.log(chatRoom);
-		alert('加入聊天室成功，当前用户：' + chatRoom.currentUser.userId);
+		$("#message").val('加入聊天室成功，当前用户：' + chatRoom.currentUser.userId);
 
 		//调用示例
 		apiDemo(chatRoom);
@@ -147,7 +147,7 @@ function apiDemo(chatRoom){
 	            console.log("发送聊天室消息失败", errorCode);
 	        }
 	    });
-    },500);
+    },2000);
 	
 	//聊天室信息
 	chatRoom.getInfo({
@@ -181,7 +181,8 @@ function apiDemo(chatRoom){
 */
 function updateDanmu(message){
 	//弹幕高度随机
-	var margintop = Math.random()*320;
+	var margintop = Math.random()*160 + Math.random()*160;
+		margintop = Math.ceil(margintop);
 	$("#video-body").append("<div class='active' style='top:"+margintop+"px;'>"+message+"</div>");
 }
 
@@ -195,6 +196,7 @@ function getRandomText(){
 	var len = messages.length;
 	var index = Math.ceil(Math.random()*1000000)%len;
 
+	// console.log(messages[index]);
 	return messages[index];
 }
 </script>
