@@ -40,9 +40,9 @@ Web IM(Angular): [https://github.com/rongcloud/rongcloud-web-im-widget](https://
 
 Web IM H5(Angular): [https://github.com/rongcloud/rongcloud-web-im-widget-h5](https://github.com/rongcloud/rongcloud-web-im-widget-h5)
 
-Web IM(jQuery): 
+Web IM(jQuery): [https://rongcloud.github.io/websdk-demo/im/im.html](https://rongcloud.github.io/websdk-demo/im/im.html)
 
-客服(jQuery): 
+Web 聊天室：[https://rongcloud.github.io/websdk-demo/chatroom/chatroom.html](https://rongcloud.github.io/websdk-demo/chatroom/chatroom.html)
 
 
 # SealTalk
