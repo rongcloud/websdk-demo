@@ -1,0 +1,21 @@
+<!-- 会话列表每一个会话
+class="rong-conversation"会话列表中的每一个会话
+此类名不能被修改
+-->
+{%for(var index in this.list){%}
+<div class="rong-conversation" _cid="{%this.list[index].targetId%}" _mcount="{%this.list[index].unreadMessageCount%}" onclick="RCS.startConversation(event)">
+	<div class="rongcloud-ext">
+		<p class="rongcloud-attr">
+			{%if(this.list[index].unreadMessageCount){%}<span class="rongcloud-badge">{%this.list[index].unreadMessageCount%}</span>{%}%}
+			<i class="rongcloud-sprite rongcloud-no-remind"></i>
+		</p>
+	</div>
+	<div class="rongcloud-photo">
+		<img class="rongcloud-img" src="http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png" alt="">
+	</div>
+    <div class="rongcloud-info">
+    	<h3 class="rongcloud-nickname">
+    		<span class="rongcloud-nickname_text">用户：{%this.list[index].targetId%}</span>
+    	</h3>
+    </div>
+</div>{%}%}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<title>IM</title>
+<link rel="stylesheet" href="im.css">
+</head>
+<body>
+	
+<div id="rcs-app"></div>
+
+</body>
+
+<script src="//cdn.ronghub.com/RongIMLib-2.2.8.min.js"></script>
+<script src="./RongIMEmoji.js"></script>
+
+<script src="./utils.js"></script>
+<script src="./qiniu-upload.js"></script>
+
+<script src="./template.js"></script>
+<script src="./emoji.js"></script>
+<script src="./im.js"></script>
+
+<!-- 实例化 -->
+<script>
+(function(){
+    var appKey = "3argexb6r934e";
+    var token = "b/jvjEFD41TIVT0nsf9+L3ryPPkHsvRwWZV8SVI5ICcZ2I5Nl4OdNO01OjZxjjmVlD2dmk4RZ90=";
+
+    RCS.init({
+        appKey: appKey,
+        token: token,
+        target: document.getElementById('rcs-app'),
+        showConversitionList: true,
+        templates: {
+            button: ['<div class="rongcloud-consult rongcloud-im-consult">',
+                    '   <button onclick="RCS.showCommon()"><span class="rongcloud-im-icon">进入 IM</span></button>',
+                    '</div>',
+                    '<div class="customer-service" style="display: none;"></div>'].join('')//"templates/button.html",
+            // chat: "templates/chat.html",
+            // closebefore: 'templates/closebefore.html',
+            // conversation: 'templates/conversation.html',
+            // endconversation: 'templates/endconversation.html',
+            // evaluate: 'templates/evaluate.html',
+            // imageView: 'templates/imageView.html',
+            // leaveword: 'templates/leaveword.html',
+            // main: 'templates/main.html',
+            // message: 'templates/message.html',
+            // messageTemplate: 'templates/messageTemplate.html',
+            // userInfo: 'templates/userInfo.html', 
+        },
+        extraInfo: {
+            // 当前登陆用户信息
+            userInfo: {
+                name: "游客",
+                grade: "VIP"
+            },
+            // 产品信息
+            requestInfo: {
+                productId: "123",
+                referrer: "10001",
+                define: "" // 自定义信息
+            }
+        }
+    });
+})()
+
+
+</script>
+
+</html>

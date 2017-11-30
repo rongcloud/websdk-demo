@@ -1,0 +1,27 @@
+<!-- main: 包括客服列表和聊天窗口的主页面  
+class="rcs-chat-wrapper"聊天窗口的容器 
+此类名不能被修改
+-->
+<div id="rcs-main" class="rongcloud-kefuListBox rongcloud-container">
+    {%if(this.showConversitionList){%}<div class="rongcloud-kefuList">
+        <div class="rongcloud-rong-header rongcloud-blueBg">
+            <div class="rongcloud-toolBar rongcloud-headBtn">
+                <div class="rongcloud-voice"></div>
+                <div class="rongcloud-sprite rongcloud-people"></div>
+                <span class="rongcloud-recent">客服列表</span>
+                <div class="rongcloud-sprite rongcloud-arrow-down cursor-pointer" onclick="RCS.minimize()"></div>
+            </div>
+        </div>
+        <div class="rongcloud-content">
+            <div class="rongcloud-netStatus" style="display:none">
+                <div class="rongcloud-sprite"></div>
+                <span>连接断开,请刷新重连</span>
+            </div>
+            <div class="rcs-conversation-list">
+                {%this.conversationList%}
+                <!-- <div class="rcs-conversation-item"></div> -->
+            </div>
+        </div>
+    </div>{%}%}
+    <div class="rcs-chat-wrapper"></div>
+</div>
