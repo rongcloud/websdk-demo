@@ -19,7 +19,7 @@
 
 		//缓存状态队列
 		window.onConnectList = window.onConnectList || [];
-		window.onConnectList.push(callbacks.onConnect);
+		window.onConnectList.push(callbacks.onConnected);
 
 		modules = modules || {};
 		var RongIMLib = modules.RongIMLib || window.RongIMLib;
@@ -27,7 +27,7 @@
 
 		if(RongIM.ready){
 			callbacks.onReady && callbacks.onReady(RongIM.instance);
-			callbacks.onConnect && callbacks.onConnect(RongIM.userInfo);
+			callbacks.onConnected && callbacks.onConnected(RongIM.instance, RongIM.userInfo);
 			return;
 		}else{
 			var appKey = appInfo.appKey;
@@ -61,7 +61,7 @@
 					};
 
 					for(var i = 0, len = onConnectList.length; i<len; i++){
-		            	onConnectList[i](RongIM.userInfo);
+		            	onConnectList[i](RongIM.instance, RongIM.userInfo);
 		            }
 				},
 				onTokenIncorrect: function() {
@@ -74,7 +74,7 @@
 					};
 
 					for(var i = 0, len = onConnectList.length; i<len; i++){
-		            	onConnectList[i](userInfo);
+		            	onConnectList[i](RongIM.instance, RongIM.userInfo);
 		            }
 				},
 				onError:function(errorCode){
@@ -89,7 +89,7 @@
 					};
 
 					for(var i = 0, len = onConnectList.length; i<len; i++){
-		            	onConnectList[i](userInfo);
+		            	onConnectList[i](RongIM.instance, RongIM.userInfo);
 		            }
 				}
 			});
@@ -122,14 +122,10 @@
 	}
 
 	function initChatRoom(appInfo, chatRoomInfo, callbacks, modules){
-		var IM = null;
-
 		var chatRoomId = chatRoomInfo.chatRoomId;
 		var count = chatRoomInfo.count;
 
 		window.chatRoomCallbacks = {};
-
-		var isConnected = false;
 
 		//公有云初始化
 		var config = {
@@ -138,7 +134,8 @@
 
 		var initCallbacks = {
 			onReady : function(_instance){
-				IM = _instance;
+				// alert(_instance)
+				// IM = _instance;
 			},
 			onMessage : function(message){
 				// 判断消息类型
@@ -150,11 +147,12 @@
 	            	onMessage(message);
 	            }
 			},
-			onConnect : function(userInfo){
+			onConnected : function(IM, userInfo){
 				//链接成功
 				IM.joinChatRoom(chatRoomId, count, {
 					onSuccess: function() {
 						var chatRoom = {
+							id : chatRoomId,
 							currentUser : userInfo.data,
 							getInfo : function (params,callbacks){
 								var order = params.order; //RongIMLib.GetChatRoomType.REVERSE;// 排序方式。
