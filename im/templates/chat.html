@@ -1,0 +1,77 @@
+<!-- 
+class="rongcloud-text"消息输入框; 
+class="rongcloud-expressionContent"表情容器;
+class="rcs-message-box"消息列表容器;
+class="rongcloud-Messages-history"查看更多消息按钮;
+class="rongcloud-mode1"、class="rongcloud-mode2"人工、机器人转换按钮的容器(机器人状态时，rongcloud-mode1隐藏，rongcloud-mode1显示);
+class="rcs-connect-status"connect断开时，状态显示的容器
+class="imageViewBox"图片预览容器
+以上类名不能被修改
+ -->
+<div class="rongcloud-kefuChat">
+    <div id="header" class="rongcloud-rong-header rongcloud-blueBg rongcloud-online">
+        {%if(this.terminal == 'phone'){%}
+        <span class="rongcloud-phone-exit" onclick="RCS.endConversation()"></span>
+        <div class="rongcloud-phone-infoBar">
+            <span class="rongcloud-phone-kefuName">{%this.targetName%}</span>
+        </div>
+        {%}else{%}<div class="rongcloud-infoBar rongcloud-pull-left">
+            <div class="rongcloud-infoBarTit">
+                <span class="rongcloud-kefuName">{%this.targetName%}</span>
+            </div>
+        </div>
+        <div class="rongcloud-toolBar rongcloud-headBtn rongcloud-pull-right">
+            <div class="rongcloud-voice"></div>
+            <a onclick="RCS.minimize()" class="rongcloud-kefuChatBoxHide rongcloud-sprite" title="隐藏"></a>
+            <a onclick="RCS.endConversation()" class="rongcloud-kefuChatBoxClose rongcloud-sprite" title="结束对话"></a>
+        </div>{%}%}
+    </div>
+    <div class="rongcloud-outlineBox rcs-connect-status" style="display:none;">
+        <div class="rongcloud-sprite"></div>
+        <span>连接断开,请刷新重连</span>
+    </div>
+    <div id="rcs-message-list" class="rcs-message-box">
+        {%this.messageList%}
+    </div>
+
+    <div id="rcs-chat-box" class="rongcloud-rong-footer">
+        <div class="rongcloud-footer-con">
+            <div class="rongcloud-text-layout">
+                <div id="funcPanel" class="rongcloud-funcPanel rongcloud-robotMode">
+                    <div class="rongcloud-mode1" style="display: none;">
+                        <div class="rongcloud-MessageForm-tool" id="expressionWrap" style="overflow: visible;">
+                            <i class="rongcloud-sprite rongcloud-iconfont-smile" onclick="RCS.showemoji(event)"></i>
+                            <div class="rongcloud-expressionWrap" onclick="RCS.chooseEmoji(event)" style="display: none;">
+                                <div class="rongcloud-expressionContent"></div>
+                            </div>
+                        </div>
+                        <div class="rongcloud-MessageForm-tool">
+                          <i class="rongcloud-sprite rongcloud-iconfont-upload" id="upload-image">
+                            <input type="file" multiple="multiple" accept="image/png,image/gif,image/jpeg" onchange="RCS.imgUpload(event)"></input>
+                          </i>
+                        </div>
+                        <div class="rongcloud-MessageForm-tool">
+                          <i class="rongcloud-sprite rongcloud-iconfont-file" id="upload-file">
+                            <input type="file" multiple="multiple" onchange="RCS.fileUpload(event)"></input>
+                          </i>
+                        </div>
+                        <!-- <div class="rongcloud-MessageForm-tool">
+                          <i class="rongcloud-sprite rongcloud-iconfont-download" id="download-his" onclick="RCS.getHistoryMsgFile()">
+                          </i>
+                        </div> -->
+                    </div>
+                    <div class="rongcloud-mode2"><a onclick="RCS.switchPerson()" id="chatSwitch" class="rongcloud-chatSwitch">转人工服务</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="rongcloud-footer-input">
+            <div class="rongcloud-footer-textarea"">
+                <textarea class="rongcloud-text rongcloud-grey" placeholder="请输入文字..." onfocus="RCS.keyboard(event)" onkeydown="RCS.keySend(event)"></textarea>
+            </div>
+            <button type="button" style="background-color: #0099ff;" class="rongcloud-rong-btn rongcloud-rong-send-btn" id="rong-sendBtn" onclick="RCS.send(event)">发送</button>
+        </div>
+    </div>
+</div>
+<div class="rebox imageViewBox" onclick="RCS.escImageView()" style="display: none;">
+    
+</div>

@@ -19,7 +19,7 @@ Normal SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/el
 WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test.html](https://rongcloud.github.io/websdk-demo/api-test.html)
 
 
-# Component
+# 扩展组件 Component
 
 VoIP: [https://rongcloud.github.io/websdk-demo/voip.html](https://rongcloud.github.io/websdk-demo/voip.html)
 
@@ -36,16 +36,16 @@ Emoji: [https://rongcloud.github.io/websdk-demo/emoji.html](https://rongcloud.gi
 
 集成指南: [https://rongcloud.github.io/websdk-demo/integrate/guide.html](https://rongcloud.github.io/websdk-demo/integrate/guide.html)
 
+Web 聊天室 (弹幕效果)：[https://rongcloud.github.io/websdk-demo/chatroom/chatroom.html](https://rongcloud.github.io/websdk-demo/chatroom/chatroom.html)
+
+Web IM(jQuery): [https://rongcloud.github.io/websdk-demo/im/im.html](https://rongcloud.github.io/websdk-demo/im/im.html)
+
 Web IM(Angular): [https://github.com/rongcloud/rongcloud-web-im-widget](https://github.com/rongcloud/rongcloud-web-im-widget)
 
 Web IM H5(Angular): [https://github.com/rongcloud/rongcloud-web-im-widget-h5](https://github.com/rongcloud/rongcloud-web-im-widget-h5)
 
-Web IM(jQuery): 
 
-客服(jQuery): 
-
-
-# SealTalk
+# SealTalk 项目源码
 
 SealTalk Server: [https://github.com/sealtalk/sealtalk-server](https://github.com/sealtalk/sealtalk-server)
 

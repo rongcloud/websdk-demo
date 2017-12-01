@@ -1,0 +1,30 @@
+<!-- userInfo: 收集用户信息的页面  
+class="userInfoModel"收集用户信息页面容器 
+此类名不能被修改
+-->
+<div class="rongcloud-layermbox userInfoModel">
+    <div class="rongcloud-laymshade"></div>
+    <div class="rongcloud-layermmain">
+        <div class="rongcloud-section">
+            <div class="rongcloud-layermchild rongcloud-collectuserinfo">
+                <form name='userinfo' novalidate="true">
+                    <div class="rongcloud-layer-body">
+                        <div class="rongcloud-collectuserinfo-title">你好，客服邀请您填写如下内容</div>
+                        <a class="rongcloud-layer-close" onclick="RCS.userInfoClose()">×</a>
+                        {%for(var index in this.list){%}
+                        <div class="rongcloud-form-item">
+                            <label class="rongcloud-form-label {%if(this.list[index].required == 1){%}{%'rongcloud-require'%}{%}%}">{%this.list[index].label%}：</label>
+                            {%switch(this.list[index].type){%}{%case 'input':%}
+                            <input class="rongcloud-inputtext" type="text" name="{%this.list[index].name%}" data-label="{%this.list[index].label%}" data-pattern="{%this.list[index].rule%}" placeholder="{%this.list[index].defaultText%}" onblur="RCS.validateUserInfo(event)" {%if(this.list[index].required == 1){%}{%'data-required = required'%}{%}%}></input>{%break;%}{%case 'textarea':%}
+                            <textarea name="{%this.list[index].name%}" placeholder="{%this.list[index].defaultText%}" data-label="{%this.list[index].label%}" data-pattern="{%this.list[index].rule%}" onblur="RCS.validateUserInfo(event)"></textarea>{%break;%}{%}%}
+                            <div class="rongcloud-form-error" style="display: none;"></div>
+                        </div>{%}%}
+                    </div>
+                    <div class="rongcloud-foot">
+                        <button class="rongcloud-btn" onclick="RCS.userInfoConfirm(event)">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

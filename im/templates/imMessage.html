@@ -1,0 +1,125 @@
+<!-- message: 消息list的页面 -->
+<div class="rong-message-list">
+    {%if(this.firstEnter){%}<div class="rongcloud-Messages-history" style="display: none;"><b onclick="RCS.loadHisMessages()">查看历史消息</b></div>{%}else if(this.hasMore){%}<div class="rongcloud-Messages-history"><b onclick="RCS.loadHisMessages()">查看历史消息</b></div>{%}%}{%else{%}<div class="rongcloud-Messages-history"><b>没有更多消息</b></div>{%}%}
+    {%for(var index in this.list){%}{%switch(this.list[index].messageType){%}{%case 'TextMessage':%}
+    <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+        <div>
+            <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png" alt="">
+                <div class="rongcloud-Message-author rongcloud-clearfix">
+                  <a class="rongcloud-author">{%if(this.list[index].messageDirection != 1){%} {%'用户：'+this.list[index].targetId%} {%}else{%} {%'我'%} {%}%}</a>
+                </div>
+            </div>
+        </div>
+        <div class="rongcloud-Message-body">
+            <div class="rongcloud-Message-text">
+                <pre class="rongcloud-Message-entry">{%this.list[index].content.content%}</pre>
+            </div>
+        </div>
+    </div>{%break;%}
+    {%case 'ImageMessage':%}
+    <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+        <div>
+            <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png" alt="">
+                <div class="rongcloud-Message-author rongcloud-clearfix">
+                  <a class="rongcloud-author">{%if(this.list[index].messageDirection != 1){%} {%'用户：'+this.list[index].targetId%} {%}else{%} {%'我'%} {%}%}</a>
+                </div>
+            </div>
+        </div>
+        <div class="rongcloud-Message-body">
+            <div class="rongcloud-Message-img">
+                <span class="rongcloud-Message-entry">
+                    <a onclick="RCS.viewImage(event)" class="cursor-pointer" data-img="{%this.list[index].content.imageUri%}">
+                        <img src="{%this.list[index].content.imageUri%}" data-img="{%this.list[index].content.imageUri%}">
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>{%break;%}
+    {%case 'FileMessage':%}
+    <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+        <div>
+            <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png" alt="">
+                <div class="rongcloud-Message-author rongcloud-clearfix">
+                  <a class="rongcloud-author">{%if(this.list[index].messageDirection != 1){%} {%'用户：'+this.list[index].targetId%} {%}else{%} {%'我'%} {%}%}</a>
+                </div>
+            </div>
+        </div>
+        <div class="rongcloud-Message-body">
+            <div class="rongcloud-Message-file">
+                <div class="rongcloud-sprite rongcloud-file-icon"></div>
+                <div class="rongcloud-file-name">{%this.list[index].content.name%}</div>
+                <div class="rongcloud-file-size">{%this.list[index].content.size%}</div>
+                <a class="rongcloud-sprite rongcloud-file-download" href="{%this.list[index].content.fileUrl%}" download="{%this.list[index].content.name%}"></a>
+            </div>
+        </div>
+    </div>{%break;%}
+    {%case 'VoiceMessage':%}
+    <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+        <div>
+            <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png" alt="">
+                <div class="rongcloud-Message-author rongcloud-clearfix">
+                  <a class="rongcloud-author">{%if(this.list[index].messageDirection != 1){%} {%'用户：'+this.list[index].targetId%} {%}else{%} {%'我'%} {%}%}</a>
+                </div>
+            </div>
+        </div>
+        <div class="rongcloud-Message-body">
+            <div class="rongcloud-Message-audio">
+                <span class="rongcloud-Message-entry">
+                    {%if(this.messageDirection == 1){%}
+                        <div style="display:inline-block;">
+                            <span class="rongcloud-audioTimer">{%Math.ceil(this.list[index].content.duration || this.list[index].content.duration / 1024)%}''</span>
+                        </div>
+                        <span class="rongcloud-r-audioBox rongcloud-clearfix" onclick='RCS.play(event, {%JSON.stringify(this.list[index].content)%})'>
+                            <i></i><i></i><i></i>
+                        </span>
+                    {%}else{%}
+                        <span class="rongcloud-audioBox rongcloud-clearfix" onclick='RCS.play(event, {%JSON.stringify(this.list[index].content)%})'>
+                            <i></i><i></i><i></i>
+                        </span>
+                        <div style="display:inline-block;">
+                            <span class="rongcloud-audioTimer">{%Math.ceil(this.list[index].content.duration || this.list[index].content.duration / 1024)%}''</span>
+                        </div>
+                    {%}%}
+                </span>
+            </div>
+        </div>
+    </div>{%break;%}
+    {%case 'TimeMessage':%}
+    <div class="rongcloud-Messages-date">
+        <b>{%this.list[index].sentTime%}</b>
+    </div>{%break;%}
+    {%case 'SightMessage': %}
+    <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+        <div>
+            <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png" alt="">
+                <div class="rongcloud-Message-author rongcloud-clearfix">
+                  <a class="rongcloud-author">{%if(this.list[index].messageDirection != 1){%} {%'用户：'+this.list[index].targetId%} {%}else{%} {%'我'%} {%}%}</a>
+                </div>
+            </div>
+        </div>
+        <div class="rongcloud-Message-body">
+            <div class="rongcloud-Message-sight" onclick="RCS.playVideo(event)">
+                <video poster="{% 'data:image/jpg;base64,' + this.list[index].content.content %}" src="{% this.list[index].content.sightUrl %}"></video>
+                <div class="play-btn"></div>
+            </div>
+        </div>
+    </div>
+    {%break;%}
+    {%default: %}
+    <div class="rongcloud-Message rongcloud-clearfix {%if(this.list[index].messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+        <div>
+            <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png" alt="">
+                <div class="rongcloud-Message-author rongcloud-clearfix">
+                  <a class="rongcloud-author">{%if(this.list[index].messageDirection != 1){%} {%'用户：'+this.list[index].targetId%} {%}else{%} {%'我'%} {%}%}</a>
+                </div>
+            </div>
+        </div>
+        <div class="rongcloud-Message-body">
+            <div class="rongcloud-Message-text">
+                <pre class="rongcloud-Message-entry">当前版本暂不支持查看此消息</pre>
+            </div>
+        </div>
+    </div>{%}%}{%}%}
+</div>
+
+<!-- <div class="rongcloud-emptyBox">暂时没有新消息</div> -->

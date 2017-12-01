@@ -117,26 +117,22 @@ function getValue(id){
 }
 
 function joinChatRoom(){
-	var btn = document.getElementById("joinChatRoom");
-		btn.style.display = "inline-block";
-	btn.onclick = function(){
-		var chatRoomId = getValue("chatRoomId");
-			// chatRoomId = chatRoomId.replace(/(^\s*)|(\s*$)/g, " ");
-		if(chatRoomId == ""){
-			alert("请输入聊天室 id！");
-			return false;
-		}
-
-		var IM = RongIMClient.getInstance();
-			IM.joinChatRoom(chatRoomId, 50, {
-			onSuccess: function() {
-	            alert("加入聊天室成功");
-			},
-			onError: function(error) {
-	            alert("加入聊天室失败");
-			}
-		});
+	var chatRoomId = getValue("chatRoomId");
+		// chatRoomId = chatRoomId.replace(/(^\s*)|(\s*$)/g, " ");
+	if(chatRoomId == ""){
+		alert("请输入聊天室 id！");
+		return false;
 	}
+
+	var IM = RongIMClient.getInstance();
+		IM.joinChatRoom(chatRoomId, 50, {
+		onSuccess: function() {
+            alert("加入聊天室 " + chatRoomId + " 成功");
+		},
+		onError: function(error) {
+            alert("加入聊天室失败");
+		}
+	});
 }
 </script>
 

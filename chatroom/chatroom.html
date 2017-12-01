@@ -44,7 +44,11 @@
     	width:20%;
     	padding:6px;
     }
- 
+ 	.info{
+ 		text-align: center;
+ 		margin-top:20px;
+ 		font-size:12px;
+ 	}
     @keyframes barrage{
         0%{
             left:100%;
@@ -53,12 +57,42 @@
             left: -100%;
         }
     }	
+
+    .chatroom {
+    	width:640px;
+    	height:120px;
+    	overflow:hidden;
+    	margin:1em auto;
+    	position:relative;
+    	background:#fff;
+    	border:1px solid #ccc;
+    }
+    .chatroom h2{
+    	font-size:14px;
+    	margin:0;
+    	padding:5px;
+    	background:#fff;
+    	position:relative;
+    }
+    .chatroom ol {
+    	position:absolute;
+    	bottom:0;
+    	left:-10px;
+    	width:100%;
+    	height:80px;
+    	overflow:auto;
+    	font-size:12px;
+    }
 </style>
 </head>
 <body>
+	<div class="info">
+		使用其他账号发送聊天室消息：<a href="https://rongcloud.github.io/websdk-demo/api-test.html">https://rongcloud.github.io/websdk-demo/api-test.html</a>
+	</div>
+
 	<div id="main">
 		<div id="video-body">
-			<video id="video" height="480" width="640" loop="true" autoplay>
+			<video id="video" height="480" width="640" loop="true" controls="">
 				<source id="vi"  src="../res/heal-the-world.mp4" type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
@@ -70,9 +104,11 @@
 		</div>
 	</div>
 
-	<div style='text-align: center;margin-top:20px;font-size:12px;'>
-		使用其他账号发送聊天室消息：<a href="https://rongcloud.github.io/websdk-demo/api-test.html">https://rongcloud.github.io/websdk-demo/api-test.html</a>
+	<div class="chatroom" id="chatroom007">
+		<h2>聊天室 007 <em></em> （测试两个聊天室消息是否会串）</h2>
+		<ol></ol>
 	</div>
+	
 </body>
 
 <script src="../lib/jquery-3.1.1.js"></script>
@@ -83,35 +119,81 @@
 <script type="text/javascript">
 $("#tools").hide();
 
-
+/*
+默认 1个用户 不能同时加入两个聊天室，需要通过工单申请客服开通
+*/
 var appInfo = {
 	"appKey" : "8w7jv4qb78a9y",
 	"token" : "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg=="
 };
 
-var chatRoomInfo = {
-	"chatRoomId" : "chatRoomId-008",
-	"count" : 20
-};
+//列表聊天室 id= chatRoomId-007
+(function(){
+	// return false;
 
-RongChatRoom.init(appInfo, chatRoomInfo, {
-	onSuccess: function(chatRoom) {
-		// 加入聊天室成功。
-		console.log("加入聊天室成功");
-		console.log(chatRoom);
-		$("#message").val('加入聊天室成功，当前用户：' + chatRoom.currentUser.userId);
+	var chatRoomInfo = {
+		"chatRoomId" : "chatRoomId-007",
+		"count" : 20
+	};
 
-		//调用示例
-		apiDemo(chatRoom);
-	},
-	onError: function(error) {
-		alert('加入聊天室失败。')
-		// 加入聊天室失败
-	},
-	onMessage : function(message){
-		updateDanmu(message.content.content);
+	RongChatRoom.init(appInfo, chatRoomInfo, {
+		onSuccess: function(chatRoom) {
+			// 加入聊天室成功。
+			showNewMessage("加入聊天室成功");
+
+			//聊天室发消息
+			var content = "这是一条发给 chatroom 007 的消息。"
+			chatRoom.sendMessage(content, {
+		        onSuccess: function (message) {
+					showNewMessage(content);
+		        },
+		        onError: function (errorCode,message) {
+		            console.log("发送聊天室消息失败", errorCode);
+		        }
+		    });
+		},
+		onError: function(error) {
+			alert('加入聊天室失败。')
+			// 加入聊天室失败
+		},
+		onMessage : function(message){
+			// console.log("007");
+			// console.log(message);
+			showNewMessage("chatroomId: " + message.targetId + ",  messageUId: " + message.messageUId);
+		}
+	});
+
+	function showNewMessage(content){
+		$("#chatroom007 ol").append("<li>" + content + "</li>");
 	}
-});
+})();
+
+//弹幕聊天室 id= chatRoomId-008
+(function(){
+	var chatRoomInfo = {
+		"chatRoomId" : "chatRoomId-008",
+		"count" : 20
+	};
+
+	RongChatRoom.init(appInfo, chatRoomInfo, {
+		onSuccess: function(chatRoom) {
+			// 加入聊天室成功。
+			console.log("加入聊天室成功");
+			console.log(chatRoom);
+			$("#message").val('加入聊天室成功，当前用户：' + chatRoom.currentUser.userId);
+
+			//调用示例
+			apiDemo(chatRoom);
+		},
+		onError: function(error) {
+			alert('加入聊天室失败。')
+			// 加入聊天室失败
+		},
+		onMessage : function(message){
+			updateDanmu(message.content.content);
+		}
+	});
+})();
 
 /*
 发送消息按钮，点击发送将push input框消息到服务器端，并清空input框。
@@ -125,6 +207,7 @@ function apiDemo(chatRoom){
 		chatRoom.sendMessage({"content" : content}, {
 	        onSuccess: function (message) {
 	            console.log("发送聊天室消息成功");
+	            updateDanmu(content);
 	        },
 	        onError: function (errorCode,message) {
 	            console.log("发送聊天室消息失败",errorCode);
@@ -141,7 +224,7 @@ function apiDemo(chatRoom){
 		//聊天室发消息
 		chatRoom.sendMessage(content, {
 	        onSuccess: function (message) {
-				updateDanmu(message.content.content);
+				updateDanmu(chatRoom.id + ": " + message.content.content);
 	        },
 	        onError: function (errorCode,message) {
 	            console.log("发送聊天室消息失败", errorCode);

@@ -1,0 +1,1402 @@
+.rongcloud-container *,.rongcloud-container *:before,.rongcloud-container *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 0
+}
+.rongcloud-container * {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.rongcloud-container a {
+    text-decoration: none;
+    outline: 0;
+}
+
+.rongcloud-container img {
+    border: none;
+    vertical-align: middle;
+}
+
+.rongcloud-container textarea {
+    overflow: auto
+}
+
+.rongcloud-clearfix {
+    *zoom:1}
+
+.rongcloud-clearfix:after {
+    display: table;
+    line-height: 0;
+    content: "";
+    clear: both
+}
+.rongcloud-pull-left{
+    float: left!important;
+}
+.rongcloud-pull-right{
+    float: right!important;
+}
+.rongcloud-sprite{
+    background: url("//cdn.ronghub.com/customerservice-icon.png") 0 0/50px auto no-repeat;
+    display: inline-block;
+    z-index: 1;
+}
+/*.rongcloud-sprite-kefu{
+    background: url("images/kefuicon.png") 0 0/50px auto no-repeat;
+    background-size: 20px 20px;
+    margin-right: 4px;
+}*/
+.rongcloud-blueBg{
+    background: url(//cdn.ronghub.com/customerservice-web-bg.png) 0 0/10px auto repeat;
+}
+/*.rongcloud-kefuListBox{
+    width: 194px;
+    height: 470px;
+    position: fixed;
+    right: 520px;
+    bottom: 100px;
+    z-index: 999;
+    box-shadow: 1px 1px #f9fafb;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.0980392) 0px 0px 5px 2px;
+    border-radius: 5px;
+}*/
+#zhichiBtnBox .rongcloud-people{
+    background-position: 0 -411px;
+    width: 26px;
+    height: 32px;
+}
+#zhichiBtnBox .rongcloud-kefuBtn .rongcloud-arrow-up{
+    margin-left: 0;
+}
+
+.rongcloud-kefuListBox .rongcloud-kefuList{
+    /*border: 1px solid #cdd7db;*/
+    /*border-bottom: none;*/
+    /*border-radius: 5px 5px 0px 0px;*/
+    overflow: hidden;
+    /*height: 100%;*/
+    box-sizing: border-box;
+    position: absolute;
+    border-radius: 4px;
+
+    width: 194px;
+    height: 470px;
+    position: fixed;
+    right: 520px;
+    bottom: 100px;
+    z-index: 999;
+    box-shadow: 1px 1px #f9fafb;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.0980392) 0px 0px 5px 2px;
+}
+.rongcloud-imList{
+    left: 50px;
+    right: auto;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-rong-header{
+    height: 36px;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-toolBar{
+    text-align: center;
+    padding-top: 8px;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-people {
+     vertical-align: middle;
+     margin-right: 10px;
+     width: 20px;
+     border: none;
+     height: 20px;
+     background-size: 45px auto;
+}
+
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-arrow-down{
+    background-position: 0 -65px;
+    vertical-align: middle;
+    width: 24px;
+    border: none;
+    height: 24px;
+    margin-left: 10px;
+    margin-right: -5px;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-recent{
+    color: #fff;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    cursor:default;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-count{
+    color: #d0d4d7;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-content{
+    position: absolute;
+    top:36px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-content .rongcloud-netStatus{
+    height: 40px;
+    padding-left: 18px;
+    background-color: #ffafaf;
+    line-height: 40px;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-content .rongcloud-netStatus.rongcloud-online{
+    background-color: #d3f8d6;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-content .rongcloud-netStatus .rongcloud-sprite{
+    width: 20px;
+    height: 22px;
+    vertical-align: middle;
+    background-position: 0 -139px;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-content .rongcloud-netStatus.rongcloud-online .rongcloud-sprite{
+    background-position: 0 -100px;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-content .rongcloud-netStatus span{
+    font-size: 14px;
+    color: #fff;
+    vertical-align: middle;
+    padding-left: 2px;
+}
+.rongcloud-kefuListBox .rongcloud-kefuList .rongcloud-content .rongcloud-netStatus.rongcloud-online span{
+    color: #868686;
+}
+
+
+
+
+
+
+
+
+
+
+
+.rongcloud-kefuChat{
+    width:470px;
+    height:470px;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: rgba(0, 0, 0, 0.0980392) 0px 0px 5px 2px;
+}
+.rongcloud-kefuChat .rongcloud-rong-header{
+    height: 36px;
+    border-radius: 4px 4px 0px 0px;
+    position: relative;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-infoBar{
+    height: 36px;
+    line-height: 36px;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-infoBarTit{
+    position: relative;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-Presence{
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    top: 14px;
+    left: 16px;
+    border: 0;
+}
+.rongcloud-kefuChat .rongcloud-rong-header.rongcloud-online .rongcloud-Presence{
+    background-color: #20e600;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-kefuName{
+    color: #fff;
+    padding-left: 16px;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-toolBar{
+    margin-right: 10px;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-toolBar a{
+    width: 20px;
+    height: 20px;
+    margin-top: 9px;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-toolBar .rongcloud-kefuChatBoxHide{
+    background-position: 0 -460px;
+    cursor: pointer;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-toolBar .rongcloud-kefuChatBoxMin{
+    background-position: 0 -252px;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-toolBar .rongcloud-kefuChatBoxMax{
+    background-position: 0 -213px;
+}
+.rongcloud-kefuChat .rongcloud-rong-header .rongcloud-toolBar .rongcloud-kefuChatBoxClose{
+    background-position: 0 -291px;
+    cursor: pointer;
+}
+.rcs-message-box {
+    width: 100%;
+    overflow: auto;
+    padding: 8px 16px;
+    position: absolute;
+    top:36px;
+    bottom: 114px;
+    background-color: white;
+    -webkit-overflow-scrolling:touch;
+}
+
+.rongcloud-kefuChat .rongcloud-outlineBox {
+    height: 40px;
+    padding-left: 18px;
+    background-color: #ffafaf;
+    line-height: 40px;
+
+    position: absolute;
+    top: 36px;
+    z-index: 10;
+    right: 0px;
+    left: 0px;
+}
+.rongcloud-kefuChat .rongcloud-outlineBox .rongcloud-sprite {
+    width: 20px;
+    height: 22px;
+    vertical-align: middle;
+    background-position: 0 -139px;
+}
+.rongcloud-kefuChat .rongcloud-outlineBox span {
+    font-size: 14px;
+    color: #fff;
+    vertical-align: middle;
+    padding-left: 2px;
+}
+
+.rongcloud-Messages-date {
+    text-align: center;
+    padding: 10px 20px;
+    /*border-bottom: 1px solid #e4e7ea;*/
+    margin-bottom: 30px;
+    height: 10px;
+}
+
+.rongcloud-Messages-date b {
+    font-size: 9pt;
+    font-weight: normal;
+    color: #8e969f;
+    background-color: #f9fbfd;
+    display: inline-block;
+    padding: 0 20px;
+    cursor:default;
+}
+.rongcloud-Messages-history {
+    text-align: center;
+    padding: 10px 20px;
+    /*border-bottom: 1px solid #e4e7ea;*/
+    margin-bottom: 30px;
+    height: 10px;
+}
+
+.rongcloud-Messages-history b {
+    font-size: 9pt;
+    font-weight: normal;
+    color: #8e969f;
+    background-color: #f9fbfd;
+    display: inline-block;
+    padding: 0 20px;
+    cursor:pointer;
+}
+.rongcloud-Messages-history b:hover{
+  color: #0099ff;
+}
+
+
+.rongcloud-Message-wrapper > div:last-child {
+    padding-bottom: 10px;
+}
+
+.rongcloud-Message {
+    position: relative;
+    padding-left: 3pc;
+    word-wrap: break-word;
+    word-break: break-all;
+    border-spacing: 1px;
+    margin-bottom: 20px;
+}
+.rongcloud-Message-send.rongcloud-Message{
+    padding-left: 0;
+    padding-right: 3pc;
+}
+
+.rongcloud-Message-header {
+    margin-top: 15px;;
+}
+.rongcloud-Message-send .rongcloud-Message-header{
+    display: table;
+    width: 100%;
+}
+
+.rongcloud-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+}
+
+.rongcloud-Message img {
+    max-width: 230px;
+    max-height: 250px;
+}
+
+.rongcloud-Message-avatar {
+    position: absolute;
+    margin-left: -3pc;
+    width: 34px;
+    height: 34px;
+}
+.rongcloud-Message-send .rongcloud-Message-avatar {
+    position: absolute;
+    right: 0;
+}
+
+.rongcloud-Message-author {
+    display: inline-block;
+    position: relative;
+    padding-right: 30px;
+}
+.rongcloud-Message-send .rongcloud-Message-author{
+    float: right;
+    padding-right: 0px;
+}
+
+.rongcloud-Message-author .rongcloud-author, .rongcloud-Message-author .rongcloud-time {
+    display: block;
+    float: left;
+    line-height: 1pc;
+}
+
+.rongcloud-Message-author > .rongcloud-author {
+    color: #8e969f;
+    text-decoration: none !important;
+    cursor: default;
+}
+
+.rongcloud-Message-author > .rongcloud-time {
+    color: #8e969f;
+    font-size: 9pt;
+    margin-left: 9pt;
+}
+
+.rongcloud-Message-body {
+    position: relative;
+    /*margin-right: 70px;*/
+    font-size: 14px;
+    line-height: 18px;
+    color: #444;
+}
+.rongcloud-Message-send .rongcloud-Message-body{
+    float: right;
+}
+
+.rongcloud-Message-text, .rongcloud-file-text {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.rongcloud-Message-text pre {
+    font-size: 14px;
+    line-height: 18px;
+    color: rgb(68, 68, 68);;
+    word-break: break-all;
+    word-wrap: break-word;
+
+    white-space: pre-wrap;
+
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+.rongcloud-Message-entry {
+    display: inline-block;
+    max-width: 100%;
+}
+
+.rongcloud-Message-entry p {
+    margin-bottom: 5px;
+}
+
+.rongcloud-Message-entry a {
+    text-decoration: none;
+}
+
+.rongcloud-Message-img img {
+    border-radius: 5px;
+}
+
+/*音频消息*/
+.rongcloud-Message-audio .rongcloud-Message-entry{
+    overflow:hidden;
+}
+.rongcloud-Message-audio .rongcloud-audioBox{
+    float: left;
+}
+.rongcloud-Message-audio .rongcloud-r-audioBox{
+    float: right;
+}
+.rongcloud-Message-audio .rongcloud-audioBox {
+    display: inline-block;
+    cursor: pointer;
+    background: url(//cdn.ronghub.com/customerservice-audio-bg.png) 0 0/170px auto no-repeat;
+    width: 165px;
+    height: 36px;
+    padding: 3px 0 3px 15px;
+}
+.rongcloud-Message-audio .rongcloud-audioBox i{
+    float: left;
+    display: inline-block;
+    width: 4px;
+    height: 26px;
+    opacity: 1;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.rongcloud-Message-audio .rongcloud-r-audioBox {
+    display: inline-block;
+    cursor: pointer;
+    background: url(./images/audioRBG.png) 0 0/165px auto no-repeat;
+    width: 165px;
+    height: 36px;
+    padding: 3px 15px 3px 0px;
+}
+.rongcloud-Message-audio .rongcloud-r-audioBox i{
+    float: right;
+    display: inline-block;
+    width: 4px;
+    height: 26px;
+    opacity: 1;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.rongcloud-Message-audio .rongcloud-audioBox i:nth-child(1){
+    background: url(//cdn.ronghub.com/customerservice-audio-bg.png) 0px -40px/170px auto no-repeat;
+}
+.rongcloud-Message-audio .rongcloud-audioBox i:nth-child(2){
+    background: url(//cdn.ronghub.com/customerservice-audio-bg.png) -7px -40px/170px auto no-repeat;
+}
+.rongcloud-Message-audio .rongcloud-audioBox i:nth-child(3){
+    background: url(//cdn.ronghub.com/customerservice-audio-bg.png) -14px -40px/170px auto no-repeat;
+}
+
+.rongcloud-Message-audio .rongcloud-audioBox.rongcloud-animate i:nth-child(2){
+    animation: audioAnimate 1s linear 0s infinite ;
+    /* Firefox: */
+    -moz-animation: audioAnimate 1s linear 0s infinite ;
+    /* Safari 和 Chrome: */
+    -webkit-animation: audioAnimate 1s linear 0s infinite ;
+    /* Opera: */
+    -o-animation: audioAnimate 1s linear 0s infinite ;
+}
+.rongcloud-Message-audio .rongcloud-audioBox.rongcloud-animate i:nth-child(3){
+    animation: audioAnimate 1s linear 0s infinite ;
+    /* Firefox: */
+    -moz-animation: audioAnimate 1s linear 0s infinite ;
+    /* Safari 和 Chrome: */
+    -webkit-animation: audioAnimate 1s linear 0s infinite ;
+    /* Opera: */
+    -o-animation: audioAnimate 1s linear 0s infinite ;
+}
+.rongcloud-Message-audio .rongcloud-r-audioBox i:nth-child(1){
+    background: url(./images/audioRBG.png) -161px -40px/165px auto no-repeat;
+}
+.rongcloud-Message-audio .rongcloud-r-audioBox i:nth-child(2){
+    background: url(./images/audioRBG.png) -154px -40px/165px auto no-repeat;
+}
+.rongcloud-Message-audio .rongcloud-r-audioBox i:nth-child(3){
+    background: url(./images/audioRBG.png) -147px -40px/165px auto no-repeat;
+}
+
+.rongcloud-Message-audio .rongcloud-r-audioBox.rongcloud-animate i:nth-child(2){
+    animation: audioAnimate 1s linear 0s infinite ;
+    /* Firefox: */
+    -moz-animation: audioAnimate 1s linear 0s infinite ;
+    /* Safari 和 Chrome: */
+    -webkit-animation: audioAnimate 1s linear 0s infinite ;
+    /* Opera: */
+    -o-animation: audioAnimate 1s linear 0s infinite ;
+}
+.rongcloud-Message-audio .rongcloud-r-audioBox.rongcloud-animate i:nth-child(3){
+    animation: audioAnimate 1s linear 0s infinite ;
+    /* Firefox: */
+    -moz-animation: audioAnimate 1s linear 0s infinite ;
+    /* Safari 和 Chrome: */
+    -webkit-animation: audioAnimate 1s linear 0s infinite ;
+    /* Opera: */
+    -o-animation: audioAnimate 1s linear 0s infinite ;
+}
+@keyframes audioAnimate
+{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-moz-keyframes audioAnimate /* Firefox */
+{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes audioAnimate /* Safari 和 Chrome */
+{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-o-keyframes audioAnimate /* Opera */
+{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+.rongcloud-Message-audio .rongcloud-audioTimer{
+    margin-top: 5px;
+    margin-left: 10px;
+    color: #8e969f;
+}
+.rongcloud-Message-audio .rongcloud-audioState{
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-color: #ff7373;
+    margin-top: 13px;
+    border-radius: 5px;
+}
+
+.rongcloud-sys-tips{
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 10px;
+}
+.rongcloud-sys-tips>span{
+    padding:7px 10px;
+    background: #e7ecf2;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #8e969f;
+    line-height: 32px;
+}
+.rongcloud-sys-tips a{
+    font-size: 12px;
+}
+.rongcloud-rong-footer {
+    background: #fff;
+    height: 114px;
+    position: absolute;
+    bottom: 0px;
+    left:0px;
+    right: 0px;
+    border-radius: 0px 0px 5px 5px;
+    /*border: 1px solid #cdd7db;
+    border-top: none;*/
+}
+
+.rongcloud-footer-con {
+    border-top: 1px solid #cdd7db;
+}
+.rongcloud-text-layout {
+    margin: 0 10px;
+}
+.rongcloud-funcPanel {
+    line-height: 22px;
+    height: 22px;
+    position: relative;
+    margin-top: 5px;
+}
+.rongcloud-funcPanel .rongcloud-mode1{
+    float: left;
+
+}
+.rongcloud-funcPanel .rongcloud-mode2{
+    float: right;
+    cursor: pointer;
+}
+.rongcloud-funcPanel .rongcloud-mode2 a{
+    color: #0099ff;
+    font-size: 12px;
+}
+.rongcloud-robotMode {
+    display: block;
+}
+.rongcloud-text {
+    width: 100%;
+    display: inline-block;
+    height: 80px;
+    padding: 5px;
+    border: 0;
+    color: #999;
+    color: black;
+    resize: none;
+    font-size: 9pt;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.rongcloud-text:focus {
+    outline: 0;
+}
+.rongcloud-powBox {
+    position: absolute;
+    right: 0px;
+    /*width: 100%;*/
+    height: 24px;
+}
+.rongcloud-rong-send-btn {
+    position: absolute;
+    top:55px;
+    right: 10px;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    width: 60px;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 40px;
+    font-size: 9pt;
+    color: rgb(255, 255, 255);
+    background: #0099ff;
+    outline:0;
+}
+.rongcloud-MessageForm-tool {
+    position: relative;
+    margin-right: 8px;
+    float: left;
+    overflow: hidden;
+}
+.rongcloud-MessageForm-tool input[type="file"] {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    opacity: 0;
+}
+.rongcloud-MessageForm-tool i {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    display: inline-block;
+}
+.rongcloud-MessageForm-tool i.rongcloud-iconfont-smile {
+    background-size: 45px;
+    background-position: 0 -297px;
+}
+.rongcloud-expressionWrap {
+    border: 1px solid #D9DADC;
+    width: 290px;
+    padding: 5px 8px;
+    position: absolute;
+    left: -2px;
+    top: -198px;
+    height: 180px;
+    background: #fff;
+    z-index: 1100;
+    overflow: auto;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+.rongcloud-expressionContent{
+    width: 100%;
+}
+.rongcloud-expressionContent div{
+    cursor: pointer;
+    margin: 0 2px;
+}
+.rongcloud-MessageForm-tool i.rongcloud-iconfont-upload {
+    width: 24px;
+    background-size: 45px;
+    background-position: 0 -333px;
+}
+.rongcloud-expressionWrap .rongcloud-arrow {
+    position: absolute;
+    left: 5px;
+    bottom: -9px;
+    display: inline-block;
+    width: 10px;
+    height: 9px;
+    background: url(//cdn.ronghub.com/customerservice-icon.png);
+    background-position: 0 -1476px;
+}
+
+/* 客服评价 */
+.rongcloud-layermbox {
+    /*position: relative;*/
+    position: initial;
+    height: 100%;
+    z-index: 19891014;
+}
+.rongcloud-layermmain {
+    display: table;
+    pointer-events: none;
+}
+.rongcloud-laymshade, .rongcloud-layermmain {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1200;
+}
+.rongcloud-laymshade {
+    background-color: rgba(0,0,0, .5);
+    pointer-events: auto;
+}
+.rongcloud-layermmain .rongcloud-section {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+.rongcloud-layermchild {
+    position: relative;
+    display: inline-block;
+    text-align: left;
+    background-color: #fff;
+    font-size: 14px;
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    pointer-events: auto;
+    /*max-width: 250px;*/
+}
+.rongcloud-layermchild h3{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.rongcloud-layermcont{
+    padding: 20px 20px 10px;
+    text-align: center;
+}
+.rongcloud-layermbox .rongcloud-rong-btn{
+    display: inline-block;
+    width: 54px;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #c4c4c4;
+    border-radius: 3px;
+    color: #000;
+    overflow: hidden;
+}
+.rongcloud-layermbox .rongcloud-rong-btn:hover{
+    background-color: #0099ff;
+    color: #fff;
+    border-color: #0099ff;
+}
+
+
+
+
+.rongcloud-layermbox .rongcloud-feedback{
+    background-color: rgba(0,0,0,.6);
+    color: #fff;
+    border: none;
+}
+.rongcloud-layermbox .rongcloud-feedback .rongcloud-layermcont{
+    padding: 15px;
+    font-size: 16px;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+/* 图片预览 */
+.rebox{
+    z-index: 999999;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.7);
+}
+.rebox-contents{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    text-align: center;
+    width: 90%;
+    height: 90%;
+}
+.rebox-contents .rebox-content {
+    border: none!important;
+    box-shadow: 0 0 8px #222!important;
+    cursor: pointer;
+    border: 5px solid #fff;
+    background-color: #fff;
+    border-radius: 1px;
+    max-width: 100%;
+    max-height: 100%; 
+    margin: auto;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0; 
+    right: 0;
+}
+.rebox-close {
+    right: 10px;
+    top: 10px;
+}
+.rebox-button {
+    position: absolute;
+    z-index: 9999;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background: rgb(0, 0, 0);
+    opacity: 0.4;
+    text-decoration: none;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-border-radius: 32px;
+    -moz-border-radius: 32px;
+    -ms-border-radius: 32px;
+    border-radius: 32px;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    transition: all 0.3s;
+}
+.rebox-button:hover {
+    opacity: 1;
+    -webkit-transform: scale(1.4);
+    -moz-transform: scale(1.4);
+    -ms-transform: scale(1.4);
+    transform: scale(1.4);
+}
+
+/* 小能客服 */
+.rongcloud-layer-title {
+    padding: 5px;
+    text-align: center;
+}
+.rongcloud-evaluate .rongcloud-layer-body label {
+    line-height: 2.3;
+    margin-right: 20px;
+    color: #808586;
+}
+.rongcloud-evaluate .rongcloud-layer-body input {
+    margin-right: 5px;
+    vertical-align: middle;
+    border: 1px solid #BBBBBB;
+    border-radius: 5px;
+}
+.rongcloud-suggest {
+    resize: none;
+    padding: 5px;
+    width: 100%;
+    height: 70px;
+    border: 1px solid #BBBBBB;
+    border-radius: 5px;
+}
+.rongcloud-layer-body .rongcloud-form-item label {
+    width: 52px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: right;
+    white-space: nowrap;
+}
+.rongcloud-layer-body .rongcloud-form-item textarea,input[type=text] {
+    width: 200px;
+}
+.rongcloud-layer-body .rongcloud-form-item textarea {
+    padding: 5px;
+    max-width: 200px;
+    max-height: 160px; 
+    resize:none;
+}
+.rongcloud-require:before {
+    content:"* ";
+    color:#f26868;
+    font-weight:bold;
+}
+
+.rongcloud-evaluate {
+    width: 266px;
+    padding-top: 15px;
+}
+.rongcloud-evaluate .rongcloud-layer-body{
+    padding: 20px 15px 30px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+.rongcloud.group-title{
+    margin-bottom: 10px;
+}
+.rongcloud-leaveword {
+    width: 300px;
+}
+.rongcloud-foot {
+    text-align: center;
+    padding-bottom: 10px;
+}
+.rongcloud-layer-submit {
+    padding: 5px;
+    width: 100px;
+    border: 1px solid #BBBBBB;
+    border-radius: 5px;
+    background-color: white;
+    outline:none;
+}
+.rongcloud-layer-submit:hover {
+    background-color: #EEE;
+}
+
+.rongcloud-layer-close {
+    position: absolute;
+    font-size: 16px;
+    top: 5px;
+    right: 5px;
+    padding: 6px;
+    line-height: 16px;
+    cursor: pointer;
+}
+.rongcloud-Message-file {
+    position: relative;
+    width: 270px;
+    overflow: hidden;
+    border: 1px solid #b9c1ca;
+    border-radius: 3px;
+}
+.rongcloud-file-icon {
+    float: left;
+    width: 52px;
+    height: 52px;
+    margin: 8px;
+    display: inline-block;
+    border-radius: 5px;
+    background-size: 45px;
+    background-position: 3px -541px;
+    background-color: #3ea9ff;
+}
+.rongcloud-file-name {
+    width: 155px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.rongcloud-file-size {
+    font-size: 12px;
+}
+.rongcloud-file-download {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-size: 45px;
+    background-position: 0 -611px;
+}
+
+.rongcloud-MessageForm-tool i.rongcloud-iconfont-file {
+    width: 24px;
+    height: 24px;
+    background-size: 45px;
+    background-position: 0 -443px;
+}
+.rongcloud-MessageForm-tool i.rongcloud-iconfont-download {
+    width: 24px;
+    height: 24px;
+    background-size: 45px;
+    background-position: 0 -476px;
+}
+.rongcloud-MessageForm-tool i.rongcloud-iconfont-evaluate {
+    width: 24px;
+    height: 24px;
+    background-size: 45px;
+    background-position: 0 -504px;
+}
+.rongcloud-MessageForm-tool i.rongcloud-iconfont-evaluate[disabled] {
+    background-position: -23px -504px;
+    cursor: default;
+}
+.rongcloud-endconversation {
+    width: 270px;
+    height: 135px;
+    padding: 22px;
+}
+.rongcloud-endconversation .rongcloud-prompt {
+    margin-top: 10px;
+}
+.rongcloud-endconversation .rongcloud-buttons {
+    margin-top: 30px;
+    text-align: center;
+}
+.rongcloud-buttons button+button {
+    margin-left: 50px;
+}
+.rongcloud-button {
+    width: 77px;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #D8D8D8;
+    border-radius: 4px;
+    background-color: white;
+    outline:none;
+}
+.rongcloud-button:hover{
+    border-color: #53B4FF;
+    color:#53B4FF;
+}
+.rongcloud-leavemessage {
+    position: absolute;
+    top: 36px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+}
+
+.rongcloud-leavemessage-title {
+    padding: 20px 40px 25px;
+    width: 310px;
+}
+.rongcloud-form-item {
+    margin: 0 40px 25px;
+    font-size: 14px;
+}
+.rongcloud-form-item label {
+    display: inline-block;
+    margin-right: 10px;
+}
+.rongcloud-leavemessage .rongcloud-form-item label {
+    width: 70px;
+    text-align: right;
+}
+.rongcloud-form-error {
+    color: #f26868;
+    margin: 2px 0 -19px 85px;
+    font-size: 13px;
+}
+.rongcloud-form-item textarea {
+    vertical-align: top;
+    width: 270px;
+    height: 120px;
+    padding: 4px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    resize: none;
+}
+.rongcloud-form-item .rongcloud-inputtext{
+    width: 270px;
+    height: 26px;
+    box-shadow: rgba(0, 0, 0, 0.07451) 0px 1px 1px inset;
+    padding: 4px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    outline: none;
+}
+.rongcloud-form-item .rongcloud-form-label{
+    line-height: 26px;
+}
+.rongcloud-leavemessage-form-btns{
+    text-align: center;
+}
+.rongcloud-btn {
+    width: 150px;
+    height: 30px;
+
+    line-height: 30px;
+    color: white;
+    outline: none;
+    background-color: #0099FF;
+    border-radius: 4px;
+    cursor: pointer;
+}
+/*收集用户信息*/
+.rongcloud-collectuserinfo-title{
+    padding: 30px 20px 15px
+}
+.rongcloud-collectuserinfo .rongcloud-form-item{
+    margin: 0 20px 25px;
+}
+.rongcloud-collectuserinfo .rongcloud-form-item .rongcloud-inputtext{
+    width: 200px;
+}
+.rongcloud-collectuserinfo .rongcloud-form-error{
+    margin: 2px 0 -19px 65px;
+}
+.rongcloud-consult {
+  position: fixed;
+  right: 50px;
+  bottom: 10px;
+  width: 195px;
+  text-align: center;
+}
+.rongcloud-im-consult{
+    left: 50px;
+    right: auto;
+}
+.rongcloud-consult button {
+  display: block;
+  width: 195px;
+  margin-bottom: 17px;
+  background: #0096f9;
+  border: 0;
+  padding: 0;
+  color: #fff;
+  font-family: 'Microsoft Yahei';
+  font-size: 16px;
+  cursor: pointer;
+}
+.rongcloud-consult button[disabled] {
+  background-color: #EEEEEE;
+  cursor: default;
+}
+.rongcloud-cs-icon {
+  display: inline-block;
+  padding-left: 43px;
+  line-height: 50px;
+  background: url(//cdn.ronghub.com/customerservice-icon.png) no-repeat 0 -358px;
+  background-size: 45px;
+}
+.rongcloud-im-icon{
+    display: inline-block;
+    padding-left: 43px;
+    line-height: 50px;
+    background: url(//cdn.ronghub.com/customerservice-icon.png) 0 12px/50px auto no-repeat;
+    background-size: 58px;
+}
+
+.rong-conversation{
+    font-size:12px;
+    color:#333;
+    padding: 10px 0px 10px 12px;
+    height: 56px;
+    border-bottom:1px dotted #e1e9f1;
+    cursor:pointer;
+}
+.rongcloud-photo{
+    float: left;
+    margin-right: 10px;
+    position: relative;
+    margin-top: 2px;
+}
+.rongcloud-info{
+    overflow: hidden;
+}
+.rongcloud-nickname{
+    font-weight: 400;
+    color: #000;
+    margin: 0;
+    height: 36px;
+    line-height: 36px;
+    font-size: 16px;
+}
+.rongcloud-nickname_text{
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    color: #606164;
+    text-align: left;
+}
+.rongcloud-ext{
+    float: right;
+    color: #6b6f7c;
+    font-size: 13px;
+    text-align: right;
+    min-width: 55px;
+}
+.rongcloud-attr{
+    height: 22px;
+    font-size: 12px;
+    margin-top: 10px;
+}
+.rongcloud-badge{
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: #999;
+    border-radius: 10px;
+    float: left;
+    background-color: #0099ff;
+    font-weight: normal;
+    margin-left: 3px;
+}
+.rongcloud-no-remind{
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    float: right;
+    background-position: 0 -177px;
+}
+
+.rcs-chat-wrapper{
+    position:fixed;
+    bottom: 100px;
+    right: 48px;
+    width: 470px;
+    height: 470px;
+}
+.rcs-chat-im-wrapper{
+    left: 247px;
+    right: auto;
+}
+
+.leavemessageHref{
+    cursor: pointer;
+    color: #00A3FF;
+}
+.leavemessageHref:hover{
+    text-decoration: underline;
+}
+
+.rong-link-site, .rong-link-email{
+    color: #008af3;
+}
+.rong-link-site:hover ,.rong-link-email:hover{
+    text-decoration: underline;
+}
+
+.satisfaction-star{
+    display: inline-block;
+    width: 35px;
+    height: 30px;
+    margin-left: 7px;
+    background-image: url("./images/star.png");
+    background-repeat: no-repeat;
+    background-size: 30px;
+    cursor: pointer;
+}
+.satisfaction-star-selected{
+    background-position-y: -30px;
+}
+.rongcloud-evaluate-btn{
+    width: 50%;
+    height: 50px;
+    color: #0099ff;
+    text-align: center;
+    line-height: 50px;
+    background-color: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+    outline: none;
+}
+.rongcloud-evaluate-btn:active{
+    background-color: #ddd;
+}
+.rongcloud-evaluate-btn:nth-child(1){
+    border-right: 1px solid #c6c6c6;
+    border-bottom-left-radius: 3px;
+}
+.rongcloud-evaluate-btn:nth-child(2){
+    border-bottom-right-radius: 3px;
+}
+.rongcloud-evaluate .rongcloud-foot{
+    padding-bottom: 0px;
+    border-top: 1px solid #c6c6c6;
+}
+.rongcloud-footer-input{
+    height: 80px;
+    padding-right: 80px;
+}
+.rongcloud-footer-textarea{
+    height: 100%;
+}
+
+.rongcloud-phone-infoBar{
+    text-align: center;
+    line-height: 36px;
+    color: #fff;
+}
+.rongcloud-phone-exit{
+    display: inline-block;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 26px;
+    height: 26px;
+    background-image: url("./images/back.png");
+    background-size: 25px;
+    background-repeat: no-repeat;
+}
+.rongcloud-phone-exit:active{
+    color: #c6c6c6;
+}
+.emojiItem{
+    display: inline-block;
+}
+
+@media screen and (max-width: 600px) {
+    .rcs-chat-wrapper{
+        top: 0;
+    	left: 0;
+    	width: 100%;
+    	height: 100%;
+    }
+    .rongcloud-kefuChat{
+    	width: 100%;
+    	height:100%;
+    }
+    .rongcloud-kefuChat .rongcloud-rong-header{
+        border-radius: 0px;
+    }
+    .rcs-message-box{
+        bottom: 65px;
+    }
+    .rongcloud-rong-footer{
+        height: 65px;
+    }
+    .rongcloud-footer-input{
+        height: 35px;
+    }
+    .rongcloud-rong-send-btn{
+        top: 35px;
+    }
+    .rongcloud-text{
+        height: 35px;
+    }
+}
+.rongcloud-img{
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}

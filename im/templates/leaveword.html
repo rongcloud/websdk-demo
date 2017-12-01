@@ -1,0 +1,21 @@
+<!-- leaveword: 留言页面  
+class="rongcloud-leavemessage"留言弹出层容器
+此类名不能被修改-->
+<div class="rongcloud-leavemessage">
+    {%if(this.url){%}
+    <iframe id="leavewordIframe" src="{%this.url%}" frameborder="0" width="100%;" height="100%;"></iframe>
+    {%}else{%}
+    <div class="rongcloud-leavemessage-title">您好，请留言~</div>
+    <form>
+        {%for(var index in this.list){%}
+        <div class="rongcloud-form-item">
+            <label class="{%if(this.list[index].required){%}{%'rongcloud-require'%}{%}%}">{%this.list[index].title%}：</label>
+            {%if(this.list[index].type == 'text'){%}<input class="rongcloud-inputtext" name="{%this.list[index].name%}" placeholder="{%this.list[index].defaultText%}" type="text" onblur="RCS.validateLeaveMessage({%index%}, event)"></input>{%}else{%}
+            <textarea name="{%this.list[index].name%}" placeholder="{%this.list[index].defaultText%}" onblur="RCS.validateLeaveMessage({%index%}, event)"></textarea>{%}%}
+            <div class="rongcloud-form-error" style="display: none;"></div>
+        </div>{%}%}
+        <div class="rongcloud-leavemessage-form-btns">
+            <button class="rongcloud-btn" onclick="RCS.leaveMessageComfirm(event)">提交</button>
+        </div>
+    </form>{%}%}
+</div>

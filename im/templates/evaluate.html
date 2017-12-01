@@ -1,0 +1,32 @@
+<!-- evaluate: 评价页面  
+class="rongcloud-evaluate"评价弹出层容器 
+此类名不能被修改
+-->
+<div class="rongcloud-layermbox rongcloud-evaluate">
+    <div class="rongcloud-laymshade"></div>
+    <div class="rongcloud-layermmain">
+        <div class="rongcloud-section">
+            <div class="rongcloud-layermchild rongcloud-evaluate">
+                <div class="rongcloud-layer-title">评价客服</div>
+                <div class="rongcloud-layer-body">
+                    <div class="rongcloud-group-row">
+                        <span class="satisfaction-star" onclick="RCS.star(1)"></span>
+                        <span class="satisfaction-star" onclick="RCS.star(2)"></span>
+                        <span class="satisfaction-star" onclick="RCS.star(3)"></span>
+                        <span class="satisfaction-star" onclick="RCS.star(4)"></span>
+                        <span class="satisfaction-star" onclick="RCS.star(5)"></span>
+                    </div>
+                </div>
+                <div class="rongcloud-foot">
+                    <button class="rongcloud-evaluate-btn" onclick="RCS.evaluate(true)">提交</button><button class="rongcloud-evaluate-btn" onclick="RCS.evaluate(false)">取消</button>
+                </div>
+            </div>
+            <!--反馈提示-->
+            <!-- <div class="rongcloud-layermchild rongcloud-feedback" ng-show="end">
+                <div class="rongcloud-layermcont">
+                    感谢您的反馈 ^ - ^ ！
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>

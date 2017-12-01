@@ -1,0 +1,132 @@
+<!-- messageTemplate: 一个消息的页面 -->
+<!-- class="rongcloud-audioState"声音消息播放状态
+class="rongcloud-audioBox" 声音消息容器
+此类名不能被修改 -->
+{%switch(this.messageType){%}{%case 'TextMessage':%}
+<div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+    <div>
+        <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="{%if(this.messageDirection != 1){%} {%if(this.content.user.icon){%}{%this.content.user.icon%}{%}else{%} {%'./images/kefu.png'%} {%}%} {%}else{%} {%'http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png'%} {%}%}" alt="">
+            <div class="rongcloud-Message-author rongcloud-clearfix">
+              <a class="rongcloud-author">{%if(this.messageDirection != 1){%}{%this.content.user.name%}{%}else{%} {%'我'%} {%}%}</a>
+            </div>
+        </div>
+    </div>
+    <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-text">
+            <pre class="rongcloud-Message-entry">{%this.content.content%}</pre>
+        </div>
+    </div>
+</div>{%break;%}
+{%case 'ImageMessage':%}
+<div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+    <div>
+        <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="{%if(this.messageDirection != 1){%} {%if(this.content.user.icon){%}{%this.content.user.icon%}{%}else{%} {%'./images/kefu.png'%} {%}%} {%}else{%} {%'http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png'%} {%}%}" alt="">
+            <div class="rongcloud-Message-author rongcloud-clearfix">
+              <a class="rongcloud-author">{%if(this.messageDirection != 1){%}{%this.content.user.name%}{%}else{%} {%'我'%} {%}%}</a>
+            </div>
+        </div>
+    </div>
+    <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-img">
+            <span class="rongcloud-Message-entry">
+                <a onclick="RCS.viewImage(event)" class="cursor-pointer" data-img="{%this.content.imageUri%}">
+                    <img src="{%this.content.imageUri%}" onload="RCS.scrollBottom()" data-img="{%this.content.imageUri%}">
+                </a>
+            </span>
+        </div>
+    </div>
+</div>{%break;%}
+{%case 'FileMessage':%}
+<div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+    <div>
+        <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="{%if(this.messageDirection != 1){%} {%if(this.content.user.icon){%}{%this.content.user.icon%}{%}else{%} {%'./images/kefu.png'%} {%}%} {%}else{%} {%'http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png'%} {%}%}" alt="">
+            <div class="rongcloud-Message-author rongcloud-clearfix">
+              <a class="rongcloud-author">{%if(this.messageDirection != 1){%}{%this.content.user.name%}{%}else{%} {%'我'%} {%}%}</a>
+            </div>
+        </div>
+    </div>
+    <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-file">
+            <div class="rongcloud-sprite rongcloud-file-icon"></div>
+            <div class="rongcloud-file-name">{%this.content.name%}</div>
+            <div class="rongcloud-file-size">{%this.content.size%}</div>
+            <a class="rongcloud-sprite rongcloud-file-download" href="{%this.content.fileUrl%}" download="{%this.content.name%}"></a>
+        </div>
+    </div>
+</div>{%break;%}
+{%case 'VoiceMessage':%}
+<div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+    <div>
+        <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="{%if(this.messageDirection != 1){%} {%if(this.content.user.icon){%}{%this.content.user.icon%}{%}else{%} {%'./images/kefu.png'%} {%}%} {%}else{%} {%'http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png'%} {%}%}" alt="">
+            <div class="rongcloud-Message-author rongcloud-clearfix">
+              <a class="rongcloud-author">{%if(this.messageDirection != 1){%}{%this.content.user.name%}{%}else{%} {%'我'%} {%}%}</a>
+            </div>
+        </div>
+    </div>
+    <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-audio">
+            <span class="rongcloud-Message-entry">
+                {%if(this.messageDirection == 1){%}
+                    <div style="display:inline-block;">
+                        <span class="rongcloud-audioTimer">{%Math.ceil(this.content.duration || this.content.duration.length / 1024)%}''</span>
+                    </div>
+                    <span class="rongcloud-r-audioBox rongcloud-clearfix" onclick='RCS.play(event, {%JSON.stringify(this.content)%})'>
+                        <i></i><i></i><i></i>
+                    </span>
+                {%}else{%}
+                    <span class="rongcloud-audioBox rongcloud-clearfix" onclick='RCS.play(event, {%JSON.stringify(this.content)%})'>
+                        <i></i><i></i><i></i>
+                    </span>
+                    <div style="display:inline-block;">
+                        <span class="rongcloud-audioTimer">{%Math.ceil(this.content.duration || this.content.duration.length / 1024)%}''</span>
+                        <span class="rongcloud-audioState"></span>
+                    </div>
+                {%}%}
+            </span>
+        </div>
+    </div>
+</div>{%break;%}
+{%case 'TimeMessage':%}
+<div class="rongcloud-Messages-date">
+    <b>{%this.sentTime%}</b>
+</div>{%break;%}
+{%case 'InformationNotificationMessage':%}
+<div class="rongcloud-sys-tips">
+    <span>{%this.content.message%}</span>
+</div>{%break;%}
+{%case 'PullLeaveMessage':%}
+<div class="rongcloud-sys-tips">
+    <span>{%this.content.content%}</span>
+</div>{%break;%}
+{%case 'SightMessage': %}
+<div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+    <div>
+        <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="{%if(this.messageDirection != 1){%} {%if(this.content.user.icon){%}{%this.content.user.icon%}{%}else{%} {%'./images/kefu.png'%} {%}%} {%}else{%} {%'http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png'%} {%}%}" alt="">
+            <div class="rongcloud-Message-author rongcloud-clearfix">
+              <a class="rongcloud-author">{%if(this.messageDirection != 1){%}{%this.content.user.name%}{%}else{%} {%'我'%} {%}%}</a>
+            </div>
+        </div>
+    </div>
+    <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-sight" onclick="RCS.playVideo(event)">
+            <video poster="{% 'data:image/jpg;base64,' + this.content.content %}" src="{% this.content.sightUrl %}"></video>
+            <div class="play-btn"></div>
+        </div>
+    </div>
+</div>
+{%break;%}
+{%default: %}
+<div class="rongcloud-Message rongcloud-clearfix {%if(this.messageDirection == 1){%} {%'rongcloud-Message-send'%} {%}%}" id="rcs-templte-message-text">
+    <div>
+        <div class="rongcloud-Message-header"><img class="rongcloud-img rongcloud-Message-avatar rongcloud-avatar" src="{%if(this.messageDirection != 1){%} {%if(this.content.user.icon){%}{%this.content.user.icon%}{%}else{%} {%'./images/kefu.png'%} {%}%} {%}else{%} {%'http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png'%} {%}%}" alt="">
+            <div class="rongcloud-Message-author rongcloud-clearfix">
+              <a class="rongcloud-author">{%if(this.messageDirection != 1){%}{%this.content.user.name%}{%}else{%} {%'我'%} {%}%}</a>
+            </div>
+        </div>
+    </div>
+    <div class="rongcloud-Message-body">
+        <div class="rongcloud-Message-text">
+            <pre class="rongcloud-Message-entry">当前版本暂不支持查看此消息</pre>
+        </div>
+    </div>
+</div>{%}%}
