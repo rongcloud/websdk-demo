@@ -1,9 +1,13 @@
 # 开发说明
+
+## 注意事项
+- 在线预览地址 https://rongcloud.github.io/websdk-demo/im/im.html
+- 本地开发调试必须在 http(s):// 协议下运行
+
 ## 目录结构说明
 - dist 
     发布-合并压缩后的代码
-    + cs.html
-        示例页面
+    
 - templates
     HTML模板
 
@@ -15,9 +19,9 @@
     im核心代码
 - emoji.js  
     表情库调用封装
-- qiniu-upload.js  
+- libs/qiniu-upload.js  
     上传插件
-- utils.js  
+- libs/utils.js  
     工具类
 
 ## 合并压缩发布代码

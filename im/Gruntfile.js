@@ -6,31 +6,29 @@ module.exports = function(grunt) {
         concat: {
             dist: {
                 src: [
-                    'RongIMemoji.js',
-                    'utils.js',
-                    'upload.js',
-                    'ali-upload.js',
+                    'libs/RongEmoji.js',
+                    'libs/utils.js',
+                    'libs/qiniu-upload.js',
                     'template.js',
                     'emoji.js',
-                    'phiz.js',
-                    'cs.js'
+                    'im.js'
                 ],
-                dest: 'temp/cs.js'
+                dest: 'temp/im.js'
             }
         },
         uglify: {
             dist: {
                 src: [
-                    'temp/cs.js',
+                    'temp/im.js',
                     'temp/template.js'
                 ],
-                dest: 'dist/cs.min.js'
+                dest: 'dist/im.min.js'
             }
         },
         cssmin: {
             dist: {
-                src: 'cs.css',
-                dest: 'dist/cs.min.css'
+                src: 'im.css',
+                dest: 'dist/im.min.css'
             }
         },
         clean: {
