@@ -94,7 +94,7 @@ http://www.ghostchina.com/adding-syntax-highlighting-to-ghost-using-highlight-js
 <script type="text/javascript" src="json-view/jquery.jsonview.js"></script>
 
 
-<script src="//cdn.ronghub.com/RongIMLib-2.2.9.js?0001"></script>
+<script src="//cdn.ronghub.com/RongIMLib-2.3.0.js?00"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 
@@ -332,9 +332,10 @@ function reconnect(){
 }
 
 //消息撤回变量及设置
-var recallMessage = null;
-function setRecallMessage(message){
+var recallMessage = null, clearMessage;
+function markMessage(message){
 	recallMessage = message;
+	clearMessage = message;
 }
 
 function sendTextMessage(){
@@ -384,7 +385,7 @@ function sendTextMessage(){
 	var start = new Date().getTime();
 	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
-        	setRecallMessage(message);
+        	markMessage(message);
             showResult("发送文字消息 成功",message,start);
         },
         onError: function (errorCode,message) {
@@ -414,7 +415,7 @@ function sendImageMessage(){
 	var start = new Date().getTime();
 	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
-        	setRecallMessage(message);
+        	markMessage(message);
             showResult("发送图片消息 成功",message,start);
         },
         onError: function (errorCode,message) {
@@ -449,7 +450,7 @@ function sendFileMessage(){
 	var start = new Date().getTime();
 	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
-        	setRecallMessage(message);
+        	markMessage(message);
             showResult("发送文件消息成功",message,start);
         },
         onError: function (errorCode,message) {
@@ -476,7 +477,7 @@ function sendVoiceMessage(){
 	var start = new Date().getTime();
 	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
-        	setRecallMessage(message);
+        	markMessage(message);
             showResult("发送语音消息成功",message,start);
         },
         onError: function (errorCode,message) {
@@ -549,7 +550,7 @@ function sendRegisterMessage(){
 	var start = new Date().getTime();
 	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
-        	setRecallMessage(message);
+        	markMessage(message);
             showResult("发送自定义消息成功",message,start);
         },
         onError: function (errorCode,message) {
@@ -579,7 +580,7 @@ function sendLocationMessage(){
 	var start = new Date().getTime();
 	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
-        	setRecallMessage(message);
+        	markMessage(message);
             showResult("发送自定义消息成功",message,start);
         },
         onError: function (errorCode,message) {
@@ -606,7 +607,7 @@ function sendRichContentMessage(){
 	var start = new Date().getTime();
 	instance.sendMessage(conversationType, targetId, msg, {
         onSuccess: function (message) {
-        	setRecallMessage(message);
+        	markMessage(message);
             showResult("发送图文消息成功", message, start);
         },
         onError: function (errorCode,message) {
@@ -706,6 +707,37 @@ function getHistroyMessage(){
 		},
 		onError: function(error) {
             showResult("获取历史消息失败",error,start);
+		}
+	});
+} 
+
+
+function clearHistroyMessage(){
+	/*
+		文档：http://www.rongcloud.cn/docs/web_api_demo.html#会话接口
+
+		注意事项：必须开通历史消息云存储
+
+		参数说明：
+		timestamp 取值范围:  timestamp >=0 并且 timestamp <= 当前会话最后一条消息的 sentTime
+ 	*/
+	if (!clearMessage) {
+		alert('请先发一条消息');
+		return;
+	}
+	var start = new Date().getTime();
+	var params = {
+		conversationType: clearMessage.conversationType,
+		targetId: clearMessage.targetId,
+		timestamp: clearMessage.sentTime
+	};
+	instance.clearRemoteHistoryMessages(params, {
+		onSuccess: function() {
+            showResult("清除历史消息成功", "success");
+		},
+		onError: function(error) {
+			console.log('请排查： 历史消息云存储是否开通');
+            showResult("清除历史消息失败",error);
 		}
 	});
 } 
@@ -1305,7 +1337,11 @@ function setUserStatusListener(){
 	<input type="button" value="同步状态消息" onclick="SendSyncReadStatusMessage();">
 	<input type="button" value="检查未读消息" onclick="checkUnreadMessage();"> 
 	<input type="button" value="消息接收" onclick="receiveMessage();"> 
-	<input type="button" value="历史消息" onclick="getHistroyMessage();"> 
+	
+	<br>
+	历史消息：
+	<input type="button" value="获取列表" onclick="getHistroyMessage();"> 
+	<input type="button" value="清空全部" onclick="clearHistroyMessage();"> 
 
 	<br>
 
