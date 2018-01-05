@@ -1,7 +1,7 @@
 ;(function(RCS){
 	var emoji = {
 		init : function(){
-			// RongIMLib.RongIMEmoji.init();
+			RongIMLib.RongIMEmoji.init();
 		},
 		emojiToHTML : function(emojiContent){
             return RongIMLib.RongIMEmoji.emojiToHTML(emojiContent);
@@ -11,7 +11,7 @@
         },
         getEmoji : function(){
             return RongIMLib.RongIMEmoji.list.map(function(data) {
-                return data.shadowDom;
+                return data.node;
             });
         }
 	}
