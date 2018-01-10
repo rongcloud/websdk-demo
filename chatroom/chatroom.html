@@ -104,14 +104,15 @@
 		</div>
 	</div>
 
-	<div class="chatroom" id="chatroom007">
+	<!-- <div class="chatroom" id="chatroom007">
 		<h2>聊天室 007 <em></em> （测试两个聊天室消息是否会串）</h2>
 		<ol></ol>
-	</div>
+	</div> -->
 	
 </body>
 
 <script src="../lib/jquery-3.1.1.js"></script>
+<script src="../lib/vue-2.1.4.js"></script>
 <script src="//cdn.ronghub.com/RongIMLib-2.3.0.js?0001"></script>
 <script type="text/javascript" src="./chatroom.js"></script>
 
@@ -128,6 +129,7 @@ var appInfo = {
 };
 
 //列表聊天室 id= chatRoomId-007
+/*
 (function(){
 	// return false;
 
@@ -167,8 +169,20 @@ var appInfo = {
 		$("#chatroom007 ol").append("<li>" + content + "</li>");
 	}
 })();
+*/
+
+
+
+function registerMessage(type,propertys){
+	var messageName = type; // 消息名称。
+	var objectName = "s:" + type; // 消息内置名称，请按照此格式命名 *:* 。
+	var mesasgeTag = new RongIMLib.MessageTag(true,true); //true true 保存且计数，false false 不保存不计数。
+
+	RongIMClient.registerMessageType(messageName,objectName,mesasgeTag,propertys);
+}
 
 //弹幕聊天室 id= chatRoomId-008
+
 (function(){
 	var chatRoomInfo = {
 		"chatRoomId" : "chatRoomId-008",
@@ -177,6 +191,10 @@ var appInfo = {
 
 	RongChatRoom.init(appInfo, chatRoomInfo, {
 		onSuccess: function(chatRoom) {
+			//注册自定义消息
+			var propertys = ["title","submitAPI","questions"]; // 消息类中的属性名。
+			registerMessage("QA",propertys);
+
 			// 加入聊天室成功。
 			console.log("加入聊天室成功");
 			console.log(chatRoom);
@@ -190,10 +208,18 @@ var appInfo = {
 			// 加入聊天室失败
 		},
 		onMessage : function(message){
+			if(message.objectName == "s:QA"){
+				qaLive(message.content)
+			}
 			updateDanmu(message.content.content);
 		}
 	});
 })();
+
+function qaLive(content){
+	console.log(content)
+	console.log(JSON.parse(content.questions))
+}
 
 /*
 发送消息按钮，点击发送将push input框消息到服务器端，并清空input框。
@@ -204,6 +230,7 @@ function apiDemo(chatRoom){
 	//点击发送消息
 	$("#send").click(function(){
 		var content = $("#message").val();
+			content = '<div style="color:red;background:#333;padding:5px;">' + content + '</div>';
 		chatRoom.sendMessage({"content" : content}, {
 	        onSuccess: function (message) {
 	            console.log("发送聊天室消息成功");

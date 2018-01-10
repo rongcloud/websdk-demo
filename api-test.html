@@ -518,11 +518,10 @@ function sendAtMessage(){
 	}, true);
 }
 
-function registerMessage(type){
+function registerMessage(type,propertys){
 	var messageName = type; // 消息名称。
 	var objectName = "s:" + type; // 消息内置名称，请按照此格式命名 *:* 。
 	var mesasgeTag = new RongIMLib.MessageTag(true,true); //true true 保存且计数，false false 不保存不计数。
-	var propertys = ["name","age","gender"]; // 消息类中的属性名。
 
 	RongIMClient.registerMessageType(messageName,objectName,mesasgeTag,propertys);
 }
@@ -536,8 +535,8 @@ function sendRegisterMessage(){
 			message.messageType == "PersonMessage"
 		3：需要自己做解析实现
 	*/
-
-	registerMessage("PersonMessage");
+	var propertys = ["name","age","gender"]; // 消息类中的属性名。
+	registerMessage("PersonMessage",propertys);
 
 	var content = {
 		name:"RegisterMessage",
@@ -941,6 +940,64 @@ function sendMessageToChatroom(){
         },
         onError: function (errorCode,message) {
             showResult("发送聊天室消息失败",message,start);
+        }
+    });
+}
+
+//发送题目
+function sendQAMessage(){
+	/*
+	文档：http://www.rongcloud.cn/docs/web_api_demo.html#自定义消息
+
+	注意事项：
+		1：init之前注册新消息类型
+		2：对应接收 onReceived: function (message) {}
+			message.messageType == "PersonMessage"
+		3：需要自己做解析实现
+	*/
+	var propertys = ["title","submitAPI","questions"]; // 消息类中的属性名。
+	registerMessage("QA",propertys);
+
+	var questions = [
+		{
+			"q" : "中国首都是那个城市？",
+			"a" : ["上海","武汉","北京","深圳"]
+		},
+		{
+			"q" : "世界上最大的岛是那个？",
+			"a" : ["马达加斯加","海南","台湾","格陵兰"]
+		},
+		{
+			"q" : "冰与火之歌里，那个家族的徽章是狼？",
+			"a" : ["史塔克","塔格利安","兰尼斯特"]
+		},
+		{
+			"q" : "地球上最大的哺乳动物是？",
+			"a" : ["鲸鱼","大象","巨蟒","恐龙"]
+		},
+		{
+			"q" : "谁是智商最高的人？",
+			"a" : ["达芬奇","法拉第","陶哲轩","爱因斯坦"]
+		}
+	];
+
+	var content = {
+		title: "冲顶大会",
+		submitAPI: "http://abc.com/check",
+		questions: JSON.stringify(questions)
+	};
+
+	var msg = new RongIMClient.RegisterMessage.QA(content);
+
+	var start = new Date().getTime();
+	var conversationType = RongIMLib.ConversationType.CHATROOM; // 私聊
+	instance.sendMessage(conversationType, chatRoomId, msg, {
+        onSuccess: function (message) {
+        	markMessage(message);
+            showResult("发送题目 成功",message,start);
+        },
+        onError: function (errorCode,message) {
+            showResult("发送题目 失败",message,start);
         }
     });
 }
@@ -1359,6 +1416,7 @@ function setUserStatusListener(){
 	聊 天 室：
 	<input type="button" value="加入聊天室" onclick="enterChatroom();"> 
 	<input type="button" value="聊天室发消息" onclick="sendMessageToChatroom();"> 
+	<input type="button" value="聊天室发题目" onclick="sendQAMessage();"> 
 	<input type="button" value="退出聊天室" onclick="quitChatroom();"> 
 	<input type="button" value="获取聊天室信息" onclick="getChatroomInfo();"> 
 	
