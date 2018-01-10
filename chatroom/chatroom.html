@@ -415,21 +415,21 @@ function apiDemo(chatRoom){
 	});
 
 	//循环发消息
-	// var sends = setInterval(function(){
-	// 	var content = {
-	// 		content: getRandomText()
-	// 	};
+	var sends = setInterval(function(){
+		var content = {
+			content: getRandomText()
+		};
 
-	// 	//聊天室发消息
-	// 	chatRoom.sendMessage(content, {
-	//         onSuccess: function (message) {
-	// 			updateDanmu(chatRoom.id + ": " + message.content.content);
-	//         },
-	//         onError: function (errorCode,message) {
-	//             console.log("发送聊天室消息失败", errorCode);
-	//         }
-	//     });
- //    },2000);
+		//聊天室发消息
+		chatRoom.sendMessage(content, {
+	        onSuccess: function (message) {
+				updateDanmu(chatRoom.id + ": " + message.content.content);
+	        },
+	        onError: function (errorCode,message) {
+	            console.log("发送聊天室消息失败", errorCode);
+	        }
+	    });
+    },2000);
 	
 	//聊天室信息
 	chatRoom.getInfo({
