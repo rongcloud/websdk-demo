@@ -960,31 +960,83 @@ function sendQAMessage(){
 
 	var questions = [
 		{
-			"q" : "中国首都是那个城市？",
-			"a" : ["上海","武汉","北京","深圳"]
+			id: 8560,
+			question : "中国首都是那个城市？",
+			answers : [{ id: 9901,answer: '上海', bingo: 9904},
+					   { id: 9903,answer: '武汉', bingo: 9904 },
+					   { id: 9904,answer: '北京', bingo: 9904 },
+					   { id: 9905,answer: '深圳', bingo: 9904 }]
 		},
 		{
-			"q" : "世界上最大的岛是那个？",
-			"a" : ["马达加斯加","海南","台湾","格陵兰"]
+			id: 8561,
+			question : "世界上最大的岛是那个？",
+			answers : [{ id: 9906,answer: '马达加斯加', bingo: 9909},
+					   { id: 9907,answer: '海南', bingo: 9909 },
+					   { id: 9908,answer: '台湾', bingo: 9909 },
+					   { id: 9909,answer: '格陵兰', bingo: 9909 }]
 		},
 		{
-			"q" : "冰与火之歌里，那个家族的徽章是狼？",
-			"a" : ["史塔克","塔格利安","兰尼斯特"]
+			id: 8562,
+			question : "冰与火之歌里，那个家族的徽章是狼？",
+			answers : [{ id: 9910,answer: '史塔克', bingo: 9910  },
+					   { id: 9911,answer: '塔格利安', bingo: 9910 },
+					   { id: 9912,answer: '兰尼斯特', bingo: 9910 }]
 		},
 		{
-			"q" : "地球上最大的哺乳动物是？",
-			"a" : ["鲸鱼","大象","巨蟒","恐龙"]
+			id: 8563,
+			question : "地球上最大的哺乳动物是？",
+			answers : [{ id: 9913,answer: '鲸鱼', bingo: 9913 },
+					   { id: 9914,answer: '大象', bingo: 9913 },
+					   { id: 9915,answer: '巨蟒', bingo: 9913 },
+					   { id: 9916,answer: '恐龙', bingo: 9913 }]
 		},
 		{
-			"q" : "谁是智商最高的人？",
-			"a" : ["达芬奇","法拉第","陶哲轩","爱因斯坦"]
+			id: 8564,
+			question : "人们常说的花季是几岁？",
+			answers : [{ id: 9917,answer: 15, bingo: 9920 },
+					   { id: 9918,answer: 20, bingo: 9920 },
+					   { id: 9919,answer: 18, bingo: 9920 },
+					   { id: 9920,answer: 16, bingo: 9920 }]
+		},
+		{
+			id: 8565,
+			question : "成龙、林志颖、郭德纲最年轻的是谁？",
+			answers : [{ id: 9921,answer: '成龙' , bingo: 9921},
+					   { id: 9922,answer: '林志颖', bingo: 9921 },
+					   { id: 9923,answer: '郭德纲', bingo: 9921 }]
+		},
+		{
+			id: 8565,
+			question : "劳动法规定，劳动者试用期不能超过几个月？",
+			answers : [{ id: 9921,answer: 3 , bingo: 9921},
+					   { id: 9922,answer: 6, bingo: 9921 },
+					   { id: 9923,answer: 9, bingo: 9921 },
+					   { id: 9924,answer: 12, bingo: 9921 }]
+		},
+		{
+			id: 8566,
+			question : "融云成立几年了？",
+			answers : [{ id: 9921,answer: 4 , bingo: 9921},
+					   { id: 9922,answer: 5, bingo: 9921 },
+					   { id: 9923,answer: 3, bingo: 9921 },
+					   { id: 9924,answer: 2, bingo: 9921 }]
+		},
+		{
+			id: 8567,
+			question : "变脸是我国哪个戏剧的绝活？",
+			answers : [{ id: 9921,answer: '川剧' , bingo: 9921},
+					   { id: 9922,answer: '京剧', bingo: 9921 },
+					   { id: 9923,answer: '豫剧', bingo: 9921 },
+					   { id: 9924,answer: '评剧', bingo: 9921 }]
 		}
 	];
+
+	var qIndex = Math.floor(Math.random()*5);
 
 	var content = {
 		title: "冲顶大会",
 		submitAPI: "http://abc.com/check",
-		questions: JSON.stringify(questions)
+		questions: JSON.stringify([questions[qIndex]])
 	};
 
 	var msg = new RongIMClient.RegisterMessage.QA(content);

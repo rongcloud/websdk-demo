@@ -11,6 +11,7 @@
     #main{
         width: 640px;
         margin: 0 auto 0;
+        position: relative;
         text-align: center;
     }
     #video-body{
@@ -83,6 +84,58 @@
     	overflow:auto;
     	font-size:12px;
     }
+    .question, .question-dialog{
+    	background-color: #111;
+    	opacity: 0.8;
+    	filter: alpha(opacity=0.8);
+	    box-sizing: border-box;
+	    padding: 0 0 3px 5px;
+	    margin-top: -16px;
+	    color: #FFF;
+	    position: absolute;
+	    bottom: 42px;
+	    z-index: 1;
+	    width: inherit;    
+    }
+
+    .question-dialog{
+       height: 110px;
+       z-index: 11;
+    }
+    
+    .question-title{
+		text-align: left;
+		margin: 6px 0px;
+		padding-bottom: 15px;
+    }
+	.question-item{
+		display: inline-block;
+	    width: 100px;
+	    background: #909090;
+	    border-radius: 13px;
+	    margin-bottom: 10px;
+	}
+	.question a{
+		text-decoration: none;
+		color: #FFF;
+	    height: 100%;
+	    width: 100%;
+	    display: inline-block;
+	}
+	.question-countdown{
+		float: right;
+		margin-right: 10px;
+	}
+	
+	.question-bingo, .question-wrong{
+		background-color: #FFF;
+	}
+	.question-bingo{
+		color: green;
+	}
+	.question-wrong{
+		color: red;
+	}
 </style>
 </head>
 <body>
@@ -92,10 +145,14 @@
 
 	<div id="main">
 		<div id="video-body">
-			<video id="video" height="480" width="640" loop="true" controls="">
+			<video id="video" height="480" width="640" loop="true" autoplay>
 				<source id="vi"  src="../res/heal-the-world.mp4" type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
+		</div>
+		
+		<div class="question-dialog" style="display: none;">
+			本轮结束
 		</div>
 
 		<div id="tools" class="tools">
@@ -171,7 +228,31 @@ var appInfo = {
 })();
 */
 
-
+var utils = {
+	templateRender: function(template, data) {
+	    template = template || "";
+	    data = data || [""];
+	    var re = /{%((?:(?!%}).)+)%}/g, reExp = /(^( )?(var|if|for|else|switch|case|default|break|{|}))(.*)?/g, code = 'var r=[];\n', cursor = 0;
+	    var add = function(line, js) {
+	        js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
+	            (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+	        return add;
+	    }
+	    var match;
+	    while(match = re.exec(template)) {
+	        add(template.slice(cursor, match.index))(match[1], true);
+	        cursor = match.index + match[0].length;
+	    }
+	    add(template.substr(cursor, template.length - cursor));
+	    code += 'return r.join("");';
+	    data = isNaN(data.length) ? [data] : data;
+	    var html = "";
+	    for(var i = 0, length = data.length; i < length; i++) {
+	        html += new Function(code.replace(/[\r\t\n]/g, '')).apply(data[i]);
+	    }
+	    return html;    
+	}
+};
 
 function registerMessage(type,propertys){
 	var messageName = type; // 消息名称。
@@ -208,7 +289,7 @@ function registerMessage(type,propertys){
 			// 加入聊天室失败
 		},
 		onMessage : function(message){
-			if(message.objectName == "s:QA"){
+			if(message.objectName == "s:QA" && !message.offLineMessage){
 				qaLive(message.content)
 			}
 			updateDanmu(message.content.content);
@@ -216,9 +297,100 @@ function registerMessage(type,propertys){
 	});
 })();
 
+var qaTpl = [
+	'<div class="question">',
+		'<div class="question-countdown">',
+			'倒计时: <span id="countdown">10</span>s',
+		'</div>',
+		'<dl>',
+			'<dt class="question-title">',
+				'{% this.question %}',
+				'{% for(var i=0; i < this.answers.length; i++){ %}',
+					'<dd class="question-item" id="answer-{% this.answers[i].id %}">',
+						'<a href="#" onclick=submitAnswer({%this.answers[i].id%},"{%this.submitAPI%}","{%this.answers[i].bingo%}")>{% this.answers[i].answer %}</a>',
+					'</dd>',
+				'{% } %}',
+			'</dt>',
+		'</dl>',
+	'</div>',
+].join('');
+
+var qaDialog = $('.question-dialog');
+function QAdialogOperator(isHide){
+	var type = 'block';
+	if (isHide) {
+		type = 'none';
+	}
+	qaDialog.css('display', type);
+}
+
+var interval = 0;
+
+function startCount(){
+	interval = setInterval(function(){
+		var counter = $('#countdown');
+		var count = counter.html();
+		if (count > 0) {
+			 counter.html(count - 1);
+		}else{
+			stopCount();
+			QAdialogOperator();
+		}
+	}, 1000);
+}
+
+function stopCount(){
+	clearInterval(interval);
+}
+
+function submitAnswer(id, submitAPI, bingo){
+	console.log(submitAPI);
+	
+	stopCount();
+
+	var isBingo = false;
+	if (id == bingo) {
+		isBingo = true;
+	}
+	// todo: post ajax submitAPI
+	var tpl = '#answer-{%this.id%}';
+	id = utils.templateRender(tpl, {
+		id: id
+	});
+
+	
+	var node = $(id);
+	var siblings = node.siblings();
+	siblings.find('a').css('pointerEvents', 'none');
+
+	if (isBingo) {
+		node.addClass('question-bingo');
+		node.html('正确');
+	}
+
+	if (!isBingo) {
+		node.addClass('question-wrong');
+		node.html('答错了');
+	}
+	
+}
+
 function qaLive(content){
 	console.log(content)
-	console.log(JSON.parse(content.questions))
+
+	stopCount();
+	var questions = JSON.parse(content.questions);
+	// 暂时处理单个问答
+	var question = questions[0];
+	question.submitAPI = content.submitAPI;
+	var qaNode = utils.templateRender(qaTpl, question);
+
+	$('.question').remove();
+
+	var main = $('#main');
+	$('#main').append(qaNode);
+	QAdialogOperator(true);
+	startCount();
 }
 
 /*
@@ -243,21 +415,21 @@ function apiDemo(chatRoom){
 	});
 
 	//循环发消息
-	var sends = setInterval(function(){
-		var content = {
-			content: getRandomText()
-		};
+	// var sends = setInterval(function(){
+	// 	var content = {
+	// 		content: getRandomText()
+	// 	};
 
-		//聊天室发消息
-		chatRoom.sendMessage(content, {
-	        onSuccess: function (message) {
-				updateDanmu(chatRoom.id + ": " + message.content.content);
-	        },
-	        onError: function (errorCode,message) {
-	            console.log("发送聊天室消息失败", errorCode);
-	        }
-	    });
-    },2000);
+	// 	//聊天室发消息
+	// 	chatRoom.sendMessage(content, {
+	//         onSuccess: function (message) {
+	// 			updateDanmu(chatRoom.id + ": " + message.content.content);
+	//         },
+	//         onError: function (errorCode,message) {
+	//             console.log("发送聊天室消息失败", errorCode);
+	//         }
+	//     });
+ //    },2000);
 	
 	//聊天室信息
 	chatRoom.getInfo({
