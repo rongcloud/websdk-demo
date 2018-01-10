@@ -62,11 +62,10 @@ function showResult(id,message){
 <script>
 //注册自定义消息
 
-function registerMessage(type){
+function registerMessage(type,propertys){
 	var messageName = type; // 消息名称。
 	var objectName = "s:" + type; // 消息内置名称，请按照此格式命名 *:* 。
 	var mesasgeTag = new RongIMLib.MessageTag(true,true); //true true 保存且计数，false false 不保存不计数。
-	var propertys = ["name","age","gender"]; // 消息类中的属性名。
 
 	RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys);
 }
@@ -83,8 +82,9 @@ function startInit(user,targetId){
 	var callbacks = {
 		getInstance : function(instance){
 			RongIMLib.RongIMEmoji.init();
-			//instance.sendMessage
-			registerMessage("PersonMessage");
+			//instance.sendMessage	
+			var propertys = ["name","age","gender"]; // 消息类中的属性名。
+			registerMessage("PersonMessage",propertys);
 		},
 		getCurrentUser : function(userInfo){
 			console.log(userInfo.userId);
