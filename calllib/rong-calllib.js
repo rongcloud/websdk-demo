@@ -603,6 +603,7 @@
         hungup: hungup,
         reject: reject,
         join: join,
+        quit: quit,
         mute: mute,
         unmute: unmute,
         videoToAudio: videoToAudio,

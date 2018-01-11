@@ -71,6 +71,7 @@ RongCallLib.videoWatch(watcher);
 
 ```js
 RongCallLib.commandWatch(function(command){
+    // 参考：http://rongcloud.cn/docs/web_calllib.html#message_type
     // command => 消息指令
 });
 
@@ -189,7 +190,7 @@ RongCallLib.audioToVideo();
 
 #### accept
 
-方法： `RongCallLib.accept();` 。
+方法： `RongCallLib.accept(params);` 。
 
 描述：
    
@@ -210,4 +211,48 @@ var params = {
     mediaType: CallType.MEDIA_VEDIO
 };
 RongCallLib.accept(params);
+```
+
+#### join
+
+方法： `RongCallLib.join(params);` 
+
+描述：主动加入音视频通话
+
+示例：
+ 
+```js
+var CallType = RongIMLib.VoIPMediaType;
+
+var params = {
+    // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
+    conversationType: conversationType,
+    // 会话目标 Id，群 Id 或者 userId。 
+    targetId: targetId,
+    // 音频类型
+    // CallType.MEDIA_VEDIO
+    // CallType.MEDIA_AUDIO
+    mediaType: CallType.MEDIA_VEDIO
+};
+RongCallLib.join(params);
+```
+
+#### quit
+
+方法： `RongCallLib.quit(params, callback);` 。
+
+描述： 退出音视频通话。
+   
+示例：
+
+```js
+var params = {
+    // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
+    conversationType: conversationType,
+    // 会话目标 Id，群 Id 或者 userId。 
+    targetId: targetId,   
+};
+RongCallLib.quit(params, function(error, summary){
+    // summary => 音视频通话汇总信息
+});
 ```
