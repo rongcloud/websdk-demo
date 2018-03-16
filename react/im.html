@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Hello RongCloud</title>
+
+<!-- 引入 react -->
+<script src="react-16.2.js"></script>
+<script src="react-dom-16.2.js"></script>
+<script src="babel.min.js"></script>
+
+
+<!-- 引入 融云 SDK -->
+<script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
+<script src="../init.js"></script>
+
+<style>
+*{
+    font-size:100%;
+    line-height:2;
+}    
+h1{
+    font-size:2em;
+}
+h2{
+    font-size:1.5em;
+    border-top:1px solid #ccc;
+    margin-top:1em;
+    padding-top:0.5em;
+}
+</style>
+</head>
+<body>
+<h1>登录用户 <span id="user"></span></h1> 
+
+<a href="../api-test.html">发送消息测试页面（各种消息发送示例、会话示例、聊天室示例等，可以参考）</a>
+
+<h2>新消息</h2>
+<div id="messages"></div>
+
+<h2>会话列表</h2>
+<div id="conversations"></div>
+
+<script>
+function login(userInfo, callbacks){
+    /*
+    userInfo = {
+        name : name,
+        password : password
+    }
+    */ 
+    var appKey = "8w7jv4qb78a9y";
+
+    ajax(userInfo,function(data){
+        var token = data.token;
+        var appInfo = {
+            appKey : appKey,
+            token : data.token
+        };
+        init(appInfo, {
+            getInstance : function(instance){
+                callbacks.getInstance(instance);
+            },
+            getCurrentUser : function(userInfo){
+                data.userId = userInfo.userId;
+                callbacks.getCurrentUser(data)
+            },
+            receiveNewMessage : function(message){
+                callbacks.receiveNewMessage(message);
+            }
+        });
+    });
+} 
+
+function ajax(userInfo, callback){
+    /*
+    请求应用服务器地址进行用户名+密码登录验证，验证通过后返回 token 、头像等
+
+    示例仅返回固定token，不实现具体请求过程
+    */ 
+    var data = {
+        token : "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==",
+        portrait : "http(s)://url",
+        gender : "men",
+        other : "其他业务需要的用户信息，格式也可自行设计"
+
+    };
+    callback(data);
+} 
+</script>
+
+<script type="text/babel">
+var userInfo = {
+    name : "张三",
+    password : "***************"
+};
+
+login(userInfo, {
+    getInstance : function(instance){
+        var conversationTypes = null;   //具体格式设置需要补充
+        var limit = 50;    //获取会话的数量，不传或传null为全部，暂不支持分页
+
+        instance.getConversationList({
+            onSuccess: function(list) {
+                //文档 http://www.rongcloud.cn/docs/web.html#conversation
+
+                const conversations = list.map((conversation, index) =>
+                    <div className="conversation" key={index}>
+                        {index}：
+                        会话类型： {conversation.conversationType}，
+                        会话类型： {conversation.conversationType}，
+                        最近一条消息ID：{conversation.latestMessage.sentTime}，
+                        发 送 者： {conversation.latestMessage.senderUserId}，
+                        发送时间： {conversation.sentTime}，
+                        消息类型： {conversation.objectName} 
+                    </div>
+                );
+                ReactDOM.render(
+                    <div>{conversations}</div>,
+                    document.getElementById('conversations')
+                );
+            },
+
+            onError: function(error) {}
+        }, conversationTypes, limit);
+    },
+
+    getCurrentUser : function(userInfo){
+        function formatName(userInfo) {
+          return userInfo.userId;
+        }
+        const element = (
+            <em> {formatName(userInfo)}!</em>
+        );
+
+        ReactDOM.render(
+          element,
+          document.getElementById('user')
+        );
+    },
+
+    receiveNewMessage : function(message){
+        const element = (
+          <div className="message">
+            消息类型：{message.objectName}，
+            消息UId：{message.messageUId},
+            消息正文：{message.content.content}
+          </div>
+        );
+
+        ReactDOM.render(
+            <div>{element}</div>,
+            document.getElementById('messages')
+        );
+    }
+});
+</script>
+</body>
+</html>
