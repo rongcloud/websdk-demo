@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>Hello RongCloud</title>
+<title>在 React 里使用融云 Web SDK 示例</title>
 
 <!-- 引入 react -->
 <script src="react-16.2.js"></script>
@@ -18,6 +18,8 @@
 *{
     font-size:100%;
     line-height:2;
+    padding:0;
+    list-style:none;
 }    
 h1{
     font-size:2em;
@@ -28,10 +30,20 @@ h2{
     margin-top:1em;
     padding-top:0.5em;
 }
+.conversation{
+    border:1px solid #ccc;
+    background:#f5f5f5;
+    padding:1em;
+}
+.message{
+    border:1px solid #ccc;
+    background:#fff;
+    padding:1em;
+}
 </style>
 </head>
 <body>
-<h1>在 React 里使用融云 Web SDK 示例</h1>
+<h1>在 <a href="https://reactjs.org/docs/lists-and-keys.html">React</a> 里使用融云 Web SDK 示例</h1>
 
 <h2>登录用户 <span id="user"></span></h2> 
 
@@ -44,6 +56,7 @@ h2{
 <div id="conversations"></div>
 
 <script>
+//登录 初始化逻辑示例
 function login(userInfo, callbacks){
     /*
     userInfo = {
@@ -91,6 +104,33 @@ function ajax(userInfo, callback){
 } 
 </script>
 
+<!-- 定义 消息、会话 组件 -->
+<script type="text/babel">
+class Message extends React.Component {
+  render() {
+    const message = this.props.message;
+    return (<ul className="message">
+        <li className="message-type">消息类型：{message.objectName}</li>
+        <li className="message-uid">消息UId：{message.messageUId}</li>
+        <li className="message-content">消息正文：{message.content.content}</li>
+        <li className="message-sender">发送者：{message.senderUserId}</li>
+    </ul>);
+  }
+}
+
+class Conversation extends React.Component {
+  render() {
+    const conversation = this.props.conversation;
+    return (<ul className="conversation">
+                <li className="conversation-type">会话类型： {conversation.conversationType}</li>
+                <li className="conversation-type">会话对象： {conversation.targetId}</li>
+                <li><Message message={conversation.latestMessage} /></li>
+            </ul>);
+  }
+}
+</script>
+<!--
+ -->
 <script type="text/babel">
 var userInfo = {
     name : "张三",
@@ -107,15 +147,7 @@ login(userInfo, {
                 //文档 http://www.rongcloud.cn/docs/web.html#conversation
 
                 const conversations = list.map((conversation, index) =>
-                    <div className="conversation" key={index}>
-                        {index}：
-                        会话类型： {conversation.conversationType}，
-                        会话类型： {conversation.conversationType}，
-                        最近一条消息ID：{conversation.latestMessage.sentTime}，
-                        发 送 者： {conversation.latestMessage.senderUserId}，
-                        发送时间： {conversation.sentTime}，
-                        消息类型： {conversation.objectName} 
-                    </div>
+                    <Conversation conversation={conversation} key={index} />
                 );
                 ReactDOM.render(
                     <div>{conversations}</div>,
@@ -142,16 +174,10 @@ login(userInfo, {
     },
 
     receiveNewMessage : function(message){
-        const element = (
-          <div className="message">
-            消息类型：{message.objectName}，
-            消息UId：{message.messageUId},
-            消息正文：{message.content.content}
-          </div>
-        );
-
+        console.log(message)
+        const messages = <Message message={message} />;
         ReactDOM.render(
-            <div>{element}</div>,
+            <div>{messages}</div>,
             document.getElementById('messages')
         );
     }
