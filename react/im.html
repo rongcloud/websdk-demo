@@ -52,6 +52,9 @@ h2{
 <h2>新消息</h2>
 <div id="messages"></div>
 
+<h2>消息发送</h2>
+<div id="message-send"></div>
+
 <h2>会话列表</h2>
 <div id="conversations"></div>
 
@@ -139,6 +142,8 @@ var userInfo = {
 
 login(userInfo, {
     getInstance : function(instance){
+
+        //获取会话列表
         var conversationTypes = null;   //具体格式设置需要补充
         var limit = 50;    //获取会话的数量，不传或传null为全部，暂不支持分页
 
@@ -157,6 +162,34 @@ login(userInfo, {
 
             onError: function(error) {}
         }, conversationTypes, limit);
+
+
+        //发送消息 更多类型消息发送参考 https://github.com/rongcloud/websdk-demo/blob/master/api-test.html
+        var content = {
+            content: "这是一条来自React demo的消息",
+            user : {
+                "id" : "this-is-a-test-id", //不支持中文及特殊字符
+                "name" : "张三",
+                "portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png"
+            },
+            extra: "{\"key\":\"value\", \"key2\" : 12, \"key3\":true}"
+        };
+
+        var msg = new RongIMLib.TextMessage(content);
+        var conversationType = RongIMLib.ConversationType.PRIVATE; // 私聊
+        var targetId = "user8";
+
+        instance.sendMessage(conversationType, targetId, msg, {
+            onSuccess: function (message) {
+                const _message = <Message message={message} />;
+                ReactDOM.render(
+                    <div>{_message}</div>,
+                    document.getElementById('message-send')
+                );
+            },
+            onError: function (errorCode,message) {
+            }
+        });
     },
 
     getCurrentUser : function(userInfo){
@@ -174,7 +207,7 @@ login(userInfo, {
     },
 
     receiveNewMessage : function(message){
-        console.log(message)
+        console.log(message);
         const messages = <Message message={message} />;
         ReactDOM.render(
             <div>{messages}</div>,
