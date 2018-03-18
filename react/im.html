@@ -14,49 +14,100 @@
 <script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
 <script src="../init.js"></script>
 
+<!-- 引入 用户信息、群组数据处理模块 -->
+<script src="../user-group.js"></script>
+
 <style>
 *{
     font-size:100%;
-    line-height:2;
+    line-height:1.5;
     padding:0;
+    margin:0;
     list-style:none;
-}    
+} 
+body{
+    padding:2em;
+}   
 h1{
     font-size:2em;
 }
 h2{
     font-size:1.5em;
-    border-top:1px solid #ccc;
-    margin-top:1em;
     padding-top:0.5em;
+    text-indent:1em;
+    background:#f6f6f6;
 }
+.mod {
+    display:inline-block;
+    vertical-align:top;
+    width:300px;
+    overflow:hidden;
+    border:1px solid #ccc;
+    margin:1em 1em 1em 0;
+}
+.mod-conversation{
+    border:1px solid #ccc;
+}
+
 .conversation{
     border:1px solid #ccc;
     background:#f5f5f5;
     padding:1em;
+    margin:1em;
 }
 .message{
     border:1px solid #ccc;
     background:#fff;
     padding:1em;
+    margin:1em;
+    font-size:14px;
+}
+.user{
+    display:inline-block;
+    border:1px solid #ccc;
+    background:#f5f6f6;
+    margin:1em;
+    padding:1em;
+    text-align:center;
+}
+.user-portrait{
+    max-width:140px;
+    max-height:140px;
+    margin:0.5em ;
+    border:1px solid #ddd;
+    padding:1px;
+    background:#f5f5f5;
+}
+.user-name{
+    display:block;
+    font-size:12px;
 }
 </style>
 </head>
 <body>
-<h1>在 <a href="https://reactjs.org/docs/lists-and-keys.html">React</a> 里使用融云 Web SDK 示例</h1>
+<h1>在 React 里使用融云 Web SDK 示例</h1>
+<p><a href="https://reactjs.org/docs/lists-and-keys.html">React 文档</a></p>
+<p><a href="../api-test.html">发送消息测试页面</a> 各种消息发送示例、会话示例、聊天室示例等，可以参考</p>
 
-<h2>登录用户 <span id="user"></span></h2> 
+<div class="mod">
+    <h2>登录用户</h2>
+    <div id="user"></div> 
+</div>
 
-<a href="../api-test.html">发送消息测试页面（各种消息发送示例、会话示例、聊天室示例等，可以参考）</a>
+<div class="mod">
+    <h2>新消息</h2>
+    <div id="messages"></div>
+</div>
 
-<h2>新消息</h2>
-<div id="messages"></div>
+<div class="mod">
+    <h2>消息发送</h2>
+    <div id="message-send"></div>
+</div>
 
-<h2>消息发送</h2>
-<div id="message-send"></div>
-
-<h2>会话列表</h2>
-<div id="conversations"></div>
+<div class="mod-conversation">
+    <h2>会话列表</h2>
+    <div id="conversations"></div>
+</div>
 
 <script>
 //登录 初始化逻辑示例
@@ -80,7 +131,6 @@ function login(userInfo, callbacks){
                 callbacks.getInstance(instance);
             },
             getCurrentUser : function(userInfo){
-                data.userId = userInfo.userId;
                 callbacks.getCurrentUser(data)
             },
             receiveNewMessage : function(message){
@@ -98,7 +148,9 @@ function ajax(userInfo, callback){
     */ 
     var data = {
         token : "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==",
-        portrait : "http(s)://url",
+        portrait : "https://avatars1.githubusercontent.com/u/10265829?s=96&login-user",
+        id : "user9",
+        name : "我是user9",
         gender : "men",
         other : "其他业务需要的用户信息，格式也可自行设计"
 
@@ -109,15 +161,35 @@ function ajax(userInfo, callback){
 
 <!-- 定义 消息、会话 组件 -->
 <script type="text/babel">
+class User extends React.Component {
+  render() {
+    const user = this.props.user;
+    return (<div className="user">
+        <img className="user-portrait" src={user.portrait} />
+        <span className="user-name">{user.name} (id:{user.id})</span>
+    </div>);
+  }
+}
+
 class Message extends React.Component {
   render() {
     const message = this.props.message;
-    return (<ul className="message">
-        <li className="message-type">消息类型：{message.objectName}</li>
-        <li className="message-uid">消息UId：{message.messageUId}</li>
-        <li className="message-content">消息正文：{message.content.content}</li>
-        <li className="message-sender">发送者：{message.senderUserId}</li>
-    </ul>);
+    if(message.content.user){
+        return (<ul className="message">
+            <li><User user={message.content.user} /></li>
+            <li className="message-sender">发送者Id：{message.senderUserId}</li>
+            <li className="message-type">消息类型：{message.objectName}</li>
+            <li className="message-uid">消息UId：{message.messageUId}</li>
+            <li className="message-content">消息正文：{message.content.content}</li>
+        </ul>);
+    }else{
+        return (<ul className="message">
+            <li className="message-type">消息类型：{message.objectName}</li>
+            <li className="message-uid">消息UId：{message.messageUId}</li>
+            <li className="message-content">消息正文：{message.content.content}</li>
+            <li className="message-sender">发送者：{message.senderUserId}</li>
+        </ul>);    
+    }
   }
 }
 
@@ -135,17 +207,22 @@ class Conversation extends React.Component {
 <!--
  -->
 <script type="text/babel">
+//实际项目中可以通过登录界面获取对应值后再使用此方法
 var userInfo = {
     name : "张三",
     password : "***************"
 };
+
+//登录、获取token，链接融云成功后可以进行消息收发
+
+var AppData = RongIM.AppData;
 
 login(userInfo, {
     getInstance : function(instance){
 
         //获取会话列表
         var conversationTypes = null;   //具体格式设置需要补充
-        var limit = 50;    //获取会话的数量，不传或传null为全部，暂不支持分页
+        var limit = 10;    //获取会话的数量，不传或传null为全部，暂不支持分页
 
         instance.getConversationList({
             onSuccess: function(list) {
@@ -166,13 +243,7 @@ login(userInfo, {
 
         //发送消息 更多类型消息发送参考 https://github.com/rongcloud/websdk-demo/blob/master/api-test.html
         var content = {
-            content: "这是一条来自React demo的消息",
-            user : {
-                "id" : "this-is-a-test-id", //不支持中文及特殊字符
-                "name" : "张三",
-                "portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png"
-            },
-            extra: "{\"key\":\"value\", \"key2\" : 12, \"key3\":true}"
+            content: "这是一条来自React demo的消息"
         };
 
         var msg = new RongIMLib.TextMessage(content);
@@ -181,27 +252,28 @@ login(userInfo, {
 
         instance.sendMessage(conversationType, targetId, msg, {
             onSuccess: function (message) {
-                const _message = <Message message={message} />;
-                ReactDOM.render(
-                    <div>{_message}</div>,
-                    document.getElementById('message-send')
-                );
+                const userId = message.senderUserId;
+                AppData.getUserInfos([userId],function(userInfos){
+                    
+                    //user1 为 mock 数据，具体逻辑参考 user-group.js
+                    message.content.user =  userInfos["userId1"];
+                    const _message = <Message message={message} />;
+                    ReactDOM.render(
+                        <div>{_message}</div>,
+                        document.getElementById('message-send')
+                    );
+                });
             },
             onError: function (errorCode,message) {
             }
         });
     },
 
-    getCurrentUser : function(userInfo){
-        function formatName(userInfo) {
-          return userInfo.userId;
-        }
-        const element = (
-            <em> {formatName(userInfo)}!</em>
-        );
+    getCurrentUser : function(user){
+        const userCard = <User user={user} />
 
         ReactDOM.render(
-          element,
+          userCard,
           document.getElementById('user')
         );
     },
