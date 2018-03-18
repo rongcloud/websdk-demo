@@ -18,6 +18,8 @@ Normal SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/el
 
 WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test.html](https://rongcloud.github.io/websdk-demo/api-test.html)
 
+WebSDK React 示例: [https://rongcloud.github.io/websdk-demo/react/im.html](https://rongcloud.github.io/websdk-demo/react/im.html)
+
 
 # 扩展组件 Component
 
