@@ -1,0 +1,14 @@
+* {
+    font-size:100%;
+    font-family:verdana;
+    line-height:1.5;
+    padding:0;
+    margin:0;
+    list-style:none;
+} 
+body{
+    padding:2em;
+}   
+h1{
+    font-size:2em;
+}

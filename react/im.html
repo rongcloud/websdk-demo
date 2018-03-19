@@ -17,73 +17,9 @@
 <!-- 引入 用户信息、群组数据处理模块 -->
 <script src="../user-group.js"></script>
 
-<style>
-*{
-    font-size:100%;
-    font-family:verdana;
-    line-height:1.5;
-    padding:0;
-    margin:0;
-    list-style:none;
-} 
-body{
-    padding:2em;
-}   
-h1{
-    font-size:2em;
-}
-h2{
-    font-size:1.5em;
-    padding-top:0.5em;
-    text-indent:1em;
-    background:#f6f6f6;
-}
-.mod {
-    display:inline-block;
-    vertical-align:top;
-    width:300px;
-    overflow:hidden;
-    border:1px solid #ccc;
-    margin:1em 1em 1em 0;
-}
-.mod-conversation{
-    border:1px solid #ccc;
-}
-
-.conversation{
-    border:1px solid #ccc;
-    background:#f5f5f5;
-    padding:1em;
-    margin:1em;
-}
-.message{
-    border:1px solid #ccc;
-    background:#fff;
-    padding:1em;
-    margin:1em;
-    font-size:14px;
-}
-.user{
-    display:inline-block;
-    border:1px solid #ccc;
-    background:#f5f6f6;
-    margin:1em;
-    padding:1em;
-    text-align:center;
-}
-.user-portrait{
-    max-width:140px;
-    max-height:140px;
-    margin:0.5em ;
-    border:1px solid #ddd;
-    padding:1px;
-    background:#f5f5f5;
-}
-.user-name{
-    display:block;
-    font-size:12px;
-}
-</style>
+<!-- UI 组件 ../im-ui-mod/ui.html -->
+<link rel="stylesheet" href="../im-ui-mod/reset.css">
+<link rel="stylesheet" href="../im-ui-mod/component-ui.css">
 </head>
 
 
@@ -99,22 +35,22 @@ h2{
 <p><a href="https://reactjs.org/docs/lists-and-keys.html">React 文档</a></p>
 <p><a href="../api-test.html">发送消息测试页面</a> 各种消息发送示例、会话示例、聊天室示例等，可以参考</p>
 
-<div class="mod">
+<div class="mod mod-inline-block">
     <h2>登录用户</h2>
     <div id="user"></div> 
 </div>
 
-<div class="mod">
+<div class="mod mod-inline-block">
     <h2>新消息</h2>
     <div id="messages"></div>
 </div>
 
-<div class="mod">
+<div class="mod mod-inline-block">
     <h2>消息发送</h2>
     <div id="message-send"></div>
 </div>
 
-<div class="mod-conversation">
+<div class="mod mod-conversation">
     <h2>会话列表</h2>
     <div id="conversations"></div>
 </div>
@@ -283,6 +219,7 @@ login(userInfo, {
                     const conversations = list.map((conversation, index) =>
                         <Conversation conversation={conversation} key={index} />
                     );
+                    
                     ReactDOM.render(
                         <div>{conversations}</div>,
                         document.getElementById('conversations')
@@ -311,6 +248,7 @@ login(userInfo, {
                         //user1 为 mock 数据，具体逻辑参考 user-group.js
                         message.content.user =  userInfos["userId1"];
                         const _message = <Message message={message} />;
+
                         ReactDOM.render(
                             <div>{_message}</div>,
                             document.getElementById('message-send')
@@ -335,6 +273,7 @@ login(userInfo, {
     receiveNewMessage : function(message){
         console.log(message);
         const messages = <Message message={message} />;
+
         ReactDOM.render(
             <div>{messages}</div>,
             document.getElementById('messages')
