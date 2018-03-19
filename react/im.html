@@ -20,6 +20,7 @@
 <style>
 *{
     font-size:100%;
+    font-family:verdana;
     line-height:1.5;
     padding:0;
     margin:0;
@@ -119,6 +120,25 @@ h2{
 </div>
 
 <script>
+//获取用户信息组件
+var AppData = RongIM.AppData;
+
+//mock portrait
+function getRandomImage(str){
+    var images = [
+        "https://avatars2.githubusercontent.com/u/212329?s=96&v=4",
+        "https://avatars0.githubusercontent.com/u/8535523?s=96&v=4",
+        "https://avatars3.githubusercontent.com/u/11469967?s=96&v=4",
+        "https://avatars2.githubusercontent.com/u/6104485?s=96&v=4",
+        "https://avatars3.githubusercontent.com/u/17945733?s=96&v=4",
+        "https://avatars1.githubusercontent.com/u/14857191?s=96&v=4",
+        "https://avatars2.githubusercontent.com/u/680807?s=96&v=4"
+    ];
+
+    var n = Math.ceil(Math.random()*10000) + Math.ceil(Math.random()*5000);
+    return images[n%images.length];
+}
+
 //登录 初始化逻辑示例
 function login(userInfo, callbacks){
     /*
@@ -166,18 +186,24 @@ function ajax(userInfo, callback){
     };
     callback(data);
 } 
+
 </script>
 
 <!-- 定义 消息、会话 组件 -->
 <script type="text/babel">
 class User extends React.Component {
-  render() {
-    const user = this.props.user;
-    return (<div className="user">
-        <img className="user-portrait" src={user.portrait} />
-        <span className="user-name">{user.name} (id:{user.id})</span>
-    </div>);
-  }
+    componentDidMount() {
+        const id = this.props.user.id;
+        console.log("用户 " + id + " 渲染完成，即将显示");
+    }
+
+    render() {
+        const user = this.props.user;
+        return (<div className="user">
+            <img className="user-portrait" src={user.portrait} />
+            <span className="user-name">{user.name} (id:{user.id})</span>
+        </div>);
+    }
 }
 
 class Message extends React.Component {
@@ -203,14 +229,33 @@ class Message extends React.Component {
 }
 
 class Conversation extends React.Component {
-  render() {
-    const conversation = this.props.conversation;
-    return (<ul className="conversation">
-                <li className="conversation-type">会话类型： {conversation.conversationType}</li>
-                <li className="conversation-type">会话对象： {conversation.targetId}</li>
-                <li><Message message={conversation.latestMessage} /></li>
-            </ul>);
-  }
+    componentDidMount() {
+        const message = this.props.conversation.latestMessage;
+        const sender = message.senderUserId;
+        const _this = this;
+        AppData.getUserInfos([sender],function(userInfos){
+            const userInfo = {
+                "id" : "sender",
+                "name" : "李四",
+                "portrait" : getRandomImage(sender)
+            };
+
+            //获取用户信息并传入
+            message.content.user = userInfo;
+
+            //通过 state 刷新页面显示
+            _this.setState({ refresh:true });
+        });
+    }
+
+    render() {
+        const conversation = this.props.conversation;
+        return (<ul className="conversation">
+                    <li className="conversation-type">会话类型： {conversation.conversationType}</li>
+                    <li className="conversation-type">会话对象： {conversation.targetId}</li>
+                    <li><Message message={conversation.latestMessage} /></li>
+                </ul>);
+    }
 }
 </script>
 <!--
@@ -223,59 +268,59 @@ var userInfo = {
 };
 
 //登录、获取token，链接融云成功后可以进行消息收发
-
-var AppData = RongIM.AppData;
-
 login(userInfo, {
     getInstance : function(instance){
 
-        //获取会话列表
-        var conversationTypes = null;   //具体格式设置需要补充
-        var limit = 10;    //获取会话的数量，不传或传null为全部，暂不支持分页
+        (function showConversation(){
+            //获取会话列表
+            var conversationTypes = null;   //具体格式设置需要补充
+            var limit = 10;    //获取会话的数量，不传或传null为全部，暂不支持分页
 
-        instance.getConversationList({
-            onSuccess: function(list) {
-                //文档 http://www.rongcloud.cn/docs/web.html#conversation
+            instance.getConversationList({
+                onSuccess: function(list) {
+                    //文档 http://www.rongcloud.cn/docs/web.html#conversation
 
-                const conversations = list.map((conversation, index) =>
-                    <Conversation conversation={conversation} key={index} />
-                );
-                ReactDOM.render(
-                    <div>{conversations}</div>,
-                    document.getElementById('conversations')
-                );
-            },
-
-            onError: function(error) {}
-        }, conversationTypes, limit);
-
-
-        //发送消息 更多类型消息发送参考 https://github.com/rongcloud/websdk-demo/blob/master/api-test.html
-        var content = {
-            content: "这是一条来自React demo的消息"
-        };
-
-        var msg = new RongIMLib.TextMessage(content);
-        var conversationType = RongIMLib.ConversationType.PRIVATE; // 私聊
-        var targetId = "user8";
-
-        instance.sendMessage(conversationType, targetId, msg, {
-            onSuccess: function (message) {
-                const userId = message.senderUserId;
-                AppData.getUserInfos([userId],function(userInfos){
-                    
-                    //user1 为 mock 数据，具体逻辑参考 user-group.js
-                    message.content.user =  userInfos["userId1"];
-                    const _message = <Message message={message} />;
-                    ReactDOM.render(
-                        <div>{_message}</div>,
-                        document.getElementById('message-send')
+                    const conversations = list.map((conversation, index) =>
+                        <Conversation conversation={conversation} key={index} />
                     );
-                });
-            },
-            onError: function (errorCode,message) {
-            }
-        });
+                    ReactDOM.render(
+                        <div>{conversations}</div>,
+                        document.getElementById('conversations')
+                    );
+                },
+
+                onError: function(error) {}
+            }, conversationTypes, limit);
+        })();
+
+        (function showSendMessage(){
+            //发送消息 更多类型消息发送参考 https://github.com/rongcloud/websdk-demo/blob/master/api-test.html
+            var content = {
+                content: "这是一条来自React demo的消息"
+            };
+
+            var msg = new RongIMLib.TextMessage(content);
+            var conversationType = RongIMLib.ConversationType.PRIVATE; // 私聊
+            var targetId = "user8";
+
+            instance.sendMessage(conversationType, targetId, msg, {
+                onSuccess: function (message) {
+                    const userId = message.senderUserId;
+                    AppData.getUserInfos([userId],function(userInfos){
+                        
+                        //user1 为 mock 数据，具体逻辑参考 user-group.js
+                        message.content.user =  userInfos["userId1"];
+                        const _message = <Message message={message} />;
+                        ReactDOM.render(
+                            <div>{_message}</div>,
+                            document.getElementById('message-send')
+                        );
+                    });
+                },
+                onError: function (errorCode,message) {
+                }
+            });
+        })();
     },
 
     getCurrentUser : function(user){
