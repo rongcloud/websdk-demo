@@ -21,7 +21,8 @@ requirejs: http://requirejs.org/docs/whyamd.html
     }else if(typeof define === 'function' && define.amd){
     	define(factory);
     }else{
-    	global[namespace] = factory();
+    	global.RongIM = global.RongIM || {};
+    	global.RongIM.AppData = factory();
     }
 })(window, function(){
 	"use strict";
@@ -30,49 +31,50 @@ requirejs: http://requirejs.org/docs/whyamd.html
 	var domain = "http(s)://yourdomain";
 
 	APIs.userInfo = "/user/{ids}";
+
+	var userInfos = [
+		{
+		"id" : "userId1",
+		"name" : "张三",
+		"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png?1"
+		},
+		{
+		"id" : "userId2",
+		"name" : "李四",
+		"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png?2"
+		},
+		{
+		"id" : "userIdN",
+		"name" : "路人甲乙丙丁",
+		"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png?3"
+		}
+	];
 	/*
 	获取用户信息接口，建议支持批量获取，如不支持，只能通过循环请求处理，后面会有示例
 	上行：ids = ["userId1","userId2",………………,"userIdN"].join(",");
-	返回：userInfos = [
-			{
-			"id" : "userId1",
-			"name" : "张三",
-			"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png"
-			},
-			{
-			"id" : "userId2",
-			"name" : "李四",
-			"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png"
-			},
-			………………
-			{
-			"id" : "userIdN",
-			"name" : "路人甲乙丙丁",
-			"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png"
-			}
-		];
+	返回：userInfos
 	*/
 
-	APIs.groupInfo = "group/{ids}";
+	APIs.groupInfo = "/group/{ids}";
+
+	var groupInfos = [
+		{
+		"id" : "groupId1",
+		"name" : "产品研发群",
+		"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png",
+		"memberIds" : ["userId1","userId2"]
+		},
+		{
+		"id" : "groupIdN",
+		"name" : "项目管理群",
+		"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png",
+		"memberIds" : ["userId1","userIdN"]
+		}
+	];
 	/*
 	获取群组信息接口，建议支持批量获取，如不支持，只能通过循环请求处理，后面会有示例
 	上行：ids = ["groupId1",………………,"groupIdN"].join(",");
-	返回 groupInfos = [
-			{
-			"id" : "groupId1",
-			"name" : "产品研发群",
-			"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png",
-			"memberIds" : ["userId1","userId2"]
-			},
-			………………
-			{
-			"id" : "groupIdN",
-			"name" : "项目管理群",
-			"portrait" : "http://rongcloud.cn/images/newVersion/log_wx.png",
-			"memberIds" : ["userId1","userIdN"]
-			}
-
-		];
+	返回 groupInfos
 	*/
 
 
@@ -82,10 +84,17 @@ requirejs: http://requirejs.org/docs/whyamd.html
 		请自行实现请求，或者传入 jQuery 等 lib 的 request 方法
 		请注意处理可能存在的跨域问题
 		*/
+
+		//返回mock数据，实际工程中请基于应用服务器实现
+		if(url.indexOf("/group/") > -1){
+			callback(groupInfos);
+		}else{
+			callback(userInfos);			
+		}
 	}
 
 	//创建本地缓存对象，缓存用户数据，目前放在内存，具体使用时可以根据需要处理为 localStorage 或 cookie 等
-	var userInfoCache = {};
+	window.userInfoCache = window.userInfoCache || {};
 
 	//获取用户信息方法的实现
 	var getUserInfos = function(ids, callback){
@@ -99,8 +108,8 @@ requirejs: http://requirejs.org/docs/whyamd.html
 				//如果本地命中，直接放入结果等待一起返回
 				userInfos[userId] = userInfoCache[userId];
 
-				//如果需要立即返回，这种方法会不断执行回调，逐个返回，如果下面，此处以及request里的返回均可如此处理
-				callback({userid:userInfoCache[userId]});
+				//如果需要立即返回，这种方法会不断执行回调，逐个返回，如下面，此处以及request里的返回均可如此处理
+				// callback({userid:userInfoCache[userId]});
 			}else{
 				//如果本地没有命中，过滤出 id，下一步从服务器请求
 				remoteUserIds.push(userId);
@@ -113,7 +122,9 @@ requirejs: http://requirejs.org/docs/whyamd.html
 		request(url, remoteUserIds, function(remoteUserInfos){
 			for(var i = 0, len = remoteUserInfos.length; i<len; i++){
 				var userInfo = remoteUserInfos[i];
-				var userId = userInfo[id];
+
+				//根据返回值做对应处理
+				var userId = userInfo["id"];
 
 				//放入本地缓存
 				userInfoCache[userId] = userInfo;
@@ -130,7 +141,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 		for(var i = 0, len = remoteUserIds.length; i<len; i++){
 			var remoteUserId = remoteUserIds[i];
 			request(url, remoteUserId, function(remoteUserInfo){
-				var userId = remoteUserInfo[id];
+				var userId = remoteUserInfo["id"];
 
 				//放入本地缓存
 				userInfoCache[userId] = remoteUserInfo;
@@ -151,7 +162,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 
 
 	//创建本地缓存对象，缓存用户数据，目前放在内存，具体使用时可以根据需要处理为 localStorage 或 cookie 等
-	var groupInfoCache = {};
+	window.groupInfoCache = window.groupInfoCache || {};
 
 	//获取群组信息实现，本方法不返回群组成员信息
 	var getGroupInfos = function(ids, callback){
@@ -159,7 +170,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 		var remoteGroupIds = [];
 		for(var i = 0, len = ids.length; i<len; i++){
 			var groupId = ids[i];
-			if(groupInfoCache[groupId]){
+			if(groupInfoCache["groupId"]){
 				//如果本地命中，直接返回
 				groupInfos[groupId] = groupInfoCache[groupId];
 			}else{
@@ -174,7 +185,7 @@ requirejs: http://requirejs.org/docs/whyamd.html
 		request(url, remoteGroupIds, function(remoteGroupInfos){
 			for(var i = 0, len = remoteGroupInfos.length; i<len; i++){
 				var groupInfo = remoteGroupInfos[i];
-				var groupId = groupInfo[id];
+				var groupId = groupInfo["id"];
 
 				//放入本地缓存
 				groupInfoCache[groupId] = groupInfo;
@@ -206,5 +217,5 @@ requirejs: http://requirejs.org/docs/whyamd.html
     	getGroupInfos : getGroupInfos,
     	getGroupInfosWithMemberInfo : getGroupInfosWithMemberInfo
     }
-}, namespace);
+});
 

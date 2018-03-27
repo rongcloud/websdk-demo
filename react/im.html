@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>融云 Web SDK React 示例</title>
+
+<!-- 引入 react -->
+<script src="react-16.2.js"></script>
+<script src="react-dom-16.2.js"></script>
+<script src="babel.min.js"></script>
+
+
+<!-- 引入 融云 SDK -->
+<script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
+<script src="../init.js"></script>
+
+<!-- 引入 用户信息、群组数据处理模块 -->
+<script src="../user-group.js"></script>
+
+<!-- UI 组件 ../im-ui-mod/ui.html -->
+<link rel="stylesheet" href="../im-ui-mod/reset.css">
+<link rel="stylesheet" href="../im-ui-mod/component-ui.css">
+</head>
+
+
+
+<link rel="stylesheet" href="../res/rongcloud.css">
+<a href="https://github.com/rongcloud/websdk-demo/blob/master/react/im.html" class="get-source">获取源码</a>
+
+
+<body>
+<h1>融云 Web SDK React 示例</h1>
+<p>提供了登录、初始化链接、会话列表、发送消息、接收显示消息功能</p>
+<p>提供了用户、消息、会话 三个组件</p>
+<p><a href="https://reactjs.org/docs/lists-and-keys.html">React 文档</a></p>
+<p><a href="../api-test.html">发送消息测试页面</a> 各种消息发送示例、会话示例、聊天室示例等，可以参考</p>
+
+<div class="mod mod-inline-block">
+    <h2>登录用户</h2>
+    <div id="user"></div> 
+</div>
+
+<div class="mod mod-inline-block">
+    <h2>新消息</h2>
+    <div id="messages"></div>
+</div>
+
+<div class="mod mod-inline-block">
+    <h2>消息发送</h2>
+    <div id="message-send"></div>
+</div>
+
+<div class="mod mod-conversation">
+    <h2>会话列表</h2>
+    <div id="conversations"></div>
+</div>
+
+<script>
+//获取用户信息组件
+var AppData = RongIM.AppData;
+
+//mock portrait
+function getRandomImage(str){
+    var images = [
+        "https://avatars2.githubusercontent.com/u/212329?s=96&v=4",
+        "https://avatars0.githubusercontent.com/u/8535523?s=96&v=4",
+        "https://avatars3.githubusercontent.com/u/11469967?s=96&v=4",
+        "https://avatars2.githubusercontent.com/u/6104485?s=96&v=4",
+        "https://avatars3.githubusercontent.com/u/17945733?s=96&v=4",
+        "https://avatars1.githubusercontent.com/u/14857191?s=96&v=4",
+        "https://avatars2.githubusercontent.com/u/680807?s=96&v=4"
+    ];
+
+    var n = Math.ceil(Math.random()*10000) + Math.ceil(Math.random()*5000);
+    return images[n%images.length];
+}
+
+//登录 初始化逻辑示例
+function login(userInfo, callbacks){
+    /*
+    userInfo = {
+        name : name,
+        password : password
+    }
+    */ 
+    var appKey = "8w7jv4qb78a9y";
+
+    ajax(userInfo,function(data){
+        var token = data.token;
+        var appInfo = {
+            appKey : appKey,
+            token : data.token
+        };
+        init(appInfo, {
+            getInstance : function(instance){
+                callbacks.getInstance(instance);
+            },
+            getCurrentUser : function(userInfo){
+                callbacks.getCurrentUser(data)
+            },
+            receiveNewMessage : function(message){
+                callbacks.receiveNewMessage(message);
+            }
+        });
+    });
+} 
+
+function ajax(userInfo, callback){
+    /*
+    请求应用服务器地址进行用户名+密码登录验证，验证通过后返回 token 、头像等
+
+    示例仅返回固定token，不实现具体请求过程
+    */ 
+    var data = {
+        token : "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==",
+        portrait : "https://avatars1.githubusercontent.com/u/10265829?s=96&login-user",
+        id : "user9",
+        name : "我是user9",
+        gender : "men",
+        other : "其他业务需要的用户信息，格式也可自行设计"
+
+    };
+    callback(data);
+} 
+
+</script>
+
+<!-- 定义 消息、会话 组件 -->
+<script type="text/babel">
+class User extends React.Component {
+    componentDidMount() {
+        const id = this.props.user.id;
+        console.log("用户 " + id + " 渲染完成，即将显示");
+    }
+
+    render() {
+        const user = this.props.user;
+        return (<div className="user">
+            <img className="user-portrait" src={user.portrait} />
+            <span className="user-name">{user.name} (id:{user.id})</span>
+        </div>);
+    }
+}
+
+class Message extends React.Component {
+  render() {
+    const message = this.props.message;
+    if(message.content.user){
+        return (<ul className="message">
+            <li><User user={message.content.user} /></li>
+            <li className="message-sender">发送者Id：{message.senderUserId}</li>
+            <li className="message-type">消息类型：{message.objectName}</li>
+            <li className="message-uid">消息UId：{message.messageUId}</li>
+            <li className="message-content">消息正文：{message.content.content}</li>
+        </ul>);
+    }else{
+        return (<ul className="message">
+            <li className="message-type">消息类型：{message.objectName}</li>
+            <li className="message-uid">消息UId：{message.messageUId}</li>
+            <li className="message-content">消息正文：{message.content.content}</li>
+            <li className="message-sender">发送者：{message.senderUserId}</li>
+        </ul>);    
+    }
+  }
+}
+
+class Conversation extends React.Component {
+    componentDidMount() {
+        const message = this.props.conversation.latestMessage;
+        const sender = message.senderUserId;
+        const _this = this;
+        AppData.getUserInfos([sender],function(userInfos){
+            const userInfo = {
+                "id" : "sender",
+                "name" : "李四",
+                "portrait" : getRandomImage(sender)
+            };
+
+            //获取用户信息并传入
+            message.content.user = userInfo;
+
+            //通过 state 刷新页面显示
+            _this.setState({ refresh:true });
+        });
+    }
+
+    render() {
+        const conversation = this.props.conversation;
+        return (<ul className="conversation">
+                    <li className="conversation-type">会话类型： {conversation.conversationType}</li>
+                    <li className="conversation-type">会话对象： {conversation.targetId}</li>
+                    <li><Message message={conversation.latestMessage} /></li>
+                </ul>);
+    }
+}
+</script>
+<!--
+ -->
+<script type="text/babel">
+//实际项目中可以通过登录界面获取对应值后再使用此方法
+var userInfo = {
+    name : "张三",
+    password : "***************"
+};
+
+//登录、获取token，链接融云成功后可以进行消息收发
+login(userInfo, {
+    getInstance : function(instance){
+
+        (function showConversation(){
+            //获取会话列表
+            var conversationTypes = null;   //具体格式设置需要补充
+            var limit = 10;    //获取会话的数量，不传或传null为全部，暂不支持分页
+
+            instance.getConversationList({
+                onSuccess: function(list) {
+                    //文档 http://www.rongcloud.cn/docs/web.html#conversation
+
+                    const conversations = list.map((conversation, index) =>
+                        <Conversation conversation={conversation} key={index} />
+                    );
+                    
+                    ReactDOM.render(
+                        <div>{conversations}</div>,
+                        document.getElementById('conversations')
+                    );
+                },
+
+                onError: function(error) {}
+            }, conversationTypes, limit);
+        })();
+
+        (function showSendMessage(){
+            //发送消息 更多类型消息发送参考 https://github.com/rongcloud/websdk-demo/blob/master/api-test.html
+            var content = {
+                content: "这是一条来自React demo的消息"
+            };
+
+            var msg = new RongIMLib.TextMessage(content);
+            var conversationType = RongIMLib.ConversationType.PRIVATE; // 私聊
+            var targetId = "user8";
+
+            instance.sendMessage(conversationType, targetId, msg, {
+                onSuccess: function (message) {
+                    const userId = message.senderUserId;
+                    AppData.getUserInfos([userId],function(userInfos){
+                        
+                        //user1 为 mock 数据，具体逻辑参考 user-group.js
+                        message.content.user =  userInfos["userId1"];
+                        const _message = <Message message={message} />;
+
+                        ReactDOM.render(
+                            <div>{_message}</div>,
+                            document.getElementById('message-send')
+                        );
+                    });
+                },
+                onError: function (errorCode,message) {
+                }
+            });
+        })();
+    },
+
+    getCurrentUser : function(user){
+        const userCard = <User user={user} />
+
+        ReactDOM.render(
+          userCard,
+          document.getElementById('user')
+        );
+    },
+
+    receiveNewMessage : function(message){
+        console.log(message);
+        const messages = <Message message={message} />;
+
+        ReactDOM.render(
+            <div>{messages}</div>,
+            document.getElementById('messages')
+        );
+    }
+});
+</script>
+</body>
+</html>
