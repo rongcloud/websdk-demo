@@ -33,6 +33,8 @@
 
     var cache = callUtil.cache();
 
+    var userMap = {};
+
     var ObserverList = callUtil.ObserverList;
 
     var videoWatcher = new ObserverList();
@@ -86,6 +88,8 @@
                 return;
             }
             params.url = config.url;
+            params.userMap = userMap;
+
             joinRoom(params, callback);
             this.isActive = true;
         },
@@ -107,6 +111,7 @@
                 if (error) {
                     throw new Error(error);
                 }
+                console.warn(result);
                 videoWatcher.notify(result);
             });
         });
@@ -256,6 +261,9 @@
                 data: data
             };
 
+            var sentTime = message.sentTime;
+            userMap[sentTime] = message.senderUserId;
+
             sendCommand(params);
         }
     };
@@ -299,6 +307,8 @@
             //被叫方 userId 为 AcceptMessage.sentTime
             var sentTime = session.sentTime;
             var userId = session.senderUserId;
+
+            userMap[message.sentTime] = message.senderUserId;
 
             var params = {
                 channelId: channelId,
@@ -364,7 +374,7 @@
             conversationType: conversationType,
             targetId: targetId,
             content: {
-                engineType: 3,
+                engineType: 1,
                 inviteUserIds: inviteUserIds,
                 mediaType: mediaType,
                 callId: callId,
@@ -378,10 +388,16 @@
         };
 
         sendCommand(params, function(error, result) {
+            var content = result.content;
             var callInfo = { };
-                callInfo[callId] = true;
+                callInfo[content.callId] = true;
 
             result.callInfo = callInfo;
+
+            var sentTime = result.sentTime;
+            var userId = result.senderUserId;
+
+            userMap[sentTime] = userId;
 
             cache.update(cacheKey, result);
 
@@ -448,6 +464,8 @@
             var sentTime = command.sentTime;
             var channelId = content.callId;
             var userId = command.senderUserId;
+
+            userMap[sentTime] = userId;
 
             var params = {
                 channelId: channelId,
@@ -603,7 +621,6 @@
         hungup: hungup,
         reject: reject,
         join: join,
-        quit: quit,
         mute: mute,
         unmute: unmute,
         videoToAudio: videoToAudio,

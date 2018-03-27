@@ -89,9 +89,30 @@
         };
     };
 
+    var tplEngine = function(temp, data, regexp){
+        if (!(Object.prototype.toString.call(data) === "[object Array]")) {
+            data = [data];
+        }
+        var ret = [];
+        for (var i = 0, j = data.length; i < j; i++) {
+            ret.push(replaceAction(data[i]));
+        }
+        return ret.join("");
+
+        function replaceAction(object) {
+            return temp.replace(regexp || (/{([^}]+)}/g), function(match, name) {
+                if (match.charAt(0) == '\\') {
+                    return match.slice(1);
+                }
+                return (object[name] != undefined) ? object[name] : '{' + name + '}';
+            });
+        }
+    };
+
     global.RongCallUtil = {
         ObserverList: ObserverList,
-        cache: cache
+        cache: cache,
+        tplEngine: tplEngine
     };
 
 })({
