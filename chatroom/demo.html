@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>chatroom component</title>
+</head>
+<body>
+
+
+<style>
+.rc-chatroom *{
+	margin:0;
+	padding:0;
+	list-style:none;
+}	
+.rc-chatroom {
+	width:400px;
+	border:1px solid #ccc;
+	border-radius:3px;
+}
+.rc-message-list-wrapper{
+	width:100%;
+	height:600px;
+	overflow:auto;	
+	position:relative;
+}
+.rc-message-list{
+	width:100%;
+	position:absolute;
+	bottom:0;
+	left:0;
+}
+.rc-message{
+	clear:both;
+	font-size:14px;
+	line-height:1.5;
+	border-bottom:1px solid #f5f5f5;
+	padding-bottom:10px;
+	margin:5px;
+	vertical-align:top;
+}
+.rc-message-portrait{
+	display:inline-block;
+	float:left;
+	margin:5px;
+}
+.rc-message-portrait img{
+	width:40px;
+	height:40px;
+	border:1px solid #ccc;
+	border-radius:50%;
+}
+.rc-message-time,
+.rc-message-name{
+	display:inline-block;
+	margin-left:0.5em;
+	margin-top:0.5em;
+}
+.rc-message-content{
+	margin-left:4.2em;
+}
+
+.rc-chatroom-user{
+	height:30px;
+	padding:5px;
+	padding-bottom:10px;
+	position:relative;
+}
+.rc-emoji-panel{
+	display:none;
+	width:19em;
+	border:1px solid #ccc;
+	padding:10px;
+	background:#f5f5f5;
+	position:absolute;
+	left:3px;
+	bottom:40px;
+}
+.rc-chatroom-emoji{
+	line-height:30px;
+	font-size:24px;
+	cursor:pointer;
+}
+.rc-chatroom-input{
+	width:72%;
+	height:24px;
+	padding:2px;
+	border:1px solid #ccc;
+	background:#f5f5f5;
+}
+.rc-chatroom-button{
+	background:#333;
+	color:#fff;
+	border-radius:3px;
+	padding:6px 20px;
+}
+</style>
+
+<div id="show">
+	<div class="rc-chatroom">
+		<div class="rc-message-list-wrapper">
+			<div class="rc-message-list" id="rc-message-list"></div>
+		</div>
+
+		<div class="rc-chatroom-user">
+			<span class="rc-chatroom-emoji" id="rc-chatroom-emoji">😄</span>
+			<div class="rc-emoji-panel" id="rc-emoji-panel"></div>
+			<input class="rc-chatroom-input" id="rc-chatroom-input" type="text" placeholder="发表你的精彩评论">
+			<input class="rc-chatroom-button" id="rc-chatroom-button" type="submit" value="发送">
+		</div>
+	</div>
+</div>
+<script src="//cdn.ronghub.com/RongEmoji-2.2.6.js"></script> 
+<script src="chatroom.sdk.js"></script>	
+<script>
+//mock
+function getRandomText(){
+	var messages = "琵琶行，白居易，浔阳江头夜送客，枫叶荻花秋瑟瑟。主人下马客在船，举酒欲饮无管弦。醉不成欢惨将别，别时茫茫江浸月。忽闻水上琵琶声，主人忘归客不发。寻声暗问弹者谁？琵琶声停欲语迟。移船相近邀相见，添酒回灯重开宴。千呼万唤始出来，犹抱琵琶半遮面。转轴拨弦三两声，未成曲调先有情。弦弦掩抑声声思，似诉平生不得志。低眉信手续续弹，说尽心中无限事。轻拢慢捻抹复挑，初为霓裳后六幺。大弦嘈嘈如急雨，小弦切切如私语。嘈嘈切切错杂弹，大珠小珠落玉盘。间关莺语花底滑，幽咽泉流冰下难。冰泉冷涩弦凝绝，凝绝不通声渐歇。别有幽愁暗恨生，此时无声胜有声。银瓶乍破水浆迸，铁骑突出刀枪鸣。曲终收拨当心画，四弦一声如裂帛。东船西舫悄无言，惟见江心秋月白。沉吟放拨插弦中，整顿衣裳起敛容。自言本是京城女，家在虾蟆陵下住。十三学得琵琶成，名属教坊第一部。曲罢曾教善才服，妆成每被秋娘妒。武陵年少争缠头，一曲红绡不知数。钿头银篦击节碎，血色罗裙翻酒污。今年欢笑复明年，秋月春风等闲度。弟走从军阿姨死，暮去朝来颜色故。门前冷落车马稀，老大嫁作商人妇。商人重利轻别离，前月浮梁买茶去。去来江口求空船，绕船月明江水寒。夜深忽梦少年事，梦啼红妆泪阑干。我闻琵琶已叹息，又闻此语重唧唧。同是天涯沦落人，相逢何必曾相识。我从去岁辞帝京，谪居卧病浔阳城。浔阳地僻无音乐，终岁不闻丝竹声。住近湓城地低湿，黄芦苦竹绕宅生。其间旦暮闻何物？杜鹃啼血猿哀鸣。春江花朝秋月夜，往往取酒还独倾。岂无山歌与村笛？呕哑嘲哳难为听。今夜闻君琵琶语，如听仙乐耳暂明。莫辞更坐弹一曲，为君翻作琵琶行。感我此言良久立，却坐促弦弦转急。凄凄不似向前声，满座重闻皆掩泣。座中泣下谁最多？江州司马青衫湿";
+
+	//将字符串拆分成数组
+	// messages = messages.split("。");
+	messages = messages.split(/，|。|？/);
+
+	var len = messages.length;
+	var index = Math.ceil(Math.random()*1000000)%len;
+
+	// console.log(messages[index]);
+	return messages[index];
+}	
+
+function getUserInfo(){
+	var id = Math.ceil(Math.random()*1000)%99;
+	var name = "用户" + id;
+	var url = "http://www.oneplusbbs.com/uc_server/images/noavatar_small.gif?" + id;
+	return {
+		portrait : url,
+		name : name,
+		id : "u-" + id
+	};
+}
+</script>
+<script>
+(function(){
+	//emoji表情
+	var RongIMEmoji = RongIMLib.RongIMEmoji;
+	RongIMEmoji.init();
+
+	var panel = document.getElementById("rc-emoji-panel");
+	var panelBtn = document.getElementById("rc-chatroom-emoji");
+	var input = document.getElementById("rc-chatroom-input");
+	var btn = document.getElementById("rc-chatroom-button");
+
+	var emojis = RongIMEmoji.list;
+    for (var i = 0; i < 24; i++) {
+        var value = RongIMEmoji.list[i];
+        panel.appendChild(value.node);
+    }
+
+	panelBtn.onclick = function(){
+		if(panel.style.display == "block"){
+			panel.style.display = "none";
+		}else{
+    		panel.style.display = "block";
+    	}
+    };
+
+    //表情选择
+    panel.onclick = function(event){
+        var e = event || window.event;
+        var target = e.target || e.srcElement;
+        if (document.all && !document.addEventListener === false) {
+            console.log(target);
+        }
+        input.value += RongIMEmoji.symbolToEmoji(target.getAttribute("name"));
+    }
+
+    //发送消息
+	btn.onclick = function(){
+		var content = input.value;
+			newMessage.content.content = content;
+
+		panel.style.display = "none";
+		input.value = "";
+		sendMessage(newMessage,function(message){
+			updateMessage(message);
+		});
+	}
+
+	//接收消息并更新ui
+	var newMessage = {
+		"content": {
+			"messageName": "TextMessage",
+			"user": getUserInfo()
+		},
+		"conversationType": 1,
+		"objectName": "RC:TxtMsg",
+		"senderUserId": "user10",
+		"sentTime": 1522401683566,
+		"targetId": "user10",
+		"messageType": "TextMessage",
+		"messageUId": "B2EO-R2GR-MUA6-D3EE"
+	};
+
+	var times = 1;
+	var add = setInterval(function(){
+		if(times >= 20){
+			clearInterval(add);
+		}
+		
+		newMessage.content.content = getRandomText();
+		times += 1;
+
+		updateMessage(newMessage);
+	},1000);
+
+	function updateMessage(message){
+		var t = document.getElementById("rc-message-list");
+		message.content.content = RongIMEmoji.symbolToEmoji(message.content.content);
+		var html = renderUI(message);
+			t.innerHTML += html;
+	}
+})();
+</script>
+</body>
+</html>
