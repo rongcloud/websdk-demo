@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>用户切换</title>
+</head>
+<body>
+
+<link rel="stylesheet" href="./res/rongcloud.css">
+<a href="https://github.com/rongcloud/websdk-demo/blob/master/switch-users.html" class="get-source">获取源码</a>
+<style>
+pre{
+	vertical-align:top;
+	display:inline-block;
+	width:45%;
+	border-top:1px dotted #ccc;
+	padding:5px 0 0 10px;
+	line-height:1.5;
+	color:#333;
+	background:#f5f5f5;
+	margin-left:1em;
+	font-size:12px;
+	font-family:verdana;
+}	
+</style>
+<script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
+<script src="./init.js"></script>
+<script>
+function startSwitch(){
+	var appKey = "8w7jv4qb78a9y";
+	var token1 = "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==";
+	var token2 = "4FGCL0oQ/E72nU4ivbui8uHR/ySxKaD1cAX2biXsYR6RsLYO9xAA4ooa+q3n42JnVTQyMAdFUiDsjFRDYZaQeg==";
+
+	var params = {
+		appKey : appKey,
+		token : token1
+	};
+
+	//登录第一个用户
+	init(params,{
+		getInstance : function(instance1){
+			instance1.getConversationList({
+				onSuccess: function(list) {
+					document.getElementById("user1").innerHTML = JSON.stringify(list,null,"\t");
+
+					instance1.logout();
+					setTimeout(function(){
+						initUser2();
+					},0);
+				},
+				onError: function(error) {}
+		    }, null, 10);
+		},
+		getCurrentUser : function(userInfo){
+			userId = userInfo.userId;
+			alert("链接成功；user1 id=" + userInfo.userId);
+		},
+		receiveNewMessage : function(message){
+		}
+	});
+
+	function initUser2(){
+		params.token = token2;
+		init(params,{
+			getInstance : function(instance2){
+				instance2.getConversationList({
+					onSuccess: function(list2) {
+						document.getElementById("user2").innerHTML = JSON.stringify(list2,null,"\t");
+					},
+					onError: function(error) {}
+			    }, null, 10);
+			},
+			getCurrentUser : function(userInfo){
+				userId = userInfo.userId;
+				alert("链接成功；user2 id=" + userInfo.userId);
+			},
+			receiveNewMessage : function(message){
+			}
+		});
+	}
+}
+</script>
+
+<p></p>
+
+<div class="show" id="show1">
+	<h3>用户切换</h3>
+
+	<button onclick="startSwitch()">开始切换</button>
+	
+	<div id="result">
+		<pre id="user1"></pre>
+		<pre id="user2"></pre>
+	</div>
+</div>
+
+</body>
+</html>
