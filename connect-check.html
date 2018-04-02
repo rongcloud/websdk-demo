@@ -83,8 +83,14 @@ function startInit(user,targetId){
 		getInstance : function(instance){
 			RongIMLib.RongIMEmoji.init();
 			//instance.sendMessage	
+
+			//注册 PersonMessage
 			var propertys = ["name","age","gender"]; // 消息类中的属性名。
 			registerMessage("PersonMessage",propertys);
+
+			//注册 ProductMessage
+			var propertys = ["price","title","desc","images"]; // 消息类中的属性名。
+			registerMessage("ProductMessage",propertys);
 		},
 		getCurrentUser : function(userInfo){
 			console.log(userInfo.userId);
