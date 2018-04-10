@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>system in electron</title>
+</head>
+<body>
+<style>  
+    .result{
+        display:block;
+        background:#f5f5f5;
+        margin-top:30px;
+        width:730px;
+        padding:5px;
+        overflow:hidden;
+    }
+</style>
+
+<script>
+function showInfo(str){
+    var show = document.getElementById("show");
+        show.innerText += "\n" + str;
+}   
+</script>
+<h1>system in electron <input type="button" value="主页" onclick="location.href='index.html'"></h1>
+
+<ul id="show" class="result"></ul>
+<script>
+function getLocale(){
+    showInfo('getLocale:' + RongDesktop.system.getLocale());
+}
+function getDeviceId(){
+    showInfo('getDeviceId:' + RongDesktop.system.deviceId);
+ /*   Electron.system.getDeviceId().then(function(address){
+        showInfo('getDeviceId:' + address);
+    });*/
+}
+
+function getPlatform(){
+    showInfo('getPlatform:' + RongDesktop.system.platform);
+}
+function purgeCache(){
+    RongDesktop.system.clearCache();
+}
+function setLanguage(lang) {
+    RongDesktop.system.setLanguage(lang);
+}
+
+</script>
+
+</br>
+<!-- 设置 App 显示语言,主要用于 web 端设置语言后同步到 Desktop 端显示相应语言的菜单等等 -->
+<input type="button" value="设置语言" onclick="setLanguage('ch')">
+<!-- 获取当前 App 语言设置,参考 https://electron.atom.io/docs/api/locales/ -->
+<input type="button" value="获取多语言" onclick="getLocale()">
+<!-- 获取设备 id(MAC 地址) -->
+<input type="button" value="获取设备号" onclick="getDeviceId()">
+<!-- 获取数据库路径, 仅支持 Mac, Windows 由 SDK 处理 内部排错用-->
+<!-- <input type="button" value="获取数据库路径" onclick="getDbPath()"> -->
+<!-- 获取当前平台 -->
+<input type="button" value="获取当前平台" onclick="getPlatform()">
+</br>
+</br>
+<!-- 清除缓存,设置成功后 重启生效 -->
+<input type="button" value="清除缓存" onclick="purgeCache()">
+</html>

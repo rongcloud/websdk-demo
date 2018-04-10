@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>file in electron</title>
+</head>
+<body>
+<script>
+function showInfo(str){
+    var show = document.getElementById("show");
+        show.innerHTML += "<br/>" + str;
+}   
+</script>
+<h1>file in electron <input type="button" value="主页" onclick="location.href='index.html'"></h1>
+<ul>
+    <li>1. 右键复制硬盘中任意位置的一个或多个文件/文件夹, 点击"获取复制文件路径", 将显示被复制 文件/文件夹 的路径</li>
+    <li>2. 点击"获取文件对象", 将显示复制文件的对象(不包括文件夹)</li>
+</ul>
+
+<ul id="file"></ul>
+</br>
+<ul id="show"></ul>
+<script>
+var objPath;
+var file = document.getElementById("file");
+function getFilePaths(){
+    objPath = RongDesktop.file.getPaths();
+    var result = '';
+    for(var i = 0; i < objPath.dirList.length;i++){
+        result += '<li>' + objPath.dirList[i] + '</li>';
+    }
+    for(var i = 0; i < objPath.fileList.length;i++){
+        result += '<li>' + objPath.fileList[i] + '</li>';
+    }
+    file.innerHTML = result;
+}
+
+function getFilesByPaths(){
+    getFilePaths();
+    var files = RongDesktop.file.getBlobs(objPath.fileList);
+    var result = '';
+    for(var i = 0; i < files.length;i++){
+        result += '<li>' + files[i].name + '</li>';
+    }
+    showInfo(result);
+}
+
+function getFiles(){
+    var fileObj = RongDesktop.file.getFiles();
+    var result = '';
+    for(var i = 0; i < fileObj.fileList.length;i++){
+        result += '<li>' + fileObj.fileList[i].name + ':  ' + fileObj.fileList[i].size + '</li>';
+    }
+
+    for(var i = 0; i < fileObj.dirList.length;i++){
+        result += '<li>' + fileObj.dirList[i].path + ':  ' + fileObj.dirList[i].size + '</li>';
+    }
+    showInfo(result);
+}
+
+var selectedPath;
+function handleFiles(files){
+    selectedFile = files[0];
+}
+
+function openFile(){
+    selectedFile && RongDesktop.file.open(selectedFile.path);
+}
+
+function chkExists(){
+    if(!selectedFile){
+        return false;
+    }
+    var fileUrl = selectedFile.path;
+    var result = RongDesktop.file.checkExist(fileUrl);
+    var _show = 'file ' + fileUrl + ' is ';
+    _show += result ? 'exist' : 'notexist';
+    showInfo(_show);
+}
+
+function openDir(){
+    selectedFile && RongDesktop.file.openDir(selectedFile.path);
+}
+</script>
+
+</br>
+<div>
+    <!-- 获取剪贴板上文件路径 -->
+    <input type="button" value="获取复制文件路径" onclick="getFilePaths()">
+    <!-- 根据路径获取文件对象,返回数组 -->
+    <input type="button" value="获取文件对象" onclick="getFilesByPaths()"> 
+    <!-- 根据路径获取文件对象,返回数组 -->
+    <input type="button" value="获取剪贴板对象" onclick="getFiles()"> 
+</div>
+</br></br>
+<div>
+    <input type="file" onchange="handleFiles(this.files)" />
+    
+    <!-- 打开文件,基于上述选择文件 -->
+    <input type="button" value="打开文件" onclick="openFile()" />
+    <!-- 检查选择文件是否存在,基于上述选择文件 -->
+    <input type="button" value="检查文件是否存在" onclick="chkExists()" /> 
+    <!-- 打开文件所在目录,基于上述选择文件 -->
+    <input type="button" value="打开文件所在目录" onclick="openDir()" />    
+</div>
+
+</html>

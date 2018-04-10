@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>window in electron</title>
+</head>
+<body>
+<style>
+    input{
+        margin:5px;
+        padding:0;
+        color:#cd0000;
+    }
+    input[type="text"] {
+        color: black;
+    }
+</style>
+<h1>window in electron <input type="button" value="主页" onclick="location.href='index.html'"></h1>  
+<ul>
+    <li>窗体简单操作,参照文档 <a target="_blank" href="https://electron.atom.io/docs/api/browser-window/">https://electron.atom.io/docs/api/browser-window/</a></li>
+</ul>
+</br>
+
+</br>
+<!-- 窗体最大化 -->
+<input type="button" value="最大化" onclick="RongDesktop.window.max()">
+<!-- 窗体最小化 -->
+<input type="button" value="最小化" onclick="RongDesktop.window.min()">
+<!-- 窗体复原,窗体从最大/小化恢复到之前状态 -->
+<input type="button" value="复原" onclick="RongDesktop.window.restore()">
+<!-- 窗体关闭 -->
+<input type="button" value="关闭" onclick="RongDesktop.window.close()">
+<!-- 窗体前置 -->
+<input type="button" value="前置" onclick="RongDesktop.window.bringFront(true)">
+<!-- 窗体获取焦点 -->
+<input type="button" value="获取焦点" onclick="RongDesktop.window.focus()">
+<!-- 窗体非激活状态显示 voip 用到-->
+<input type="button" value="showInactive" onclick="RongDesktop.window.showInactive()">
+<!-- 窗体显示 -->
+<input type="button" value="显示" onclick="RongDesktop.window.show()">
+
+<br/>
+
+<!-- 仅支持 Mac, dock 显示消息数 -->
+<input type="button" value="更新 Badge(Mac)" onclick="RongDesktop.window.updateBadgeNumber(22, 'dwdw')(100, '99+')">
+<!-- 仅支持 windows, 显示气泡弹框 -->
+<input type="button" value="示气泡(Win)" onclick="RongDesktop.window.displayBalloon('title', { body: 'content' })">
+<!-- 仅支持 windows, dock 闪烁 -->
+<input type="button" value="flashFrame" onclick="RongDesktop.window.flashFrame()">
+<!-- 窗体抖动 -->
+<input type="button" value="抖动" onclick="RongDesktop.window.shakeWindow()">
+<!-- 仅支持 Mac, dock click -->
+<input type="button" value="监听 DockClick" onclick="bindDockClick()">
+<!-- 双击任务栏小图标 -->
+<input type="button" value="监听 DoubleClick" onclick="bindDoubleClick()">
+
+<hr/>
+
+<input type="text" placeholder="请输入链接地址" id="address" onkeypress="if(event.keyCode === 13) { openBrowserWin() }">
+<input type="submit" value="打开链接" onclick="openBrowserWin()">
+
+
+<script>
+    function bindDockClick() {
+        RongDesktop.ipcRenderer.on('onDockClick', function() {
+            alert('dockClick');
+        });
+    }
+    function bindDoubleClick() {
+        RongDesktop.ipcRenderer.on('onDoubleClick', function() {
+            alert('doubleClick');
+        });
+    }
+    function openBrowserWin() {
+        var el = document.getElementById('address');
+        var path = el.value;
+        path = path ? path : 'http://www.rongcloud.cn/';
+        RongDesktop.browserWin.create({
+            path: path
+        });
+    }
+</script>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>download in electron</title>
+</head>
+<body>
+<script>
+function showProgress(str){
+    str = str || '';
+    var progress = document.getElementById("progress");
+    progress.innerHTML = "\n" + str;
+}  
+function showInfo(str){
+    str = str || '';
+    var show = document.getElementById("show");
+    show.innerHTML += "\n" + str;
+}   
+</script>
+<h1>download in electron <input type="button" value="主页" onclick="location.href='index.html'"></h1>
+<ul>
+    <li>下载支持 暂停/恢复, 取消</li>
+</ul>
+<pre id="progress"></pre>
+<pre id="show"></pre>
+
+</br>
+
+<!-- 下载 -->
+<input type="button" value="下载vscode" onclick="downloadFile()">
+<!-- 暂停 -->
+<input id="pause" type="button" value="暂停" onclick="toggleButton()">
+<!-- 取消下载 -->
+<input type="button" value="取消下载" onclick="cancelDownload()">
+<script>
+// var url = 'http://sw.bos.baidu.com/sw-search-sp/software/e335feb5c2f01';
+// var url = 'http://sw.bos.baidu.com/sw-search-sp/software/e335feb5c2f01/WeChatSetup.exe';
+var url = 'http://vscode.cdn.azure.cn/stable/2648980a697a4c8fb5777dcfb2ab110cec8a2f58/VSCodeSetup-ia32-1.14.1.exe';
+// var url = 'http://test.im.rce.rongcloud.net/desktop-client/config.js';
+// var Downloader = RongDesktop.Downloader;
+var downloader;
+var pause = document.getElementById("pause");
+
+function downloadFile(){
+    /*
+    url:下载地址,
+    name:默认下载名称
+    */
+    var file = {
+        url: url
+    };
+    downloader = RongDesktop.download(file);
+
+    downloader.onError = function(error){
+        // console.log('error', error);
+        showInfo(error);
+    }
+    // downloader.saveAs();
+    // downloader.save('adsfa.js');
+    downloader.save();
+
+    // 下载准备完毕, 此时可知文件大小 
+    downloader.onReady = function(data){
+        showInfo('full size:' + data.total);
+    }
+
+    // 下载中,返回下载进度
+    downloader.onProgress = function(data){
+        if(data.progress === 0){
+            return;
+        }
+        showProgress(data.loaded + '/' + data.total);
+    }
+    
+    // 下载完成
+    downloader.onComplete = function(data){
+        if(data.loaded >= data.total){
+            showInfo('下载完成');
+        } else {
+            showInfo('下载已取消');
+        }
+    }
+
+}
+function cancelDownload(){
+     showProgress();
+    downloader && downloader.abort();
+}
+
+function toggleButton(){
+    if (pause.value == '暂停') {
+        downloader && downloader.pause();
+        pause.value = '恢复';
+    }
+    else {
+        downloader && downloader.resume();
+        pause.value = '暂停'
+    }
+}
+</script>
+
+</html>

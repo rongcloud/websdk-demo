@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>requirejs in electron</title>
+</head>
+<body>
+    
+<h1>screenshot in electron <input type="button" value="主页" onclick="location.href='index.html'"></h1>
+<ul>
+    <li>调用前需先注册回调,用于处理获取到的图像数据</li>
+    <li>截图方法返回的是剪切板中的 base64 数据</li>
+</ul>
+
+<input type="button" value="screen capture" onclick="startShot()">
+
+<br/>
+<img style="max-width:100px;border:1px solid red;margin:10px;" id="screen" src="http://www.rongcloud.cn/docs/assets/img/index/logo.png" alt="">
+
+<script>
+var screen = document.getElementById("screen");
+
+var completeCallback = function(file){
+   screen.src = file.dataURL;
+}
+
+var cancelCallback = function(){
+    console.log('exit screenshot');
+    alert('exit screenshot');
+}
+
+// 调用前需先注册回调,用于处理获取到的图像数据
+// RongDesktop.setCallback(callback);
+
+function startShot(){
+    RongDesktop.screenshot.captureScreen(completeCallback, cancelCallback);  
+}
+
+</script>
+
+</body>
+</html>
