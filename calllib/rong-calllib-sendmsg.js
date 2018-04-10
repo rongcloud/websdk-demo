@@ -1,4 +1,4 @@
-"use strict";;
+"use strict";
 (function(dependencies) {
 
     var global = dependencies.global;

@@ -1,5 +1,5 @@
 module.exports = {
-	appkey: 'c9kqba3rdkbbf8j',
-	secret: 'OY1jzdrxMmUOmq',
+	appkey: 'c9k3rdkbb8j',
+	secret: 'OYjMmUOmq',
 	api: 'http://api.cn.ronghub.com'
 };
