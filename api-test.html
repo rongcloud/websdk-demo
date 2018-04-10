@@ -75,6 +75,7 @@
 		right:5px;
 		top:5px;
 	}
+
 </style>
 
 
@@ -238,9 +239,25 @@ function startInit(){
         //protobuf: './local-sdk/protobuf-2.2.7.min.js' //支持http(s)网络路径、本地相对路径
     };
 
+    /*
+		RongDesktop 即为 electron-c++sdk/js/preload.js 中的 `RongDesktop`
+		以下逻辑为 RongDesktop 存在即认为在 Electron 中，请一定保证 RongDesktop 唯一、不可破坏、不被污染
+		详细请参考 init.js dataProvider 用法
+
+    */
+    var imClient = null;
+	var isDesktopEnv = (typeof RongDesktop != 'undefined')
+	if (isDesktopEnv) {
+		imClient = RongDesktop.addon;
+		document.getElementById("rong-discussion").style.display = 'none';
+		document.getElementById("rong-public-service").style.display = 'none';
+		document.getElementById("rong-home-page").style.display = 'block';
+	}
+
 	var params = {
 		appKey : appKey,
-		token : token
+		token : token,
+		imClient: imClient
 	};
 
 	var callbacks = {
@@ -1391,6 +1408,7 @@ function setUserStatusListener(){
 </script>
 
 <h1>Web SDK demo <small><a href="connect-check.html">消息接收demo</a></small></h1>
+<button onclick="history.back()" style="display: none;" id="rong-home-page">主页</button>
 <div class="panel" id="panel">
 	<p>
 		<span>appkey</span>
@@ -1434,6 +1452,7 @@ function setUserStatusListener(){
 	<input type="button" value="图片消息" onclick="sendImageMessage();">
 	<input type="button" value="文件消息" onclick="sendFileMessage();">
 	<input type="button" value="语音消息" onclick="sendVoiceMessage();">
+	<br/>
 	<input type="button" value="@ 消息" onclick="sendAtMessage();"> 
 	<input type="button" value="富文本消息" onclick="sendRichContentMessage();">
 	<input type="button" value="自定义消息" onclick="sendRegisterMessage();">
@@ -1459,6 +1478,7 @@ function setUserStatusListener(){
 	<input type="button" value="获取会话" title="需要在获取会话列表之后执行" onclick="getConversation();">
 	<input type="button" value="会话未读数" onclick="getUnreadCount();"> 
 	<input type="button" value="会话未读总数" onclick="getTotalUnreadCount();"> 
+	<br/>
 	<input type="button" value="清除会话未读数" onclick="clearUnreadCount();">
 	<input type="button" value="删除指定会话" onclick="removeConversation();">
 	<input type="button" value="删除所有会话" onclick="clearConversation();">
@@ -1479,27 +1499,29 @@ function setUserStatusListener(){
 	<input type="button" value="查询其他人在线状态" onclick="setUserStatusListener();"> 
 	<br>
 
-	讨论组：
-	<input type="button" value="讨论组创建" onclick="createDiscussion();"> 
-	<input type="button" value="讨论组改名" onclick="setDiscussionName();"> 
-	<input type="button" value="讨论组状态" onclick="setDiscussionStatus();"> 
-	<input type="button" value="讨论组加人" onclick="addMemberToDiscussion();"> 
-	<input type="button" value="讨论组踢人" onclick="removeMemberFromDiscussion();"> 
-	<input type="button" value="退出讨论组" onclick="quitDiscussion();"> 
-	<br><em style="margin-left:5em;">讨论组已经停止更新，强烈不推荐使用，建议使用群组替代</em>
+	<div class="rong-discussion" id="rong-discussion">
+		讨论组：
+		<input type="button" value="讨论组创建" onclick="createDiscussion();"> 
+		<input type="button" value="讨论组改名" onclick="setDiscussionName();"> 
+		<input type="button" value="讨论组状态" onclick="setDiscussionStatus();"> 
+		<input type="button" value="讨论组加人" onclick="addMemberToDiscussion();"> 
+		<input type="button" value="讨论组踢人" onclick="removeMemberFromDiscussion();"> 
+		<input type="button" value="退出讨论组" onclick="quitDiscussion();"> 
+		<br><em style="margin-left:5em;">讨论组已经停止更新，强烈不推荐使用，建议使用群组替代</em>
+	</div>
 	<br>
-
-	公众服务：
-	<input type="button" value="获取已关注公众号" onclick="getPublicServiceList();"> 
-	<input type="button" value="查找公众号" onclick="searchPublicService();"> 
-	<!-- <input type="button" value="查找公众号 byType" onclick="searchPublicServiceByType();">  -->
-	<input type="button" value="订阅公众号" onclick="subscribePublicService();"> 
-	<input type="button" value="取消订阅公众号" onclick="unsubscribePublicService();"> 
-	<input type="button" value="获取公众号信息" onclick="getPublicServiceProfile();"> 
-	<input type="button" value="给公众号留言" onclick="sendToPublic();"> 
-	<input type="button" value="公众号历史留言" onclick="getPublicHistroyMessage();"> 
 	
-	<br>
+	<div class="rong-public-service" id="rong-public-service">
+		公众服务：
+		<input type="button" value="获取已关注公众号" onclick="getPublicServiceList();"> 
+		<input type="button" value="查找公众号" onclick="searchPublicService();"> 
+		<!-- <input type="button" value="查找公众号 byType" onclick="searchPublicServiceByType();">  -->
+		<input type="button" value="订阅公众号" onclick="subscribePublicService();"> 
+		<input type="button" value="取消订阅公众号" onclick="unsubscribePublicService();"> 
+		<input type="button" value="获取公众号信息" onclick="getPublicServiceProfile();"> 
+		<input type="button" value="给公众号留言" onclick="sendToPublic();"> 
+		<input type="button" value="公众号历史留言" onclick="getPublicHistroyMessage();"> 
+	</div>
 	<br>
 </div>
 

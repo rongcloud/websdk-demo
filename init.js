@@ -26,8 +26,12 @@ function init(params, callbacks, modules){
 		config.protobuf = protobuf;
 	};
 
-
-	RongIMLib.RongIMClient.init(appKey,null,config);
+	var dataProvider = null;
+	var imClient = params.imClient;
+	if (imClient) {
+		dataProvider = new RongIMLib.VCDataProvider(imClient);
+	}
+	RongIMLib.RongIMClient.init(appKey, dataProvider, config);
 
 	var instance = RongIMClient.getInstance();
 
@@ -106,5 +110,5 @@ function init(params, callbacks, modules){
 		onError:function(errorCode){
 			console.log(errorCode);
 		}
-	});
+	}, '');
 }
