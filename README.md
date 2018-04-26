@@ -18,6 +18,10 @@ Normal SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/el
 
 WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test.html](https://rongcloud.github.io/websdk-demo/api-test.html)
 
+WebSDK Vue Require 示例: [https://rongcloud.github.io/websdk-demo/vue/require.html](https://rongcloud.github.io/websdk-demo/vue/require.html)
+
+WebSDK Vue Normal 示例: [https://rongcloud.github.io/websdk-demo/vue/normal.html](https://rongcloud.github.io/websdk-demo/vue/normal.html)
+
 WebSDK React 示例: [https://rongcloud.github.io/websdk-demo/react/im.html](https://rongcloud.github.io/websdk-demo/react/im.html)
 
 
