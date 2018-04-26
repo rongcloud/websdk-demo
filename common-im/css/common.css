@@ -1,0 +1,39 @@
+html,body{
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+a{
+	text-decoration: none;
+	color: #333;
+}
+
+a:hover{
+	color: #53779E;
+	transition: all 0.3s;
+}
+
+.rong-input{
+	outline: none;
+	border: none;
+}
+
+.rong-avatar{
+	height: 40px;
+	width: 40px;
+	background-size: contain;
+    border-radius: 20px;
+  border: 1px solid #FFF;
+}
+
+.rong-selected{
+	background-color: #E0E8F2;
+}
+
+.rong-clearfix{
+	clear: both;
+}

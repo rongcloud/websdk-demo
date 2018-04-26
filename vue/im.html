@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Rong-IM-Vue</title>
+	<link rel="icon" type="image/png" href="../common-im/css/images/logo.png">
+	<link rel="stylesheet" href="../common-im/css/common.css">
+	<link rel="stylesheet" href="../common-im/css/main.css">
+
+	<script src="../common-im/js/service.js"></script>
+	<script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
+
+	<script src="vue-2.1.4.js"></script>
+	<script src="vue-router-2.1.1.js"></script>
+	
+	<script src="config.js"></script>
+	
+	<script src="conversation-list.js"></script>
+	<script src="message-list.js"></script>
+
+	<script src="routes.js"></script>
+
+	<script src="im.js"></script>
+
+</head>
+<body>
+	<div class="rong-im" id="rong-im">
+		<!-- 会话列表 -->
+		<router-view name="list"></router-view>
+		<!-- 会话窗口消息列表 -->
+		<router-view name="chat"></router-view>
+	</div>
+</body>
+</html>
