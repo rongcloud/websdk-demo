@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>vue normal</title>
+</head>
+<body>
+
+
+<h1>vue normal</h1>
+
+<div>
+	<h2>user</h2>
+	<div id="user-info">
+		<span>id: {{userInfo.userId}}</span>
+	</div>
+</div>
+
+<script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
+<script src="./vue-2.1.4.js"></script>
+<script src="../init.js"></script>
+	
+<script>
+"use strict";
+
+connectRongCloud(Vue);
+
+function connectRongCloud(Vue){
+	var params = {
+		appKey : "8w7jv4qb78a9y",
+		token : "qyN3mb4PjM+ZXDOdW4f8KpltMLEfik9DxpqXaALr0RGROd6gPSiwQtBYfRPwWMBLjb+Q/sj37frDI5cUnfVAKg=="
+	};
+
+	var userId = "";
+
+	var callbacks = {
+		getInstance : function(instance){
+		},
+		getCurrentUser : function(userInfo){
+			var user = new Vue({
+				el : "#user-info",
+				data : {
+					userInfo : userInfo
+				}
+			});
+		},
+		receiveNewMessage : function(message){
+			//show(message);
+		}
+	};
+
+	init(params,callbacks);
+}
+</script>
+	
+</body>
+</html>

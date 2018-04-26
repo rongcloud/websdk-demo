@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>vue require</title>
+</head>
+<body>
+
+
+<h1>vue require</h1>
+
+<div>
+	<h2>user</h2>
+	<div id="user-info">
+		<span>id: {{userInfo.userId}}</span>
+	</div>
+</div>
+
+<script src="../lib/require.js"></script>
+<script src="../init.js"></script>
+	
+<script>
+function isSupport(APIName){
+	var d = document, w = window;
+	var id = "RongCloudCloud-API-Test" + new Date().getTime;
+	var iframe = d.getElementById(id);
+	if(!iframe){
+		iframe = d.createElement("iframe");
+		iframe.id = id;
+		iframe.style.display = "none";
+		d.body.appendChild(iframe);
+	}
+	var nativeAPI = iframe.contentWindow[APIName];
+	var API = w[APIName];
+	if(API && nativeAPI.toString() == API.toString()){
+		return true;
+	}
+	return false;
+}	
+</script>
+
+<script>
+"use strict";
+
+var isSupportSocket = isSupport("WebSocket");
+
+require.config({
+    paths: {
+    	protobuf: '//cdn.ronghub.com/protobuf-2.3.0.min',
+    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.3.0',
+    	Vue: 'vue-2.1.4'
+    }
+});
+
+if(isSupportSocket){
+	require(['protobuf','RongIMLib','Vue'], function(protobuf, RongIMLib, Vue) {
+	    connectRongCloud(RongIMLib, Vue, protobuf);
+	});
+}else{
+	require(['RongIMLib','Vue'], function(RongIMLib, Vue) {
+	    connectRongCloud(RongIMLib, Vue);
+	});
+}
+
+function connectRongCloud(RongIMLib, Vue, protobuf){
+	var params = {
+		appKey : "8w7jv4qb78a9y",
+		token : "qyN3mb4PjM+ZXDOdW4f8KpltMLEfik9DxpqXaALr0RGROd6gPSiwQtBYfRPwWMBLjb+Q/sj37frDI5cUnfVAKg=="
+	};
+
+	var userId = "";
+
+	var callbacks = {
+		getInstance : function(instance){
+		},
+		getCurrentUser : function(userInfo){
+			var user = new Vue({
+				el : "#user-info",
+				data : {
+					userInfo : userInfo
+				}
+			});
+		},
+		receiveNewMessage : function(message){
+			//show(message);
+		}
+	};
+
+	init(params,callbacks, {
+		RongIMLib : RongIMLib,
+		protobuf : protobuf
+	});
+}
+</script>
+	
+</body>
+</html>
