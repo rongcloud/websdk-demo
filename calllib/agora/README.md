@@ -1,4 +1,4 @@
-### Rong CallLib API 说明
+### Rong CallLib API 说明{#calllib-api}
 
 ### 启动示例
 
@@ -10,23 +10,29 @@
     
 #### videoWatch
 
-方法： `RongCallLib.videoWatch(watcher);` 。
+方法： `RongCallLib.videoWatch(watcher);` 
 
-描述： 监控视频流，当有人加入、离开会触发此监听。
+描述： 监控视频流，当有人加入、离开会触发此监听
    
 示例：
 
 ```js
-var watcher = function(result){
-    // result => {type: 'added', data: ''}
-};
+RongCallLib.videoWatch(function(result){
+    /*
+        result => { 
+            type: 'added', 
+            data: 'video 节点',
+            // true 表示自己的音视频流，反之是对方的
+            isLocal: true
+        }
 
-RongCallLib.videoWatch(watcher);
+    */
+});
 ```
     
 #### commandWatch
 
-方法： `RongCallLib.commandWatch(watcher);` 。
+方法： `RongCallLib.commandWatch(watcher);` 
 
 描述： 接收指令，根据指令操作 UI，按钮
    
@@ -34,15 +40,15 @@ RongCallLib.videoWatch(watcher);
 
 ```js
 RongCallLib.commandWatch(function(command){
-    // command => 消息指令
+    // command => 消息指令, 详细可参考：http://www.rongcloud.cn/docs/web_calllib.html#message
 });
 
 ```
 #### call
 
-方法： `RongCallLib.call(params, callback);` 。
+方法： `RongCallLib.call(params, callback);` 
 
-描述： 发起音视频通话。
+描述： 发起音视频通话
    
 示例：
 
@@ -52,9 +58,9 @@ var CallType = RongIMLib.VoIPMediaType;
 var params = {
     // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
     conversationType: conversationType,
-    // 会话目标 Id，群 Id 或者 userId。 
+    // 会话目标 Id，群 Id 或者 userId 
     targetId: targetId,
-    // 被邀请人 Id , 多人视频填写多个 userId, 一对一和 targetId 值一致。
+    // 被邀请人 Id , 多人视频填写多个 userId, 一对一和 targetId 值一致
     inviteUserIds: inviteUserIds,
     // 音频类型
     // CallType.MEDIA_VEDIO
@@ -65,11 +71,37 @@ RongCallLib.call(params, function(error){
     // do something...
 });
 ```
+
+#### accept
+
+方法： `RongCallLib.accept();` 
+
+描述：接听电话邀请
+   
+
+示例：
+
+```js
+var CallType = RongIMLib.VoIPMediaType;
+
+var params = {
+    // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
+    conversationType: conversationType,
+    // 会话目标 Id，群 Id 或者 userId 
+    targetId: targetId,
+    // 音频类型
+    // CallType.MEDIA_VEDIO
+    // CallType.MEDIA_AUDIO
+    mediaType: CallType.MEDIA_VEDIO
+};
+RongCallLib.accept(params);
+```
+
 #### hungup
 
-方法： `RongCallLib.hungup(params, callback);` 。
+方法： `RongCallLib.hungup(params, callback);` 
 
-描述： 挂断音视频通话。
+描述： 挂断音视频通话
    
 示例：
 
@@ -77,7 +109,7 @@ RongCallLib.call(params, function(error){
 var params = {
     // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
     conversationType: conversationType,
-    // 会话目标 Id，群 Id 或者 userId。 
+    // 会话目标 Id，群 Id 或者 userId 
     targetId: targetId,   
 };
 RongCallLib.hungup(params, function(error, summary){
@@ -86,9 +118,9 @@ RongCallLib.hungup(params, function(error, summary){
 ```
 #### reject
 
-方法： `RongCallLib.reject(params);` 。
+方法： `RongCallLib.reject(params);` 
 
-描述： 收到请求音视频指令，拒绝通话。
+描述： 收到请求音视频指令，拒绝通话
    
 示例：
 
@@ -96,7 +128,7 @@ RongCallLib.hungup(params, function(error, summary){
 var params = {
     // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
     conversationType: conversationType,
-    // 会话目标 Id，群 Id 或者 userId。 
+    // 会话目标 Id，群 Id 或者 userId 
     targetId: targetId
 };
 RongCallLib.reject(params);
@@ -104,7 +136,7 @@ RongCallLib.reject(params);
 
 #### mute
 
-方法： `RongCallLib.mute();` 。
+方法： `RongCallLib.mute();` 
 
 描述： 关闭麦克风
 
@@ -116,7 +148,7 @@ RongCallLib.mute();
 
 #### unmute
 
-方法： `RongCallLib.unmute();` 。
+方法： `RongCallLib.unmute();` 
 
 描述： 打开麦克风
    
@@ -128,7 +160,7 @@ RongCallLib.unmute();
 
 #### videoToAudio
 
-方法： `RongCallLib.videoToAudio;` 。
+方法： `RongCallLib.videoToAudio;` 
 
 描述： 视频转音频
    
@@ -140,7 +172,7 @@ RongCallLib.videoToAudio();
 
 #### audioToVideo
 
-方法： `RongCallLib.audioToVideo();` 。
+方法： `RongCallLib.audioToVideo();` 
 
 描述： 音频转视频
 
@@ -148,29 +180,4 @@ RongCallLib.videoToAudio();
 
 ```js
 RongCallLib.audioToVideo();
-```
-
-#### accept
-
-方法： `RongCallLib.accept();` 。
-
-描述：
-   
-
-示例：
-
-```js
-var CallType = RongIMLib.VoIPMediaType;
-
-var params = {
-    // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
-    conversationType: conversationType,
-    // 会话目标 Id，群 Id 或者 userId。 
-    targetId: targetId,
-    // 音频类型
-    // CallType.MEDIA_VEDIO
-    // CallType.MEDIA_AUDIO
-    mediaType: CallType.MEDIA_VEDIO
-};
-RongCallLib.accept(params);
 ```
