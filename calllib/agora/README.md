@@ -1,4 +1,34 @@
-### CallLib
+## CallLib
+
+### 使用说明
+
+1、开通音视频服务，请参考 [音视频开通指南](http://www.rongcloud.cn/docs/call.html#open)
+
+2、引入 WebSDK
+
+```
+<script src="https://cdn.ronghub.com/RongIMLib-2.3.1.js"></script>
+```
+
+3、引入 Web CallLib
+
+将以下文件下载到项目中，修改 `src` 的相对路径
+
+```
+<script src="./AgoraRTCSDK-2.0.0.js"></script>
+
+<script src="../rong-calllib-util.js"></script>
+
+<script src="./rong-calllib-agora.js"></script>
+
+<script src="../rong-calllib-sendmsg.js"></script>
+
+<script src="../rong-calllib.js"></script>
+```
+
+4、WebSDK 连接融云服务器，可参考 https://github.com/rongcloud/websdk-demo/blob/master/calllib/init.js
+
+5、发起音视频通话
 
 ### 启动示例
 
@@ -6,7 +36,7 @@
 
 2、访问 `private.html` 或者 `group.html`
 
-### API 说明{#api}
+### API 说明
     
 #### videoWatch
 
