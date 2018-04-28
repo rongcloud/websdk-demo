@@ -71,7 +71,8 @@ function call(mediaType){
         targetId: targetId,
         inviteUserIds: inviteUserIds,
         mediaType: mediaType,
-        profile: '720P_2'
+        // 设置视频分辨率， 默认 720P http://www.rongcloud.cn/docs/web_calllib.html#resolution 
+        profile: '720P'
     };
     RongCallLib.call(params, function(error) {
         console.log(error);
@@ -103,7 +104,8 @@ function acceptVideo() {
         conversationType: conversationType,
         targetId: targetId,
         mediaType: CallType.MEDIA_VEDIO,
-        profile: '720P_6'
+        // 设置视频分辨率，默认 720P http://www.rongcloud.cn/docs/web_calllib.html#resolution
+        profile: '720P'
     };
     RongCallLib.accept(params);
 }

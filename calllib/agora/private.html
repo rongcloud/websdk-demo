@@ -78,28 +78,28 @@
         <input type="button" value="audioToVideo" onclick="audioToVideo()">
 
     </div>
-
-    <script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
 </body>
+    <!-- 引入 WebSDK start -->
+    <script src="//cdn.ronghub.com/RongIMLib-2.3.0.js"></script>
+    <!-- 引入 WebSDK start -->
 
     <script src="../init.js"></script>
 
     <script src="../jquery-3.1.1.js"></script>
 
-    <script src="./AgoraRTCSDK-2.0.0.js"></script>
-    
     <script src="../underscore-1.8.3.js"></script>
 
+    <!-- 引入 CallLib start -->
+    <!-- 将以下 js 文件拷贝到项目中，按顺序引用 -->
+    <script src="./AgoraRTCSDK-2.0.0.js"></script>
     <script src="../rong-calllib-util.js"></script>
     <script src="./rong-calllib-agora.js"></script>
-
     <script src="../rong-calllib-sendmsg.js"></script>
-
     <script src="../rong-calllib.js"></script>
+    <!-- 引入 CallLib end -->
 
     <script src="config.js"></script>
     <script>
-
 
         var users = Data.private;
 

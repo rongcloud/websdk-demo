@@ -27,7 +27,7 @@ WebSDK React 示例: [https://rongcloud.github.io/websdk-demo/react/im.html](htt
 
 # 扩展组件 Component
 
-VoIP: [https://rongcloud.github.io/websdk-demo/voip.html](https://rongcloud.github.io/websdk-demo/voip.html)
+音视频: [https://github.com/rongcloud/websdk-demo/tree/master/calllib/agora](https://github.com/rongcloud/websdk-demo/tree/master/calllib/agora)
 
 Emoji: [https://rongcloud.github.io/websdk-demo/emoji.html](https://rongcloud.github.io/websdk-demo/emoji.html)
 
