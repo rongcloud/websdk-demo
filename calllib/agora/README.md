@@ -19,13 +19,28 @@
 ```js
 RongCallLib.videoWatch(function(result){
     /*
+        
+        result 有 3 种情况，具体如下：
+
+        // 有成员加入房间，此时可向页面追加视频流
         result => { 
             type: 'added', 
             data: 'video 节点',
             // true 表示自己的音视频流，反之是对方的
             isLocal: true
         }
+        
+        // 有成员离开房间，可移除 video 节点
+        result => { 
+            type: 'removed', 
+            data: 'video 节点 Id'
+        }
 
+        //有成员加入房间
+        result => { 
+            type: 'joined', 
+            userId: 'userId'
+        }
     */
 });
 ```

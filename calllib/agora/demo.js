@@ -34,9 +34,6 @@ var videoItem = {
         var videoElId = result.data;
         $('div').remove('#' + videoElId);
     },
-    leave: function() {
-        clearChild();
-    },
     joined: function(result){
         var userId = result.userId;
         console.warn(userId + '加入通话')
