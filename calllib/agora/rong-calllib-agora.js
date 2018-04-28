@@ -74,7 +74,7 @@
     };
 
     var sentTime = params.sentTime;
-    userId = getUserId(sentTime);
+    var userId = getUserId(sentTime);
 
     var remotePeerBox = null;
 
@@ -235,8 +235,14 @@
   var quitRoom = function() {
     var onSuccess = util.noop;
     var onError = util.noop;
-    client.leave(onSuccess, onError);
-    localStream.close();
+      
+    if (localStream) {
+      localStream.close();
+    }
+    
+    if (client) {
+      client.leave(onSuccess, onError);
+    }
   };
 
   var streamhandler = function(params) {
@@ -256,7 +262,10 @@
       }
     };
 
-    handlerItem[handler](type);
+    if (localStream) {
+      handlerItem[handler](type);
+    }
+
   };
 
   var enableAudio = function(params) {

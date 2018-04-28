@@ -81,6 +81,12 @@
         };
     }
 
+    var config = {
+        url: '',
+        timeout: 30000,
+        engineType: 1
+    };
+
     var room = {
         isActive: false,
         init: function(params, callback) {
@@ -100,6 +106,7 @@
     };
 
     var initRoom = function(params) {
+        params.engineType = config.engineType;
         getToken(params, function(error, token) {
             if (error) {
                 throw new Error(error);
@@ -115,11 +122,6 @@
                 videoWatcher.notify(result);
             });
         });
-    };
-
-    var config = {
-        url: '',
-        timeout: 30000,
     };
 
     var Reason = (function() {
@@ -208,10 +210,12 @@
 
     var getToken = function(params, callback) {
         var channelId = params.channelId;
+        var engineType = params.engineType;
         params = {
             command: 'getToken',
             data: {
-                channelId: channelId
+                channelId: channelId,
+                engineType: engineType
             }
         };
         sendCommand(params, callback);

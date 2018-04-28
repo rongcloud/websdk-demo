@@ -126,7 +126,7 @@
         },
         getToken: function(params, callback) {
             var im = RongIMClient.getInstance();
-            var engineType = 3;
+            var engineType = params.engineType;
             var channelId = params.channelId;
             im.getAgoraDynamicKey(engineType, channelId, {
                 onSuccess: function(data) {

@@ -1,3 +1,8 @@
+//设置引擎类型
+RongCallLib.setConfig({
+    engineType: 3
+});
+
 // 大视频窗口
 var element = $('.video-main')[0];
 // video box
