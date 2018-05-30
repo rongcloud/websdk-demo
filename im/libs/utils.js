@@ -6,7 +6,8 @@
     /*
     var tpl = '<a>{{this.key1}} <p>-</p> {{this.value1.c}}</a>';
     var data = {"key1":1,"value1":{"c":"cccccc"}};
-    var html = render(tpl,data);  
+    var html = render(tpl,data);
+    详见 http://blog.jobbole.com/56689/
     */
     function render(template, data) {
         template = template || "";
