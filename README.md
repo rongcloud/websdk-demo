@@ -44,7 +44,7 @@ Emoji: [https://rongcloud.github.io/websdk-demo/emoji.html](https://rongcloud.gi
 
 Web 聊天室 (弹幕效果)：[https://rongcloud.github.io/websdk-demo/chatroom/chatroom.html](https://rongcloud.github.io/websdk-demo/chatroom/chatroom.html)
 
-Web IM(jQuery): [https://rongcloud.github.io/websdk-demo/im/im.html](https://rongcloud.github.io/websdk-demo/im/im.html)
+Web IM(无框架依赖): [https://rongcloud.github.io/websdk-demo/im/im.html](https://rongcloud.github.io/websdk-demo/im/im.html)
 
 Web IM(Angular): [https://github.com/rongcloud/rongcloud-web-im-widget](https://github.com/rongcloud/rongcloud-web-im-widget)
 
