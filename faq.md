@@ -158,7 +158,7 @@ Token无效一般有以下两种原因：
 
 （2）开页面就要分别对每个页面初始化 和 connect ，会提示其他设备登录，需要多页面链接需要开通 多设备消息同步 服务。
 
-（3）参考链接：[http://www.rongcloud.cn/docs/payment.html#multi_device_message_sync](http://www.rongcloud.cn/docs/payment.html#multi_device_message_sync)
+（3）参考链接：[http://www.rongcloud.cn/docs/advanced_features.html#multi_device_message_sync](http://www.rongcloud.cn/docs/advanced_features.html#multi_device_message_sync)
 
 ### 聊天插件中删除会话列表问题
 
