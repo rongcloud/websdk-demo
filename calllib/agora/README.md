@@ -7,7 +7,7 @@
 2、引入 WebSDK
 
 ```
-<script src="https://cdn.ronghub.com/RongIMLib-2.3.1.js"></script>
+<script src="https://cdn.ronghub.com/RongIMLib-2.3.2.js"></script>
 ```
 
 3、引入 Web CallLib
