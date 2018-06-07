@@ -556,9 +556,12 @@ function sendRegisterMessage(){
 	registerMessage("PersonMessage",propertys);
 
 	var content = {
-		name:"RegisterMessage",
-		age:3,
-		gender:"male"
+		name: {
+			"first" : "Bob",
+			"last" : "Smith"
+		},
+		age: 3,
+		gender: "male"
 	};
 
 	var msg = new RongIMClient.RegisterMessage.PersonMessage(content);
