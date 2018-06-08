@@ -129,7 +129,7 @@
 
 		//公有云初始化
 		var config = {
-	        //protobuf: './local-sdk/protobuf-2.2.7.min.js' //支持http(s)网络路径、本地相对路径
+	        //protobuf: 'https://cdn.ronghub.com/protobuf-2.3.1.min.js' //支持http(s)网络路径、本地相对路径
 	    };
 
 		var initCallbacks = {
