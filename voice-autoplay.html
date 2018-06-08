@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>voice</title>
+</head>
+<body>
+
+<h1>voice autoplay</h1>
+
+<script src="./lib/Libamr-2.2.5.min.js"></script>
+<script type="text/javascript" src="./lib/RongIMVoice-2.2.6.js"></script>
+
+<!-- 引入base64编码的 amr 音频数据 -->
+<script src="./res/voice-amr-base64.json"></script>
+<script>
+var RongIMVoice = RongIMLib.RongIMVoice;
+	RongIMVoice.init();
+
+function play(voice){
+	if(voice){
+		var duration = voice.length/1024;    // 音频持续大概时间(秒)
+		RongIMVoice.preLoaded(voice, function(){
+		    RongIMVoice.play(voice,duration);
+		});
+	}else{
+		console.error('请传入 amr 格式的 base64 音频文件');
+	}
+}
+
+var voiceData = voice;    //from voice-amr-base64.json
+
+play(voiceData);
+</script>
+</body>
+</html>
