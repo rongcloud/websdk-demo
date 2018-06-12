@@ -20,8 +20,8 @@ RCS.init({
     },//非必填
     target: document.getElementById("rcs-app"),// 要插入到的页面节点
     customerServiceId: "KEFUxiaoqiaoPrestaShop1"// 通过“客服管理后台 - 坐席管理 - 技能组”，对应为技能组列表中的技能组 ID。
-    userIcon: 'http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png',//用户默认头像，在用户没有头像的时候显示，绝对路径
-    csIcon: '/customer-service/images/kefu.png',//客服默认头像，在客服没有头像的时候显示，绝对路径
+    userIcon: 'http://7xo1cb.com1.z0.glb.clouddn.com/rongcloudkefu2.png',//用户默认头像，在用户没有头像的时候显示
+    csIcon: 'http://fsprodrcx.cn.ronghub.com/UQRxDVEHcD6_gHENUQRxDUs9XOZRBH25PGECfjBjFA/base64.png',//客服默认头像，在客服没有头像的时候显示,建议线上地址
     showButton: true,
     //是否需要按钮主动发起，设为false的时候，init()方法直接唤起聊天窗口,需客户自己编写按钮，点击之后调用init(),templates中的button模板不可用;设为true的时候，init()首先唤起客服咨询按钮，点击之后才连接客服，唤起聊天窗口，在进入页面之后就需调用init()方法。此参数是为了方便客户在点击客服按钮后自行获取token，在获取到token之后，执行init()即可。
     connectingCallback: function(){
