@@ -3,11 +3,15 @@
 ```
 <!-- Web SDK 相关资源 SDK 针对自建客服做出了一些修改 -->
 <script src="../RongIMLib-cs.js"></script>
-<script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script>
+<script src="./RongIMEmoji.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 <!-- 客服插件样式表和 js 代码 -->
-<link rel="stylesheet" href="cs.min.css">
-<script src="cs.min.js"></script>
+<link rel="stylesheet" href="cs.css">
+<script src="utils.js"></script>
+<script src="upload.js"></script>
+<script src="template.js"></script>
+<script src="emoji.js"></script>
+<script src="cs.js"></script>
 
 ```
 2. 初始化客服插件
