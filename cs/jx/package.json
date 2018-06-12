@@ -1,0 +1,16 @@
+{
+  "name": "customer-service",
+  "version": "1.0.0",
+  "description": "customerService",
+  "scripts": {
+    "dist": "grunt dist"
+  },
+  "devDependencies": {
+    "glog": "^1.7.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^2.2.0",
+    "grunt-contrib-uglify": "^3.0.1"
+  }
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<title>CS</title>
+<style>
+	.main button{
+		margin: 100px;
+	}
+</style>
+</head>
+<body>
+
+<div id="main">
+	<button onclick="send()">发送</button>
+</div>
+
+<script src="./RongIMLib-cs.js"></script>
+
+<!-- 实例化 -->
+<script>
+	var appKey = 'c9kqb3rdkbb8j';
+	var token = 'TD9of5Xke0UXQsGOJKN093YNDAey+CFwhZPcG3x/Kb6PKb2ZF1eknWi8hdy8lshmsamlcoe2LxwJ+j6RAml8iw==';
+	var navi = 'navqa.cn.ronghub.com';
+	var targetId = 'xgs';
+
+var sdkInit = function(params, callbacks){
+	if(navi !== ""){
+		//私有云
+		var config = {
+			navi : navi
+		};
+		console.log("私有云");
+		RongIMLib.RongIMClient.init(appKey,null,config);
+	}else{
+		//公有云
+		console.log("公有云");
+		RongIMLib.RongIMClient.init(appKey);
+	}
+
+	var instance = RongIMClient.getInstance();
+
+	// 连接状态监听器
+	RongIMClient.setConnectionStatusListener({
+		onChanged: function (status) {
+			console.log(status);
+		    switch (status) {
+		        case RongIMLib.ConnectionStatus.CONNECTED:
+		            registerMessage();
+		            break;
+		        case RongIMLib.ConnectionStatus.DISCONNECTED:
+                	console.log('断开连接');
+                default:
+                	break;
+		        }
+		}
+	});
+
+	RongIMClient.setOnReceiveMessageListener({
+		// 接收到的消息
+		onReceived: function (message) {
+		    // 判断消息类型
+		    console.log("新消息: " + message.targetId);
+		    if (message.offLineMessage) {
+		    	return;
+		    }
+            console.log(message);
+		}
+	});
+
+	//开始链接
+	RongIMClient.connect(token, {
+		onSuccess: function(userId) {
+			console.log("链接成功，用户id：" + userId);
+			RongIMLib.RongIMClient.getInstance().startCustomService(targetId, {
+	            onSuccess: function() {
+	                console.log('客服初始化成功');
+	                document.getElementById('main').innerHtml = '<button onclick="send()">发送商品消息</button>';
+	            },
+	            onError: function() {
+	                
+	            }
+	        });
+		},
+		onTokenIncorrect: function() {
+			console.log('token无效');
+		},
+		onError:function(errorCode){
+		  console.log("=============================================");
+		  console.log(errorCode);
+		}
+	});
+}
+
+var registerMessage = function() {
+    var messageName = "ProductMessage"; // 消息名称。
+    var objectName = "cs:product"; // 消息内置名称，请按照此格式命名。
+    var mesasgeTag = new RongIMLib.MessageTag(true, true);// 消息是否保存是否计数，true true 保存且计数，false false 不保存不计数。
+    var propertys = ["title", "url", "content", "imageUrl", "extra"]; // 消息类中的属性名。
+    // RongIMLib.RongIMClient.registerMessageType(messageName, objectName, mesasgeTag, propertys);
+
+    RongIMLib.RongIMClient.registerMessageType("ProductInfoMessage", "JX:ProductInfo", mesasgeTag, ['title','content','url','remoteurl']);
+}
+
+function send(){
+	var msg = new RongIMClient.RegisterMessage.ProductInfoMessage({
+		title: '红米Note2 移动4G手机 双卡双待',
+		content: '￥799 16G',
+		url: 'http://www.jiaxincloud.com',
+		remoteurl: 'http://f2e.cn.ronghub.com/desktop-client-qa/css/images/logo.png'
+	});
+	var targetType = RongIMLib.ConversationType.CUSTOMER_SERVICE;
+	RongIMClient.getInstance().sendMessage(targetType, targetId, msg, {
+        // 发送消息成功
+        onSuccess: function (message) {
+        	console.log(message);
+            console.log("Send successfully");
+        },
+        onError: function (errorCode,message) {
+            var info = '';
+            switch (errorCode) {
+                case RongIMLib.ErrorCode.TIMEOUT:
+                    info = '超时';
+                    break;
+                case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+                    info = '未知错误';
+                    break;
+                case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
+                    info = '在黑名单中，无法向对方发送消息';
+                    break;
+                case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
+                    info = '不在讨论组中';
+                    break;
+                case RongIMLib.ErrorCode.NOT_IN_GROUP:
+                    info = '不在群组中';
+                    break;
+                case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
+                    info = '不在聊天室中';
+                    break;
+                default :
+                    info = x;
+                    break;
+            }
+            console.log('发送失败:' + info);
+        }
+   	});
+}
+
+sdkInit();
+
+</script>
+
+
+</body>
+</html>
