@@ -1,7 +1,16 @@
-(function(){
-	/*
-	检测代码建议放在SDK加载之后，init运行之前。
-	*/
+/*
+环境检测代码：建议放在融云 SDK 运行的上下文环境进行测试
+*/
+
+;(function(){
+	//模块化下载判断
+	if(typeof exports === 'object' && typeof module !== 'undefined'){
+        alert("当前环境使用了 CMD 协议，必须使用 CMD 协议加载 SDK."); 
+    }else if(typeof define === 'function' && define.amd){
+        alert("当前环境使用了 AMD 协议，必须 AMD 协议加载 SDK."); 
+    }else{
+        alert("当前环境没使用 CMD 或 AMD，可以通过 src 的方式引入 SDK"); 
+    }
 
 	//protocal
 	(function(){
@@ -20,16 +29,10 @@
 	//localStorage
 	supportStorage();
 
-
-	//todo more
-	function browser(){
-		//above IE8
-	}
-
 	function supportStorage(){
 		var store = window.localStorage;
 		if(!store){
-			alert("localStorage 不支持.")
+			alert("当前浏览器不支持 localStorage.")
 			return false;
 		}
 		
@@ -39,14 +42,14 @@
             store.setItem(key, key);
             store.removeItem(key);
         } catch (err) {
-        	alert("localStorage 被禁用.");
+        	alert("隐私模式 localStorage 被禁用.");
         }
 	}
 
 
 	function checkFunctionPure(funcName){
 		var d = document, w = window;
-		var id = "RongCloudCloud-API-Test" + new Date().getTime;
+		var id = "RongCloudCloud-API-Test";
 		var iframe = d.getElementById(id);
 		if(!iframe){
 			iframe = d.createElement("iframe");
@@ -60,7 +63,7 @@
 		if(funcPure.toString() == funcNow.toString()){
 			console.log(funcName + " ok");
 		}else{
-			alert(funcName + " is broken");
+			alert("原生 " + funcName + " 被重定义，无法使用");
 		}
 		//function WebSocket() { [native code] }
 	}
