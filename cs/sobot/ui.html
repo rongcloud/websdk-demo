@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ui</title>
+</head>
+<body>
+<link rel="stylesheet" href="cs.css">
+
+
+<!-- conversationlist.tpl.html -->
+<!--#include file="templates/userInfo.html"-->
+
+<div class="rongcloud-Message-body">
+    <div class="rongcloud-Message-audio">
+        <span class="rongcloud-Message-entry">
+            <span class="rongcloud-audioBox rongcloud-clearfix" onclick="RCS.play()">
+                <i></i><i></i><i></i>
+            </span>
+            <div style="display:inline-block;">
+                <span class="rongcloud-audioTimer">{%this.list[index].content.duration%}</span>
+                <span class="rongcloud-audioState"></span>
+            </div>
+        </span>
+    </div>
+</div>
+
+
+
+<!-- main.tpl.html -->
+<div id="rong-widget-box" class="rongcloud-container" style="display:none;">
+    <div class="rong-conversation-list">
+    </div>
+    <div id="rong-widget-minbtn" class="rongcloud-kefuBtnBox rongcloud-blueBg">
+      <a class="rongcloud-kefuBtn" href="###">
+          <div class="rongcloud-sprite rongcloud-people"></div>
+          <span class="rongcloud-recent">联系客服</span>
+          <span class="rongcloud-recent"><span ng-show="twinkle" >(有未读消息)</span></span>
+      </a>
+    </div>
+    <div id="rong-widget-minbtn-kefu" class="rongcloud-kefuBtnBox rongcloud-blueBg">
+      <a class="rongcloud-kefuBtn" href="###">
+          <div class="rongcloud-sprite rongcloud-people rongcloud-sprite-kefu"></div>
+          <span class="rongcloud-recent" >联系客服</span>
+      </a>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- expand colsebefore.tpl.html -->
+<div class="rongcloud-layermbox" ng-show="true" style="display:none;">
+    <div class="rongcloud-laymshade"></div>
+    <div class="rongcloud-layermmain">
+        <div class="rongcloud-section">
+            <div class="rongcloud-layermchild rongcloud-endconversation">
+                <p class="rongcloud-prompt">客服会话已结束</p>
+                <div class="rongcloud-buttons" ng-click="confirm()"><button class="rongcloud-button">确定</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- expand customerinfo.tpl.html -->
+<div class="rongcloud-layermbox" ng-show="true" style="display:none;">
+    <div class="rongcloud-laymshade"></div>
+    <div class="rongcloud-layermmain">
+        <div class="rongcloud-section">
+            <div class="rongcloud-layermchild rongcloud-collectuserinfo">
+                <form name='userinfo' novalidate="true">
+                    <div class="rongcloud-layer-body">
+                        <div class="rongcloud-collectuserinfo-title">你好，客服邀请您填写如下内容</div>
+                        <a class="rongcloud-layer-close" href="#" ng-click="close()">×</a>
+                        <div class="rongcloud-form-item">
+                            <label class="rongcloud-require">姓名：</label>
+                            <input class="rongcloud-inputtext"  type="text" name="name" required ng-model="user.name"></input>
+                            <div class="rongcloud-form-error" ng-show="(userinfo.name.$dirty || userinfo.$submitted) && userinfo.name.$error.required">请输入姓名</div>
+                        </div>
+                        <div class="rongcloud-form-item">
+                            <label class="rongcloud-require">电话：</label>
+                            <input class="rongcloud-inputtext" type="text" name="phone" required ng-model="user.phone" ng-pattern="/^1[0-9]{10}$/"></input>
+                            <div class="rongcloud-form-error" ng-show="(userinfo.phone.$dirty || userinfo.$submitted) && userinfo.phone.$error.required">请输入电话</div>
+                            <div class="rongcloud-form-error" ng-show="(userinfo.phone.$dirty || userinfo.$submitted) && userinfo.phone.$error.pattern">手机格式不正确</div>
+                        </div>
+                        <div class="rongcloud-form-item">
+                            <label>邮箱：</label>
+                            <input class="rongcloud-inputtext" type="text" name="email" ng-model="user.email"></input>
+                        </div>
+                    </div>
+                    <div class="rongcloud-foot">
+                        <button class="rongcloud-btn" ng-click="userinfo.$valid && confirm()">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- expand endconversation.tpl -->
+<div class="rongcloud-layermbox" ng-show="true" style="display:none;">
+    <div class="rongcloud-laymshade"></div>
+    <div class="rongcloud-layermmain">
+        <div class="rongcloud-section">
+            <div class="rongcloud-layermchild rongcloud-endconversation">
+                <p class="rongcloud-prompt">是否要结束当前会话?</p>
+                <div class="rongcloud-buttons" ng-click="confirm()"><button class="rongcloud-button">是</button><button class="rongcloud-button" ng-click="close()">否</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- expand evaluate.tpl -->
+<div class="rongcloud-layermbox" ng-show="true" style="display:none;">
+    <div class="rongcloud-laymshade"></div>
+    <div class="rongcloud-layermmain">
+        <div class="rongcloud-section">
+            <div class="rongcloud-layermchild rongcloud-evaluate">
+                <div class="rongcloud-layer-title">服务评价</div><a href="#" class="rongcloud-layer-close" ng-click="close()">×</a>
+                <div class="rongcloud-layer-body">
+                    <div class="rongcloud-group-row">
+                        <div class="rongcloud-group-title">感谢您的支持，请对我的服务进行评价：</div>
+                        <label for="satisfaction5"><input id="satisfaction5" name="satisfaction" type="radio" value="5" ng-model="source"></input>非常满意</label>
+                        <label for="satisfaction4"><input id="satisfaction4" name="satisfaction" type="radio" value="4" ng-model="source"></input>满意</label>
+                        <label for="satisfaction3"><input id="satisfaction3" name="satisfaction" type="radio" value="3" ng-model="source"></input>一般</label>
+                        <label for="satisfaction2"><input id="satisfaction2" name="satisfaction" type="radio" value="2" ng-model="source"></input>不满意</label>
+                        <br/><label for="satisfaction1"><input id="satisfaction1" name="satisfaction" type="radio" value="1" ng-model="source"></input>非常不满意</label><br/>
+                    </div>
+                    <div class="rongcloud-group-row" ng-show="showResolveStatus">
+                        <div class="rongcloud-group-title">是否解决问题：</div>
+                        <input id="resolve"   name="result" type="radio" value="1" ng-model="isresolve"></input><label for="resolve">已解决</label>
+                        <input id="followup"  name="result" type="radio" value="2" ng-model="isresolve"></input><label for="followup">跟进中</label>
+                        <input id="unresolve" name="result" type="radio" value="0" ng-model="isresolve"></input><label for="unresolve">未解决</label><br/>
+                    </div>
+                    <div class="rongcloud-group-row">
+                        <div>建议：</div>
+                        <textarea class="rongcloud-suggest" placeholder="谢谢您的反馈，我们会更加努力！" ng-model="suggest"></textarea>
+                    </div>
+                </div>
+                <div class="rongcloud-foot">
+                    <button class="rongcloud-btn" ng-click="confirm()">评价</button>
+                </div>
+            </div>
+            <!--反馈提示-->
+            <!-- <div class="rongcloud-layermchild rongcloud-feedback" ng-show="end">
+                <div class="rongcloud-layermcont">
+                    感谢您的反馈 ^ - ^ ！
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
+<!-- expand leaveword -->
+<div class="rongcloud-leavemessage" style="display:none;">
+    <div class="rongcloud-leavemessage-title">{{content}}</div>
+    <form name="leave" novalidate>
+        <div class="rongcloud-form-item" ng-repeat="item in formList">
+            <label ng-class="{'rongcloud-require': item.required}">{{item.title}}</label>
+            <input class="rongcloud-inputtext" ng-if=" item.type== 'text' " name="{{item.name}}" placeholder="{{item.defaultText}}" type="text" ng-model="item.value" ng-blur="validateItem(item)"></input>
+            <textarea name="leaveword" ng-if=" item.type =='textarea' " name="{{item.name}}" placeholder="{{item.defaultText}}" ng-model="item.value" ng-blur="validateItem(item)"></textarea>
+            <div class="rongcloud-form-error" ng-show="item.error">{{item.error}}</div>
+        </div>
+        <div class="rongcloud-leavemessage-form-btns">
+            <button class="rongcloud-btn" ng-click="confirm()">提交</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

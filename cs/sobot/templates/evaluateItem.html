@@ -1,0 +1,13 @@
+{%if(this.labelNameArray.length != 0){%}
+<div class="rongcloud-group-row">
+    <div class="rongcloud-group-title">存在哪些问题{%if(this.isTagMust == 1){%}(必填){%}%}</div>
+    <div class="rongcloud-group-tag-list">
+    	{%for(var index in this.labelNameArray){%}
+        <div class="rongcloud-group-tag rongcloud-tag-item" onclick="RCS.tagClick(event)">{%this.labelNameArray[index]%}</div>
+        {%}%}
+    </div>
+</div>
+<div class="rongcloud-group-row">
+    <textarea class="rongcloud-evaluate-suggest rongcloud-suggest" placeholder="其他想说的"></textarea>
+</div>
+{%}%}
