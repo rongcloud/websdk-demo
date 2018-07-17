@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>user media</title>
+</head>
+
+<body>
+
+<section id="app" hidden>
+	<video id="show" autoplay></video>
+</section>
+
+<script>
+function init(){
+	var video = document.getElementById("show");
+	var app = document.getElementById("app");
+
+	navigator.getUserMedia({audio:true, video:true}, gotStream, function(err){
+		console.log("获取摄像头失败");
+		console.log(err);
+	});
+
+	function gotStream(stream) {
+		video.src = URL.createObjectURL(stream);
+		app.hidden = false;
+	}
+}
+</script>
+
+<script>
+init();	
+</script>
+</body>
+</html>
