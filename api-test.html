@@ -1075,118 +1075,6 @@ function sendQAMessage(){
 }
 
 
-var discussionName = "shuise`s discussion"; // 名称自定义
-var userIds = [userId,targetId];//讨论组初始成员。
-var discussionId;
-
-function getDiscussionInfo(discussionId,start){
-	instance.getDiscussion(discussionId,{
-		onSuccess:function(discussion){
-			showResult("讨论组信息获取成功",discussion,start);
-		},
-		onError:function(error){
-            showResult("讨论组信息获取失败",error,start);
-		}
-	});
-}
-
-function createDiscussion(){
-	/*
-	http://www.rongcloud.cn/docs/web_api_demo.html#讨论组
-	
-	*/ 
-	var start = new Date().getTime();
-	instance.createDiscussion(discussionName,userIds,{
-	    onSuccess:function(discussionId){
-	    	window.discussionId = discussionId;
-			getDiscussionInfo(discussionId,start);
-	    },
-	    onError:function(error){
-            showResult("讨论组创建失败",error,start);
-	    }
-	});
-}
-
-function setDiscussionName(){
-	var start = new Date().getTime();
-	var discusstionName = "another discussion";
-
-	instance.setDiscussionName(discussionId,discusstionName,{
-	    onSuccess:function(){
-            showResult("讨论组改名成功",null,start);
-            getDiscussionInfo(discussionId,start);
-	    },
-	    onError:function(error){
-            showResult("讨论组改名失败",error,start);
-	    }
-	});
-}
-
-function setDiscussionStatus(){
-	var status = RongIMLib.DiscussionInviteStatus.CLOSED; 
-	/* 讨论邀请状态 ，默认开放
-	0 ： 开发邀请，
-	1：关闭邀请  
-	RongIMLib.DiscussionInviteStatus.OPEND
-	RongIMLib.DiscussionInviteStatus.CLOSED
-	*/
-	var start = new Date().getTime();
-	instance.setDiscussionInviteStatus(discussionId,status,{
-	    onSuccess:function(){
-            getDiscussionInfo(discussionId, start);
-	    },
-	    onError:function(error){
-            showResult("讨论组状态修改成功",error,start);
-	    }
-	});
-}
-
-function addMemberToDiscussion(){
-	var userIds = [targetId2];//被邀请成员。
-
-	var start = new Date().getTime();
-	instance.addMemberToDiscussion(discussionId,userIds,{
-	    onSuccess:function(){
-            getDiscussionInfo(discussionId, start);
-	    },
-	    onError:function(error){
-            showResult("讨论组加人失败",error,start);
-	    }
-	});
-}
-
-function removeMemberFromDiscussion(){
-	var userIds = targetId2;//被邀请成员。
-
-	var start = new Date().getTime();
-
-	instance.removeMemberFromDiscussion(discussionId,userIds,{
-	    onSuccess:function(){
-            getDiscussionInfo(discussionId, start);
-	    },
-	    onError:function(error){
-            showResult("讨论组加人失败",error,start);
-	    }
-	});
-}
-
-function quitDiscussion(){
-	var start = new Date().getTime();
-
-	instance.quitDiscussion(discussionId,{
-	    onSuccess:function(){
-            showTips("退出讨论组 成功");
-            // showResult("讨论组踢人成功",null,start);
-
-            getDiscussionInfo(discussionId, start);
-	    },
-	    onError:function(error){
-	    	showResult("退出讨论组 失败",error,start);
-	    }
-	});
-}
-
-
 /*
 公众号
 RongIMLib.ConversationType = {
@@ -1500,18 +1388,6 @@ function setUserStatusListener(){
 	在线状态：
 	<input type="button" value="设置自己在线状态" onclick="setUserStatus();"> 
 	<input type="button" value="查询其他人在线状态" onclick="setUserStatusListener();"> 
-	<br>
-
-	<div class="rong-discussion" id="rong-discussion">
-		讨论组：
-		<input type="button" value="讨论组创建" onclick="createDiscussion();"> 
-		<input type="button" value="讨论组改名" onclick="setDiscussionName();"> 
-		<input type="button" value="讨论组状态" onclick="setDiscussionStatus();"> 
-		<input type="button" value="讨论组加人" onclick="addMemberToDiscussion();"> 
-		<input type="button" value="讨论组踢人" onclick="removeMemberFromDiscussion();"> 
-		<input type="button" value="退出讨论组" onclick="quitDiscussion();"> 
-		<br><em style="margin-left:5em;">讨论组已经停止更新，强烈不推荐使用，建议使用群组替代</em>
-	</div>
 	<br>
 	
 	<div class="rong-public-service" id="rong-public-service">
