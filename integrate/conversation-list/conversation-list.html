@@ -13,7 +13,7 @@
 
     <script src="../lib/jquery-3.1.1.js"></script>
     <script src="../lib/vue-2.1.4.js"></script>
-    <script src="//cdn.ronghub.com/RongIMLib-2.3.2.js"></script>
+    <script src="//cdn.ronghub.com/RongIMLib-2.3.3.js"></script>
 
 
     <script src="../init.js"></script>
@@ -66,6 +66,10 @@
                 onSuccess: function (conversations) {
                     //处理会话列表
                     transConversations(conversations, function (translatedConversations) {
+                        // 因 Demo 用户数据为 Mock 数据，过滤没有用户信息的会话，若数据完整可省略此项
+                        translatedConversations = translatedConversations.filter((conversation) => {
+                            return conversation.userInfo != null;
+                        });
                         //渲染会话列表
                         renderConversationView(translatedConversations,instance);
                     })

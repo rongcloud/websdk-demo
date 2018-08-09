@@ -95,7 +95,7 @@ http://www.ghostchina.com/adding-syntax-highlighting-to-ghost-using-highlight-js
 <script type="text/javascript" src="json-view/jquery.jsonview.js"></script>
 
 
-<script src="//cdn.ronghub.com/RongIMLib-2.3.2.js?00"></script>
+<script src="//cdn.ronghub.com/RongIMLib-2.3.3.js"></script>
 <script src="//cdn.ronghub.com/RongEmoji-2.2.4.min.js"></script> 
 <script src="//cdn.ronghub.com/RongIMVoice-2.2.4.min.js"></script>
 
@@ -240,24 +240,30 @@ function startInit(){
   };
 
     /*
+
+		----------
+		备注： 桌面版需优先开通，开通后方可使用
+					开通方式，请移步开发者后台提工单，申请开通 https://developer.rongcloud.cn/signin?returnUrl=%2F
+		----------
+
 		RongDesktop 即为 electron-c++sdk/js/preload.js 中的 `RongDesktop`
 		以下逻辑为 RongDesktop 存在即认为在 Electron 中，请一定保证 RongDesktop 唯一、不可破坏、不被污染
 		详细请参考 init.js dataProvider 用法
-
     */
     var imClient = null;
 	var isDesktopEnv = (typeof RongDesktop != 'undefined')
 	if (isDesktopEnv) {
-		imClient = RongDesktop.addon;
-		document.getElementById("rong-discussion").style.display = 'none';
-		document.getElementById("rong-public-service").style.display = 'none';
-		document.getElementById("rong-home-page").style.display = 'block';
+		imClient = RongDesktop.require('IMLib');
+		// document.getElementById("rong-discussion").style.display = 'none';
+		// document.getElementById("rong-public-service").style.display = 'none';
+		// document.getElementById("rong-home-page").style.display = 'block';
 	}
 
 	var params = {
 		appKey : appKey,
 		token : token,
-		imClient: imClient
+		imClient: imClient,
+		userId: 'user10'
 	};
 
 	var callbacks = {
