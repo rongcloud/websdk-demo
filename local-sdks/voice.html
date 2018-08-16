@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>voice</title>
+</head>
+<body>
+
+
+<h1>声音库</h1>
+<h3>官网文档：<a href="http://www.rongcloud.cn/docs/web.html#voice">http://www.rongcloud.cn/docs/web.html#voice</a></h3>
+
+<script src="./sdk/Libamr-2.2.5.min.js"></script>
+<script src="./sdk/RongIMVoice-2.2.5.min.js"></script>
+
+<!-- 引入base64编码的arm音频数据 -->
+<script src="./voice-amr-base64.json"></script>
+
+<button id="btn">播放base64</button>
+
+<script>
+var RongIMVoice = RongIMLib.RongIMVoice;
+	RongIMVoice.init();
+
+//voice define in voice-mar-base64.json
+var duration = voice.length/1024;
+
+var btn = document.getElementById("btn");
+
+var isPlay = false;
+btn.onclick = function(){
+	if(isPlay){
+		stop();
+		isPlay = false;
+		btn.innerHTML = "播放base64";
+	}else{
+		play();
+		isPlay = true;
+		btn.innerHTML = "停止播放";
+	}
+}
+
+function play(){
+	// 音频持续大概时间(秒)
+    //预加载 + 播放
+	RongIMLib.RongIMVoice.preLoaded(voice, function(){
+    	// 播放声音
+    	RongIMLib.RongIMVoice.play(voice,duration);
+	});
+}
+
+function stop(){
+	RongIMLib.RongIMVoice.stop(voice);
+}
+</script>
+
+
+</body>
+</html>

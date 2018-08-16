@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emoji</title>
+</head>
+<body>
+
+<style>
+#supportList{
+	background:#f5f5f5;
+	font-size:12px;
+	line-height: 2;
+}	
+</style>
+	
+<!-- <script src="./lib/RongEmoji-dev.js"></script>  -->
+<script src="./sdk/RongEmoji-2.2.5.min.js"></script>
+
+<h1>Emoji</h1>
+<h3>官网文档：<a href="http://www.rongcloud.cn/docs/web.html#emoji">http://www.rongcloud.cn/docs/web.html#emoji</a></h3>
+
+<h2>融云消息 message 里的 emoji 说明</h2>
+<ol>
+	<li>发消息 ，直接发送 😀 原生 emoji 字符</li>
+	<li>Web SDK 接收消息会被转码成 “uf600” 格式</li>
+	<li>emoji SDK 内置了128个emoji表情的图片，也可自行扩展配置</li>
+	<li>特殊说明：emoji图片提供的是一个质量很差的版本，因为版权问题，如果要商用，请自行解决版权问题。</li>
+	<li id="supportList"></li>
+</ol>
+
+
+<h3>测试 ([狞笑]不支持，[露齿而笑]支持)</h3>
+
+<pre class="code" id="show"></pre>
+
+<script>
+test(RongIMLib.RongIMEmoji);
+
+function test(RongIMEmoji){
+	RongIMEmoji.init();
+
+
+	var list = document.querySelector('#supportList');
+		list.innerHTML = "支持的128：";
+		for(var i=0;i<RongIMEmoji.emojis.length;i++){
+			list.appendChild(RongIMEmoji.emojis[i]);
+		}
+
+	var t = document.querySelector('#show');
+
+	var str = "[狞笑] [露齿而笑]  测试Emoji";
+
+
+	//symbolToEmoji
+	t.innerHTML += "symbolToEmoji \n";
+
+	str = RongIMEmoji.symbolToEmoji(str);
+	t.innerHTML += "\t" + str + "\n\n";
+
+
+	//emojiToSymbol
+	t.innerHTML += "emojiToSymbol \n";
+
+	str = RongIMEmoji.emojiToSymbol(str);
+	t.innerHTML += "\t" + str + "\n\n";	
+
+
+
+	//emojiToHTML
+	var str = "我收到了一个表情 \uf600 \uf601 很酷";
+	t.innerHTML += "emojiToHTML \n";
+	str = RongIMEmoji.emojiToHTML(str);
+	t.innerHTML += "\t" + str + "\n\n";	
+
+
+
+	//symbolToHTML
+	t.innerHTML += "symbolToHTML \n";
+
+	var str = "[狞笑] [露齿而笑]  测试Emoji";
+	str = RongIMEmoji.symbolToHTML(str);
+	t.innerHTML +=  "\t" + str + "\n";
+}	
+</script>
+
+<!-- require load -->
+<!-- <script src="lib/require.js"></script>
+<script>
+require.config({
+    paths: {
+    	RongIMEmoji: './lib/RongEmoji-dev'
+    }
+});
+
+require(['RongIMEmoji'], function(RongIMEmoji) {
+    test(RongIMEmoji);
+});	
+</script> -->
+</body>
+</html>
