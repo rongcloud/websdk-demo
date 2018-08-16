@@ -110,5 +110,5 @@ function init(params, callbacks, modules){
 		onError:function(errorCode){
 			console.log(errorCode);
 		}
-	}, '');
+	}, params.userId);
 }
