@@ -26,6 +26,7 @@
 		display:none;
 		font-size:12px;
 		border:1px solid #ccc;
+		background:#fff;
 		padding:10px 30px;
 		width:300px;
 		overflow:auto;
@@ -75,7 +76,16 @@
 		right:5px;
 		top:5px;
 	}
-
+	.title {
+		background:#f5f5f5;
+		padding-left:1em;
+		padding-bottom:1em;
+	}
+	.title h2{
+		display: inline;
+		font-size:14px;
+		margin-right:0.5em;
+	}
 </style>
 
 
@@ -213,22 +223,12 @@ var targetIds = [];
 
 var begin = 0;
 
-function startInit(){
+function startInit(token){
 	appKey = document.getElementById("appkey").value;
-	token = document.getElementById("token").value;
 
-	if(appKey == "" || token == ""){
+	if(appKey == ""){
 		alert("必须提供appkey和token");
 	}
-
-	targetIds = document.getElementById("targetId").value;
-	if(targetIds == ""){
-		alert("必须提供两个的有效targetId");
-	}
-
-	targetIds = targetIds.split("，").join(",").split(",");
-	targetId = targetIds[0];	
-	targetId2 = targetIds[1];	
 
 	showTips();
 
@@ -281,6 +281,7 @@ function startInit(){
 		getCurrentUser : function(userInfo){
 			showTips("链接成功 用户id：" + userInfo.userId + ", 耗时" + getTimer(begin));
 			userId = userInfo.userId;
+			document.getElementById("login").innerHTML = userId;
 		    afterConnected();
 		}
 	};
@@ -294,6 +295,35 @@ function startInit(){
 
 	RongIMLib.RongIMVoice.init();
 	showTips("初始化 声音库 " + getTimer(begin));
+}
+
+function login(){
+	var token = document.getElementById("token").value;
+
+	if(token == ""){
+		alert("必须提供 token");
+	}
+
+	targetIds = document.getElementById("targetId").value;
+	if(targetIds == ""){
+		alert("必须提供两个的有效targetId");
+	}
+
+	targetIds = targetIds.split("，").join(",").split(",");
+	targetId = targetIds[0];	
+	targetId2 = targetIds[1];
+
+	startInit(token);	
+}
+
+function changeUser(){
+	instance.logout();
+	var token = document.getElementById("token2").value;
+
+	if(token == ""){
+		alert("必须提供 token");
+	}
+	startInit(token);
 }
 
 function afterConnected(){
@@ -1313,11 +1343,12 @@ function setUserStatusListener(){
 	</p>
 	<p>
 		<span>token</span>
-		<input type="text" id="token" size="90" value="4FGCL0oQ/E72nU4ivbui8uHR/ySxKaD1cAX2biXsYR6RsLYO9xAA4ooa+q3n42JnVTQyMAdFUiDsjFRDYZaQeg==">
+		<input type="text" id="token" size="90" _user="user10" value="4FGCL0oQ/E72nU4ivbui8uHR/ySxKaD1cAX2biXsYR6RsLYO9xAA4ooa+q3n42JnVTQyMAdFUiDsjFRDYZaQeg==">
 		<!-- 
 		8w7jv4qb78a9y
 		user9	ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==
 		user10	4FGCL0oQ/E72nU4ivbui8uHR/ySxKaD1cAX2biXsYR6RsLYO9xAA4ooa+q3n42JnVTQyMAdFUiDsjFRDYZaQeg== 
+		user11	ovjkF2621YWp7odRhy9i6vHDlKxuUva3nL1owWyEuVOxBPB1/Pr1sY7ayEdnH2tgVyqC/Dcl95lDFEgeXzjaqQ==
 		-->
 
 		<!-- 
@@ -1326,17 +1357,26 @@ function setUserStatusListener(){
 		-->
 	</p>
 	<p>
+		<span>token2</span>
+		<input type="text" id="token2" size="90" _user="user11" value="ovjkF2621YWp7odRhy9i6vHDlKxuUva3nL1owWyEuVOxBPB1/Pr1sY7ayEdnH2tgVyqC/Dcl95lDFEgeXzjaqQ==">  &#160;&#160;<strong>切换方法使用</strong>
+	</p>
+	<p>
 		<span>targetIds</span>
 		<input type="text" id="targetId" size="25" value="user9,user8">
 		<em>逗号间隔，至少提供两个</em>
 	</p>
 	<p>
 		<span>&#160;</span>
-		<input type="button" onclick="startInit()" value="初始化">  &#160;&#160;<strong>所有业务方法都必须在 链接成功 之后执行</strong>
+		<input type="button" onclick="login()" value="初始化">  &#160;&#160;<strong>所有业务方法都必须在 链接成功 之后执行</strong>
 	</p>
 </div>
 
 <div class="btns" id="btns">
+	<div class="title">
+		<h2>当前登录用户 id：<span id="login"></span></h2> 	
+		<input type="button" value="切换用户" onclick="changeUser();">
+	</div>
+
 	链接状态：
 	<input type="button" value="断开链接" onclick="disconnect();">
 	<input type="button" value="重新链接" onclick="reconnect();">
