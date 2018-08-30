@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sticker</title>
+  <style>
+    ul,li{
+      margin: 0;
+      list-style: none;
+      padding: 0;
+    }
+    li{
+      display: inline-block;
+    }
+    .rong-container{
+      margin: 5% auto;
+      height: 480px;
+      width: 1000px;
+    }
+    .rong-editor{
+      height: 480px;
+      width: 50%;
+      background-color: #bc8f8f;
+      float: left;
+      position: relative;
+    }
+    .rong-stickers{
+      padding: 20px;
+    }
+    .rong-sticker{
+      margin: 3px 11px;
+    }
+    .rong-sticker img{
+      width: 90px;
+    }
+    .rong-sticker:hover{
+      background-color: #F5F5DC;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .rong-packages{
+      position: absolute;
+      bottom: 0;
+      padding: 0;
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid #F0FFFF;
+    }
+    .rong-package{
+      height: 30px;
+      width: 30px;
+      height: 30px;
+      width: 30px;
+      margin: 12px 0 0 7px;
+      padding-left: 6px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 1px solid #FFF;
+      border-radius: 5px;
+    }
+    .rong-package:hover{
+      cursor: pointer;
+      background-color: #F0FFFF;
+    }
+    .rong-show{
+      height: 480px;
+      width: 50%;
+      background-color:#b0e0e6;
+      float: right;
+    }
+    .rong-message-list{
+      height: 390px;
+      overflow-y: auto;
+    }
+    .rong-message{
+      min-height: 25px;
+      background-color: #FFF;
+      border-radius: 4px;
+      padding: 2px 5px;
+      max-width: 80%;
+      margin-top: 10px;
+      display: table;
+    }
+    .rong-message-editor{
+      border-top: 1px solid #F0FFFF;
+      height: 49px;
+      position: relative;
+    }
+    .rong-message-input{
+      outline: none;
+      resize: none;
+      border: none;
+      margin: 8px 5px;
+      width: 83%;
+    }
+    .rong-buttons{
+      width: 1000px;
+      margin: 20px auto;
+    }
+    .rong-buttons input[type=text]{
+      background-color: red;
+      border: none;
+      background: none;
+      border-bottom: 1px solid #b0e0e6;
+      outline: none;
+      width: 90%;
+      line-height: 42px;
+    }
+    .rong-buttons [type=button], .rong-button{
+      background: none;
+      outline: none;
+      border: none;
+      border-radius: 5px;
+      background: lightblue;
+    }
+    .rong-buttons [type=button]:hover, .rong-button:hover{
+      cursor: pointer;
+      background-color: #F0F8FF;
+    }
+    .rong-buttons [type=button]{
+      height: 40px;
+      margin: 20px 20px 0 0;
+    }
+    .rong-buttons span{
+      text-align: right;
+      width: 90px;
+      display: inline-block;
+      font-size: 12px;
+    }
+    .rong-buttons [value=connect]{
+      margin-left: 95px;
+    }
+    .rong-button-send{
+      height: 30px;
+      width: 60px;
+      position: absolute;
+      right: 10px;
+      top: 11px;
+    }
+    .rong-token{
+      width: 401px;
+    }
+    .rong-message-list img{
+      width: 100px;
+    }
+    .rong-warn{
+      color: #FF0000;
+    }
+  </style>
+</head>
+<body>
+  <script src="http://cdn.ronghub.com/rong-sticker-1.0.0.js"></script>
+  <script src="http://cdn.ronghub.com/RongIMLib-2.3.3.js"></script>
+  <script src="./init.js"></script>
+  <div class="rong-container" style="display: none;">
+    <div class="rong-editor">
+      <ul class="rong-stickers rong-editor-stickers"></ul>
+      <ul class="rong-packages"></ul>
+    </div>
+    <div class="rong-show">
+      <div class="rong-stickers rong-message-list">
+      </div>
+
+      <div class="rong-message-editor">
+          <textarea class="rong-message-input"></textarea>
+          <input class="rong-button rong-button-send" type="button" value="发送"  onclick="sendCommand('send')">
+      </div>
+    </div>
+    <div class="rong-warn">
+      Demo 兼容性：
+      <span>Desktop：IE9+、Chrome、FireFox、Safari 移动端：Android4.4+、iOS、微信浏览器</span>
+    </div>
+  </div>
+
+  <div class="rong-buttons" >
+      <span>Appkey:</span> <input type="text" value="8luwapkvucoil" placeholder="appkey" id="appkey"><br/>
+      <span>导航:</span> <input type="text" value="nav.cn.ronghub.com" placeholder="nav" id="nav"><br/>
+      <span>Token: </span> <input type="text" value="nMBnd1tfhRXXC4k0LA/tgbrkPG6U/xPk3zvPIWf9le00WpXoGCi74G0J3j8FrBLZvooqg3jC7Xf3k2fSwL5MX7qw5Xap7yf5" placeholder="token" id="token" class="rong-token"><br/>
+      <span>会话类型: </span> <input type="text" id="conversationType" placeholder="conversationType" value="1"><br/>
+      <span>targetId: </span> <input type="text" id="targetId" placeholder="targetId" value="sLakct3QJ"><br/>
+      <input type="button" value="connect" onclick="connect()">
+  </div>
+
+  <script>
+      var config = {
+        appkey: 'appkey'
+      };
+      var rongSticker = RongSticker.init(config);
+      var Sticker = rongSticker.Sticker;
+      var Package = rongSticker.Package;
+      var utils = rongSticker.utils;
+      
+      var getDom = function(name){
+        return document.getElementsByClassName(name)[0] || document.getElementById(name);
+      };
+      
+      var conversation = {
+        get: function(){
+          return {
+            conversationType: getDom('conversationType').value,
+            targetId: getDom('targetId').value
+          };
+        }
+      };
+      var packagesNode = getDom('rong-packages');
+      var tpl = '<li class="rong-package" packageid={packageId} style="background-image: url({url})"></li>';
+      Package.getList(function(result){
+        var packages = result.packages;
+        utils.forEach(packages, function(package){
+          packagesNode.innerHTML += utils.tplEngine(tpl, {
+            packageId: package.id,
+            url: package.icon
+          });
+        });
+        
+        packagesNode.onclick = function(event){
+          var target = event.target;
+          var pacakgeId = target.getAttribute('packageid');
+          if(pacakgeId){
+            getStickers(pacakgeId);
+          }
+        };
+      });
+      
+      var stickersNode = getDom('rong-editor-stickers');
+      var showNode = getDom('rong-message-list');
+      function getStickers(pacakgeId){ 
+        stickersNode.innerHTML = '';
+
+        var package = {
+          id: pacakgeId
+        };
+   
+        var tpl = [
+          '<li class="rong-sticker" >',
+            '<img src="{url}" alt="{desc}" sheight={height} swidth={width} packageid={packageId} stickerid={stickerId}>',
+          '</li>'
+        ].join('');
+        Sticker.getList(package, function(result, error){
+          var stickers = result.stickers;
+          utils.forEach(stickers, function(sticker){
+            stickersNode.innerHTML += utils.tplEngine(tpl, sticker);
+          });
+        });
+
+        stickersNode.onclick = function(event){
+          var target = event.target;
+          var packageId = target.getAttribute('packageid');
+          var stickerId = target.getAttribute('stickerid');
+          var height = +target.getAttribute('sheight');
+          var width = +target.getAttribute('swidth');
+
+          var digest = target.getAttribute('alt');
+          if(packageId){
+            var params = {
+              packageId: packageId,
+              stickerId: stickerId,
+              digest: digest,
+              height: height,
+              width: width
+            };
+            sendCommand('sendSticker', params);
+          }
+        };
+      }
+
+      var messagesNode = getDom('rong-message-list');
+      var log = {
+        clear: function(){
+          messagesNode.innerHTML = '';
+        },
+        show: function(message){
+          
+          var messageTpl = '<div class="rong-message">{content}</div>'
+
+          if(typeof message == 'string'){
+            return messagesNode.innerHTML += utils.tplEngine(messageTpl, {
+              content: message
+            });
+          }
+
+          var messageMap = {
+            TextMessage: function(){
+              return messagesNode.innerHTML += utils.tplEngine(messageTpl, {
+                content: message.content.content
+              });
+            },
+            StickerMessage: function(){
+              var tpl = '<img src="{url}">';
+              var content = message.content;
+              Sticker.get(content, function(sticker){
+                var html = utils.tplEngine(tpl, sticker);
+                messagesNode.innerHTML += utils.tplEngine(messageTpl, {
+                  content: html
+                });
+              });
+            }
+          };
+
+          var defHandler = function(){
+            messagesNode.innerHTML += utils.tplEngine(messageTpl, {
+                  content: JSON.stringify(message)
+                });
+          };
+          var messageType = message.messageType;
+          var format = messageMap[messageType] || defHandler;
+          format();
+          
+        }
+      };
+
+      function clearResult(){
+        log.clear();
+      }
+      
+      var mainNode = getDom('rong-container');
+      var buttonsNode = getDom('rong-buttons');
+
+      function connect(){
+        var appkey = getDom('appkey').value;
+        var token = getDom('token').value;
+        var navi = getDom('nav').value;
+        
+
+        var params = {
+          appkey: appkey,
+          token: token,
+          navi: navi
+        };
+        var callbacks = {
+          connected: function(_Rong){
+            Rong = _Rong;
+            buttonsNode.style.display = 'none';
+            mainNode.style.display = 'block';
+          },
+          disconnectd: function(){
+            Rong = null;
+          },
+          received: function(message){
+            log.show(message);
+          }
+        };
+        init(params, callbacks);
+      }
+      
+      var contentNode = getDom('rong-message-input');
+      var handler = {
+        send: function(){
+          var value = contentNode.value;
+          if(value == ''){
+            return;
+          }
+          contentNode.value = '';
+          var date = new Date();
+          var content = value;
+          var msg = new RongIMLib.TextMessage({content: content});
+          var info = conversation.get();
+          Rong.sendMessage(+info.conversationType, info.targetId, msg, {
+            onSuccess: function(message) {
+              log.show(message);
+              },
+              onError: function(error, message) {
+                log.show(message);
+              }
+          });
+        },
+        sendSticker: function(content){
+          var msg = new RongIMClient.RegisterMessage.StickerMessage(content);
+          var info = conversation.get();
+          Rong.sendMessage(+info.conversationType, info.targetId, msg, {
+            onSuccess: function(message) {
+              log.show(message);
+              },
+              onError: function(error, message) {
+                log.show(message);
+              }
+          });
+        },
+        getHistory: function(){
+          var params = conversation.get();
+          Rong.getHistoryMessages(+params.conversationType, params.targetId, null, 10, {
+            onSuccess: function(list) {
+              if(list.length == 0){
+                return log.show('无历史消息记录');
+              }
+              for (var i = 0, len=list.length; i < len; i++) {
+                log.show(list[i]);
+              }
+
+              },
+              onError: function(error) {
+                log.show(error);
+              }
+          });
+        }
+      };
+      function sendCommand(type, content){
+        if (typeof Rong == 'undefined') {
+          alert('请先连接.');
+          return;
+        }
+        return handler[type](content);
+      }
+    </script>
+
+
+</body>
+</html>
