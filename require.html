@@ -52,27 +52,21 @@ function isSupport(APIName){
 <script>
 "use strict";
 
+require.config({
+    paths: {
+    	protobuf: '//cdn.ronghub.com/protobuf-2.3.1.min',
+    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.3.3'
+    }
+});
+
 var isSupportSocket = isSupport("WebSocket");
 
 if(isSupportSocket){
-	require.config({
-	    paths: {
-	    	protobuf: '//cdn.ronghub.com/protobuf-2.3.1.min',
-	    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.3.3'
-	    }
-	});
-
 	require(['protobuf','RongIMLib'], function(protobuf,RongIMLib) {
 	    showInfo("require done");
 	    init(RongIMLib, protobuf);
 	});
 }else{
-	require.config({
-	    paths: {
-	    	RongIMLib: '//cdn.ronghub.com/RongIMLib-2.3.3'
-	    }
-	});
-
 	require(['RongIMLib'], function(RongIMLib) {
 	    showInfo("require done");
 
