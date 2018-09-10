@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>RongCloud Web SDK with Sea.js</title>
+</head>
+<body>
+
+
+<link rel="stylesheet" href="./res/rongcloud.css">
+<a href="https://github.com/rongcloud/websdk-demo/blob/master/seajs/im.html" class="get-source">获取源码</a>
+
+<h1>seajs demo</h1>
+<p>seajs文档：https://seajs.github.io/seajs/docs/#docs</p>
+<pre id="show"></pre>
+
+
+<script>
+"use strict";
+var t1 = new Date().getTime();
+
+function showInfo(str){
+  var t = document.getElementById("show");
+  var dt = new Date().getTime() - t1 + " ms 后: "
+  t.innerHTML += dt + str + "<br>";
+}
+
+showInfo("开始加载");
+
+
+function isSupport(APIName){
+  var d = document, w = window;
+  var id = "RongCloudCloud-API-Test" + new Date().getTime;
+  var iframe = d.getElementById(id);
+  if(!iframe){
+    iframe = d.createElement("iframe");
+    iframe.id = id;
+    iframe.style.display = "none";
+    d.body.appendChild(iframe);
+  }
+  var nativeAPI = iframe.contentWindow[APIName];
+  var API = w[APIName];
+  if(API && nativeAPI.toString() == API.toString()){
+    return true;
+  }
+  return false;
+} 
+</script>
+
+<script src="lib/seajs-2.1.1.js"></script>
+  
+<script>
+"use strict";
+
+/*
+Set configuration
+https://github.com/seajs/seajs/issues/266
+*/
+seajs.config({
+  base : "./",
+  alias: {
+      protobuf: 'local-sdks/sdk/protobuf-2.3.1.min.js',
+      RongIMLib: 'local-sdks/sdk/RongIMLib-2.3.3.min.js'
+  }
+});
+
+var isSupportSocket = isSupport("WebSocket");
+if(isSupportSocket){
+  seajs.use(['protobuf','RongIMLib'], function(protobuf,RongIMLib) {
+      showInfo("require done");
+      init(RongIMLib, protobuf);
+  });
+}else{
+  seajs.use(['RongIMLib'], function(RongIMLib) {
+      showInfo("require done");
+
+      // var RongIMClient = RongIMLib.RongIMClient;
+
+      init(RongIMLib);
+  });
+}
+
+function init(RongIMLib, protobuf){
+  var appKey = "8w7jv4qb78a9y";
+  var token = "qyN3mb4PjM+ZXDOdW4f8KpltMLEfik9DxpqXaALr0RGROd6gPSiwQtBYfRPwWMBLjb+Q/sj37frDI5cUnfVAKg==";
+  
+  var RongIMClient = RongIMLib.RongIMClient;
+
+  var RongIMClient = RongIMLib.RongIMClient;
+  var config = { };
+  if (protobuf) {
+    config.protobuf = protobuf;
+  }
+  //初始化
+  RongIMClient.init(appKey,null,{protobuf:protobuf});
+
+  var _instance = RongIMClient.getInstance();
+  // 连接状态监听器
+  RongIMClient.setConnectionStatusListener({
+    onChanged: function (status) {
+      console.info(status)
+        switch (status) {
+            case RongIMLib.ConnectionStatus.CONNECTED:
+                showInfo("链接成功");
+                break;
+            case RongIMLib.ConnectionStatus.CONNECTING:
+                console.log('正在链接');
+                break;
+            case RongIMLib.ConnectionStatus.DISCONNECTED:
+                console.log('断开连接');
+                break;
+            case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
+                console.log('其他设备登录');
+                break;
+              case RongIMLib.ConnectionStatus.DOMAIN_INCORRECT:
+                console.log('域名不正确');
+                break;
+            case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
+              console.log('网络不可用');
+              break;
+            }
+    }
+  });
+  
+  RongIMClient.setOnReceiveMessageListener({
+    // 接收到的消息
+    onReceived: function (message) {
+        // 判断消息类型
+        // showTips("新消息，类型为：" + message.messageType);
+            // showResult("新消息",message,start);
+            console.log(message);
+
+        switch(message.messageType){
+            case RongIMClient.MessageType.TextMessage:
+              /*
+              显示消息方法： 
+              消息里是 原生emoji
+              RongIMLib.RongIMEmoji.emojiToHTML(message.content.content);
+                */
+                break;
+            case RongIMClient.MessageType.VoiceMessage:
+                // 对声音进行预加载                
+                // message.content.content 格式为 AMR 格式的 base64 码
+                break;
+            case RongIMClient.MessageType.ImageMessage:
+               // message.content.content => 图片缩略图 base64。
+               // message.content.imageUri => 原图 URL。
+               break;
+            case RongIMClient.MessageType.DiscussionNotificationMessage:
+               // message.content.extension => 讨论组中的人员。
+               break;
+            case RongIMClient.MessageType.LocationMessage:
+               // message.content.latiude => 纬度。
+               // message.content.longitude => 经度。
+               // message.content.content => 位置图片 base64。
+               break;
+            case RongIMClient.MessageType.RichContentMessage:
+               // message.content.content => 文本消息内容。
+               // message.content.imageUri => 图片 base64。
+               // message.content.url => 原图 URL。
+               break;
+            case RongIMClient.MessageType.InformationNotificationMessage:
+                // do something...
+               break;
+            case RongIMClient.MessageType.ContactNotificationMessage:
+                // do something...
+               break;
+            case RongIMClient.MessageType.ProfileNotificationMessage:
+                // do something...
+               break;
+            case RongIMClient.MessageType.CommandNotificationMessage:
+                // do something...
+               break;
+            case RongIMClient.MessageType.CommandMessage:
+                // do something...
+               break;
+            case RongIMClient.MessageType.UnknownMessage:
+                // do something...
+               break;
+            default:
+                // do something...
+        }
+    }
+  });
+  
+  
+  //开始链接
+  RongIMClient.connect(token, {
+    onSuccess: function(userId) {
+      showInfo("链接成功，用户id：" + userId);
+            sendMessage();
+            getConversationList();
+    },
+    onTokenIncorrect: function() {
+      showInfo('token无效');
+    },
+    onError:function(errorCode){
+      var info = '';
+      switch (errorCode) {
+        case RongIMLib.ErrorCode.TIMEOUT:
+          info = '超时';
+          break;
+        case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+          info = '未知错误';
+          break;
+        case RongIMLib.ErrorCode.UNACCEPTABLE_PaROTOCOL_VERSION:
+          info = '不可接受的协议版本';
+          break;
+        case RongIMLib.ErrorCode.IDENTIFIER_REJECTED:
+          info = 'appkey不正确';
+          break;
+        case RongIMLib.ErrorCode.SERVER_UNAVAILABLE:
+          info = '服务器不可用';
+          break;
+      }
+      console.log(info);
+    }
+  });
+
+  function getConversationList(){
+    _instance.getConversationList({
+      onSuccess: function(list){
+        showInfo(JSON.stringify(list, null, '\t'));
+      },
+      onError:function(errorCode){
+         showInfo(errorCode);
+      }
+    }, null, 2);
+  }
+  
+  function sendMessage(){
+    var msg = new RongIMLib.TextMessage({content:"hello RongCloud!",extra:"附加信息"});
+    var conversationtype = RongIMLib.ConversationType.PRIVATE;
+    var targetId = "tester";
+    _instance.sendMessage(conversationtype, targetId, msg, {
+            onSuccess: function (message) {
+              console.log(message);
+                showInfo(JSON.stringify(message, null, '\t'));
+            },
+            onError: function (errorCode,message) {
+                showInfo(errorCode);
+            }
+      });
+  }
+}
+</script>
+</body>
+</html>
