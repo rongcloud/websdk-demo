@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sticker</title>
+</head>
+<body>
+  <script src="../lib/require.js"></script>
+  <div id="log"></div>
+  <script>
+
+    var logNode = document.getElementById('log');
+    var showLogs = function(log){
+      if(typeof log != 'string'){
+        log = JSON.stringify(log, null, '  ')
+      }
+      logNode.innerHTML += '<pre>' + log + '</pre>'
+    };
+    require.config({
+        paths: {
+          RongSticker: 'https://cdn.ronghub.com/rong-sticker-1.0.0'
+        }
+    });
+
+    require(['RongSticker'], function(RongSticker) {
+      var config = {
+        appkey: 'appkey'
+      };
+      var rongSticker = RongSticker.init(config);
+      showLogs('初始化成功...');
+      var Package = rongSticker.Package;
+      Package.getList(function(result, error){
+        var packages = result.packages;
+        if(!error){
+          showLogs('获取表情包成功:');
+          showLogs(packages);
+          return;
+        }
+        showLogs('获取表情包失败:');
+        showLogs(error);
+      });
+    });
+  </script>
+</body>
+</html>

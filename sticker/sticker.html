@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sticker</title>
+  <style>
+    html,body{
+      background-color: #f0f8ff;
+    }
+    ul,li{
+      margin: 0;
+      list-style: none;
+    }
+    li{
+      display: inline-block;
+    }
+    .rong-container{
+      margin: 5% auto;
+      height: 480px;
+      width: 1000px;
+    }
+    .rong-editor{
+      height: 480px;
+      width: 50%;
+      background-color: #bc8f8f;
+      float: left;
+      position: relative;
+    }
+    .rong-show{
+      height: 480px;
+      width: 50%;
+      background-color:#b0e0e6;
+      float: right;
+      position: relative;
+    }
+    .rong-show-stickers{
+      height: 395px;
+      overflow-y: auto;
+    }
+    .rong-buttons{
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+    }
+    .rong-button{
+      height: 30px;
+      width: 60px;
+      background: none;
+      outline: none;
+      border: none;
+      border-radius: 5px;
+    }
+    .rong-button:hover{
+      cursor: pointer;
+      background-color: #F0F8FF;
+    }
+    .rong-stickers{
+      padding: 20px;
+    }
+    .rong-sticker{
+      margin: 3px 11px;
+    }
+    .rong-sticker img{
+      width: 90px;
+    }
+    .rong-sticker:hover{
+      background-color: #F5F5DC;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .rong-packages{
+      position: absolute;
+      bottom: 0;
+      padding: 0;
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid #F0FFFF;
+    }
+    .rong-package{
+      height: 30px;
+      width: 30px;
+      height: 30px;
+      width: 30px;
+      margin: 12px 0 0 7px;
+      padding-left: 6px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 1px solid #FFF;
+      border-radius: 5px;
+    }
+    .rong-package:hover{
+      cursor: pointer;
+      background-color: #F0FFFF;
+    }
+    .rong-warn{
+      color: #FF0000;
+    }
+  </style>
+</head>
+<body>
+  <script src="//cdn.ronghub.com/rong-sticker-1.0.0.js"></script>
+  <script src="./extend-stickers/extend-sticker.js"></script>
+  <div class="rong-container">
+    <div class="rong-editor">
+      <ul class="rong-stickers rong-editor-stickers" id="rong-editor-stickers"></ul>
+      <ul class="rong-packages" id="rong-packages"></ul>
+    </div>
+    <div class="rong-show">
+      <ul class="rong-stickers rong-show-stickers" id="rong-show-stickers"></ul>
+      <div class="rong-buttons">
+        <input class="rong-button rong-button-clear" id="rong-button-clear" type="button" value="清空">
+      </div>
+    </div>
+    <div class="rong-warn">
+      Demo 兼容性：
+      <span>Desktop：IE9+、Chrome、FireFox、Safari 移动端：Android4.4+、iOS、微信浏览器</span>
+    </div>
+  </div>
+  <script>
+      var config = {
+        appkey: 'appkey',
+        // extendPackages 来源 extend-stickers 目录下 extend-sticker.js
+        extensions: extendPackages
+      };
+      var rongSticker = RongSticker.init(config);
+      var Sticker = rongSticker.Sticker;
+      var Package = rongSticker.Package;
+      var utils = rongSticker.utils;
+      
+      var getDom = function(id){
+        return document.getElementById(id);
+      };
+
+      var packagesNode = getDom('rong-packages');
+      var tpl = '<li class="rong-package" packageid={packageId} style="background-image: url({url})"></li>';
+      Package.getList(function(result){
+        var packages = result.packages;
+        utils.forEach(packages, function(package){
+          packagesNode.innerHTML += utils.tplEngine(tpl, {
+            packageId: package.id,
+            url: package.icon
+          });
+        });
+        
+        packagesNode.onclick = function(_event){
+          var target = _event.target;
+          var pacakgeId = target.getAttribute('packageid');
+          if(pacakgeId){
+            getStickers(pacakgeId);
+          }
+        };
+      });
+      
+      var stickersNode = getDom('rong-editor-stickers');
+      var showNode = getDom('rong-show-stickers');
+      function getStickers(pacakgeId){ 
+        stickersNode.innerHTML = '';
+
+        var package = {
+          id: pacakgeId
+        };
+   
+        var tpl = [
+          '<li class="rong-sticker" >',
+            '<img src="{url}" alt="{desc}" packageid={packageId} stickerid={stickerId}>',
+          '</li>'
+        ].join('');
+        Sticker.getList(package, function(result, error){
+          var stickers = result.stickers;
+          utils.forEach(stickers, function(sticker){
+            stickersNode.innerHTML += utils.tplEngine(tpl, sticker);
+          });
+        });
+
+        stickersNode.onclick = function(event){
+          var target = event.target;
+          var packageId = target.getAttribute('packageid');
+          var stickerId = target.getAttribute('stickerid');
+
+          if(packageId){
+            var params = {
+              packageId: packageId,
+              stickerId: stickerId
+            };
+            Sticker.get(params, function(sticker, error){
+              showNode.innerHTML += utils.tplEngine(tpl, sticker);
+            });
+          }
+        };
+      }
+
+      var clearNode = getDom('rong-button-clear');
+      clearNode.onclick = function(){
+        showNode.innerHTML = '';
+      };
+    </script>
+</body>
+</html>
