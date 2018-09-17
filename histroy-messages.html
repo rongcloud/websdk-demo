@@ -1,0 +1,296 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>histroy messages</title>
+</head>
+<body>
+
+<link rel="stylesheet" href="./res/rongcloud.css">
+<a href="https://github.com/rongcloud/websdk-demo/blob/master/histroy-messages.html" class="get-source">获取源码</a>
+
+<style>
+	body{
+		font-size:14px;
+		line-height:2;
+		color:#333;
+	}
+	h1,h2,h3{
+		margin:0;
+	}
+	.panel span{
+		display:inline-block;	
+		width:60px;
+	}
+	.show{
+		display:none;
+		font-size:12px;
+		border:1px solid #ccc;
+		background:#fff;
+		padding:10px 30px;
+		width:300px;
+		overflow:auto;
+		position:fixed;
+		right:10px;
+		top:0;
+		bottom:10px;
+	}
+	.btns{
+		display:none;
+	}
+	.btns input,
+	.btns a{
+		font-size:12px;
+		margin:20px 10px 0 10px;
+	}	
+	.result{
+		display:none;
+		background:#f5f5f5;
+		margin-top:30px;
+		width:730px;
+		padding:5px;
+		overflow:hidden;
+	}
+	.result h2{
+		font-size:14px;
+		margin:0;
+		padding:0;
+	}
+	.result btn{
+		margin:5px;
+		padding:0;
+		color:#cd0000;
+	}
+	.result-code{
+		float:right;
+		margin:0 5px 5px 0;
+		color:#fff;
+		background:#000;
+		border:none;
+	}
+	#result-body{
+		position: relative;
+	}
+	.code-copy{
+		position:absolute;
+		right:5px;
+		top:5px;
+	}
+	.title {
+		background:#f5f5f5;
+		padding-left:1em;
+		padding-bottom:1em;
+	}
+	.title h2{
+		display: inline;
+		font-size:14px;
+		margin-right:0.5em;
+	}
+	.docs{
+		display:inline-block;
+		background:#f5f5f5;
+		padding:10px;
+		border:1px solid #ccc;
+		font-family:arial;
+	}
+</style>
+
+<!-- 
+http://www.ghostchina.com/adding-syntax-highlighting-to-ghost-using-highlight-js/
+-->
+<link href="res/monokai_sublime.min.css" rel="stylesheet">  
+<script src="res/highlight.min.js"></script> 
+
+<script type="text/javascript" src="lib/jquery-3.1.1.js"></script>
+<link rel="stylesheet" href="json-view/jsonview.css" />
+<script type="text/javascript" src="json-view/jquery.jsonview.js"></script>
+
+
+<script src="//cdn.ronghub.com/RongIMLib-2.3.3.js"></script>
+
+<!-- 二次封装的初始化代码 -->
+<script src="init.js"></script>
+
+<script>
+"use strict";
+function showTips(data){
+	var dom = document.getElementById("show");
+		dom.style.display = "block";
+	if(data){
+		dom.innerHTML += "<li>" + data + "</li>";
+	}else{
+		dom.innerHTML = "";
+	}
+}	
+function showResult(title,code){
+	var dom = document.getElementById("result-area");
+		dom.style.display = "block";
+
+	jsonOprators(code);
+}
+
+function jsonOprators(json){
+	var jt = $('#result-body');
+
+	if(typeof json == 'function'){
+		jt.html('<pre class="jsonview"><code id="result-code">' + json + '</code></pre>');
+		$('pre > code').each(function(i, block) {
+			hljs.highlightBlock(block);
+		});
+	}else{
+		json = JSON.stringify(json);
+		jt.JSONView(json);
+	}
+
+	$('#collapse-btn').on('click', function() {
+		jt.JSONView('collapse');
+	});
+
+	$('#expand-btn').on('click', function() {
+		jt.JSONView('expand');
+	});
+
+	$('#toggle-btn').on('click', function() {
+		jt.JSONView('toggle');
+	});
+
+	$('#toggle-level1-btn').on('click', function() {
+		jt.JSONView('toggle', 1);
+	});
+
+	$('#toggle-level2-btn').on('click', function() {
+		jt.JSONView('toggle', 2);
+	});
+}
+
+
+function getTimer(begin){
+	var now = new Date().getTime();
+	return " time:" + (now - begin) + " ms";
+}
+</script>
+
+<script>
+var instance = null;
+
+(function(){
+	var appKey = "8w7jv4qb78a9y";
+	var token = "ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==";
+
+
+	var params = {
+		appKey : appKey,
+		token : token
+	};
+
+
+	var callbacks = {
+		getInstance : function(_instance){
+			instance = _instance;
+		},
+		receiveNewMessage : function(message){
+		},
+		getCurrentUser : function(userInfo){
+			$("#login").html(userInfo.userId);
+			$("#btns").show();
+		    getHistroyMessage();
+		}
+	};
+	init(params,callbacks);
+})();
+
+
+var from = 0;
+var isCircle = true;
+var hasMsg = true;
+
+//必须成功初始化链接后才可执行
+function getHistroyMessage(){
+	var count = 20;  // 2 <= count <= 20
+	var targetId = "user11";	
+	var conversationType = RongIMLib.ConversationType.PRIVATE; // 私聊
+
+	/*
+	from 参数解释 1483950413013
+	获取历史消息的起始位置，服务器端时间，message.sentTime
+	0 为最新
+	*/
+
+	console.log("getHistroyMessage")
+	console.log(from)
+
+	//无更多历史消息时直接返回
+	if(!hasMsg){
+		return;
+	}
+
+	instance.getHistoryMessages(conversationType, targetId, from, count, {
+		onSuccess: function(list, _hasMsg) {
+			hasMsg = _hasMsg;
+			$("#time").html("起始时间：" + from + "；还有更多历史消息 " + hasMsg);
+
+			//删除多余信息，看结果对比方便
+            list.forEach(function(item, index){
+            	delete item["content"];
+            	delete item.messageDirection;
+            	delete item.receivedStatus;
+            	delete item.sentStatus;
+            	delete item.offLineMessage;
+            	delete item.messageId;
+            	delete item.messageType;
+            });
+
+
+            showResult("获取历史消息成功",list);
+            if(isCircle && hasMsg){
+            	from = list[0].sentTime;
+            }
+		},
+		onError: function(error) {
+            showResult("获取历史消息失败",error);
+		}
+	});
+} 
+
+
+</script>
+
+<h1>历史消息 <small>当前登录用户 id：<span id="login"></span></small></h1>
+
+<pre class="docs">
+设计改进：
+	1. 简化 timestrap 参数功能，仅保留时间戳功能
+	2. 新增 isCircle 参数标识是否循环拉取
+	3. 不论 timestrap 为何值，均可在 isCircle == true 时循环拉取 (应用场景：搜索定位到某条消息后需要上翻查看)
+	4. 拉取到无记录时不再执行，而不是又重新返回最新的消息
+
+思考：
+	1. 定位到某条消息可以上翻了，但下翻还无解决方案
+</pre>
+
+
+<div class="btns" id="btns">
+	<input type="button" value="获取历史消息" onclick="getHistroyMessage();"> 
+</div>
+
+
+<div class="result" id="result-area">
+	<h3 id="result-title">运行结果：</h3>
+	<div id="time"></div>
+
+	<div class="result-btns">
+		<button id="collapse-btn">Collapse</button>
+		<button id="expand-btn">Expand</button>
+		<button id="toggle-btn">Toggle</button>
+		<button id="toggle-level1-btn">Toggle level1</button>
+		<button id="toggle-level2-btn">Toggle level2</button>
+		
+		<button class="result-code" id="result-code-btn">查看代码</button>
+	</div>
+
+	<div id="result-body"></div>
+</div>
+
+
+</body>
+</html>
