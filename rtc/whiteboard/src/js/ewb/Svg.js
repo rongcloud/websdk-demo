@@ -760,9 +760,9 @@ enyo.kind({
         this.drawingItem = 'highlighter';
     },
 
-    //selectEraser: function() {
-    //this.drawingItem = 'eraser';
-    //},
+    selectEraser: function() {
+    this.drawingItem = 'eraser';
+    },
 
     removeLaser: function(send) {
         if (this.laserPen) {

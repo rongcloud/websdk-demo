@@ -27,6 +27,8 @@
   cursor: pointer;
   padding: 3px;
   top: 6px;
+  width: 42px;
+  height: 32px;
 }
 .rong-button:hover{
   color: #FFF;
@@ -35,19 +37,28 @@
 
 .rong-button-clear{
   position: relative;
-  left: 60px;
+  left: 53px;
 }
 
 .rong-button-table{
   position: relative;
+  top: 6px;
 }
 
 .rong-button-upload {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  left: -30px;
-  top: 15px;
+  left: -45px;
+  top: 17px;
+  text-align: center;
+  height: 24px;
+  width: 36px;
+}
+
+.rong-button-upload span{
+  margin-top: 2px;
+  display: inline-block;
 }
 
 .rong-button-upload input{
@@ -56,6 +67,7 @@
   right: 0px;
   top: 0px;
   opacity: 0;
+  border: #262626;
 }
 
 .rong-table{

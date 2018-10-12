@@ -162,7 +162,7 @@ enyo.kind({
         style: "background:#262626;height:61px;border:0 none;",
         components: [{
             kind: "onyx.TooltipDecorator",
-            style: "float:left;",
+            style: "float:left;margin-top: 6px;",
             name: "uploadAndNewPageBtn",
             components: [{
                 kind: "onyx.MenuDecorator",
@@ -170,7 +170,7 @@ enyo.kind({
                     name: "optionsMenu",
                     onmouseover: "optionsPickerMouseOver",
                     onmouseout: "optionsPickerMouseOut",
-                    style: "background:url(images/wb.svg) 0 0 no-repeat transparent;cursor:pointer;margin-top: 4px;"
+                    style: "margin-top: 8px;background:url(images/wb.svg) 0 0 no-repeat transparent;cursor:pointer;"
                 }, {
                     kind: "onyx.Menu",
                     components: [{
@@ -195,7 +195,7 @@ enyo.kind({
             }]
         }, {
             kind: "onyx.TooltipDecorator",
-            style: "float:left;margin:8px 0 20px",
+            style: "float:left;margin:6px 0 20px",
             components: [{
                 name: "previewPages",
                 kind: "onyx.Button",
@@ -203,7 +203,7 @@ enyo.kind({
                 onmouseover: "previewMouseOver",
                 onmouseout: "previewMouseOut",
                 popup: "previewPagesPopup",
-                style: "background:url(images/wb.svg);background-repeat:no-repeat;background-color:transparent;background-position:0 -40px;cursor:pointer;",
+                style: "margin-top: 8px;background:url(images/wb.svg);background-repeat:no-repeat;background-color:transparent;background-position:0 -40px;cursor:pointer;",
             }, {
                 kind: "onyx.Tooltip",
                 content: $L("Preview Pages"),
@@ -219,7 +219,7 @@ enyo.kind({
                 name: "zoomInButton",
                 onmouseover: "zoomInMouseOver",
                 onmouseout: "zoomInMouseOut",
-                style: "background:url(images/wb.svg);background-repeat:no-repeat;background-color:transparent;background-position:0 -80px;cursor:pointer;"
+                style: "margin-top: 6px;background:url(images/wb.svg);background-repeat:no-repeat;background-color:transparent;background-position:0 -120px;cursor:pointer;"
             }, {
                 kind: "onyx.Tooltip",
                 content: $L("Zoom In"),
@@ -228,11 +228,11 @@ enyo.kind({
             }],
         }, {
             kind: "onyx.TooltipDecorator",
-            style: "float:left;margin:8px 0 20px",
+            style: "float:left;margin:6px 0 20px",
             components: [{
                 kind: "onyx.Button",
                 name: "zoomOutButton",
-                style: "background:url(images/wb.svg);background-repeat:no-repeat;background-color:transparent;background-position:0 -120px;cursor:pointer;",
+                style: "margin-top: 8px;background:url(images/wb.svg);background-repeat:no-repeat;background-color:transparent;background-position:0 -80px;cursor:pointer;",
                 ontap: "zoomOutPane",
                 onmouseover: "zoomOutMouseOver",
                 onmouseout: "zoomOutMouseOut",
@@ -386,7 +386,7 @@ enyo.kind({
                     kind: "onyx.Button",
                     onmouseover: "penPickerMouseOver",
                     onmouseout: "penPickerMouseOut",
-                    style: "width:38px;background:url(images/wb.svg);background-repeat:no-repeat;background-position:0 -319px; background-color:transparent;height:30px;padding:0;cursor:pointer;margin:5px 0 20px;",
+                    style: "width:36px;background:url(images/wb.svg);background-repeat:no-repeat;background-position:0 -319px; background-color:transparent;height:30px;padding:0;cursor:pointer;margin:5px 0 20px;",
                 }, {
                     kind: "onyx.Picker",
                     maxHeight: "400px",
@@ -495,7 +495,7 @@ enyo.kind({
                 components: [{
                     name: "lineWidthPicker",
                     kind: "onyx.Button",
-                    style: "width: 40px;background:url(images/wb.svg);background-repeat:no-repeat;background-position:0 -159px;background-color:transparent;height:25px;cursor:pointer;margin:15px 10px 20px",
+                    style: "width: 40px;background:url(images/wb.svg);background-repeat:no-repeat;background-position:0 -159px;background-color:transparent;height:25px;cursor:pointer;margin:11px 10px 20px",
                 }, {
                     kind: "onyx.Picker",
                     maxHeight: "400px",
@@ -965,6 +965,7 @@ enyo.kind({
 
     selectEraser: function (inSender, inEvent) {
         this.whiteboard.removeSelected(true);
+        this.cancelEditingText();
     },
 
     selectLaserPen: function (inSender, inEvent) {
@@ -1333,19 +1334,19 @@ enyo.kind({
     },
 
     zoomOutMouseOver: function (inSender, inEvent) {
-        this.$.zoomOutButton.applyStyle("background-position", "-80px -120px");
+        this.$.zoomOutButton.applyStyle("background-position", "-80px -80px");
     },
 
     zoomOutMouseOut: function (inSender, inEvent) {
-        this.$.zoomOutButton.applyStyle("background-position", "0 -120px");
+        this.$.zoomOutButton.applyStyle("background-position", "0 -80px");
     },
 
     zoomInMouseOver: function (inSender, inEvent) {
-        this.$.zoomInButton.applyStyle("background-position", "-80px -80px");
+        this.$.zoomInButton.applyStyle("background-position", "-80px -120px");
     },
 
     zoomInMouseOut: function (inSender, inEvent) {
-        this.$.zoomInButton.applyStyle("background-position", "0 -80px");
+        this.$.zoomInButton.applyStyle("background-position", "0 -120px");
     },
 
     previewMouseOver: function (inSender, inEvent) {
@@ -1386,7 +1387,7 @@ enyo.kind({
             }
             var comp = this.createComponent({
                 container: this.$.previewPagesPopup,
-                style: "border:4px solid white; display:inline-block;float:left;width:120px;height:118px;;margin:10px;color:#000;background:url(" + url + ") center center no-repeat #FFF;background-size:contain;cursor:pointer;",
+                style: "border:4px solid white; display:inline-block;float:left;width:120px;height:116px;;margin:10px;color:#000;background:url(" + url + ") center center no-repeat #FFF;background-size:contain;cursor:pointer;",
                 content: "<div style='text-align:center;height: 100%;font-size:3em;'> " + page + " </div>",
                 allowHtml: true,
                 ontap: "gotoPage",

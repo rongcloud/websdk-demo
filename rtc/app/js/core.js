@@ -358,14 +358,15 @@
   var jumpNode = getDom('.rong-button-jump');
   var stepNode = getDom('.rong-install-plugins');
 
-  var isInstallPlugin = rtcCache.get('isInstallPlugin');
-  if(!isInstallPlugin){
-    El.show(stepNode);
-  }
+  // 隐藏引导
+  // var isInstallPlugin = rtcCache.get('isInstallPlugin');
+  // if(!isInstallPlugin){
+    // El.show(stepNode);
+  // }
 
   jumpNode.onclick = function(){
     El.hide(stepNode);
-    rtcCache.set('isInstallPlugin', true);
+    // rtcCache.set('isInstallPlugin', true);
   };
 
   joinNode.onclick = function () {
