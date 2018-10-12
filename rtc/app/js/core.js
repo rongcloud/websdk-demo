@@ -369,7 +369,7 @@
     // rtcCache.set('isInstallPlugin', true);
   };
 
-  joinNode.onclick = function () {
+  var startGuide = function(){
     var roomId = roomNode.value;
     if (utils.isEmpty(roomId)) {
       return LogHandler.error(Error.ROOMID_IS_EMPTY);
@@ -379,6 +379,16 @@
     El.hide(footerNode);
     launchFullscreen(document.body);
     joinRoom(roomId);
+  };
+  roomNode.onkeydown = function(event){
+    var isEnter = (event.keyCode == 13);
+    if(isEnter){
+      startGuide();
+    }
+  };
+
+  joinNode.onclick = function () {
+    startGuide();
   };
 
   var RTC = new RongRTCEngine(config.nav);
