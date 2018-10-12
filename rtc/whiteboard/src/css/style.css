@@ -1,3 +1,6 @@
+html{
+  overflow: hidden;
+}
 .rong-image{
   left: 30%;
   height:300px;
