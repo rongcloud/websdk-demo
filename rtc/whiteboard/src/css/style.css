@@ -1,0 +1,96 @@
+.rong-image{
+  left: 30%;
+  height:300px;
+  width: 300px;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.9;
+  display: none;
+}
+
+.rong-butons{
+  position: absolute;
+  height: 60px;
+  width: 150px;
+  bottom: 0;
+  left: 210px;
+  z-index: 99;
+}
+
+.rong-button{
+  background: none;
+  outline: none;
+  color: #898989;
+  border: 1px solid #898989;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 3px;
+  top: 6px;
+}
+.rong-button:hover{
+  color: #FFF;
+  border-color: #FFF;
+}
+
+.rong-button-clear{
+  position: relative;
+  left: 60px;
+}
+
+.rong-button-table{
+  position: relative;
+}
+
+.rong-button-upload {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  left: -30px;
+  top: 15px;
+}
+
+.rong-button-upload input{
+  position: absolute;
+  cursor: pointer;
+  right: 0px;
+  top: 0px;
+  opacity: 0;
+}
+
+.rong-table{
+  position: absolute;
+  left: 40%;
+  bottom: 100px;
+  display: none;
+  height: 180px;
+}
+
+/* Table Head */
+.rong-users thead th {
+  background-color: rgb(81, 130, 187);
+  color: #fff;
+  border-bottom-width: 0;
+}
+
+/* Column Style */
+.rong-users td {
+  color: #FFF;
+}
+/* Heading and Column Style */
+.rong-users tr, .rong-users th {
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(81, 130, 187);
+}
+
+/* Padding and font style */
+.rong-users td, .rong-users th {
+  padding: 5px 10px;
+  font-size: 12px;
+  font-family: Verdana;
+  font-weight: bold;
+}
+.rong-whiteborad{
+  overflow: hidden;
+}

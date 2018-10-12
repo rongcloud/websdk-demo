@@ -1,0 +1,124 @@
+.rong-main{
+  margin: 0 auto;
+  width: 80%;
+  height: 80%;
+  margin-top: 5%;
+  position: relative;
+  display: none;
+}
+
+.rong-main-item{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.rong-login{
+  height: 100%;
+  width: 100%;
+  background-color: #F2F2F2;
+}
+
+.rong-login-button{
+  width: 100%;
+  height: 50px;
+  margin: 20px auto;
+  border-radius: 10px;
+  border-style: none;
+  font-size: 18px;
+  text-align: center;
+}
+
+.rong-login-main{
+  width: 400px;
+  height: 100%;
+  margin: 0 auto;
+  padding-top: 80px;
+}
+
+.rong-login-logo{
+  background-image: url(./logo.png);
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 120px;
+  width: 120px;
+}
+
+.rong-login-main span{
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  color: #33CCFF;
+}
+
+.rong-login-title{
+  margin-top: 30px;
+}
+
+.rong-login-roomid{
+  margin-top: 80px;
+}
+
+.rong-login-roomid input{
+  color: #999; 
+}
+
+.rong-login-join input{
+  background: #3A83F5;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.rong-footer{
+  position: absolute;
+  bottom: 0;
+  background-color: #dee0e2;
+  width: 100%;
+  height: 65px;
+}
+.rong-footer-blocks{
+  width: 600px;
+  margin: 0 auto;
+}
+.rong-footer-block{
+  display: inline-block;
+  margin-top: 25px;
+  width: 29%;
+  text-align: center;
+}
+
+.rong-install-plugins{
+  height: 450px;
+  width: 400px;
+  background-color: #3A83F5;
+  position: absolute;
+  box-shadow: 10px 10px 5px #3A83F5;
+  border-radius: 10px;
+  display: none;
+}
+
+.rong-steps{
+  height: 100%;
+  color: #FFF;
+}
+
+.rong-steps a{
+  color: #FFF;
+}
+
+.rong-step{
+  line-height: 50px;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.rong-step-jump{
+  float: right;
+}
+.rong-button-jump{
+  cursor: pointer;
+  color: #3A83F5;
+  height: 35px;
+  width: 120px;
+}

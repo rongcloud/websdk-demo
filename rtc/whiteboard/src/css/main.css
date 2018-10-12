@@ -1,0 +1,77 @@
+body,
+html {
+    height: 100%;
+}
+
+.onyx-button {
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.line {
+    fill: none;
+}
+
+.onyx-menu {
+    padding: 0 !important;
+}
+
+.onyx-button:hover {
+    /*background-color: rgba(255,255,255,0.3) !important;*/
+    /*border: 1px solid rgba(179,179,179,0.5) !important;*/
+}
+
+.ajax-file-upload-container {
+    /*display: none;*/
+    position: relative;
+}
+
+.ajax-file-upload-filename {
+    word-wrap: break-word;
+    overflow-x: auto;
+}
+
+.ajax-file-upload-progress {
+    display: block !important;
+}
+
+.onyx-toolbar,
+.onyx-toolbar-inline {
+    white-space: normal !important;
+}
+
+.jconfirm-box {
+    width: 320px;
+    margin: 0 auto;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.text-entity {
+    width: 200px;
+    height: 100px;
+    border: 0 none;
+    font-size: 16px;
+    resize: none;
+    background: none;
+    user-select: none;
+    outline: 0;
+    font-family: "Helvetica";
+}
+
+#textareaFrame rect {
+    width: 6px;
+    height: 6px;
+    fill: #0096fd;
+    fill-opacity: 1;
+    stroke: #fff;
+    stroke-opacity: 1;
+    shape-rendering: crispEdges;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    stroke-miterlimit: 10;
+    float: left;
+    background-color: #0096fd;
+}

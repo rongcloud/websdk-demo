@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>whiteboard</title>
+
+	<meta http-equiv="X-UA-Compatible" content="requiresActiveX=true;IE=edge;chrome=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+	<meta http-equiv="Cache-Control" content="public" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" id="viewport" content="user-scalable=no" />
+
+	<link rel="stylesheet" href="css/enyo.css">
+	<link rel="stylesheet" href="css/app.css">
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/uploadfile.css">
+	<link rel="stylesheet" href="css/jquery-confirm.min.css">
+	<link rel="stylesheet" href="css/sweetalert.css">
+	<link rel="stylesheet" href="css/style.css">
+
+	<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+	<script type="text/javascript" src="js/jquery-confirm.min.js"></script>
+	<script type="text/javascript" src="js/jquery.form.min.js"></script>
+	<!-- <script type="text/javascript" src="js/jquery.uploadfile.min.js"></script> -->
+	<script type="text/javascript" src="js/jquery.noty.packaged.min.js"></script>
+	<script type="text/javascript" src="js/canvg.min.js"></script>
+	<script type="text/javascript" src="js/d3.min.js"></script>
+	<script type="text/javascript" src="js/draggabilly.pkgd.min.js"></script>
+	<script type="text/javascript" src="js/jsxcompressor.min.js"></script>
+	<script type="text/javascript" src="js/Queue.src.js"></script>
+	<script type="text/javascript" src="js/raphael-min.js"></script>
+	<script type="text/javascript" src="js/raphael.export.min.js"></script>
+	<script type="text/javascript" src="js/raphael.inline_text_editing.js"></script>
+	<script type="text/javascript" src="js/rgbcolor.min.js"></script>
+	<script type="text/javascript" src="js/scale.raphael.min.js"></script>
+	<script type="text/javascript" src="js/StackBlur.min.js"></script>
+	<script type="text/javascript" src="js/sweetalert.min.js"></script>
+	<script type="text/javascript" src="js/hammer.min.js"></script>
+
+	<script type="text/javascript" src="js/lib/enyo.js"></script>
+	<script type="text/javascript" src="js/lib/enyo-ilib.js"></script>
+	<script type="text/javascript" src="js/lib/layout.js"></script>
+	<script type="text/javascript" src="js/lib/onyx.js"></script>
+
+	<script type="text/javascript" src="config.js?v=20180507"></script>
+	<script type="text/javascript" src="js/common.js?v=20180507"></script>
+	<script type="text/javascript">
+		var ewb_server_path = global_config.server_path;
+		var ewb_file_server_path = global_config.file_server_path;
+		var ewb_load_interval = global_config.load_interval;
+		var ewb_width = global_config.width;
+		var ewb_height = global_config.height;
+
+		var ewb_roomKey = getParameterByName('roomKey');
+		var ewb_token = getParameterByName('token');
+		var ewb_clientType = getParameterByName('type');
+		var ewb_role = getParameterByName('role');
+		var ewb_userId = getParameterByName('userId');
+		if (ewb_userId == null || ewb_userId == '') {
+			ewb_userId = guid();
+		}
+	</script>
+
+	<script type="text/javascript" src="js/ewb/WhiteBoardApi.js?v=20180507"></script>
+	<script type="text/javascript" src="js/ewb/App.js?v=20180507"></script>
+	<script type="text/javascript" src="js/ewb/Svg.js?v=20180507"></script>
+	<script type="text/javascript" src="js/ewb/Connection.js?v=20180507"></script>
+	<script type="text/javascript" src="js/blink/blinkEwb.js?v=20180507"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			/* Call WhiteBoardApi */
+			var api = new WhiteBoardApi();
+			api.canvasWidth = ewb_width;
+			api.canvasHeight = ewb_height;
+			api.canvasNode = document.querySelector('.rong-whiteborad');
+			var params = {
+				role: ewb_role
+			};
+			api.join(params);
+
+			// 根据底部工具栏宽度调整间距
+			if (!api.app.isMobile() && !api.app.isGuest()) {
+				resizeBottomToolBar();
+			}
+			// 监听窗口大小变化
+			$(window).resize(function () {
+				waitForFinalEvent(function () {
+					console.debug("window resize");
+					// 根据底部工具栏宽度调整间距
+					if (!api.app.isMobile() && !api.app.isGuest()) {
+						resizeBottomToolBar();
+					}
+					// 设置缩放率
+					api.app.whiteboard.setZoomRatioCustom();
+					// 调整面板
+					api.app.whiteboard.zoomReduction();
+				}, 500, "some unique string");
+			});
+		});
+
+		/**
+		 * 根据底部工具栏宽度调整间距
+		 *
+		 */
+		function resizeBottomToolBar() {
+			// 原始大小
+			var marginLeft = "6px";
+			var marginRight = "6px";
+			var parent_paddingLeft = "8px";
+			var parent_paddingRight = "8px";
+			var button_padding = "18px";
+			var bottomToolBarClient = $("#app_bottomToolbar_client");
+			var bottomToolBar = bottomToolBarClient.parent();
+			var bottomToolBarClient_width = bottomToolBarClient.width();
+			if (bottomToolBarClient_width < 650) {
+				if ($("#app_middleFittableRows").height() == 393) {
+					$("#app_middleFittableRows").css({ "height": 394 })
+				}
+				marginLeft = "-1px";
+				marginRight = "-1px";
+				parent_paddingLeft = "1px";
+				parent_paddingRight = "1px";
+				button_padding = "16px";
+				bottomToolBarClient.css({
+					"minWidth": 578
+				})
+			} else if (bottomToolBarClient_width < 700) {
+				marginLeft = "0px";
+				marginRight = "0px";
+				parent_paddingLeft = "2px";
+				parent_paddingRight = "2px";
+				button_padding = "17px";
+			} else if (bottomToolBarClient_width < 750) {
+				marginLeft = "1px";
+				marginRight = "1px";
+				parent_paddingLeft = "3px";
+				parent_paddingRight = "3px";
+			} else if (bottomToolBarClient_width < 800) {
+				marginLeft = "2px";
+				marginRight = "2px";
+				parent_paddingLeft = "4px";
+				parent_paddingRight = "4px";
+			} else if (bottomToolBarClient_width < 850) {
+				marginLeft = "3px";
+				marginRight = "3px";
+				parent_paddingLeft = "5px";
+				parent_paddingRight = "5px";
+			} else if (bottomToolBarClient_width < 900) {
+				marginLeft = "4px";
+				marginRight = "4px";
+				parent_paddingLeft = "6px";
+				parent_paddingRight = "6px";
+			}
+			bottomToolBarClient.children().css("margin-left", marginLeft);
+			bottomToolBarClient.children().css("margin-right", marginRight);
+			bottomToolBar.css("padding-left", parent_paddingLeft);
+			bottomToolBar.css("padding-right", parent_paddingRight);
+			$("#app_bottomToolbar_client button").css({ "padding-left": button_padding, "padding-right": button_padding })
+		}
+	</script>
+</head>
+
+<body class="enyo-unselectable">
+	<div class="rong-whiteborad"></div>
+	<div class="rong-table">
+		<table class="rong-users">
+			<thead>
+				<th>姓名</th>
+				<th>城市</th>
+				<th>手机号</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>孙悟空</td>
+					<td>花果山</td>
+					<td>13269772112</td>
+				</tr>
+				<tr>
+					<td>猪八戒</td>
+					<td>高老庄</td>
+					<td>15810352456</td>
+				</tr>
+				<tr>
+					<td>唐僧</td>
+					<td>东土大唐</td>
+					<td>18902139872</td>
+				</tr>
+				<tr>
+					<td>嫦娥</td>
+					<td>广寒宫</td>
+					<td>18876279078</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="rong-image"></div>
+	<div class="rong-butons">
+		<input class="rong-button rong-button-table" type="button" value="表格">
+		<input class="rong-button rong-button-clear" type="button" value="清空">
+		<span class="rong-button rong-button-upload">
+			<span>图片</span>
+			<input type="file" id="uploadFile" accept="image/*">
+		</span>
+	</div>
+</body>
+<script src="./js/core.js"></script>
+
+</html>
