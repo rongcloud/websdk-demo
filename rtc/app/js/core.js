@@ -3,6 +3,11 @@
   var RongRTCEngine = dependencies.RongRTCEngine;
   var RongRTCEngineEventHandle = dependencies.RongRTCEngineEventHandle;
   var config = dependencies.RTCConfig;
+  // 是否支持插件
+  var isSupportRTCPlugin = false;
+  // 是否支持插件这个步骤是否已经加载完
+  var isSupportRTCLoaded = false;
+  var promptTime = 5000;
 
   var utils = {
     ObserverList: function () {
@@ -346,6 +351,32 @@
     }
   };
 
+  var gotoInstallStep = function () {
+    var promptDom = getDom('.rong-plugin-prompt');
+    El.show(promptDom);
+    setTimeout(() => {
+      El.show(stepNode);
+    }, promptTime);
+  };
+
+  var setRTCPluginSupport = function (successCallback, faildCallback) {
+    window.addEventListener('message', function (msg) {
+      var type = msg.data.type;
+      if (type === 'testMessage') {
+        isSupportRTCPlugin = true;
+        isSupportRTCLoaded = true;
+        successCallback && successCallback();
+      }
+    });
+    setTimeout(() => {
+      isSupportRTCLoaded = true;
+      if (!isSupportRTCPlugin) {
+        gotoInstallStep();
+      }
+    }, 2000);
+    window.postMessage('test', '*');
+  };
+
   var rtcCache = new utils.Cache();
 
   var loginNode = getDom('.rong-login');
@@ -354,20 +385,13 @@
   var roomNode = getDom('.rong-button-room');
   var joinNode = getDom('.rong-button-join');
   var whiteboardNode = getDom('.rong-whiteboard');
-  var footerNode = getDom('.rong-footer');
-  var jumpNode = getDom('.rong-button-jump');
   var stepNode = getDom('.rong-install-plugins');
-
-  // 隐藏引导
-  // var isInstallPlugin = rtcCache.get('isInstallPlugin');
-  // if(!isInstallPlugin){
-    // El.show(stepNode);
-  // }
-
-  jumpNode.onclick = function(){
-    El.hide(stepNode);
-    // rtcCache.set('isInstallPlugin', true);
+  var jumpNode = getDom('.rong-step-jump');
+  var showPluginPrompt = function () {
+    
   };
+  
+  setRTCPluginSupport();
 
   var startGuide = function(){
     var roomId = roomNode.value;
@@ -376,7 +400,7 @@
     }
     El.show(mainNode);
     El.hide(loginNode);
-    El.hide(footerNode);
+    // El.hide(footerNode);
     launchFullscreen(document.body);
     joinRoom(roomId);
   };
@@ -387,8 +411,24 @@
     }
   };
 
+  var joinChannel = function () {
+    if (isSupportRTCLoaded) {
+      if (isSupportRTCPlugin) {
+        startGuide();
+      } else {
+        gotoInstallStep();
+      }
+    } else {
+      setTimeout(joinChannel, 200);
+    }
+  };
+
   joinNode.onclick = function () {
-    startGuide();
+    joinChannel();
+  };
+
+  jumpNode.onclick = function () {
+    window.location.reload();
   };
 
   var RTC = new RongRTCEngine(config.nav);
@@ -428,7 +468,7 @@
           RTC.leaveChannel();
           RTC.closeLocalStream();
           El.show(loginNode);
-          El.show(footerNode);
+          // El.show(footerNode);
           El.hide(mainNode);
           exitFullScreen(document);
         }
