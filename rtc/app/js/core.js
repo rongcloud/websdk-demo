@@ -404,12 +404,6 @@
     launchFullscreen(document.body);
     joinRoom(roomId);
   };
-  roomNode.onkeydown = function(event){
-    var isEnter = (event.keyCode == 13);
-    if(isEnter){
-      startGuide();
-    }
-  };
 
   var joinChannel = function () {
     if (isSupportRTCLoaded) {
@@ -420,6 +414,12 @@
       }
     } else {
       setTimeout(joinChannel, 200);
+    }
+  };
+  roomNode.onkeydown = function(event){
+    var isEnter = (event.keyCode == 13);
+    if(isEnter){
+      joinChannel();
     }
   };
 
