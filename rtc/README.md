@@ -11,16 +11,18 @@
 ### 建立基于Web的远程专家端
 
 1、现场工程师与专家通过公有云建立会场
+
 2、现场工程师通过VR眼镜或手机现场采集，远端专家通过Web远程专家端加入会场
+
 3、专家可以接收现场工程师采集的音视频，并进行实时的双向音视频对话
+
 4、专家通过共享屏幕，可以在现场采集的视频基础上进行，标记（写画），文本输入，显示图片，显示表格
+
 5、专家侧的标注和现场采集的视频，合并后传给现场工程师显示
 
 ### Web专家端操作步骤
 
-1、首次使用安装 RongRTC 插件，下载地址:
-
-[http://rongcloud-file.ronghub.com/bb94b141e196cca49c.zip?attname=rong-rtc-plugin.zip&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:wJ_khuHbz3TDso6RL9FMVDQP3QA=](http://rongcloud-file.ronghub.com/bb94b141e196cca49c.zip?attname=rong-rtc-plugin.zip&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:wJ_khuHbz3TDso6RL9FMVDQP3QA=)
+1、首次使用安装 RongRTC 插件，[点击下载](http://rongcloud-file.ronghub.com/bb94b141e196cca49c.zip?attname=rong-rtc-plugin.zip&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:wJ_khuHbz3TDso6RL9FMVDQP3QA=):
 
 2、解压 rong-rtc-plugin.zip
 
