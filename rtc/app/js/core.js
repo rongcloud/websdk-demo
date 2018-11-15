@@ -10,6 +10,16 @@
   var promptTime = 5000;
 
   var utils = {
+    getScale: function (dom) {
+      var transform = dom.style.transform;
+      if (transform.indexOf('scale') === -1) {
+        return null;
+      }
+      var scale = transform.substring(5, transform.length);
+    },
+    scaleEl: function (dom, percent) {
+      
+    },
     ObserverList: function () {
       var checkIndexOutBound = function (index, bound) {
         return index > -1 && index < bound;
@@ -616,6 +626,11 @@
       RTC.joinChannel(roomId, userId, token);
     });
   }
+  window.RongWhiteboard = window.RongWhiteboard || {};
+  window.RongWhiteboard.zoom = function (percent) {
+    var videoEl = getDom('.rong-main-item');
+    utils.scaleEl(videoEl, percent);
+  };
 })({
   RTCConfig: RTCConfig,
   RongRTCEngine: RongRTCEngine,
