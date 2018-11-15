@@ -22,7 +22,7 @@
 
 ### Web专家端操作步骤
 
-1、首次使用安装 RongRTC 插件，[点击下载](http://rongcloud-file.ronghub.com/bb94b141e196cca49c.zip?attname=rong-rtc-plugin.zip&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:wJ_khuHbz3TDso6RL9FMVDQP3QA=):
+1、首次使用安装 RongRTC 插件，[点击下载](http://rongcloud-file.ronghub.com/bb94b141e196cca49c.zip?attname=rong-rtc-plugin.zip&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:wJ_khuHbz3TDso6RL9FMVDQP3QA=)
 
 2、解压 rong-rtc-plugin.zip
 

@@ -15,10 +15,13 @@
       if (transform.indexOf('scale') === -1) {
         return null;
       }
-      var scale = transform.substring(5, transform.length);
+      var scale = transform.substring(6, transform.length - 1);
+      return Number(scale);
     },
     scaleEl: function (dom, percent) {
-      
+      var scale = utils.getScale(dom);
+      percent = scale ? scale * percent : percent;
+      dom.style.transform = 'scale(' + percent + ')';
     },
     ObserverList: function () {
       var checkIndexOutBound = function (index, bound) {
