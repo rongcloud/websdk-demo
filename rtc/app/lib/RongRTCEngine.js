@@ -2162,6 +2162,7 @@ RongRTCEngine.prototype.preparePeerConnection = function (userId) {
         var pc = new RTCPeerConnection();
         var pcMin = new RTCPeerConnection();
         pc.onaddstream = function (evt) {
+            window.RongOtherEvt = evt;
             RongRTCLogger.debug("onaddstream", evt);
 
             rongRTCEngine.remoteStreams.push(evt.stream);
