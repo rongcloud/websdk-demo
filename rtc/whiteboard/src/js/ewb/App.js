@@ -6,7 +6,7 @@ enyo.kind({
     published: {
         whiteboard: '',
         curves: {
-            color: 'black',
+            color: 'red',
             width: '3px',
         },
         eraser: {
@@ -94,6 +94,7 @@ enyo.kind({
         components: [{
             kind: "Scroller",
             classes: "enyo-fit",
+            style: "overflow-x: hidden !important; overflow-y: hidden !important",
             components: [{
                 style: "display:inline-block;height:40px;width:40px;padding:5px;background:url(images/btn_left.png) center center no-repeat #808080;position:absolute;left:1%;top:50%;cursor:pointer;z-index:10;border-radius:5px;cursor:pointer;position:fixed;",
                 ontap: "gotoPreviousPage",
@@ -168,6 +169,7 @@ enyo.kind({
                 kind: "onyx.MenuDecorator",
                 components: [{
                     name: "optionsMenu",
+                    ontap: "showOptionsMenu",
                     onmouseover: "optionsPickerMouseOver",
                     onmouseout: "optionsPickerMouseOut",
                     style: "margin-top: 8px;background:url(images/wb.svg) 0 0 no-repeat transparent;cursor:pointer;"
@@ -479,7 +481,7 @@ enyo.kind({
                 name: "pencilButton",
                 onmouseover: "pencilMouseOver",
                 onmouseout: "pencilMouseOut",
-                style: "background:url(images/wb.svg);background-repeat:no-repeat;background-color:transparent;background-position:0 -199px;height:25px;cursor:pointer;margin:5px 0 20px;",
+                style: "background:url(images/wb.svg);background-repeat:no-repeat;background-color:transparent;background-position:-80px -199px;height:25px;cursor:pointer;margin:5px 0 20px;",
                 ontap: "selectPen",
             }, {
                 kind: "onyx.Tooltip",
@@ -541,7 +543,7 @@ enyo.kind({
                 components: [{
                     name: "colorPicker",
                     kind: "onyx.Button",
-                    style: "background-color: black;height:30px;cursor:pointer;",
+                    style: "background-color: red;height:30px;cursor:pointer;",
                 }, {
                     kind: "onyx.Picker",
                     name: "colorItemSelectedHolder",
@@ -798,7 +800,10 @@ enyo.kind({
     uploadFileNew: function () {
         this.whiteboard.connection.blinkEwb.upload();
     },
-
+    showOptionsMenu: function () {
+        var _this = this;
+        _this.$.previewPagesPopup.hide()
+    },
     drawRectangle: function (inSender, inEvent) {
         this.closeEraser();
         this.cancelSelect();

@@ -351,6 +351,9 @@
     var videoEl = getDom('.rong-main-item');
     utils.scaleEl(videoEl, percent);
   };
+  window.onbeforeunload = function (e) {
+    RTC.leaveChannel();
+  }
 })({
   RTCConfig: RTCConfig,
   RongRTCEngine: RongRTCEngine,
