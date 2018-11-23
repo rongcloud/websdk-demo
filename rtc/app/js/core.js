@@ -351,8 +351,9 @@
     var videoEl = getDom('.rong-main-item');
     utils.scaleEl(videoEl, percent);
   };
-  window.onbeforeunload = function (e) {
-    RTC.leaveChannel();
+  window.onbeforeunload = function () {
+    window.clearWhiteboard && window.clearWhiteboard();
+    RTC && RTC.leaveChannel && RTC.leaveChannel();
   }
 })({
   RTCConfig: RTCConfig,

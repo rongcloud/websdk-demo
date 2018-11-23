@@ -147,6 +147,9 @@ enyo.kind({
                                 _this.owner.$.channelId.render();
                             }
                         );
+                        window.parent.clearWhiteboard = function () {
+                            _this.owner.whiteboard.clear(true);
+                        };
                     }
                 },
             }, {
