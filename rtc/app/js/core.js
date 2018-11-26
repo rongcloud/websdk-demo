@@ -194,12 +194,7 @@
           console.log(result);
         },
         onsharestoped: function(){
-          RTC.leaveChannel();
-          RTC.closeLocalStream();
-          El.show(loginNode);
-          // El.show(footerNode);
-          El.hide(mainNode);
-          exitFullScreen(document);
+          window.location.reload();
         }
       };
       var type = result.type;
