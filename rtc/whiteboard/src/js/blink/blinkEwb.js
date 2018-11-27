@@ -144,7 +144,7 @@ BlinkEwb.prototype.upload = function() {
 	$(document.body)
 			.append(
 					"<form enctype=\"multipart/form-data\" method=\"post\" id=\"uploadFileForm\" name=\"uploadFileForm\">"
-							+ "<input type=\"file\" id=\"file\" name=\"file\" runat=\"server\"/>"
+							+ "<input style=\"opacity: 0\" type=\"file\" id=\"file\" name=\"file\" runat=\"server\"/>"
 							+ "<input type=\"hidden\" name=\"roomKey\" id=\"roomKey\" value=\""
 							+ this.roomKey + "\" />" + "</form>");
 	$("#file").change(
@@ -190,6 +190,7 @@ BlinkEwb.prototype.upload = function() {
 				$("#uploadFileForm").ajaxSubmit(options);
 			}).click();
 }
+
 /** ----- loadPageInfo ---- */
 /**
  * loadPageInfo
