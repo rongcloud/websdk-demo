@@ -347,7 +347,7 @@
     utils.scaleEl(videoEl, percent);
   };
   window.onbeforeunload = function () {
-    window.clearWhiteboard && window.clearWhiteboard();
+    // window.clearWhiteboard && window.clearWhiteboard();
     RTC && RTC.leaveChannel && RTC.leaveChannel();
   }
 })({
