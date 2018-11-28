@@ -80,17 +80,20 @@ html{
   display: none;
   height: 180px;
 }
+.rong-table td, .rong-table td {
+  border: 1px solid #687f8d;
+}
 
 /* Table Head */
 .rong-users thead th {
-  background-color: rgb(81, 130, 187);
-  color: #fff;
+  background-color: #78D1F0;
+  color: #262626;
   border-bottom-width: 0;
 }
 
 /* Column Style */
 .rong-users td {
-  color: #FFF;
+  color: rgb(180, 180, 180);
 }
 /* Heading and Column Style */
 .rong-users tr, .rong-users th {
