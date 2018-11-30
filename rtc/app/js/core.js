@@ -343,7 +343,12 @@
         console.log(error);
         return LogHandler.error(Error.GET_TOKEN);
       }
-      RTC.joinChannel(roomId, userId, token);
+      RTC.joinChannel(roomId, userId, token, function (error) {
+        if (error.message === 'Permission denied') {
+          alert('请打开您的摄像头、麦克风权限');
+          window.location.reload();
+        }
+      });
     });
   }
   window.RongWhiteboard = window.RongWhiteboard || {};
