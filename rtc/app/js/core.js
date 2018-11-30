@@ -9,6 +9,8 @@
   var isSupportRTCLoaded = false;
   var promptTime = 5000;
   var utils = RongRTC.utils;
+  var store = utils.store;
+  var roomIdStoreKey = 'roomId';
 
   var Error = {
     ROOMID_IS_EMPTY: '房间号不能为空',
@@ -118,11 +120,14 @@
   var whiteboardNode = getDom('.rong-whiteboard');
   var stepNode = getDom('.rong-install-plugins');
   var jumpNode = getDom('.rong-step-jump');
-  
+
+  roomNode.value = store.get(roomIdStoreKey) || '';
+
   setRTCPluginSupport();
 
   var startGuide = function(){
     var roomId = roomNode.value;
+    store.set(roomIdStoreKey, roomId);
     if (utils.isEmpty(roomId)) {
       return LogHandler.error(Error.ROOMID_IS_EMPTY);
     }

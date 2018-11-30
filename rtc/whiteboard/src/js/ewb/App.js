@@ -2,6 +2,7 @@ enyo.kind({
     name: "App",
     kind: "FittableRows",
     fit: true,
+    style: "border: 1px solid black",
 
     published: {
         whiteboard: '',

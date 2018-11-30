@@ -277,7 +277,83 @@
         };
       }
       xhr.send(option.body);
-    }
+    },
+    store: (function () {
+      var keyNS = 'rong-rtcmark-';
+
+      function get(key) {
+        /*
+        legal data: "" [] {} null flase true
+
+        illegal: undefined
+            1: key not set
+            2: key is cleared
+            3: key removed
+            4: wrong data format
+        */
+        key = keyNS + key;
+
+        if (!isKeyExist(key)) {
+          return;
+        }
+
+        //maybe keyNS could avoid conflict
+        var val = localStorage.getItem(key) || sessionStorage.getItem(key);
+        val = JSON.parse(val);
+
+        //val format check
+        if (val !== null && val.hasOwnProperty('type') && val.hasOwnProperty('data')) {
+          return val.data;
+        }
+
+        /*
+        how to return illegal data for im？
+        */
+        return;
+      }
+
+      //isPersistent
+      function set(key, val, isTemp) {
+        var store = localStorage;
+        if (isTemp) {
+          store = sessionStorage;
+        }
+
+        key = keyNS + key;
+        var type = (typeof val);
+        val = {
+          data: val,
+          type: type
+        };
+
+        store[key] = JSON.stringify(val);
+      }
+
+      function remove(key) {
+        key = keyNS + key;
+        localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
+      }
+
+      function isKeyExist(key) {
+        //do not depend on value cause of ""和0
+        return localStorage.hasOwnProperty(key) || sessionStorage.hasOwnProperty(key);
+      }
+
+      function setKeyNS(NS) {
+        var isString = typeof NS === 'string';
+        if (isString && NS !== '') {
+          keyNS = NS;
+        }
+      }
+
+      return {
+        setKeyNS: setKeyNS,
+        get: get,
+        set: set,
+        remove: remove
+      };
+    })()
   };
 
   window.RongRTC = window.RongRTC || {};
