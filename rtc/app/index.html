@@ -3,73 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <title>RongRTC</title>
-  <link rel="icon" href="./css/icon.png" type="image/x-icon"/>
+  <link rel="icon" href="./css/icon/icon.png" type="image/x-icon"/>
   <link rel="stylesheet" href="./css/common.css">
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-  <div class="rong-login">
-    <div class="rong-login-main">
-      <div class="rong-install-plugins">
-          <ul class="rong-steps">
-            <li class="rong-step">
-              安装 RongRTC 插件步骤 :
-            </li>
-            <li class="rong-step">
-              1、<a href="http://rongcloud-file.ronghub.com/bb94b141e196cca49c.zip?attname=rong-rtc-plugin.zip&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:wJ_khuHbz3TDso6RL9FMVDQP3QA=">下载 RongRTC 插件</a>
-            </li>
-            <li class="rong-step">
-              2、解压 rong-rtc-plugin.zip 
-            </li>
-            <li class="rong-step">
-              3、打开浏览器插件列表
-            </li>
-            <li class="rong-step">
-              4、将 rong-rtc-plugin 拖拽至浏览器
-            </li>
-            <li class="rong-step rong-step-jump">
-              <input type="button" value="已安装" class="rong-login-button rong-button-jump">
-            </li>
-          </ul>
+  <div class="rong-box">
+    <div class="rong-login">
+      <div class="rong-plugin-prompt">
+        <p>首次使用请先安装 RongRTC 屏幕共享插件。</p>
       </div>
-
-      <ul class="rong-components">
-        <li class="rong-component">
-          <i class="rong-login-logo"></i>
-        </li>
-        <li class="rong-component rong-login-title">
-            <span>欢迎体验实时高质量的远程指导</span>
-            <span>SealRTC V1.6.0</span>
-        </li>
-        <li class="rong-component rong-login-roomid">
-            <input type="text" class="rong-login-button rong-button-room" placeholder="请输入房间号">
-        </li>
-        <li class="rong-component rong-login-join">
-            <input type="button" class="rong-login-button rong-button-join" value="加入">
-        </li>
-      </ul>
+      <div class="rong-install-plugins">
+        <h1>RongRTC</h1>
+        <h2>适用 Chrome 的屏幕共享插件</h2>
+        <h4 class="rong-install-step-title">安装 RongRTC 插件操作步骤</h4>
+        <ul class="rong-steps">
+          <li>
+            <p>1. 首次使用安装 RongRTC 插件</p>
+            <div>
+              <a class="rong-step-button rong-step-download" href="http://rongcloud-file.ronghub.com/bb94b141e196cca49c.zip?attname=rong-rtc-plugin.zip&e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:wJ_khuHbz3TDso6RL9FMVDQP3QA=">下载插件</a>
+              <p class="rong-step-download-desc">需要把扩展程序下载到本地，再将下载的文件夹拖拽到 chrome 浏览器扩展程序中。</p>
+            </div>
+          </li>
+          <li>
+            <p>2. 打开 Chrome "扩展选项"</p>
+            <div class="rong-step-graphic rong-step-open"></div>
+          </li>
+          <li>
+            <p>3. 将 rong-rtc-plugin 文件夹拖拽至浏览器</p>
+            <div class="rong-step-graphic rong-step-drag"></div>
+          </li>
+          <li>
+            <p>4. 插件安装成功</p>
+            <div class="rong-step-graphic rong-step-success"></div>
+          </li>
+          <li>
+            <p>5. 进入演示模式</p>
+            <div>
+              <button class="rong-step-button rong-step-jump">进入远程专家系统</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="rong-login-main">
+        <ul class="rong-components rong-login-box">
+          <li class="rong-component">
+            <i class="rong-login-logo"></i>
+          </li>
+          <li class="rong-component rong-login-title">
+            <p>远程标注专家系统</p>
+          </li>
+          <li class="rong-component rong-login-roomid">
+            <input id="roomId" type="text" class="rong-login-button rong-button-room" placeholder="请输入房间号">
+          </li>
+          <li class="rong-component rong-login-join">
+            <input type="button" class="rong-login-button rong-button-join" value="进入房间">
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-  <div class="rong-main">
-    <video class="rong-main-item rong-video-remote"></video>
-    <iframe class="rong-main-item rong-whiteboard" frameborder="0"></iframe>
-  </div>
-  <div class="rong-footer">
-    <ul class="rong-footer-blocks">
-      <li class="rong-footer-block">
-        <a href="https://www.rongcloud.cn">RongCloud</a>
-      </li>
-      <li class="rong-footer-block">
-          © Copyright SealRTC
-      </li>
-      <li class="rong-footer-block">
-          浏览器: <a href="http://www.chromeliulanqi.com" target="_blank">谷歌浏览器 57+</a>
-      </li>
-    </ul>
+    <div class="rong-main">
+      <video class="rong-main-item rong-video-remote"></video>
+      <iframe class="rong-main-item rong-whiteboard" frameborder="0"></iframe>
+    </div>
+    <!-- <div class="rong-footer">
+        <ul class="rong-footer-blocks">
+          <li class="rong-footer-block">
+            <a href="https://www.rongcloud.cn">RongCloud</a>
+          </li>
+          <li class="rong-footer-block">
+              © Copyright SealRTC
+          </li>
+          <li class="rong-footer-block">
+              浏览器: <a href="http://www.chromeliulanqi.com" target="_blank">谷歌浏览器 57+</a>
+          </li>
+        </ul>
+      </div> -->
   </div>
   <script src="./lib/adapter.js"></script>
   <script src="./lib/RongRTCEngine.js"></script>
   <script src="./config.js"></script>
+  <script src="./js/utils.js"></script>
   <script src="./js/core.js"></script>
 </body>
 </html>

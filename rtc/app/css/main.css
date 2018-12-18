@@ -5,6 +5,7 @@
   margin-top: 5%;
   position: relative;
   display: none;
+  min-width: 1030px;
 }
 
 .rong-main-item{
@@ -18,31 +19,45 @@
   height: 100%;
   width: 100%;
   background-color: #F2F2F2;
+  background-image: url('./icon/background.jpg');
+  background-size: cover;
 }
 
 .rong-login-button{
   width: 100%;
-  height: 50px;
-  margin: 20px auto;
+  height: 42px;
+  margin: 16px auto;
   border-radius: 10px;
   border-style: none;
-  font-size: 18px;
+  font-size: 15px;
   text-align: center;
 }
 
 .rong-login-main{
-  width: 400px;
+  width: 360px;
   height: 100%;
   margin: 0 auto;
-  padding-top: 80px;
+  position: relative;
+}
+
+.rong-login-box {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
 }
 
 .rong-login-logo{
-  background-image: url(./logo.png);
+  background-image: url(./icon/logo.png);
   background-repeat: no-repeat;
   display: inline-block;
-  height: 120px;
-  width: 120px;
+  height: 90px;
+  width: 90px;
+  background-size: cover;
 }
 
 .rong-login-main span{
@@ -55,9 +70,10 @@
 .rong-login-title{
   margin-top: 30px;
 }
-
-.rong-login-roomid{
-  margin-top: 80px;
+.rong-login-title p {
+  font-size: 30px;
+  color: white;
+  margin: 10px 0 18px 0;
 }
 
 .rong-login-roomid input{
@@ -89,20 +105,87 @@
 }
 
 .rong-install-plugins{
-  height: 450px;
-  width: 400px;
-  background-color: #3A83F5;
+  overflow: scroll;
+  height: 100%;
+  width: 100%;
+  background-color:rgb(250, 250, 250);
   position: absolute;
   box-shadow: 10px 10px 5px #3A83F5;
-  border-radius: 10px;
   display: none;
+  position: absolute;
+  z-index: 10;
+  padding: 0 150px;
+  box-sizing: border-box;
+  min-width: 1078px;
+}
+.rong-install-step-title {
+    background-color: rgb(194, 215, 248);
+    padding-left: 10px;
+    padding: 5px 0 5px 10px;
+    color: rgb(92, 92, 92);
+    font-size: 13px;
+}
+
+.rong-step-button {
+  display: inline-block;
+  width: 250px;
+  height: 37px;
+  line-height: 37px;
+  background-color: rgb(66, 133, 244);
+  color: white;
+  text-align: center;
+  border-radius: 2px;
+  font-size: 15px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.rong-step-download {
+  margin: 19px 0 0 18px;
+}
+
+.rong-step-jump {
+  margin: 5px 0 0 18px;
+}
+
+.rong-step-jump:disabled {
+  background-color: rgb(194, 215, 248);
+}
+
+.rong-step-download-desc {
+    font-size: 12px;
+    color: rgb(111, 111, 111);
+    margin: 14px 45px 0 18px;
+}
+
+.rong-step-graphic {
+  width: 237px;
+  height: 102px;
+  background-size: cover;
+  margin-left: 22px;
+}
+.rong-step-open {
+  background-image: url(./icon/open.png);
+}
+
+.rong-step-drag {
+  background-image: url(./icon/drag.png);
+}
+
+.rong-step-success {
+  background-image: url(./icon/install-success.png);
 }
 
 .rong-steps{
-  height: 100%;
-  color: #FFF;
+  width: 100%;
 }
 
+.rong-steps li {
+  float: left;
+  width: 325px;
+  height: 200px;
+}
 .rong-steps a{
   color: #FFF;
 }
@@ -113,12 +196,49 @@
   font-size: 20px;
 }
 
-.rong-step-jump{
+/* .rong-step-jump{
   float: right;
-}
+} */
 .rong-button-jump{
   cursor: pointer;
   color: #3A83F5;
   height: 35px;
   width: 120px;
+}
+
+.rong-plugin-prompt {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color:rgb(0, 0, 0, 0.8);
+  z-index: 9;
+}
+
+.rong-plugin-prompt p {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 400px;
+  line-height: 75px;
+  background-color: white;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+@media screen and (max-width: 1270px) {
+    .rong-steps li {
+      margin-right: 90px;
+    }
+}
+
+@media screen and (max-width: 1132px) {
+    .rong-steps li {
+      margin-right: 30px;
+    }
 }

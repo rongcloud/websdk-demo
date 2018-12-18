@@ -2,7 +2,37 @@
  * This contains all the local functions to interact with the whiteboard. It also contains
  * interfaces to the Connection class.
  */
-
+window.RongSvgUtils = {
+    getScale: function (dom) {
+        var transform = dom.style.transform;
+        if (transform.indexOf('scale') === -1) {
+            return null;
+        }
+        var scale = transform.substring(6, transform.length - 1);
+        return Number(scale);
+    },
+    scaleEl: function (dom, percent, isRestore) {
+        var scale = window.RongSvgUtils.getScale(dom);
+        percent = scale ? scale * percent : percent;
+        percent = isRestore ? '1' : percent;
+        dom.style.transform = 'scale(' + percent + ')';
+    },
+    scaleTable: function (percent, isRestore) {
+        var dom = document.querySelector('.rong-table');
+        window.RongSvgUtils.scaleEl(dom, percent, isRestore);
+    },
+    scaleImage: function (percent, isRestore) {
+        var dom = document.querySelector('.rong-image');
+        window.RongSvgUtils.scaleEl(dom, percent, isRestore);
+    },
+    scaleAll: function (percent, isRestore) {
+        window.RongSvgUtils.scaleTable(percent, isRestore);
+        window.RongSvgUtils.scaleImage(percent, isRestore);
+    }
+};
+window.onresize = function () {
+    window.RongSvgUtils.scaleAll(0, true);
+};
 enyo.kind({
     name: 'WhiteboardSvg',
     kind: null,
@@ -885,12 +915,24 @@ enyo.kind({
         if (this.zoomRatio > this.zoomRatioMax) {
         	this.zoomRatio = this.zoomRatioMax;
         }
+        
+        var containerId = this.parent_.$.canvasContainer.id;
+        var oldWidth = document.getElementById(containerId).offsetWidth;
+
         this.cvs.scaleAll(this.zoomRatio);
         // Adjust convas size accordingly
         this.parent_.$.canvasContainer.applyStyle("width", String(this.canvasWidth * this.zoomRatio) + "px");
         this.parent_.$.canvasContainer.applyStyle("height", String(this.canvasHeight * this.zoomRatio) + "px");
         this.parent_.$.canvasContainer.applyStyle("margin-top", String(this.getCanvasMarginTop()) + "px");
 
+        var newWidth = document.getElementById(containerId).offsetWidth;
+        var percent = newWidth / oldWidth;
+        var RongWhiteboard = window.RongWhiteboard || window.parent.RongWhiteboard;
+        if (RongWhiteboard && RongWhiteboard.zoom) {
+            window.RongSvgUtils.scaleAll(percent);
+            RongWhiteboard.zoom(percent);
+        }
+        // window.on
         // if (this.laserPen) {
         //     this.removeLaser(true);
         //     this.drawLaser();
@@ -907,7 +949,11 @@ enyo.kind({
         if (this.zoomRatio < this.zoomRatioMin) {
         	this.zoomRatio = this.zoomRatioMin;
         }
+
+        var containerId = this.parent_.$.canvasContainer.id;
+        var oldWidth = document.getElementById(containerId).offsetWidth;
         this.cvs.scaleAll(this.zoomRatio);
+
         // Adjust convas size accordingly
         this.parent_.$.canvasContainer.applyStyle("width", String(this.canvasWidth * this.zoomRatio) + "px");
         this.parent_.$.canvasContainer.applyStyle("height", String(this.canvasHeight * this.zoomRatio) + "px");
@@ -918,6 +964,14 @@ enyo.kind({
         //     this.removeLaser(true);
         //     this.drawLaser();
         // }
+
+        var newWidth = document.getElementById(containerId).offsetWidth;
+        var percent = newWidth / oldWidth;
+        var RongWhiteboard = window.RongWhiteboard || window.parent.RongWhiteboard;
+        if (RongWhiteboard && RongWhiteboard.zoom) {
+            window.RongSvgUtils.scaleAll(percent);
+            RongWhiteboard.zoom(percent);
+        }
         this.justifyText();
         this.disableTextEditing();
     },

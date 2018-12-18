@@ -17,3 +17,9 @@ input{
 .rong-component{
   text-align: center;
 }
+.rong-box {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}

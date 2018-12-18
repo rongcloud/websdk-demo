@@ -444,7 +444,7 @@ RongRTCEngine.prototype.audioVideoState = async function () {
  * 加入会议
  *
  */
-RongRTCEngine.prototype.joinChannel = function (channelId, userId, token) {
+RongRTCEngine.prototype.joinChannel = function (channelId, userId, token, callback) {
 
     this.channelId = RongRTCConstant.ConnectionType.MEDIASERVER + channelId;
     this.selfUserId = userId;
@@ -469,6 +469,7 @@ RongRTCEngine.prototype.joinChannel = function (channelId, userId, token) {
         rongRTCEngine.createSignaling();
         rongRTCEngine.logonAndJoin(RongRTCConstant.LogonAndJoinStatus.CONNECT);
     }, function (error) {
+        callback && callback(error);
         RongRTCLogger.error("navigator.getUserMedia error: ", error);
 
     });
@@ -2162,6 +2163,7 @@ RongRTCEngine.prototype.preparePeerConnection = function (userId) {
         var pc = new RTCPeerConnection();
         var pcMin = new RTCPeerConnection();
         pc.onaddstream = function (evt) {
+            window.RongOtherEvt = evt;
             RongRTCLogger.debug("onaddstream", evt);
 
             rongRTCEngine.remoteStreams.push(evt.stream);
