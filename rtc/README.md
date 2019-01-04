@@ -43,8 +43,6 @@
 
 浏览器访问 [融云官网-下载页-实时音视频-Web 模块](https://www.rongcloud.cn/downloads/rtc)，点击「远程标注在线体验」标签访问远程标注 Demo.
 
-> 素材待更换
-
 ![avatar](image/entrance.png)
 
 > 远程标注源码也可从 [融云官网-下载页-实时音视频-Web 模块](https://www.rongcloud.cn/downloads/rtc) 免费获取。
