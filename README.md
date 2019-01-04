@@ -1,3 +1,15 @@
+# 引导说明
+
+写给前端新手的工程管理建议: [https://support.rongcloud.cn/kb/NzUx](https://support.rongcloud.cn/kb/NzUx)
+
+开发 IM 的基本思路: [https://support.rongcloud.cn/kb/NzQ4](https://support.rongcloud.cn/kb/NzQ4)
+
+消息类型与文件格式: [http://support.rongcloud.cn/kb/NjE0](http://support.rongcloud.cn/kb/NjE0)
+
+用信息处理: [http://support.rongcloud.cn/kb/NjQ5](http://support.rongcloud.cn/kb/NjQ5) 
+
+
+
 # WebSDK demo
 
 SDK源码: [https://github.com/rongcloud/rongcloud-web-im-sdk-v2](https://github.com/rongcloud/rongcloud-web-im-sdk-v2)
