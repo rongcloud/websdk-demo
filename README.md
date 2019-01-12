@@ -22,6 +22,8 @@ Require SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/e
 
 Normal SDK in Electron: [https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html](https://github.com/rongcloud/websdk-demo/tree/master/electron/normal.html)
 
+WebSDK in electron-vue: [https://github.com/rongcloud/websdk-demo/tree/master/electron-vue](https://github.com/rongcloud/websdk-demo/tree/master/electron-vue)
+
 引用本地 SDK: 将 [WebSDK](https://cdn.ronghub.com/RongIMLib-2.3.0.js) 下载至本地引用即可，[初始化示例](https://github.com/rongcloud/websdk-demo/tree/master/local-sdks)
 
 初始化、消息监听: [https://rongcloud.github.io/websdk-demo/connect-check.html](https://rongcloud.github.io/websdk-demo/connect-check.html)
