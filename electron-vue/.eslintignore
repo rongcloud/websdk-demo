@@ -1,0 +1,5 @@
+test/unit/coverage/**
+test/unit/*.js
+test/e2e/*.js
+static/js/RongIMLib-2.3.5.js
+static/js/protobuf-2.3.3.min.js
