@@ -1,0 +1,4 @@
+<view class="{{ disabled?'cml-switch-disabled':'cml-switch' }}  cml-base cml-view">
+  <switch checked="{{ checked }}" disabled="{{ disabled }}" bindchange="_cmlEventProxy" data-eventchange="switchChange" color="#fc9153" class=" cml-base cml-switch" />
+    <text class="cml-switch-label  cml-base cml-text" wx:if="{{ label }}">{{label}}</text>
+</view>
