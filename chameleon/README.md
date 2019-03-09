@@ -10,9 +10,9 @@
 
 4. 打包： `cml build`
 
-### 引入 web IM SDK 
+### 引入 web IM SDK 
 
-下载 SDK : `http(s)://cdn.ronghub.com/RongIMLib-2.3.5.min.js` `https://cdn.ronghub.com/protobuf-2.3.1.min.js`
+下载 SDK : `http(s)://cdn.ronghub.com/RongIMLib-2.3.5.min.js` `https://cdn.ronghub.com/protobuf-2.3.1.min.js`
 
 
 ```js
