@@ -1,0 +1,227 @@
+<template>
+  <view class="rong-main">
+    <h1>{{ title }}</h1>
+    <view>
+      <text class="rong-label">appkey: </text>
+      <input type="text" c-model="{{appkey}}" class="rong-appkey"></input>
+    </view>
+    <view>
+       <text class="rong-label">token: </text>
+       <input type="text" c-model="{{token}}" class="rong-token"></input>
+    </view>
+    <view>
+       <text class="rong-label">user: </text>
+       <input c-model="{{userId}}" class="rong-userId"></input>
+    </view>
+    <button text="初始化链接" c-bind:onclick="init" class="rong-button"></button>
+    <p>初始化链接状态:</p>
+    <view c-for="{{ initResult }}" c-for-index="idx" c-for-item="itemName">
+      <text class="init-status">{{ itemName }}</text>
+    </view>
+  </view>
+</template>
+
+<script>
+import RongIMLib from '../../assets/js/RongIMLib-2.3.5.min.js';
+import protobuf from '../../assets/js/protobuf-2.3.1.min.js';
+
+function setListener(appKey,callback){
+  console.log('setListener');
+  RongIMLib.RongIMClient.init(appKey, null, {
+    protobuf: protobuf
+  });
+  // 设置连接监听状态 （ status 标识当前连接状态 ）
+  // 连接状态监听器
+  RongIMLib.RongIMClient.setConnectionStatusListener({
+    onChanged: function (status) {
+      callback(status)
+      switch (status) {
+        case RongIMLib.ConnectionStatus.CONNECTED:
+          console.log('链接成功');
+          break;
+        case RongIMLib.ConnectionStatus.CONNECTING:
+          console.log('正在链接');
+          break;
+        case RongIMLib.ConnectionStatus.DISCONNECTED:
+          console.log('断开连接');
+          break;
+        case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
+          console.log('其他设备登录');
+          break;
+        case RongIMLib.ConnectionStatus.DOMAIN_INCORRECT:
+          console.log('域名不正确');
+          break;
+        case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
+          console.log('网络不可用');
+          break;
+      }
+    }
+  });
+  // 消息监听器
+  RongIMLib.RongIMClient.setOnReceiveMessageListener({
+      // 接收到的消息
+      onReceived: function (message) {
+          // 判断消息类型
+          switch(message.messageType){
+              case RongIMClient.MessageType.TextMessage:
+                  // message.content.content => 消息内容
+                  break;
+              case RongIMClient.MessageType.VoiceMessage:
+                  // 对声音进行预加载                
+                  // message.content.content 格式为 AMR 格式的 base64 码
+                  break;
+              case RongIMClient.MessageType.ImageMessage:
+                // message.content.content => 图片缩略图 base64。
+                // message.content.imageUri => 原图 URL。
+                break;
+              case RongIMClient.MessageType.DiscussionNotificationMessage:
+                // message.content.extension => 讨论组中的人员。
+                break;
+              case RongIMClient.MessageType.LocationMessage:
+                // message.content.latiude => 纬度。
+                // message.content.longitude => 经度。
+                // message.content.content => 位置图片 base64。
+                break;
+              case RongIMClient.MessageType.RichContentMessage:
+                // message.content.content => 文本消息内容。
+                // message.content.imageUri => 图片 base64。
+                // message.content.url => 原图 URL。
+                break;
+              case RongIMClient.MessageType.InformationNotificationMessage:
+                  // do something...
+                break;
+              case RongIMClient.MessageType.ContactNotificationMessage:
+                  // do something...
+                break;
+              case RongIMClient.MessageType.ProfileNotificationMessage:
+                  // do something...
+                break;
+              case RongIMClient.MessageType.CommandNotificationMessage:
+                  // do something...
+                break;
+              case RongIMClient.MessageType.CommandMessage:
+                  // do something...
+                break;
+              case RongIMClient.MessageType.UnknownMessage:
+                  // do something...
+                break;
+              default:
+                  // do something...
+          }
+      }
+  });
+}
+function connect(data,callback) {
+  let cml = this;
+  let token = data.token;
+  let userId = data.userId;
+  RongIMLib.RongIMClient.connect(token, {
+    onSuccess: function(userId) {
+      console.log("Connect successfully." + userId);
+      callback(userId);
+    },
+    onTokenIncorrect: function() {
+      console.log('token无效');
+      callback();
+    },
+    onError:function(errorCode){
+        var info = '';
+        switch (errorCode) {
+          case RongIMLib.ErrorCode.TIMEOUT:
+            info = '超时';
+            break;
+          case RongIMLib.ConnectionState.UNACCEPTABLE_PAROTOCOL_VERSION:
+            info = '不可接受的协议版本';
+            break;
+          case RongIMLib.ConnectionState.IDENTIFIER_REJECTED:
+            info = 'appkey不正确';
+            break;
+          case RongIMLib.ConnectionState.SERVER_UNAVAILABLE:
+            info = '服务器不可用';
+            break;
+        }
+        console.log(errorCode);
+      }
+  });
+}
+class Index {
+  data = {
+    title: 'Chameleon框架-连接融云服务demo',
+    appkey:'vnroth0kvbf4o',
+    token:'dvKz9A78l1XTOefuNW1XN+vX7mzajXCPhVdLzaVlxBArcMENdNOjkzB3EDvQjyIobIeFv0Cezh/32gSONIAXOA==',
+    userId:'1001',
+    initResult:[],
+  }
+  computed = {
+    message2: function() {
+      return 'computed' + this.message;
+    }
+  }
+  methods = {
+    test(){
+      console.log('appkey',this.appkey)
+    },
+    init(){
+      let cml = this;
+      let appkey = cml.appkey;
+      let data = {
+        token: this.token,
+        userId: this.userId
+      }
+      console.log('data: ', data);
+      setListener(appkey,function(status){
+        switch (status) {
+          case RongIMLib.ConnectionStatus.CONNECTED:
+            cml.initResult.push('链接成功');
+            break;
+          case RongIMLib.ConnectionStatus.CONNECTING:
+            cml.initResult.push('正在链接');
+            break;
+          case RongIMLib.ConnectionStatus.DISCONNECTED:
+            cml.initResult.push('断开连接');
+            break;
+          case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
+            cml.initResult.push('其他设备登录');
+            break;
+          case RongIMLib.ConnectionStatus.DOMAIN_INCORRECT:
+            cml.initResult.push('域名不正确');
+            break;
+          case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
+            cml.initResult.push('网络不可用');
+            break;
+        }
+      })
+      connect(data,function(userId){
+        if(userId){
+          cml.initResult.push("Connect successfully." + userId);
+        }else {
+          cml.initResult.push('token无效');
+        }
+      });
+    }
+  }
+}
+
+export default new Index();
+</script>
+<style scoped>
+.rong-main {
+  padding: 8px
+}
+.rong-label {
+  margin-bottom: 8px;
+}
+.rong-appkey {
+  width: 100%;
+}
+.rong-button {
+  width: 100%;
+  margin: 8px 0 8px 0 ;
+}
+.init-status {
+  font-size: .3rem;
+}
+</style>
+<script cml-type="json">
+{}
+</script>

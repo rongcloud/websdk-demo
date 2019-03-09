@@ -1,0 +1,3 @@
+<scroll-view scroll-x="{{ scrollDirection === 'horizontal' }}" scroll-y="{{ scrollDirection === 'vertical' }}" scroll-with-animation="true" scroll-into-view="{{toView}}" lower-threshold="{{bottomOffset+'rpx'}}" enable-back-to-top="true" bindscrolltolower="onBottom" bindscroll="onScroll" class="cml-scroller  cml-base cml-origin-scroll-view  _cml_ref_lmc_" style="{{wrapperStyle}}" scroll-top="{{scrollTopPx}}" scroll-left="{{scrollLeftPx}}" id="c-scroller">
+    <slot class=" cml-base cml-slot"></slot>
+</scroll-view>
