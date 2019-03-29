@@ -1,3 +1,0 @@
-<view class="rich-text  cml-base cml-view">
-  <text wx:for="{{richList}}" style="{{item.style}}" wx:key="{{index}}" class=" cml-base cml-text">{{item.text}}</text>
-</view>
