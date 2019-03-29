@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import RongIMLib from '../../assets/js/RongIMLib-2.3.5.min.js';
-import protobuf from '../../assets/js/protobuf-2.3.1.min.js';
+import RongIMLib from '../../assets/js/RongIMLib-2.4.0.min.js';
+import protobuf from '../../assets/js/protobuf-2.3.4.min.js';
 
 function setListener(appKey,callback){
   console.log('setListener');

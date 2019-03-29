@@ -9,8 +9,8 @@ if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
-require('../../static/js/RongIMLib-2.3.5.js')
-require('../../static/js/protobuf-2.3.3.min.js')
+require('../../static/js/RongIMLib-2.4.0.js')
+require('../../static/js/protobuf-2.3.4.min.js')
 
 /* eslint-disable no-new */
 new Vue({

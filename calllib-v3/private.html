@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title> CallLib </title>
-  <link rel="stylesheet" href="../res/rongcloud.css">
-  <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <a href="https://github.com/rongcloud/websdk-demo/blob/master/calllib/blink/private.html" class="get-source">获取源码</a>
+  <!-- <a href="https://github.com/rongcloud/websdk-demo/blob/master/calllib/blink/private.html" class="get-source">获取源码</a> -->
   <div class="rong-container"></div>
    <div class="rong-toolbar">
       <button onclick="callVideo()" class="rong-callvideo"></button>
@@ -22,8 +21,7 @@
       <button onclick="videoToAudio()" class="rong-disable-video"></button>
       <button onclick="audioToVideo()" class="rong-disable-audio"></button>
   </div>
-  </div>
-  <h2 class="rong-notice">公告：此 Demo 即将废弃，后续不再维护，同时会推出新示例</h2>
+
   <div class="rong-warns">
     <p>兼容说明：</p>
     <ul>
@@ -37,44 +35,41 @@
   </div>
 </body>
   <script src="//cdn.ronghub.com/RongIMLib-2.4.0.js"></script>
-  <script src="//cdn.ronghub.com/RongCallLib-3.0.0.min.js"></script>
-  <script src="./init.js"></script>
-  <script src="./demo.js"></script>
+  <script src="//cdn.ronghub.com/RongRTC.3.0.0.js"></script>
+  <script src="//cdn.ronghub.com/RongCallLib.3.1.0.js"></script>
+  <script src="./lib/media.js"></script>
+  <script src="./js/init.js"></script>
   <script>
     var config = {
-      appKey: 'appkey',
-      groupId: 'mBze1232Cm',
-      members: [{
-        id: 'XDdddLn7p',
-        token: '48WQuGNLvftw4xaa/DrZEyJMsLZ9PPIg+8Ph5+QmAtoP6tdpZUyLdaH'
+      appKey: 'c9kqbbb8j',
+      users: [{
+        id: "mon91",
+        token: "h5IAHJDGpm4zc1ab37tZjjVgZOtrWuESz8LGXFTVIuHd9X5FwbUUMu5XhureGRsB5Sb+BtDCbXjGwS6FT+GJEw=="
       }, {
-        id: 'Qlyv123T',
-        token: 'KM7HOjWA2JPgQ/joNtsdS1YEkeV2IKH+AY1qZPXnLINfK'
-      },{
-        id: 'RffffM6h',
-        token: 'X1LcAANGwXDJjWfmuNGHu3xpRjANxKgfakOnYL9zWv+8tfUu6WVQ=='
+        id: "mon2",
+        token: "itQwKrhLFlLuZ10eb7WRL7yOO2249HlcrDpNdIF3+2DLrDlyODnpGbKARbCoc5lmW"
       }]
     };
 
     var params = (function(config){
-        var members = config.members;  
+        var users = config.users;  
         var appKey = config.appKey;
 
         var index = location.search.slice(1) || 0;
-        var member = members[index];
-        var inviteUsers = members.filter(function(_member){
-          return _member.id != member.id;
+        var user = users[index];
+        var inviteUsers = users.filter(function(_user){
+          return _user.id != user.id;
         });
-        var inviteUserIds = inviteUsers.map(function(_member){
-          return _member.id; 
+        var inviteUserIds = inviteUsers.map(function(_user){
+          return _user.id; 
         });
         return {
           appKey: appKey,
-          conversationType: 3,
-          userId: member.id,
+          conversationType: 1,
+          userId: user.id,
           inviteUserIds: inviteUserIds,
-          token: member.token,
-          targetId: config.groupId
+          token: user.token,
+          targetId: inviteUsers[0].id
         };
     })(config);
 
@@ -90,5 +85,6 @@
 
     IMLib.init(params, callbacks);
   </script>
+  <script src="./js/demo.js"></script>
 
 </html> 
