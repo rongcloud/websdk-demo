@@ -133,3 +133,8 @@ button.rong-accept{
   list-style: none;
   line-height: 26px;
 }
+.rong-notice{
+  position: relative;
+  left: 30%;
+  color: #FFF;
+}
