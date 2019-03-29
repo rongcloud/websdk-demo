@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ScreenShare</title>
+  <style>
+    video {
+      height: 300px;
+      width: 400px;
+    }
+
+    .rong-desc {
+      width: 500px;
+      position: absolute;
+      top: 10px;
+      right: 30px;
+      border: 1px solid #CCC;
+      color: #FF0000;
+    }
+    img{
+      width: 500px;
+    }
+  </style>
+  <script src="//cdn.ronghub.com/RongIMLib-2.4.0.js"></script>
+  <script src="//cdn.ronghub.com/RongRTC.3.0.0.js"></script>
+  <script src="./screenshare.js"></script>
+</head>
+
+<body>
+  <h1>浏览器兼容性: Chrome 57+</h1>
+  <button onclick="getDisplayMedia()">getDisplayMedia</button>
+  <video autoplay muted></video>
+  <div class="rong-desc">
+    <h6>1、下载 Chrome 插件，<a href="./screenshare-addon.zip">【点我下载】</a> </h6>
+    <h6>2、解压 screenshare-addon.zip ，按照说明文档安装插件</h6>
+    <h6>3、点击 getDisplayMedia 开始测试</h6>
+    <h6>共享示例截图:</h6>
+    <img src="./result.png" alt="示例">
+  </div>
+  <script>
+    var rongRTC = new RongRTC({
+      RongIMLib: RongIMLib
+    });
+    var stream = new rongRTC.Stream();
+    function showScreen(stream) {
+      var node = document.querySelector('video');
+      var mediaStream = stream.mediaStream;
+      node.srcObject = mediaStream;
+      // 获取到 mediaStream 即可调用 stream.publish(user) 将自己的屏幕共享给其他人
+      // stream.publish(user) 可参考示例 (发布资源)：https://github.com/rongcloud/websdk-demo/rongrtc/api
+      mediaStream.oninactive = function () {
+        node.srcObject = null;
+      };
+    }
+    function getDisplayMedia() {
+      ScreenShare.get((desktopStreamId) => {
+        stream.get({
+          screen: true,
+          desktopStreamId: desktopStreamId
+        }).then((stream) => {
+          showScreen(stream);
+        }, (error) => {
+          console.log(error);
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>RongRTC</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #F8F8F8;
+    }
+
+    .rong-container {
+      height: 100%;
+    }
+
+    .rong-current-toolbar,
+    .rong-member-toolbar {
+      border-bottom: 1px solid;
+      box-sizing: border-box;
+      width: 50%;
+      float: left;
+      height: 300px;
+      margin-top: 50px;
+      min-width: 300px;
+    }
+
+    .rong-member-toolbar {
+      border-left: 1px solid #B6B6B6;
+      overflow-y: auto;
+    }
+
+    .rong-box-bttom {
+      position: absolute;
+      bottom: 0;
+      top: 350px;
+    }
+
+    .rong-log-box {
+      width: 50%;
+      right: 0;
+    }
+
+    .rong-logs {
+      font-size: 12px;
+      line-height: 10px;
+      overflow-y: auto;
+      box-sizing: border-box;
+      position: absolute;
+      width: 100%;
+      height: 91%;
+      top: 50px;
+      padding: 0 10px;
+    }
+
+    .rong-video-box {
+      clear: both;
+      width: 50%;
+      border-right: 1px solid #B6B6B6;
+      position: absolute;
+      bottom: 0;
+      top: 350px;
+    }
+
+    .rong-videos {
+      position: absolute;
+      top: 50px;
+      width: 100%;
+      height: 90%;
+      overflow-y: auto;
+    }
+
+    .rong-input {
+      outline: none;
+      background: none;
+      cursor: pointer;
+      line-height: 16px;
+      border-radius: 5px;
+      padding: 4px;
+      margin: 5px 20px;
+    }
+
+    .rong-member-input {
+      margin: 5px 12px;
+    }
+
+    .rong-video-child {
+      opacity: 0.9;
+      text-align: center;
+      display: none;
+      line-height: 200px;
+      color: #FFF;
+    }
+
+    .rong-video-box .rong-video-child,
+    video {
+      height: 200px;
+      width: 200px;
+      margin: 20px;
+      float: left;
+      border: 1px solid;
+      position: absolute;
+    }
+
+    .rong-video {
+      float: left;
+      height: 200px;
+      width: 200px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+    }
+
+    pre {
+      border: none;
+    }
+
+    .rong-member-buttons {
+      border: 1px solid #B6B6B6;
+      border-radius: 5px;
+      margin: 5px;
+      padding: 0 10px;
+      display: inline-block;
+    }
+
+    .rong-member-name {
+      color: #666666;
+      padding-left: 10px;
+      margin: 3px;
+      border-bottom: 1px dotted #B6B6B6;
+    }
+
+    .rong-member-operation {
+      display: inline-block;
+    }
+
+    .rong-header {
+      font-size: 12px;
+      border-bottom: 1px solid #dedede;
+      background: #efefef;
+      position: absolute;
+      width: 50%;
+      padding-left: 10px;
+      box-sizing: border-box;
+      z-index: 99;
+    }
+
+    .rong-memberbox-header {
+      left: 50%;
+      top: 0px;
+    }
+
+    .rong-video-header {
+      width: 100%;
+    }
+
+    .rong-log-header {
+      width: 100%;
+    }
+
+    .rong-buttons-room {
+      display: none;
+    }
+
+    .rong-buttons-stream {
+      display: none;
+    }
+
+    .rong-buttons-storage {
+      display: none;
+    }
+
+    .rong-buttons-message {
+      display: none;
+    }
+
+    .rong-buttons-operation {
+      display: none;
+    }
+  </style>
+  <script src="//cdn.ronghub.com/RongIMLib-2.4.0.js"></script>
+  <script src="//cdn.ronghub.com/RongRTC.3.0.0.js"></script>
+  <script src="../im.js"></script>
+  <script src="../utils.js"></script>
+  <script src="../mock.js"></script>
+</head>
+
+<body>
+  <div class="rong-container">
+    <div class="rong-header">
+      <h3 class="rong-header-content">自己相关操作:</h3>
+    </div>
+    <div class="rong-current-toolbar">
+      <div class="rong-buttons-connect">
+        <input class="rong-input" id="connect" type="button" value="连接服务">
+        <input class="rong-input" id="disconnect" type="button" value="断开连接">
+      </div>
+      <div class="rong-buttons-room">
+        <input class="rong-input" id="joinroom" type="button" value="加入房间">
+        <input class="rong-input" id="leaveroom" type="button" value="离开房间">
+      </div>
+      <div class="rong-buttons-storage">
+        <input class="rong-input" id="setitem" type="button" value="设置数据">
+        <input class="rong-input" id="getitem" type="button" value="获取数据">
+        <input class="rong-input" id="removeitem" type="button" value="移除数据">
+      </div>
+      <div class="rong-buttons-message">
+        <input class="rong-input" id="sendmessage" type="button" value="发送消息">
+      </div>
+      <div class="rong-buttons-stream">
+        <input class="rong-input" id="publish" type="button" value="发布资源">
+        <input class="rong-input" id="unpublish" type="button" value="取消发布">
+      </div>
+      <div class="rong-buttons-operation">
+        <input class="rong-input" id="mute" type="button" value="静音音频">
+        <input class="rong-input" id="unmute" type="button" value="取消静音">
+        <input class="rong-input" id="disablevideo" type="button" value="禁用视频">
+        <input class="rong-input" id="enablevideo" type="button" value="启用视频">
+      </div>
+    </div>
+    <div class="rong-header rong-memberbox-header">
+      <h3 class="rong-header-content">成员相关操作:</h3>
+    </div>
+    <div class="rong-member-toolbar">
+    </div>
+    <div class="rong-box-bttom rong-video-box">
+      <div class="rong-header rong-video-header">
+        <h3 class="rong-header-content">视频列表:</h3>
+      </div>
+      <div class="rong-videos">
+        <!-- <div class="rong-video">
+          <video controls src="http://localhost:8686/martin-demo/sdk/rtc/heal-the-world.mp4"></video>
+          <div class="rong-video-child"></div>
+        </div> -->
+      </div>
+    </div>
+    <div class="rong-box-bttom rong-log-box">
+      <div class="rong-header rong-log-header">
+        <h3 class="rong-header-content">操作日志:</h3>
+      </div>
+      <div class="rong-logs">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var getDom = function (key) {
+      return document.querySelector(key);
+    };
+    var logger = new utils.Logger({
+      el: getDom('.rong-logs')
+    });
+    function show(node) {
+      node.style.display = 'block';
+    }
+    function hide(node) {
+      node.style.display = 'none';
+    }
+
+    var roomBox = getDom('.rong-buttons-room');
+    var streamBox = getDom('.rong-buttons-stream');
+    var operationBox = getDom('.rong-buttons-operation');
+    var messageBox = getDom('.rong-buttons-message');
+    var storageBox = getDom('.rong-buttons-storage');
+
+    var connectNode = getDom("#connect");
+    var disconnectNode = getDom("#disconnect");
+    var joinroomNode = getDom("#joinroom");
+    var leaveroomNode = getDom("#leaveroom");
+    var publishNode = getDom("#publish");
+    var unpublishNode = getDom("#unpublish");
+    var muteNode = getDom("#mute");
+    var unmuteNode = getDom("#unmute");
+    var disablevideoNode = getDom("#disablevideo");
+    var enablevideoNode = getDom("#enablevideo");
+    var setItemNode = getDom("#setitem");
+    var getItemNode = getDom("#getitem");
+    var removeItemNode = getDom("#removeitem");
+    var sendMessageNode = getDom("#sendmessage");
+
+    connectNode.onclick = function () {
+      connect();
+    };
+    disconnectNode.onclick = function () {
+      disconnect();
+    };
+    joinroomNode.onclick = function () {
+      joinRoom();
+    };
+    leaveroomNode.onclick = function () {
+      leaveRoom();
+    };
+    publishNode.onclick = function () {
+      publish();
+    };
+    unpublishNode.onclick = function () {
+      unpublish();
+    };
+    muteNode.onclick = function () {
+      mute();
+    };
+    unmuteNode.onclick = function () {
+      unmute();
+    };
+    disablevideoNode.onclick = function () {
+      disableVideo();
+    };
+    enablevideoNode.onclick = function () {
+      enableVideo();
+    };
+    setItemNode.onclick = function () {
+      setItem();
+    };
+    getItemNode.onclick = function () {
+      getItem();
+    };
+    removeItemNode.onclick = function () {
+      removeItem();
+    };
+    sendMessageNode.onclick = function () {
+      sendMessage();
+    };
+    var currentUser = {
+      id: ''
+    }
+    /* 开始: IM 连接相关 */
+    var imInstance = null;
+    function connect() {
+      if (imInstance) {
+        return;
+      }
+      var appkey = App.appkey;
+      var userIndex = location.search.split('?')[1] || 0;
+      var token = App.users[userIndex];
+
+      var params = {
+        appkey: appkey,
+        token: token
+      };
+      var callbacks = {
+        connected: function (instance, user) {
+          var userId = user.id;
+          currentUser.id = userId;
+          imInstance = instance;
+          show(roomBox);
+          logger.log('连接成功，用户 ID: ' + userId);
+        },
+        disconnectd: function (status) {
+          imInstance = null;
+          logger.log('连接断开');
+        },
+        error: function () {
+          imInstance = null;
+          logger.log('连接异常，状态码: ' + status);
+        },
+        onTokenIncorrect: function () {
+          logger.log('Token 不正确，可在融云开发者后台获取 https://developer.rongcloud.cn/');
+        }
+      };
+      initIM(params, callbacks);
+    }
+    function disconnect() {
+      if (!imInstance) {
+        return
+      }
+      imInstance.disconnect();
+    }
+    /* 结束: IM 连接相关 */
+    var videoBox = getDom('.rong-videos');
+    var createDiv = function (id, classList) {
+      var node = document.createElement('div');
+      node.id = id;
+      node.classList = classList;
+      return node;
+    };
+    var getId = function (user, suffix) {
+      var id = user.id;
+      var tag = user.stream.tag;
+      var key = 'u_' + id + '_' + tag;
+      if (suffix) {
+        key += '_' + suffix;
+      }
+      return key;
+    };
+    var appendVideo = function (user) {
+      var streams = user.stream;
+      if (Object.prototype.toString.call(streams) != '[object Array]') {
+        streams = [streams];
+      }
+      var ms = streams.filter(function (ms) {
+        return ms.size != StreamSize.MIN;
+      })[0];
+      var mediaStream = ms.mediaStream;
+      // Safari 下默认静音，否则无法自动播放
+      if (navigator.appVersion.indexOf("Safari") > -1) {
+        var tracks = mediaStream.getAudioTracks();
+        tracks.forEach(function (track) {
+          track.enabled = false;
+        });
+      }
+      var video = createVideo(mediaStream);
+      var userInfo = {
+        id: user.id,
+        stream: ms
+      };
+      if (user.id == currentUser.id) {
+        video.muted = true;
+      }
+      var id = getId(userInfo);
+      var box = createDiv(id, ['rong-video']);
+      var childId = getId(userInfo, 'info');
+      var child = createDiv(childId, ['rong-video-child'])
+      box.appendChild(video);
+      box.appendChild(child);
+      videoBox.appendChild(box);
+    };
+    var removeVideo = function (user) {
+      var id = getId(user);
+      var video = getDom('#' + id);
+      if (video) {
+        videoBox.removeChild(video);
+      }
+
+      id = getId(user, 'info');
+      video = getDom('#' + id);
+      if (video) {
+        videoBox.removeChild(video);
+      }
+    };
+
+    var rongRTC = new RongRTC({
+      RongIMLib: RongIMLib,
+      error: function (error) {
+        logger.log(error);
+      },
+      logger: function (log) {
+      }
+    });
+    var Room = rongRTC.Room;
+    var Stream = rongRTC.Stream;
+    var StreamType = rongRTC.StreamType;
+    var StreamSize = rongRTC.StreamSize;
+    var RongStorage = rongRTC.Storage;
+    var StorageType = rongRTC.StorageType;
+    var RTCMessage = rongRTC.Message;
+
+    var memberToolBarNode = getDom('.rong-member-toolbar');
+    function removeMemberStreams(user) {
+      user = user || {};
+      var id = user.id;
+      var children = memberToolBarNode.children;
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i]
+        if (!id) {
+          memberToolBarNode.removeChild(child);
+        } else {
+          if (child.id.indexOf(id) > -1) {
+            memberToolBarNode.removeChild(child);
+          }
+        }
+      }
+    }
+    function removeUsers(user) {
+      user = user || {};
+      var id = user.id;
+      var children = videoBox.children;
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i]
+        if (!id) {
+          videoBox.removeChild(child);
+        } else {
+          if (child.id.indexOf(id) > -1) {
+            videoBox.removeChild(child);
+          }
+        }
+      }
+    }
+    /* Room 模块示例 */
+    var room = new Room({
+      id: App.roomId,
+      joined: function (user) {
+        logger.log(user.id + ' 加入房间');
+      },
+      left: function (user) {
+        logger.log(user.id + ' 离开房间');
+        removeMemberStreams(user);
+        removeUsers(user);
+      }
+    });
+    var showTip = function (user, style, tip) {
+      var id = getId(user, 'info');
+      var node = getDom('#' + id);
+      if (node) {
+        node.style.display = style;
+        node.innerHTML = tip;
+      }
+    };
+    var addMember = function (user) {
+      removeMember(user);
+      var userId = user.id;
+      var tag = user.stream.tag;
+      var streamtype = user.stream.type;
+      var createEl = function (type, attrs) {
+        var button = document.createElement(type);
+        for (var name in attrs) {
+          var attr = attrs[name];
+          button.setAttribute(name, attr);
+        }
+        return button;
+      };
+      var memberButtons = createEl('div', {
+        id: getId(user, 'handler'),
+        class: "rong-member-buttons"
+      });
+
+      var memberName = createEl('h6', {
+        class: "rong-member-name"
+      });
+      memberName.innerHTML = "成员 : " + userId + " Tag : " + tag;
+
+      var createButton = function (name) {
+        return createEl('input', {
+          class: "rong-input rong-member-input",
+          userid: userId,
+          tag: tag,
+          type: "button",
+          streamtype: streamtype,
+          value: name
+        });
+      };
+
+      var subscribeNode = createButton("订阅资源");
+      var unsubscribeNode = createButton("取消订阅");
+
+      var memberOperate = createEl('div', {
+        class: "rong-member-operation"
+      });
+      var muteNode = createButton("静音音频");
+      var unmuteNode = createButton("取消静音");
+      var disbaleNode = createButton("禁用视频");
+      var enableNode = createButton("取消禁用");
+      var resizeNode = createButton("切换大小流");
+
+      subscribeNode.onclick = function (event) {
+        subscribeStream(event.currentTarget);
+      };
+      unsubscribeNode.onclick = function (event) {
+        unsubscribeStream(event.currentTarget);
+      };
+      muteNode.onclick = function (event) {
+        mute(event.currentTarget);
+      };
+      unmuteNode.onclick = function (event) {
+        unmute(event.currentTarget);
+      };
+      disbaleNode.onclick = function (event) {
+        disableVideo(event.currentTarget);
+      };
+      enableNode.onclick = function (event) {
+        enableVideo(event.currentTarget);
+      };
+      resizeNode.onclick = function (event) {
+        resizeStream(event.currentTarget);
+      };
+      memberOperate.append(muteNode, unmuteNode, disbaleNode, enableNode, resizeNode);
+      memberButtons.append(memberName, subscribeNode, unsubscribeNode, memberOperate);
+      memberToolBarNode.append(memberButtons);
+    };
+    var removeMember = function (user) {
+      var id = getId(user, 'handler');
+      var node = getDom('#' + id);
+      if (node) {
+        memberToolBarNode.removeChild(node);
+      }
+    };
+    /* Stream 模块示例 */
+    var stream = new Stream({
+      published: function (user) {
+        addMember(user);
+      },
+      unpublished: function (user) {
+        user.stream.type = StreamType.AUDIO_AND_VIDEO;
+        stream.unsubscribe(user);
+        removeMember(user);
+      },
+      muted: function (user) {
+        console.log('muted', user);
+        showTip(user, 'block', 'Muted');
+      },
+      unmuted: function (user) {
+        console.log('unmuted', user);
+        showTip(user, 'none', 'Unmuted');
+      },
+      disabled: function (user) {
+        console.log('disabled', user);
+        showTip(user, 'block', 'Disabled');
+      },
+      enabled: function (user) {
+        console.log('enabled', user);
+        showTip(user, 'none', 'Enabled');
+      }
+    });
+    function joinRoom() {
+      room.join({
+        id: currentUser.id
+      }).then(function (users) {
+        show(streamBox);
+        show(storageBox);
+        show(messageBox);
+        logger.log("加入房间成功");
+      }, function (error) {
+        logger.log(error);
+      });
+    }
+    function clearAll() {
+      videoBox.innerHTML = '';
+      hide(streamBox);
+      hide(operationBox);
+      hide(messageBox)
+      hide(storageBox)
+      removeMemberStreams();
+      removeUsers();
+    }
+    function leaveRoom() {
+      room.leave().then(function (user) {
+        clearAll();
+        logger.log("离开房间成功");
+      }, function (error) {
+        clearAll();
+        logger.log(error || "");
+      });
+    }
+    var createVideo = function (stream) {
+      var video = document.createElement('video');
+      video.srcObject = stream;
+      video.autoplay = true;
+      return video;
+    };
+    function getUser(target) {
+      if (!target) {
+        return {
+          id: currentUser.id,
+          stream: {
+            tag: 'rtc',
+            type: StreamType.AUDIO_AND_VIDEO
+          }
+        };
+      }
+      return {
+        id: target.getAttribute('userid'),
+        stream: {
+          tag: target.getAttribute('tag'),
+          type: Number(target.getAttribute('streamtype'))
+        }
+      }
+    }
+    function subscribeStream(target) {
+      var user = getUser(target);
+      user.stream.type = StreamType.AUDIO_AND_VIDEO;
+      stream.subscribe(user).then(function (user) {
+        appendVideo(user);
+      }, function (error) {
+      });
+    }
+    function unsubscribeStream(target) {
+      var user = getUser(target);
+      user.stream.type = StreamType.AUDIO_AND_VIDEO;
+      stream.unsubscribe(user);
+      removeVideo(user);
+    }
+    function mute(target) {
+      var user = getUser(target)
+      stream.audio.mute(user).then(function () {
+        showTip(user, 'block', 'Muted');
+        logger.log('静音成功');
+      }, function (error) {
+        logger.log(error, '静音失败:');
+      });
+    }
+    function unmute(target) {
+      var user = getUser(target);
+      stream.audio.unmute(user).then(function () {
+        showTip(user, 'none', 'Unmuted');
+        logger.log('取消静音成功');
+      }, function (error) {
+        logger.log(error, '取消静音失败');
+      });;
+    }
+    function disableVideo(target) {
+      var user = getUser(target);
+      stream.video.disable(user).then(function () {
+        showTip(user, 'block', 'Disabled');
+        logger.log('禁用视频成功');
+      }, function (error) {
+        logger.log(error, '禁用视频失败');
+      });
+    }
+    function enableVideo(target) {
+      var user = getUser(target);
+      stream.video.enable(user).then(function () {
+        showTip(user, 'none', 'Enabled');
+        logger.log('启用视频成功');
+      }, function (error) {
+        logger.log(error, '启用视频失败');
+      });;
+    }
+    var isMax = false;
+    function resizeStream(target) {
+      var StreamType = rongRTC.StreamType;
+      isMax = !isMax;
+      var user = getUser(target);
+      user.stream.size = isMax ? StreamSize.MAX : StreamSize.MIN;
+      stream.resize(user).then(function () {
+      }, function (error) {
+      });
+    }
+    function getMedia(callback) {
+      stream.get().then(function ({ mediaStream }) {
+        callback(mediaStream);
+        appendVideo({
+          id: currentUser.id,
+          stream: {
+            tag: 'rtc',
+            mediaStream: mediaStream
+          }
+        });
+      }, function (error) {
+        logger.log(error, '获取媒体流失败:');
+      });
+    }
+    var isPublish = false;
+    function publish() {
+      if (isPublish) {
+        return logger.log('资源已发布，无需重复发布');;
+      }
+      isPublish = true;
+      getMedia(function (mediaStream) {
+        stream.publish({
+          id: currentUser.id,
+          stream: {
+            type: StreamType.AUDIO_AND_VIDEO,
+            tag: 'rtc',
+            mediaStream: mediaStream
+          }
+        }).then(function () {
+          logger.log('发布资源成功');
+          show(operationBox);
+        }, function (error) {
+          logger.log(error, '发布资源失败:');
+        })
+      });
+    }
+    function unpublish() {
+      isPublish = false;
+      var user = {
+        id: currentUser.id,
+        stream: {
+          tag: 'rtc',
+          type: StreamType.AUDIO_AND_VIDEO
+        }
+      };
+      stream.unpublish(user).then(function () {
+        removeVideo(user);
+        hide(operationBox);
+        logger.log('取消发布成功');
+      }, function (error) {
+        logger.log(error, '取消发布失败:');
+      });
+    }
+    /* Storage 模块示例 */
+    var roomStorage = new RongStorage();
+    function setItem() {
+      let message = {
+        name: 'RTCC:Room:Set',
+        content: Date.now()
+      };
+      roomStorage.set('url', "https://www.rongcloud.cn?" + Date.now(), message).then(() => {
+        logger.log('设置房间数据成功');
+      });
+    }
+    function getItem() {
+      roomStorage.get('url').then(result => {
+        logger.log(result, '获取房间数据成功');
+      });
+    }
+    function removeItem() {
+      let message = {
+        name: 'RTCC:Room:Remove',
+        content: Date.now()
+      };
+      roomStorage.remove('url', message).then(() => {
+        logger.log('移除房间数据成功');
+      })
+    }
+    /* Message 模块示例 */
+    var rtcMessage = new RTCMessage({
+      received: (message) => {
+        logger.log(message, '收到消息:');
+      }
+    });
+    function sendMessage() {
+      var name = 'RCRTC:Welcome';
+      var content = {
+        title: '欢迎小明加入房间'
+      };
+      rtcMessage.send({
+        name: name,
+        content: content
+      }).then(() => {
+        logger.log('发送消息成功');
+      }, (error) => {
+        logger.log(error, '发送消息失败:');
+      });
+    }
+  </script>
+</body>
+
+</html>
