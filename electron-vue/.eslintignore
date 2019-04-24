@@ -3,3 +3,5 @@ test/unit/*.js
 test/e2e/*.js
 static/js/RongIMLib-2.4.0.js
 static/js/protobuf-2.3.3.min.js
+static/js/protobuf-2.3.4.min.js
+static/js/*.js
