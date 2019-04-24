@@ -24,6 +24,12 @@ npm run dev
 npm run build
 ```
 
+#### 相关文件
+
+```
+src/renderer/components/init.vue
+```
+
 #### 注意
 
 1、此 Demo 仅为 electron-vue 引入融云 websdk 示例, 非完整项目
