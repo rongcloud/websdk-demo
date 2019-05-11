@@ -25,12 +25,16 @@
 </template>
 
 <script>
+  require('../../../static/js/RongIMLib-2.4.0.js')
+  require('../../../static/js/protobuf-2.3.4.min.js')
+  require('../../../static/js/RongEmoji-2.2.7.js')
+  var RongIMLib = window.RongIMLib
+  var RongIMClient = RongIMLib.RongIMClient
+
   function init (params, addPromptInfo) {
     var appkey = params.appkey
     var token = params.token
     var navi = params.navi
-    var RongIMLib = window.RongIMLib
-    var RongIMClient = RongIMLib.RongIMClient
     var config = {}
     if (navi) {
       config.navi = navi
@@ -101,8 +105,13 @@
     name: 'landing-page',
     data: function () {
       return {
+<<<<<<< HEAD
         appkey: '8w7jv4qb78a9y',
         token: 'ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==',
+=======
+        appkey: '',
+        token: '',
+>>>>>>> 11de9a6f7c3dc33d3211c89e39069c684718224e
         navi: '',
         showDatas: []
       }
