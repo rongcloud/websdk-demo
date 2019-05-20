@@ -2,7 +2,7 @@
 
 1、下载 Demo Web 源码
 
-[https://github.com/rongcloud/sealrtc-server.git](https://github.com/rongcloud/sealrtc-server.git)
+[https://github.com/rongcloud/websdk-demo/tree/master/calllib-v3/web](https://github.com/rongcloud/websdk-demo/tree/master/calllib-v3/web)
 
 2、修改配置文件 `setting.js`
 
