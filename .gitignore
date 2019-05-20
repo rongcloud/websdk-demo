@@ -3,3 +3,6 @@ node_modules
 electron-vue/node_modules
 electron-vue/dist
 electron-vue/build
+calllib-v3/server/node_modules
+calllib-v3/server/package-lock.json
+calllib-v3/web/node_modules
