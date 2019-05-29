@@ -2,88 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title> CallLib </title>
-  <link rel="stylesheet" href="css/main.css">
+  <title>已废弃 CallLib</title>
+  <style>
+    body {
+      background-color: #333;
+    }
+    .rong-warns {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+    }
+    .rong-warns a {
+      color: white;
+    }
+  </style>
 </head>
 <body>
-  <!-- <a href="https://github.com/rongcloud/websdk-demo/blob/master/calllib/blink/private.html" class="get-source">获取源码</a> -->
-  <div class="rong-container"></div>
-   <div class="rong-toolbar">
-      <button onclick="callVideo()" class="rong-callvideo"></button>
-      <button onclick="callAudio()" class="rong-callaudio"></button>
-      
-      <button onclick="acceptVideo()" class="rong-accept"></button>
-      <button onclick="hungup()" class="rong-hungup"></button>
-      
-      <button onclick="mute()" class="rong-mute"></button>
-      <button onclick="unmute()" class="rong-unmute"></button>
-
-      <button onclick="videoToAudio()" class="rong-disable-video"></button>
-      <button onclick="audioToVideo()" class="rong-disable-audio"></button>
-  </div>
-
   <div class="rong-warns">
-    <p>兼容说明：</p>
-    <ul>
-      <li>操作系统: macOS 10.13.3+ 、Win7+</li>
-      <li>浏览器: Chrome 57+</li>
-    </ul>
-    <p>站点要求：</p>
-    <ul>
-      <li>HTTPS 站点或 localhost, 端口不限</li>
-    </ul>
+    <p>抱歉, 为了大家更好的使用体验, 推荐参考最新版 Demo: <a href="https://github.com/rongcloud/websdk-demo/tree/master/calllib-v3">CallLib Demo v3</a></p>
+    <p>如依然需要使用旧版 Demo, 请访问: <a href="https://github.com/rongcloud/websdk-demo/tree/11de9a6f7c3dc33d3211c89e39069c684718224e/calllib-v3">CallLib Demo v3 Old</a></p>
   </div>
 </body>
-  <script src="//cdn.ronghub.com/RongIMLib-2.4.0.js"></script>
-  <script src="//cdn.ronghub.com/RongRTC.3.0.2.js"></script>
-  <script src="./lib/RongCallLib-3.1.1.js"></script>
-  <script src="./js/init.js"></script>
-  <script>
-    var config = {
-      appKey: 'n19jmcy59f1q9',
-      users: [{
-        id: "user1",
-        token: "+g6JJPqmfnPIDO/bYwzkva+YsUIoF3ojin3K277sfOkiCHYubEaIoOBsZjb5g2XB8jme+y1fqnwwWn6TqlmkMA=="
-      }, {
-        id: "user2",
-        token: "DmUhXqjW0ppZSW+H47nFJq+YsUIoF3ojin3K277sfOkiCHYubEaIoNP2pzW+HH43cpFI5kNdUK7pML3qCyOMGw=="
-      }]
-    };
-
-    var params = (function(config){
-        var users = config.users;  
-        var appKey = config.appKey;
-
-        var index = location.search.slice(1) || 0;
-        var user = users[index];
-        var inviteUsers = users.filter(function(_user){
-          return _user.id != user.id;
-        });
-        var inviteUserIds = inviteUsers.map(function(_user){
-          return _user.id; 
-        });
-        return {
-          appKey: appKey,
-          conversationType: 1,
-          userId: user.id,
-          inviteUserIds: inviteUserIds,
-          token: user.token,
-          targetId: inviteUsers[0].id
-        };
-    })(config);
-
-    var callbacks = {
-        getInstance : function(instance){
-           var toolbar = tools.getDom('.rong-toolbar')[0];
-           toolbar.style.display = 'block';
-        },
-        getCurrentUser : function(userInfo){
-            console.log(userInfo.userId);
-        }
-    };
-
-    IMLib.init(params, callbacks);
-  </script>
-  <script src="./js/demo.js"></script>
 
 </html> 

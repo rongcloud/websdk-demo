@@ -1,76 +1,24 @@
-### 文档
+# CallLib Demo
 
-开通音视频服务，请参考 [音视频开通指南](http://www.rongcloud.cn/docs/call.html#open)
+`注意事项:`
 
-CallLib [开发指南](http://www.rongcloud.cn/docs/web_calllib.html#CallLibInit)
+1、需开通 [音视频 3.0 服务](./docs/ready.md)
 
-### 示例说明
+2、旧版 calllib-v3 demo 请参考: [calllib-v3-old](https://github.com/rongcloud/websdk-demo/tree/11de9a6f7c3dc33d3211c89e39069c684718224e/calllib-v3)
 
-1、HTTPS 站点或 localhost, 端口不限
+`启动流程:`
 
-2、配置 `private.html` 、`group.html` 页面中的用户信息 <span style="color: red;">至少配置 2 个 用户</span>
+* [前期准备](./docs/ready.md)
+* [Demo Server](./docs/server.md)
+* [Demo Web](./docs/web.md)
+* [演示示例](./docs/show.md)
 
-`private.html`:
+`相关文档:`
 
-```js
-var config = {
-  // 融云开发者后台创建应用获取 http://developer.rongcloud.cn/
-  appKey: 'appkey',
-  users: [{
-    // 用户 Id
-    id: "XDov3Ln7p",
-    /*
-      用户 Token 
-      Server API：http://www.rongcloud.cn/docs/server.html#user_get_token
-      Server SDK：http://rongcloud.github.io/server-sdk-nodejs/docs/v1/user/user.html#register
-    */ 
-    token: "48WQuGNh7065SB3WVJYnt6+YsUIoF3ojin3K2sssIg+8Ph5+QmAtoP6tdpZUyLdaH"
-  }, {
-    id: "Qlyvf1BdT",
-    token: "KM7HOjWA2JPghgUJSvFUkcjRgiV1+NBKF4hsSSFA/joNtsdS1YEkeV2IKH+AY1qZPXnLINfK"
-  }]
-};
-```
+Web CallLib 开发指南: [https://www.rongcloud.cn/docs/web_calllib.html](https://www.rongcloud.cn/docs/web_calllib.html)
 
-`group.html`:
+Web IM SDK 开发指南: [https://www.rongcloud.cn/docs/web.html](https://www.rongcloud.cn/docs/web.html)
 
-```js
-var config = {
-  // 融云开发者后台创建应用获取 http://developer.rongcloud.cn/
-  appKey: 'appkey',
-  groupId: '群组 Id',
-  members: [{
-    id: "XDov3Ln7p",
-    /*
-      用户 Token 
-      Server API：http://www.rongcloud.cn/docs/server.html#user_get_token
-      Server SDK：http://rongcloud.github.io/server-sdk-nodejs/docs/v1/user/user.html#register
-    */ 
-    token: "48WQuGNojin3K277sfOlwuO8bLvftw4xaa/DrZEyJMsLZ9PPIg+8Ph5+QmAtoP6tdpZUyLdaH"
-  }, {
-    id: "Qlyvf1BdT",
-    token: "KM7HOjWA2JPgasdfrUJSvFUkcjRgiV1+NBKF4hsSSFA/joNtsdS1YEkeV2IKH+AY1qZPXnLINfK"
-  }, {
-    id: "OasdgfrU",
-    token: "KM7HfOasdgfrUJSvFUkcjRgiV1+KH+AY1qZPXnLINfK"
-  }]
-};
-```
+融云知识库: [https://support.rongcloud.cn](https://support.rongcloud.cn)
 
-3、访问地址:
-
->一对一视频通话
-
-用户 XDov3Ln7p: `https://域名/private.html?0`
-
-用户 Qlyvf1BdT: `https://域名/private.html?1`
-
->多人视频通话
-
-用户 XDov3Ln7p: `https://域名/private.html?0`
-
-用户 Qlyvf1BdT: `https://域名/private.html?1`
-
-用户 OasdgfrU: `https://域名/private.html?2`
-
-
+融云开发者后台: [https://developer.rongcloud.cn](https://developer.rongcloud.cn)
