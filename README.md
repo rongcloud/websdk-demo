@@ -38,6 +38,8 @@ WebSDK Vue Require 示例: [https://rongcloud.github.io/websdk-demo/vue/require.
 
 WebSDK Vue Normal 示例: [https://rongcloud.github.io/websdk-demo/vue/normal.html](https://rongcloud.github.io/websdk-demo/vue/normal.html)
 
+WebSDK Vue CLI 示例: [https://rongcloud.github.io/websdk-demo/vue/normal.html](https://rongcloud.github.io/websdk-demo/vue/normal.html)
+
 WebSDK React 示例: [https://rongcloud.github.io/websdk-demo/react/im.html](https://rongcloud.github.io/websdk-demo/react/im.html)
 
 WebSDK SeaJS 示例: [https://rongcloud.github.io/websdk-demo/seajs.html](https://rongcloud.github.io/websdk-demo/seajs.html)

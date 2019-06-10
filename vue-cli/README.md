@@ -1,8 +1,6 @@
-### vue-cli 引入 websdk
+### Vue CLI 引入 WebSDK
 
-此 Demo 为融云 WebSDK 在 vue-cli 环境下链接的 Demo
-
-`此 Demo 仅作为链接代码参考, 不建议直接用于项目内`
+此 Demo 为融云 WebSDK 在 Vue CLI 环境下链接的 Demo
 
 #### 环境要求
 
@@ -32,13 +30,13 @@ src/components/Init.vue
 
 #### 注意
 
-1、此 Demo 仅为 vue-cli 引入融云 websdk 示例, 非完整项目
+1、此 Demo 仅为 Vue CLI 引入融云 WebSDK 示例, 非完整项目, 不建议直接用于开发者项目
 
-2、运行 vue-cli 项目时, 请配置 .eslintignore 文件, 忽略 eslint 对融云 WebSDK 的限制
+2、运行 Vue CLI 项目时, 请配置 .eslintignore 文件, 忽略 eslint 对融云 WebSDK 的限制
 
-3、vue-cli 开发使用等问题, 请参考 [vue-cli](https://cli.vuejs.org/) 文档
+3、Vue CLI 开发使用等问题, 请参考 [Vue CLI](https://cli.vuejs.org/) 文档
 
-4、使用 vue-cli 时, 为避免遇到问题无排查方向, 建议提前了解以下知识:
+4、使用 Vue CLI 时, 为避免遇到问题无排查方向, 建议提前了解以下知识:
 
 > Vue.js: [https://cn.vuejs.org](https://cn.vuejs.org)
 
