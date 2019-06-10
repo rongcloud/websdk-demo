@@ -25,7 +25,7 @@
 </template>
 
 <script>
-  require('../../../static/js/RongIMLib-2.4.0.js')
+  require('../../../static/js/RongIMLib-2.5.0.js')
   require('../../../static/js/protobuf-2.3.4.min.js')
   require('../../../static/js/RongEmoji-2.2.7.js')
   var RongIMLib = window.RongIMLib
