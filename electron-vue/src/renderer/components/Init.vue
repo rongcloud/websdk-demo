@@ -105,13 +105,8 @@
     name: 'landing-page',
     data: function () {
       return {
-<<<<<<< HEAD
-        appkey: '8w7jv4qb78a9y',
-        token: 'ZThhLI1Xa1BX5EMREAdArWSH6ouuI8NT/fNmMkzF+4IOKIoFvbsi6JnH8QmnSltLkCcsK8vOgKl3IZgfbxFiWg==',
-=======
         appkey: '',
         token: '',
->>>>>>> 11de9a6f7c3dc33d3211c89e39069c684718224e
         navi: '',
         showDatas: []
       }
