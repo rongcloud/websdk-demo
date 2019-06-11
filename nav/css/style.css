@@ -1,0 +1,180 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: PingFangSC-Regular, Helvetica Neue, Microsoft Yahei, 微软雅黑;
+    background-color: #F3F6F8;
+}
+
+ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.rong-container {
+    height: 100%;
+    width: 100%;
+}
+
+.rong-nav-box {
+    width: 200px;
+    height: 100%;
+    background: #30333C;
+    float: left;
+    color: #fff;
+}
+
+.rong-nav-box>div {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.rong-nav-title {
+    text-align: center;
+}
+
+.rong-web-title {
+    font-size: 13px;
+    border-top: 2px solid hsla(0, 0%, 100%, .04);
+    border-bottom: 2px solid hsla(0, 0%, 100%, .04);
+}
+
+.rong-web-title>p {
+    border-right: 3px solid #3a85ff;
+}
+
+.rong-navs {
+    height: 300px;
+    overflow-y: auto;
+}
+
+.rong-nav {
+    height: 33px;
+    display: flex;
+    align-items: center;
+}
+
+.rong-navs a {
+    color: #6B7386;
+    font-size: 12px;
+    padding-left: 30px;
+    box-sizing: border-box;
+    display: block;
+}
+
+.rong-navs a:hover {
+    color: #FFF;
+}
+
+.active-nav {
+    color: #FFF !important;
+    cursor: pointer;
+}
+
+.rong-nav i {
+    margin-right: 8px;
+}
+
+.rong-main {
+    height: 100%;
+    margin-left: 150px;
+    overflow-y: auto;
+    color: #4D4D4D;
+}
+
+.rong-animate {
+    animation: moveDown 0.6s ease-in-out 0.2s backwards;
+}
+
+@keyframes moveDown {
+    0% {
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+.rong-content {
+    width: 95%;
+    background: #fff;
+    margin: 20px;
+    padding-bottom: 20px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.rong-content-title {
+    padding: 12px 0 0 2.1%;
+    font-size: 18px;
+}
+
+.rong-content-item {
+    border-radius: 6px;
+    padding: 10px;
+    width: 20%;
+    min-width: 200px;
+    margin: 22px 0 0 2.1%;
+    float: left;
+    overflow: hidden;
+    border: 1px solid #e4ecf3;
+    box-shadow: 1px 2px 3px #f2f6f8;
+    max-height: 107px;
+}
+
+.rong-content-item:hover {
+    transform: translateY(-6px);
+    transition: all .3s ease;
+}
+
+.rong-content-logo {
+    display: flex;
+    align-items: center;
+}
+
+.rong-content-logo div {
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center
+}
+.rong-content-desc {
+    color: gray;
+    font-size: 12px;
+    padding-top: 10px;
+    height: 35px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    line-clamp: 2;
+    box-orient: vertical;
+}
+
+.text-over-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 5px;
+}
+
+.rong-content-logo {
+    height: 40px;
+    position: relative;
+    font-size: 14px;
+    font-weight: 700;
+    color: #3273dc;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 .1rem;
+}
