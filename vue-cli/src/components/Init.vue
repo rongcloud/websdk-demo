@@ -1,6 +1,6 @@
 <template>
   <div style="text-align: left;">
-    <h1>Web SDK electron-vue</h1>
+    <h1>Web SDK Vue CLI</h1>
     <p class="rong-input">
       <span>appkey:</span>
       <input type="text" v-model="appkey" size="20">
