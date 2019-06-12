@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App'
-import Protobuf from './static/protobuf-2.3.4.min.js'
-import RongIMLib from './static/RongIMLib-2.4.0.js'
+import Protobuf from './static/protobuf-2.3.5.min.js'
+import RongIMLib from './static/RongIMLib-2.5.0.js'
 
 RongIMLib.RongIMClient.Protobuf = Protobuf
 
