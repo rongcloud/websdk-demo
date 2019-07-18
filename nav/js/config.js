@@ -214,12 +214,6 @@ var RCConf = {
           detail: '基于 Angular 的 H5 Web IM 示例',
         },
         {
-          name: 'Web 客服（佳信）',
-          icon: './res/js.png',
-          linkUrl: 'https://rongcloud.github.io/websdk-demo/cs/jx/cs.html',
-          detail: 'IM SDK 对接佳信客服，无框架依赖',
-        },
-        {
           name: 'Web 客服（智齿）',
           icon: './res/js.png',
           linkUrl: 'https://rongcloud.github.io/websdk-demo/cs/sobot/cs.html',
