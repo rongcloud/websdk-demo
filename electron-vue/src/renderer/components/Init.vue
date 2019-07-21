@@ -26,7 +26,7 @@
 
 <script>
   require('../../../static/js/RongIMLib-2.5.0.js')
-  require('../../../static/js/protobuf-2.3.4.min.js')
+  require('../../../static/js/protobuf-2.3.5.min.js')
   require('../../../static/js/RongEmoji-2.2.7.js')
   var RongIMLib = window.RongIMLib
   var RongIMClient = RongIMLib.RongIMClient
