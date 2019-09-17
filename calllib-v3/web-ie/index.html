@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Rong CallLib Demo</title>
+  <link rel="stylesheet" href="./css/main.min.css">
+
+  <!-- 配置文件 -->
+  <script src="setting.js"></script>
+
+  <script src="./lib/promise.js"></script>
+  <script src="./lib/vue-2.6.7.js"></script>
+  <script src="./lib/vue-router-3.0.2.js"></script>
+  <script src="./lib/RongRTC-IE.3.0.4.js"></script>
+  <script src="./lib/RongIMLib-2.5.1.js"></script>
+  <script src="./lib/RongCallLib.3.1.5.js"></script>
+  
+  <script src="./js/common/utils.js"></script>
+  <script src="./js/common/init.js"></script>
+
+  <script src="./js/dialog.js"></script>
+  <script src="./js/login.js"></script>
+  <script src="./js/call.js"></script>
+  <script src="./js/main.js"></script>
+
+  <!-- 登录页面模板 -->
+  <script id="rong-template-login" type="text/x-template">
+    <div class="rong-box">
+      <div class="rong-login-inner">
+        <p>融云 CallLib</p>
+        <input v-model="userId" type="text" placeholder="请输入 userId" @keyup.13="login">
+        <input v-if="isLoading" type="button" value="正在登陆 ..." disabled>
+        <input v-else type="button" value="登陆" @click="login">
+      </div>
+    </div>
+  </script>
+
+  <!-- 通话界面模板 -->
+  <script id="rong-template-call" type="text/x-template">
+    <div class="rong-box rong-call-box">
+      <div class="rong-info">
+        <p>登录用户 id: <span>{{$route.params.userId}}</span></p>
+        <p>群组 id: <span>{{$route.params.groupId}}</span></p>
+      </div>
+      <div class="rong-type-box" v-if="callStep === CallStep.READY_TO_CALL">
+        <label for="">通话类型: </label>
+        <select name="" id="" v-model="callType">
+          <option value="1">单人</option>
+          <option value="3">群组</option>
+        </select>
+      </div>
+      <div class="rong-video-box">
+        <object :style="engineStyle" class="rong-stream-content" id="RTCEngine" width=640 height=480 classid="CLSID:369C2ABD-E339-42C8-B302-9652E3936E28"></object>
+        <!-- <div class="rong-video-list">
+          <div class="rong-video-min" v-for="user in minUserList" v-video="user" :talktype="user.talkType"></div>
+        </div>
+        <div v-if="maxUser" class="rong-video-max" v-video="maxUser" :talktype="maxUser.talkType"></div> -->
+      </div>
+      <div class="rong-call-btns">
+        <template v-if="callStep === CallStep.READY_TO_CALL">
+          <button class="rong-call-video" title="点击进行视频通话" @click="startCall(false)"></button>
+          <button class="rong-call-audio" title="点击进行音频通话" @click="startCall(true)"></button>
+        </template>
+        <template v-else-if="callStep === CallStep.CALLING">
+          <button class="rong-call-hungup" title="点击挂断" @click="hungup"></button>
+          <button v-if="callType == 3" class="rong-call-invite" title="点击邀请" @click="invite"></button>
+          <button class="rong-call-mute" title="点击开启/关闭音频" :closed="isMuted" @click="mute"></button>
+          <button class="rong-call-video" closed title="点击开启/关闭视频" :closed="callInfo.mediaType !== 2" @click="setVideo"></button>
+        </template>
+        <template v-else-if="callStep === CallStep.INVITED_TO_ANSWER">
+          <button class="rong-call-accept" @click="accept"></button>
+          <button class="rong-call-hungup" @click="reject"></button>
+        </template>
+        <!-- <iframe id="iframe1" src="about:blank" frameBorder="0" marginHeight="0" marginWidth="0"
+　　style="position:absolute; visibility:inherit; top:0px;left:0px;width:120px; height:120px;z-index:-1; filter:alpha(opacity=0);"></iframe> -->
+      </div>
+    </div>
+  </script>
+
+  <!-- 选择人员弹框 -->
+  <script id="rong-template-dialog-users" type="text/x-template">
+    <div v-if="isShow" class="rong-dialog-box">
+      <div class="rong-dialog-user-list">
+        <h3>选择人员</h3>
+        <div class="rong-dialog-user-list-content">
+          <div class="rong-dialog-user" v-for="user in userList" @click="selectUser(user)">
+            <i :class="{ 'rong-user-selected': user.isSelected }"></i>
+            <span>{{user.userId || user.id}}</span>
+          </div>
+        </div>
+        <div class="rong-confirm-btns">
+          <button class="rong-confirm-cancel" @click="cancel">取消</button>
+          <button class="rong-confirm-ok" @click="confirm" :disabled="!hasSelectedUser">确认</button>
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <script id="rong-template-dialog-toast" type="text/x-template">
+    <div class="rong-dialog-toast">
+      <span class="rong-dialog-toast-content">{{content}}</span>
+    </div>
+  </script>
+
+
+  
+</head>
+<body>
+  <div id="rongCall" class="rong-main">
+    <router-view></router-view>
+  </div>
+</body>
+
+<script>
+  // 方法定义见: js/main.js
+  RongCall.init({
+    el: '#rongCall'
+  })
+</script>
+
+</html>
