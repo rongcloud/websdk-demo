@@ -1,44 +1,35 @@
-### Vue CLI 引入 WebSDK
+# vue-cli-3.0
 
-此 Demo 为融云 WebSDK 在 Vue CLI 环境下链接的 Demo
-
-#### 环境要求
-
-node 8.12.0 及以上版本
-
-#### 启动
-
-1、安装依赖包
-
+## Project setup
 ```
 npm install
 ```
 
-2、运行
-
+### Compiles and hot-reloads for development
 ```
-npm start
-```
-
-#### 链接相关文件
-
-`此文件逻辑非常简单, 强烈建议开发者了解此文件逻辑后再进行开发`
-
-```
-src/components/Init.vue
+npm run serve
 ```
 
-#### 注意
+### Compiles and minifies for production
+```
+npm run build
+```
 
-1、此 Demo 仅为 Vue CLI 引入融云 WebSDK 示例, 非完整项目, 不建议直接用于开发者项目
+### Run your tests
+```
+npm run test
+```
 
-2、运行 Vue CLI 项目时, 请配置 .eslintignore 文件, 忽略 eslint 对融云 WebSDK 的限制
+### Lints and fixes files
+```
+npm run lint
+```
 
-3、Vue CLI 开发使用等问题, 请参考 [Vue CLI](https://cli.vuejs.org/) 文档
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
 
-4、使用 Vue CLI 时, 为避免遇到问题无排查方向, 建议提前了解以下知识:
+### 注意事项
 
-> Vue.js: [https://cn.vuejs.org](https://cn.vuejs.org)
+1、主要关注 src/components/Init.vue 文件的引入和链接逻辑
 
-> webpack: [https://webpack.js.org](https://webpack.js.org)
-
+2、protobuf 必须为 2.3.6+ 版本

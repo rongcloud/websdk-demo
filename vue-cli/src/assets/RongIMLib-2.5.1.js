@@ -874,6 +874,159 @@ var Polling = {
             this.toArrayBuffer = function(){
                 return a;
             };
+        },
+        RtcQueryListInput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setOrder = function (b) {
+                a.order = b;
+            };
+        },
+        RtcKeyDeleteInput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setKey = function (b) {
+                a.key = b;
+            };
+        },
+        RtcValueInfo: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setKey = function (b) {
+                a.key = b;
+            };
+            this.setValue = function (b) {
+                a.value = b;
+            };
+        },
+        // RtcUserInfo: function () {
+        //     var a = {};
+        // },
+        RtcUserListOutput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setList = function (b) {
+                a.list = b;
+            };
+            this.setToken = function (b) {
+                a.token = b;
+            };
+        },
+        RtcRoomInfoOutput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setRoomId = function (b) {
+                a.roomId = b;
+            };
+            this.setRoomData = function (b) {
+                a.roomData = b;
+            };
+            this.setUserCount = function (b) {
+                a.userCount = b;
+            };
+            this.setList = function (b) {
+                a.list = b;
+            }
+        },
+        RtcInput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setRoomType = function (b) {
+                a.roomType = b;
+            };
+            this.setBroadcastType = function (b) {
+                a.broadcastType = b;
+            }
+        },
+        // RtcQryInput: function () {
+        //     var a = {};
+        // },
+        RtcQryOutput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setOutInfo = function (b) {
+                a.outInfo = b;
+            };
+        },
+        // RtcDelDataInput: function () {
+        //     var a = {};
+        // },
+        RtcDataInput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setInterior = function (b) {
+                a.interior = b;
+            };
+            this.setTarget = function (b) {
+                a.target = b;
+            };
+            this.setKey = function (b) {
+                a.key = b;
+            };
+            this.setObjectName = function (b) {
+                a.objectName = b;
+            };
+            this.setContent = function (b) {
+                a.content = b;
+            };
+        },
+        RtcSetDataInput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setInterior = function (b) {
+                a.interior = b;
+            };
+            this.setTarget = function (b) {
+                a.target = b;
+            };
+            this.setKey = function (b) {
+                a.key = b;
+            };
+            this.setValue = function (b) {
+                a.value = b;
+            };
+            this.setObjectName = function (b) {
+                a.objectName = b;
+            };
+            this.setContent = function (b) {
+                a.content = b;
+            };
+        },
+        RtcOutput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setNothing = function (b) {
+                a.nothing = b;
+            };
+        },
+        RtcTokenOutput: function () {
+            var a = {};
+            this.toArrayBuffer = function(){
+                return a;
+            };
+            this.setRtcToken = function (b) {
+                a.rtcToken = b;
+            }
         }
     };
     for (var f in Polling) {
@@ -1223,6 +1376,10 @@ var RongIMLib;
          * websocket 连接失败
          */
         ConnectionStatus[ConnectionStatus["WEBSOCKET_UNAVAILABLE"] = 7] = "WEBSOCKET_UNAVAILABLE";
+        /**
+         * websocket 报错
+         */
+        ConnectionStatus[ConnectionStatus["WEBSOCKET_ERROR"] = 8] = "WEBSOCKET_ERROR";
         /**
          * 网络不可用。
          */
@@ -1715,6 +1872,7 @@ var RongIMLib;
     (function (VoIPMediaType) {
         VoIPMediaType[VoIPMediaType["MEDIA_AUDIO"] = 1] = "MEDIA_AUDIO";
         VoIPMediaType[VoIPMediaType["MEDIA_VEDIO"] = 2] = "MEDIA_VEDIO";
+        VoIPMediaType[VoIPMediaType["MEDIA_VIDEO"] = 2] = "MEDIA_VIDEO";
     })(RongIMLib.VoIPMediaType || (RongIMLib.VoIPMediaType = {}));
     var VoIPMediaType = RongIMLib.VoIPMediaType;
     (function (MediaType) {
@@ -2035,7 +2193,7 @@ var RongIMLib;
                 navigaters[index] = navi;
             });
             var _sourcePath = {
-                protobuf: 'cdn.ronghub.com/protobuf-2.3.5.min.js'
+                protobuf: 'cdn.ronghub.com/protobuf-2.3.6.min.js'
             };
             RongIMLib.RongUtil.forEach(_sourcePath, function (path, key) {
                 _sourcePath[key] = RongIMLib.RongUtil.stringFormat(pathTmpl, [protocol, path]);
@@ -2050,7 +2208,8 @@ var RongIMLib;
                 snifferTime: 2000,
                 naviTimeout: 5000,
                 navigaters: navigaters,
-                maxNaviRetry: 10
+                maxNaviRetry: 10,
+                isNaviJSONP: false
             };
             delete options.navigaters;
             RongIMLib.RongUtil.extend(_defaultOpts, options);
@@ -2130,7 +2289,8 @@ var RongIMLib;
                 SuspendMessage: { objectName: "RC:CsSp", msgTag: new RongIMLib.MessageTag(false, false) },
                 TerminateMessage: { objectName: "RC:CsEnd", msgTag: new RongIMLib.MessageTag(false, false) },
                 CustomerStatusUpdateMessage: { objectName: "RC:CsUpdate", msgTag: new RongIMLib.MessageTag(false, false) },
-                ReadReceiptMessage: { objectName: "RC:ReadNtf", msgTag: new RongIMLib.MessageTag(false, false) }
+                ReadReceiptMessage: { objectName: "RC:ReadNtf", msgTag: new RongIMLib.MessageTag(false, false) },
+                RCCombineMessage: { objectName: "RC:CombineMsg", msgTag: new RongIMLib.MessageTag(true, true) }
             };
             RongIMClient.MessageParams["AcceptMessage"] = { objectName: "RC:VCAccept", msgTag: new RongIMLib.MessageTag(false, false) };
             RongIMClient.MessageParams["RingingMessage"] = { objectName: "RC:VCRinging", msgTag: new RongIMLib.MessageTag(false, false) };
@@ -2182,7 +2342,8 @@ var RongIMLib;
                 PublicServiceMultiRichContentMessage: "PublicServiceMultiRichContentMessage",
                 PublicServiceCommandMessage: "PublicServiceCommandMessage",
                 RecallCommandMessage: "RecallCommandMessage",
-                ReadReceiptMessage: "ReadReceiptMessage"
+                ReadReceiptMessage: "ReadReceiptMessage",
+                RCCombineMessage: "RCCombineMessage"
             };
             RongIMClient.LogFactory = {
                 /**
@@ -2647,6 +2808,76 @@ var RongIMLib;
                     code: "61001",
                     msg: "删除消息数组长度为 0"
                 }
+            };
+            var handler = function (message, uris, callback) {
+                var userId = message.senderUserId;
+                var _uris = RongIMClient.roomInfo.users[userId].uris || '[]';
+                if (RongIMLib.RongUtil.isString(_uris)) {
+                    _uris = JSON.parse(_uris);
+                }
+                var tUris = JSON.parse(JSON.stringify(_uris));
+                RongIMLib.RongUtil.forEach(tUris, function (_uri, index) {
+                    RongIMLib.RongUtil.forEach(uris, function (uri) {
+                        if (uri.uri == _uri.uri) {
+                            callback(_uri, uri, _uris, index);
+                        }
+                    });
+                });
+                RongIMClient.roomInfo.users[userId].uris = JSON.stringify(_uris);
+            };
+            var RTCMessage = {
+                RTCPublishResourceMessage: function (message, uris) {
+                    var userId = message.senderUserId;
+                    var user = RongIMClient.roomInfo.users[userId];
+                    if (!user) {
+                        user = {};
+                        RongIMClient.roomInfo.users[userId] = {};
+                    }
+                    var _uris = user.uris || '[]';
+                    if (RongIMLib.RongUtil.isString(_uris)) {
+                        _uris = JSON.parse(_uris);
+                    }
+                    _uris = _uris.concat(uris);
+                    RongIMClient.roomInfo.users[userId].uris = JSON.stringify(_uris);
+                },
+                RTCUnpublishResourceMessage: function (message, uris) {
+                    handler(message, uris, function (_uri, uri, _uris, index) {
+                        _uris.splice(index, 1);
+                    });
+                },
+                RTCModifyResourceMessage: function (message, uris) {
+                    handler(message, uris, function (_uri, uri) {
+                        _uri.state = uri.state;
+                    });
+                },
+                RTCUserChangeMessage: function (message) {
+                    var content = message.content;
+                    var users = content.users;
+                    var UserState = {
+                        JOINED: 0,
+                        LEFT: 1,
+                        OFFLINE: 2
+                    };
+                    RongIMLib.RongUtil.forEach(users, function (user) {
+                        var state = user.state;
+                        var userId = user.userId;
+                        switch (+state) {
+                            case UserState.JOINED:
+                                RongIMClient.roomInfo.users[userId] = {};
+                                break;
+                            case UserState.LEFT:
+                            case UserState.OFFLINE:
+                                delete RongIMClient.roomInfo.users[userId];
+                                break;
+                        }
+                    });
+                }
+            };
+            RongIMClient.RTCInnerListener = function (message) {
+                var func = RTCMessage[message.messageType] || function () { };
+                var content = message.content;
+                var uris = content.uris;
+                func(message, uris);
             };
             return sdkInfo;
         };
@@ -4051,6 +4282,9 @@ var RongIMLib;
         RongIMClient.messageWatch = function (watcher) {
             RongIMClient.RTCListener = watcher;
         };
+        RongIMClient.messageSignalWatch = function (watcher) {
+            RongIMClient.RTCSignalLisener = watcher;
+        };
         /*
             var data = {
                 key1: 123,
@@ -4087,11 +4321,31 @@ var RongIMLib;
         };
         RongIMClient.prototype.joinRTCRoom = function (room, callback) {
             RongIMLib.CheckParam.getInstance().check(["object", "object"], "joinRTCRoom", false, arguments);
-            RongIMClient._dataAccessProvider.joinRTCRoom(room, callback);
+            if (RongIMClient.isJoinedRTCRoom) {
+                return callback.onSuccess(RongIMClient.roomInfo);
+            }
+            RongIMClient._dataAccessProvider.joinRTCRoom(room, {
+                onSuccess: function (result) {
+                    RongIMClient.roomInfo = result;
+                    RongIMClient.isJoinedRTCRoom = true;
+                    callback.onSuccess(result);
+                },
+                onError: callback.onError
+            });
         };
         RongIMClient.prototype.quitRTCRoom = function (room, callback) {
             RongIMLib.CheckParam.getInstance().check(["object", "object"], "quitRTCRoom", false, arguments);
-            RongIMClient._dataAccessProvider.quitRTCRoom(room, callback);
+            RongIMClient.isJoinedRTCRoom = false;
+            RongIMClient._dataAccessProvider.quitRTCRoom(room, {
+                onSuccess: function () {
+                    RongIMClient.roomInfo = {
+                        users: {},
+                        token: ''
+                    };
+                    callback.onSuccess(true);
+                },
+                onError: callback.onError
+            });
         };
         RongIMClient.prototype.RTCPing = function (room, callback) {
             RongIMLib.CheckParam.getInstance().check(["object", "object"], "RTCPing", false, arguments);
@@ -4121,6 +4375,13 @@ var RongIMLib;
             RongIMLib.CheckParam.getInstance().check(["string", "array", "boolean", "object", "global|object|null|undefined"], "removeRTCRoomData", false, arguments);
             RongIMClient._dataAccessProvider.removeRTCRoomData(roomId, keys, isInner, callback, message);
         };
+        RongIMClient.prototype.setRTCOutData = function (roomId, data, type, callback, message) {
+            RongIMClient._dataAccessProvider.setRTCOutData(roomId, data, type, callback, message);
+        };
+        // 信令 SDK 新增
+        RongIMClient.prototype.getRTCOutData = function (roomId, userIds, callback) {
+            RongIMClient._dataAccessProvider.getRTCOutData(roomId, userIds, callback);
+        };
         RongIMClient.prototype.getNavi = function () {
             return RongIMClient._dataAccessProvider.getNavi();
         };
@@ -4128,13 +4389,24 @@ var RongIMLib;
             RongIMLib.CheckParam.getInstance().check(["object", "object"], "getRTCToken", false, arguments);
             return RongIMClient._dataAccessProvider.getRTCToken(room, callback);
         };
+        RongIMClient.prototype.setRTCState = function (room, content, callback) {
+            RongIMLib.CheckParam.getInstance().check(["object", "object", "object"], "setRTCState", false, arguments);
+            return RongIMClient._dataAccessProvider.setRTCState(room, content, callback);
+        };
         RongIMClient.prototype.getAppInfo = function () {
             var appKey = RongIMClient._memoryStore.appKey;
             return {
                 appKey: appKey
             };
         };
+        RongIMClient.prototype.getSDKInfo = function () {
+            return {
+                version: RongIMClient.sdkver
+            };
+        };
         RongIMClient.RTCListener = function () { };
+        RongIMClient.RTCInnerListener = function () { };
+        RongIMClient.RTCSignalLisener = function () { };
         RongIMClient.currentServer = '';
         RongIMClient.LogFactory = {};
         RongIMClient.MessageType = {};
@@ -4142,10 +4414,15 @@ var RongIMLib;
         RongIMClient._memoryStore = { listenerList: [], isPullFinished: false, syncMsgQueue: [] };
         RongIMClient.isNotPullMsg = false;
         RongIMClient.userStatusObserver = null;
-        RongIMClient.sdkver = '2.5.0';
+        RongIMClient.sdkver = '2.5.1';
         RongIMClient.otherDeviceLoginCount = 0;
         RongIMClient.serverStore = { index: 0 };
         RongIMClient.isFirstConnect = true;
+        RongIMClient.roomInfo = {
+            users: {},
+            token: ''
+        };
+        RongIMClient.isJoinedRTCRoom = false;
         RongIMClient.statusListeners = [];
         RongIMClient.userStatusListener = null;
         return RongIMClient;
@@ -4181,7 +4458,7 @@ var RongIMLib;
     var Type = RongIMLib.Type;
     var _topic = [
         "invtDiz", "crDiz", "qnUrl", "userInf", "dizInf", "userInf", "joinGrp", "quitDiz", "exitGrp", "evctDiz",
-        ["", "ppMsgP", "pdMsgP", "pgMsgP", "chatMsg", "pcMsgP", "", "pmcMsgN", "pmpMsgN", "", "", "", "prMsgS"],
+        ["", "ppMsgP", "pdMsgP", "pgMsgP", "chatMsg", "pcMsgP", "", "pmcMsgN", "pmpMsgN", "", "", "", "prMsgS", "prMsgP"],
         "pdOpen", "rename", "uGcmpr", "qnTkn", "destroyChrm", "createChrm", "exitChrm", "queryChrm",
         "joinChrm", "pGrps", "addBlack", "rmBlack", "getBlack", "blackStat",
         "addRelation", "qryRelation", "delRelation", "pullMp", "schMp", "qnTkn",
@@ -4307,6 +4584,9 @@ var RongIMLib;
             var hasEvent = (typeof StatusEvent == "object");
             var me = this;
             me.socket.on("StatusChanged", function (code) {
+                if (RongIMLib.Bridge && RongIMLib.Bridge._client && RongIMLib.Bridge._client.channel && me !== RongIMLib.Bridge._client.channel) {
+                    return;
+                }
                 if (!hasEvent) {
                     throw new Error("setConnectStatusListener:Parameter format is incorrect");
                 }
@@ -4880,7 +5160,10 @@ var RongIMLib;
             message = RongIMLib.MessageUtil.messageParser(entity, this._onReceived, offlineMsg);
             var isRTCMessage = message.conversationType == 12;
             if (isRTCMessage) {
-                return RongIMLib.RongIMClient.RTCListener(message);
+                RongIMLib.RongIMClient.RTCListener(message);
+                RongIMLib.RongIMClient.RTCInnerListener(message);
+                RongIMLib.RongIMClient.RTCSignalLisener(message);
+                return;
             }
             var isRecall = (msg.getTopic && msg.getTopic() == "recallMsg");
             if (isRecall) {
@@ -5459,12 +5742,16 @@ var RongIMLib;
                 }
             }
             Navigation.clear();
+            var context = this;
             var StatusEvent = RongIMLib.Channel._ConnectionStatusListener;
             var depend = RongIMLib.RongIMClient._memoryStore.depend;
             var navigaters = depend.navigaters;
             var naviTimeout = depend.naviTimeout;
             var maxNaviRetry = depend.maxNaviRetry;
-            var context = this;
+            var isNaviJSONP = depend.isNaviJSONP;
+            var isSupportRequestHeaders = RongIMLib.RongUtil.isSupportRequestHeaders();
+            var isRequestJSONP = !isSupportRequestHeaders || isNaviJSONP;
+            var requestFunc = isRequestJSONP ? context.requestJSONP : context.request;
             var timer = new RongIMLib.Timer({
                 timeout: naviTimeout
             });
@@ -5510,7 +5797,7 @@ var RongIMLib;
                     consume();
                 };
                 StatusEvent.onChanged(RongIMLib.ConnectionStatus.REQUEST_NAVI);
-                var xhr = context.request(navi, appId, token, success, error);
+                var xhr = requestFunc.call(context, navi, appId, token, success, error);
                 timer.resume(function () {
                     StatusEvent.onChanged(RongIMLib.ConnectionStatus.RESPONSE_NAVI_TIMEOUT);
                     xhr.abort();
@@ -5519,25 +5806,30 @@ var RongIMLib;
             };
             consume();
         };
-        Navigation.prototype.request = function (navi, appId, token, success, error) {
+        Navigation.prototype.getPath = function (navi, appId, token, callbackName) {
             var depend = RongIMLib.RongIMClient._memoryStore.depend;
             var path = (depend.isPolling ? 'cometnavi' : 'navi');
             token = encodeURIComponent(token);
             var sdkver = RongIMLib.RongIMClient.sdkver;
             var random = RongIMLib.RongUtil.getTimestamp();
-            var tpl = '{navi}/{path}.js?appId={appId}&token={token}&callBack=null&v={sdkver}&r={random}';
+            var tpl = '{navi}/{path}.js?appId={appId}&token={token}&callBack={callback}&v={sdkver}&r={random}';
             var url = RongIMLib.RongUtil.tplEngine(tpl, {
                 navi: navi,
                 path: path,
                 appId: appId,
                 token: token,
                 sdkver: sdkver,
-                random: random
+                random: random,
+                callback: callbackName
             });
+            return url;
+        };
+        Navigation.prototype.request = function (navi, appId, token, success, error) {
+            var url = this.getPath(navi, appId, token, 'getServerEndpoint');
             return RongIMLib.RongUtil.request({
                 url: url,
                 success: function (result) {
-                    result = result.replace('null(', '').replace(');', '');
+                    result = result.replace('getServerEndpoint(', '').replace(');', '');
                     // 兼容私有云无分号
                     var lastIndex = result.lastIndexOf(')');
                     var maxIndex = result.length - 1;
@@ -5555,6 +5847,23 @@ var RongIMLib;
                     }
                 }
             });
+        };
+        Navigation.prototype.requestJSONP = function (navi, appId, token, success, error) {
+            var callbackName = 'getServerEndpoint';
+            window.getServerEndpoint = function (result) {
+                var code = result.code;
+                if (code !== 200) {
+                    return error(RongIMLib.ConnectionState.TOKEN_INCORRECT);
+                }
+                success(result);
+            };
+            var url = this.getPath(navi, appId, token, callbackName);
+            var xss = document.createElement('script');
+            xss.src = url;
+            document.body.appendChild(xss);
+            xss.onerror = function () {
+                error(RongIMLib.ConnectionState.TOKEN_INCORRECT);
+            };
         };
         Navigation.Endpoint = new Object;
         return Navigation;
@@ -6649,6 +6958,7 @@ var RongIMLib;
          * @param {any} error [抛出异常]
          */
         SocketTransportation.prototype.onError = function (error) {
+            this._socket.fire("StatusChanged", RongIMLib.ConnectionStatus.WEBSOCKET_ERROR);
             throw new Error(error);
         };
         /**
@@ -6758,8 +7068,10 @@ var RongIMLib;
         PollingTransportation.prototype.getRequest = function (url, isconnect) {
             var me = this;
             me.xhr = this.requestFactory(url + "&pid=" + encodeURIComponent(me.pid), "GET");
+            var timer = new RongIMLib.Timer({ timeout: 45000 });
             if ("onload" in me.xhr) {
                 me.xhr.onload = function () {
+                    timer.pause();
                     me.xhr.onload = me.empty;
                     if (this.responseText == "lost params") {
                         me.onError();
@@ -6769,11 +7081,13 @@ var RongIMLib;
                     }
                 };
                 me.xhr.onerror = function () {
+                    timer.pause();
                     me.disconnect();
                 };
             }
             else {
                 me.xhr.onreadystatechange = function () {
+                    timer.pause();
                     if (me.xhr.readyState == 4) {
                         me.xhr.onreadystatechange = me.empty;
                         if (/^(200|202)$/.test(me.xhr.status)) {
@@ -6788,6 +7102,9 @@ var RongIMLib;
                     }
                 };
             }
+            timer.resume(function () {
+                me.onError();
+            });
             me.xhr.send();
         };
         /**
@@ -6898,7 +7215,8 @@ var RongIMLib;
             RongIMLib.RongIMClient._storageProvider.removeItem(RongIMLib.Navigation.Endpoint.userId + "msgId");
             this.onClose();
             this.connected = false;
-            this.socket.fire("disconnect");
+            var code = RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE;
+            this.socket.fire("disconnect", code);
         };
         PollingTransportation.prototype.close = function () {
             this.xhr.abort();
@@ -6947,7 +7265,8 @@ var typeMapping = {
     "RC:RRReqMsg": "ReadReceiptRequestMessage",
     "RC:RRRspMsg": "ReadReceiptResponseMessage",
     "RCJrmf:RpMsg": "JrmfRedPacketMessage",
-    "RCJrmf:RpOpendMsg": "JrmfRedPacketOpenedMessage"
+    "RCJrmf:RpOpendMsg": "JrmfRedPacketOpenedMessage",
+    "RC:CombineMsg": "RCCombineMessage"
 }, 
 //自定义消息类型
 registerMessageTypeMapping = {}, HistoryMsgType = {
@@ -8140,6 +8459,28 @@ var RongIMLib;
         return MemberModifyMessage;
     })();
     RongIMLib.MemberModifyMessage = MemberModifyMessage;
+    var RCCombineMessage = (function () {
+        function RCCombineMessage(message) {
+            this.messageName = "RCCombineMessage";
+            if (arguments.length == 0) {
+                throw new Error("Can not instantiate with empty parameters, use obtain method instead -> RCCombineMessage.");
+            }
+            this.nameList = message.nameList;
+            this.remoteUrl = message.remoteUrl;
+            if (message.user) {
+                this.user = message.user;
+            }
+            this.summaryList = message.summaryList;
+        }
+        RCCombineMessage.obtain = function (remoteUrl, nameList, summaryList) {
+            return new RCCombineMessage({ extra: "", content: remoteUrl, nameList: nameList, summaryList: summaryList });
+        };
+        RCCombineMessage.prototype.encode = function () {
+            return JSON.stringify(RongIMLib.ModelUtil.modelClone(this));
+        };
+        return RCCombineMessage;
+    })();
+    RongIMLib.RCCombineMessage = RCCombineMessage;
 })(RongIMLib || (RongIMLib = {}));
 var RongIMLib;
 (function (RongIMLib) {
@@ -8347,10 +8688,12 @@ var RongIMLib;
     })();
     RongIMLib.User = User;
     var Room = (function () {
-        function Room(id, user, mode) {
+        function Room(id, user, mode, broadcastType, type) {
             this.id = id;
             this.user = user;
             this.mode = mode;
+            this.broadcastType = broadcastType;
+            this.type = type;
         }
         return Room;
     })();
@@ -9088,7 +9431,7 @@ var RongIMLib;
             }
             params = params || {};
             var userIds = params.userIds;
-            if (isGroup && userIds) {
+            if (userIds) {
                 modules.setUserId(userIds);
             }
             modules.setClassname(RongIMLib.RongIMClient.MessageParams[messageContent.messageName].objectName);
@@ -10010,8 +10353,11 @@ var RongIMLib;
         };
         ServerDataProvider.prototype.joinRTCRoom = function (room, callback) {
             var modules = new RongIMLib.RongIMClient.Protobuf.RtcInput();
-            // 复用 PB
-            modules.setNothing(room.mode);
+            var mode = room.mode || 0;
+            modules.setRoomType(mode);
+            if (room.broadcastType) {
+                modules.setBroadcastType(room.broadcastType);
+            }
             RongIMLib.RongIMClient.bridge.queryMsg("rtcRJoin_data", RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
                 onSuccess: function (result) {
                     var users = {};
@@ -10049,6 +10395,11 @@ var RongIMLib;
         };
         ServerDataProvider.prototype.RTCPing = function (room, callback) {
             var modules = new RongIMLib.RongIMClient.Protobuf.RtcInput();
+            var mode = room.mode || 0;
+            modules.setRoomType(mode);
+            if (room.broadcastType) {
+                modules.setBroadcastType(room.broadcastType);
+            }
             RongIMLib.RongIMClient.bridge.queryMsg("rtcPing", RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, callback);
         };
         ServerDataProvider.prototype.setRTCData = function (roomId, key, value, isInner, apiType, callback, message) {
@@ -10125,12 +10476,50 @@ var RongIMLib;
         ServerDataProvider.prototype.removeRTCRoomData = function (roomId, keys, isInner, callback, message) {
             this.removeRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.ROOM, callback, message);
         };
+        // 信令 SDK 新增
+        ServerDataProvider.prototype.setRTCOutData = function (roomId, data, type, callback, message) {
+            var modules = new RongIMLib.RongIMClient.Protobuf.RtcSetOutDataInput();
+            modules.setTarget(type);
+            if (!RongIMLib.RongUtil.isArray(data)) {
+                data = [data];
+            }
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                if (item.key) {
+                    item.key = item.key.toString();
+                }
+                if (item.value) {
+                    item.value = item.value.toString();
+                }
+            }
+            modules.setValueInfo(data);
+            message = message || {};
+            var name = message.name;
+            var content = message.content;
+            if (name) {
+                modules.setObjectName(name);
+            }
+            if (content) {
+                if (!RongIMLib.RongUtil.isString(content)) {
+                    content = JSON.stringify(content);
+                }
+                modules.setContent(content);
+            }
+            RongIMLib.RongIMClient.bridge.queryMsg("rtcSetOutData", RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), roomId, callback, "RtcOutput");
+        };
+        // 信令 SDK 新增
+        ServerDataProvider.prototype.getRTCOutData = function (roomId, userIds, callback) {
+            var modules = new RongIMLib.RongIMClient.Protobuf.RtcQryUserOutDataInput();
+            modules.setUserId(userIds);
+            RongIMLib.RongIMClient.bridge.queryMsg("rtcQryUserOutData", RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), roomId, callback, "RtcUserOutDataOutput");
+        };
         ServerDataProvider.prototype.getNavi = function () {
             var navi = RongIMLib.RongIMClient._storageProvider.getItem("fullnavi") || "{}";
             return JSON.parse(navi);
         };
         ServerDataProvider.prototype.getRTCToken = function (room, callback) {
             var modules = new RongIMLib.RongIMClient.Protobuf.RtcInput();
+            modules.setRoomType(0);
             RongIMLib.RongIMClient.bridge.queryMsg("rtcToken", RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
                 onSuccess: function (result) {
                     callback.onSuccess(result);
@@ -10139,6 +10528,20 @@ var RongIMLib;
                     callback.onError(errorCode);
                 }
             }, "RtcTokenOutput");
+        };
+        ServerDataProvider.prototype.setRTCState = function (room, content, callback) {
+            // MCFollowInput 为 PB 复用，字段：一个必传 string（第一位）
+            var modules = new RongIMLib.RongIMClient.Protobuf.MCFollowInput();
+            var report = content.report;
+            modules.setId(report);
+            RongIMLib.RongIMClient.bridge.queryMsg("rtcUserState", RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
+                onSuccess: function (result) {
+                    callback.onSuccess(result);
+                },
+                onError: function (errorCode) {
+                    callback.onError(errorCode);
+                }
+            }, "RtcOutput");
         };
         return ServerDataProvider;
     })();
@@ -10318,6 +10721,11 @@ var RongIMLib;
                     var isVoIPMsg = voipMsgTypes.indexOf(message.messageType) > -1;
                     if (isVoIPMsg) {
                         RongIMLib.RongIMClient._voipProvider && RongIMLib.RongIMClient._voipProvider.onReceived(message);
+                    }
+                    else if (message.conversationType == 12) {
+                        RongIMLib.RongIMClient.RTCListener(message);
+                        RongIMLib.RongIMClient.RTCInnerListener(message);
+                        RongIMLib.RongIMClient.RTCSignalLisener(message);
                     }
                     else {
                         listener.onReceived(message, leftCount, hasMore);
@@ -11107,6 +11515,177 @@ var RongIMLib;
             return conver;
         };
         VCDataProvider.prototype.getRTCUserInfoList = function (room, callback) {
+            this.addon.getRTCUsers(room.id, 1, function (result) {
+                callback.onSuccess(result);
+            }, function (error) {
+                callback.onError(error);
+            });
+        };
+        VCDataProvider.prototype.getRTCRoomInfo = function (room, callback) {
+            var order = 2;
+            this.addon.getRTCResouce(room.id, order, function (result) {
+                callback.onSuccess(JSON.parse(result));
+            }, function (error) {
+                callback.onError(error);
+            });
+        };
+        VCDataProvider.prototype.joinRTCRoom = function (room, callback) {
+            var id = room.id;
+            var type = room.type || 0;
+            this.addon.joinRTCRoom(id, type, function (result, token) {
+                var res = JSON.parse(result);
+                var users = {};
+                var list = res.list;
+                RongIMLib.RongUtil.forEach(list, function (item) {
+                    var userId = item.id;
+                    var tmpData = {};
+                    RongIMLib.RongUtil.forEach(item.data, function (data) {
+                        var key = data.key;
+                        var value = data.value;
+                        tmpData[key] = value;
+                    });
+                    users[userId] = tmpData;
+                });
+                callback.onSuccess({
+                    users: users,
+                    token: token
+                });
+            }, function (error) {
+                callback.onError(error);
+            });
+        };
+        VCDataProvider.prototype.quitRTCRoom = function (room, callback) {
+            this.addon.exitRTCRoom(room.id, function () {
+                callback.onSuccess(true);
+            }, function (error) {
+                callback.onError(error);
+            });
+        };
+        VCDataProvider.prototype.RTCPing = function (room, callback) {
+            this.addon.sendRTCPing(room.id, function () {
+                callback.onSuccess(true);
+            }, function (error) {
+                callback.onError(error);
+            });
+        };
+        VCDataProvider.prototype.setRTCData = function (roomId, key, value, isInner, apiType, callback, message) {
+            var context = this;
+            var hanlders = {
+                room_inner: function (roomId, key, value, name, content, success, error) {
+                    context.addon.setRTCInnerData(roomId, RongIMLib.RTCAPIType.ROOM, key, value, name, content, success, error);
+                },
+                room_outer: function (roomId, key, value, name, content, success, error) {
+                    context.addon.setRTCOuterData(roomId, RongIMLib.RTCAPIType.ROOM, key, value, name, content, success, error);
+                },
+                user_inner: function (roomId, key, value, name, content, success, error) {
+                    context.addon.setRTCInnerData(roomId, RongIMLib.RTCAPIType.PERSON, key, value, name, content, success, error);
+                },
+                user_outer: function (roomId, key, value, name, content, success, error) {
+                    context.addon.setRTCOuterData(roomId, RongIMLib.RTCAPIType.PERSON, key, value, name, content, success, error);
+                }
+            };
+            var type = RongIMLib.RTCAPIType.PERSON == apiType ? 'user' : 'room';
+            var direction = isInner ? 'inner' : 'outer';
+            var tpl = '{type}_{direction}';
+            var name = RongIMLib.RongUtil.tplEngine(tpl, {
+                type: type,
+                direction: direction
+            });
+            var handler = hanlders[name];
+            if (handler) {
+                message = message || {};
+                var name = message.name;
+                var content = message.content;
+                handler(roomId, key, value, name, content, function () {
+                    callback.onSuccess(true);
+                }, function (code) {
+                    callback.onError(code);
+                });
+            }
+        };
+        VCDataProvider.prototype.setRTCRoomData = function (roomId, key, value, isInner, callback, message) {
+            this.setRTCData(roomId, key, value, isInner, RongIMLib.RTCAPIType.ROOM, callback, message);
+        };
+        VCDataProvider.prototype.getRTCData = function (roomId, keys, isInner, apiType, callback) {
+            var context = this;
+            var hanlders = {
+                room_inner: function (roomId, keys, success, error) {
+                    context.addon.getRTCInnerData(roomId, RongIMLib.RTCAPIType.ROOM, keys, success, error);
+                },
+                room_outer: function (roomId, keys, success, error) {
+                    context.addon.getRTCOuterData(roomId, RongIMLib.RTCAPIType.ROOM, keys, success, error);
+                }
+            };
+            var type = RongIMLib.RTCAPIType.PERSON == apiType ? 'user' : 'room';
+            var direction = isInner ? 'inner' : 'outer';
+            var tpl = '{type}_{direction}';
+            var name = RongIMLib.RongUtil.tplEngine(tpl, {
+                type: type,
+                direction: direction
+            });
+            var handler = hanlders[name];
+            if (handler) {
+                handler(roomId, keys, function (result) {
+                    var res = JSON.parse(result);
+                    var props = {};
+                    var list = res.list;
+                    RongIMLib.RongUtil.forEach(list, function (item) {
+                        props[item.key] = item.value;
+                    });
+                    callback.onSuccess(props);
+                }, function (code) {
+                    callback.onError(code);
+                });
+            }
+        };
+        VCDataProvider.prototype.getRTCRoomData = function (roomId, keys, isInner, callback, message) {
+            this.getRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.ROOM, callback);
+        };
+        VCDataProvider.prototype.removeRTCData = function (roomId, keys, isInner, apiType, callback, message) {
+            var context = this;
+            var hanlders = {
+                room_inner: function (roomId, keys, name, content, success, error) {
+                    context.addon.deleteRTCInnerData(roomId, RongIMLib.RTCAPIType.ROOM, keys, name, content, success, error);
+                },
+                room_outer: function (roomId, keys, name, content, success, error) {
+                    context.addon.deleteRTCOuterData(roomId, RongIMLib.RTCAPIType.ROOM, keys, name, content, success, error);
+                },
+                user_inner: function (roomId, keys, name, content, success, error) {
+                },
+                user_outer: function (roomId, keys, name, content, success, error) {
+                }
+            };
+            var type = RongIMLib.RTCAPIType.PERSON == apiType ? 'user' : 'room';
+            var direction = isInner ? 'inner' : 'outer';
+            var tpl = '{type}_{direction}';
+            var name = RongIMLib.RongUtil.tplEngine(tpl, {
+                type: type,
+                direction: direction
+            });
+            var handler = hanlders[name];
+            if (handler) {
+                message = message || {};
+                var name = message.name || '';
+                var content = message.content || '';
+                handler(roomId, keys, name, content, function () {
+                    callback.onSuccess(true);
+                }, function (code) {
+                    callback.onError(code);
+                });
+            }
+        };
+        VCDataProvider.prototype.removeRTCRoomData = function (roomId, keys, isInner, callback, message) {
+            this.removeRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.ROOM, callback);
+        };
+        VCDataProvider.prototype.getNavi = function () {
+            var nav = this.addon.getNav();
+            return nav[this.userId];
+        };
+        // 信令 SDK 新增
+        VCDataProvider.prototype.setRTCOutData = function (roomId, data, type, callback, message) {
+        };
+        // 信令 SDK 新增
+        VCDataProvider.prototype.getRTCOutData = function (roomId, userId, callback) {
         };
         VCDataProvider.prototype.setRTCUserInfo = function (room, info, callback) {
         };
@@ -11114,33 +11693,20 @@ var RongIMLib;
         };
         VCDataProvider.prototype.getRTCUserList = function (room, callback) {
         };
-        VCDataProvider.prototype.getRTCRoomInfo = function (room, callback) {
-        };
         VCDataProvider.prototype.setRTCRoomInfo = function (room, data, callback) {
         };
         VCDataProvider.prototype.removeRTCRoomInfo = function (room, data, callback) {
         };
-        VCDataProvider.prototype.joinRTCRoom = function (room, callback) {
-        };
-        VCDataProvider.prototype.quitRTCRoom = function (room, callback) {
-        };
-        VCDataProvider.prototype.RTCPing = function (room, callback) {
-        };
         VCDataProvider.prototype.setRTCUserData = function (roomId, key, value, isInner, callback, message) {
+            this.setRTCData(roomId, key, value, isInner, RongIMLib.RTCAPIType.PERSON, callback, message);
         };
         VCDataProvider.prototype.getRTCUserData = function (roomId, key, isInner, callback, message) {
         };
         VCDataProvider.prototype.removeRTCUserData = function (roomId, key, isInner, callback, message) {
         };
-        VCDataProvider.prototype.setRTCRoomData = function (roomId, key, value, isInner, callback, message) {
-        };
-        VCDataProvider.prototype.getRTCRoomData = function (roomId, key, isInner, callback, message) {
-        };
-        VCDataProvider.prototype.removeRTCRoomData = function (roomId, key, isInner, callback, message) {
-        };
-        VCDataProvider.prototype.getNavi = function () {
-        };
         VCDataProvider.prototype.getRTCToken = function (room, callback) {
+        };
+        VCDataProvider.prototype.setRTCState = function (room, content, callback) {
         };
         return VCDataProvider;
     })();
@@ -11991,6 +12557,17 @@ var RongIMLib;
             var date = new Date();
             return date.getTime();
         };
+        RongUtil.isSupportRequestHeaders = function () {
+            var userAgent = navigator.userAgent;
+            var isIE = window.ActiveXObject || 'ActiveXObject' in window;
+            if (isIE) {
+                var reIE = new RegExp('MSIE (\\d+\\.\\d+);');
+                reIE.test(userAgent);
+                var fIEVersion = parseFloat(RegExp['$1']);
+                return fIEVersion > 9;
+            }
+            return true;
+        };
         return RongUtil;
     })();
     RongIMLib.RongUtil = RongUtil;
@@ -12039,6 +12616,27 @@ var RongIMLib;
         return RongObserver;
     })();
     RongIMLib.RongObserver = RongObserver;
+    var Observer = (function () {
+        function Observer() {
+            this.observers = [];
+        }
+        Observer.prototype.add = function (observer, force) {
+            if (force) {
+                this.observers = [observer];
+            }
+            this.observers.push(observer);
+        };
+        Observer.prototype.clear = function () {
+            this.observers = [];
+        };
+        Observer.prototype.emit = function (data) {
+            RongUtil.forEach(this.observers, function (observer) {
+                observer(data);
+            });
+        };
+        return Observer;
+    })();
+    RongIMLib.Observer = Observer;
     var Timer = (function () {
         function Timer(config) {
             this.timeout = 0;

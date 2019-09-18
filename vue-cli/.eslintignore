@@ -1,6 +1,4 @@
-/build/
-/config/
-/dist/
-/*.js
-/test/unit/coverage/
-static/js/*.js
+src/assets/RongIMLib-2.5.0.js
+src/assets/RongIMLib-2.5.1.js
+src/assets/protobuf-2.3.5.min.js
+src/assets/protobuf-2.3.6.min.js

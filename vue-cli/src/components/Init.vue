@@ -25,22 +25,16 @@
 </template>
 
 <script>
-var RongIMLib = require('../../static/js/RongIMLib-2.5.0.js')
-var Protobuf = require('../../static/js/protobuf-2.3.5.min.js')
-// var RongIMEmoji = require('../../static/js/RongEmoji-2.2.7.js')
-var RongIMClient = RongIMLib.RongIMClient
+require('../assets/RongIMLib-2.5.1')  // 此时已将 RongIMLib 赋值到了 window 上
+require('../assets/protobuf-2.3.6.min.js') // 此时已将 Protobuf 赋值到了 window.RongIMLib.RongIMClient 上. 注意: 必须为 protobuf-2.3.6 版本
+
+var RongIMLib = window.RongIMLib;
+var RongIMClient = RongIMLib.RongIMClient;
 
 function init (params, addPromptInfo) {
   var appkey = params.appkey
   var token = params.token
-  var navi = params.navi
-  var config = {
-    protobuf: Protobuf
-  }
-  if (navi) {
-    config.navi = navi
-  }
-  RongIMClient.init(appkey, null, config)
+  RongIMClient.init(appkey, null, params)
   RongIMClient.setConnectionStatusListener({
     onChanged: function (status) {
       switch (status) {

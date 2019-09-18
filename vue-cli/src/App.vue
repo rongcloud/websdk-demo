@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <router-view/>
+    <Init/>
   </div>
 </template>
 
 <script>
+import Init from './components/Init.vue'
+
 export default {
-  name: 'App'
+  name: 'app',
+  components: {
+    Init
+  }
 }
 </script>
 
