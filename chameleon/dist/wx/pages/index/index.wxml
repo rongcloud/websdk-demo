@@ -1,0 +1,20 @@
+<view class="rong-main  cml-base cml-view">
+  <h1 class=" cml-base cml-h1">{{title}}</h1>
+  <view class=" cml-base cml-view">
+    <text class="rong-label  cml-base cml-text">appkey: </text>
+    <input type="text" data-modelkey="appkey" bindinput="_cmlModelEventProxy" value="{{appkey}}" class="rong-appkey  cml-base cml-input"></input>
+  </view>
+  <view class=" cml-base cml-view">
+     <text class="rong-label  cml-base cml-text">token: </text>
+     <input type="text" data-modelkey="token" bindinput="_cmlModelEventProxy" value="{{token}}" class="rong-token  cml-base cml-input"></input>
+  </view>
+  <view class=" cml-base cml-view">
+     <text class="rong-label  cml-base cml-text">user: </text>
+     <input data-modelkey="userId" bindinput="_cmlModelEventProxy" value="{{userId}}" class="rong-userId  cml-base cml-input"></input>
+  </view>
+  <button text="初始化链接" bindonclick="_cmlEventProxy" data-eventonclick="{{['init']}}" class="rong-button  cml-base cml-button"></button>
+  <p class=" cml-base cml-p">初始化链接状态:</p>
+  <view wx:for="{{ initResult }}" wx:for-index="idx" wx:for-item="itemName" class=" cml-base cml-view">
+    <text class="init-status  cml-base cml-text">{{itemName}}</text>
+  </view>
+</view>

@@ -1,0 +1,12 @@
+{
+    "window": {
+        "backgroundTextStyle": "dark",
+        "navigationBarBackgroundColor": "#343434",
+        "navigationBarTitleText": "CNODE",
+        "navigationBarTextStyle": "white"
+    },
+    "pages": [
+        "pages/index/index"
+    ],
+    "usingComponents": {}
+}
