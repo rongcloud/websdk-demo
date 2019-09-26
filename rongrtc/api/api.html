@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>RTC 3.0 demo</title>
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    video {
+      background: #69696938;
+      width: 48%;
+      height: 600px;
+      transform: rotateY(180deg);
+      margin: 1%;
+    }
+    .rong-container {
+      background: #333;
+      min-height: 100%;
+    }
+    .rong-container .rong-title {
+      margin: 0;
+      padding: 35px 0 10px;;
+      text-align: center;
+      color: #fff;
+      font-size: 30px;
+    }
+    .rong-container .rong-login-box {
+      width: 100%;
+      height: 50px;
+      line-height: 50px;
+      border-bottom: 1px solid #333;
+      padding: 10px;
+      text-align: center;
+    }
+    .rong-container .rong-login-box .rong-input {
+      border-radius: 2px;
+    }
+    .rong-container .rong-login-box input:nth-child(1) {
+      width: 150px;
+      height: 38px;
+      border: none;
+      padding-left: 10px;
+    }
+    .rong-container .rong-login-box input:nth-child(2),
+    .rong-container .rong-login-box input:nth-child(3) {
+      width: 150px;
+      height: 40px;
+      border-radius: 2px;
+      background: #4285F4;
+      border: none;
+      color: #fff;
+      box-shadow: 1px 1px 6px #00000069;
+    }
+    .rong-container .rong-login-box input:nth-child(2):hover,
+    .rong-container .rong-login-box input:nth-child(3):hover {
+      transition-duration: .3s;
+      transition-timing-function: ease-in-out;
+      box-shadow: 0 10px 22px #00000069;
+    }
+    .rong-container .rong-user-box {
+      width: 100%;
+      text-align: center;
+    }
+    .rong-container .rong-logs {
+      border-top: 1px solid #333;
+    }
+  </style>
+  <script src="//cdn.ronghub.com/RongIMLib-2.5.1.js"></script>
+  <script src="//cdn.ronghub.com/RongRTC-3.1.0.js"></script>
+  <script src="../im.js"></script>
+  <script src="../utils.js"></script>
+  <script src="../mock.js"></script>
+</head>
+<body>
+  <div class="rong-container">
+    <h3 class="rong-title"> Web RTC 3.0 SDK MiniApp</h3>
+    <div class="rong-login-box">
+      <input class="rong-input" id="roomId" type="text" placeholder="房间号" value="19941116" autocomplete="off" >
+      <input class="rong-input" id="joinRoom" type="button" value="加入房间" >
+      <input class="rong-input" id="leaveRoom" type="button" value="离开房间" >
+    </div>
+    <div class="rong-user-box">
+    </div>
+    <div class="rong-logs">
+    </div>
+  </div>
+
+  <script>
+    var getDom = function (key) {
+      return document.querySelector(key);
+    }
+    var logger = new utils.Logger({
+      el: getDom('.rong-logs')
+    })
+    function show(node) {
+      node.style.display = 'inline-block';
+    }
+    function hide(node) {
+      node.style.display = 'none';
+    }
+
+    var roomIdNode = getDom('#roomId')
+    var joinRoomNode = getDom('#joinRoom')
+    var leaveRoomNode = getDom('#leaveRoom')
+    var userBoxNode = getDom('.rong-user-box')
+    var rongRTC, rongRoom, rongStream ;
+    var StreamType ;
+    joinRoomNode.onclick = function () {
+      if(imInstance){
+        startRTCConnect();
+        return;
+      }
+      getIMToken({roomId: roomIdNode.value}).then(function(data){
+        console.log(data);
+        connect({token: data},function(){
+          startRTCConnect();
+        })
+      }).catch(function(error){
+        console.log(error);
+      })
+    }
+    leaveRoomNode.onclick = function () {
+      rongStream.unpublish({
+        id: currentUser.id,
+          stream: {
+            type: StreamType.AUDIO_AND_VIDEO,
+            tag: 'rtc'
+          }
+      }).then(result => {
+        console.log('取消推送成功');
+        rongRoom.leave().then(function () {
+          console.log('leave successfully');
+          show(roomIdNode);
+          show(joinRoomNode);
+          var videoList = document.querySelectorAll('video');
+          for(var i=0;i<=videoList.length;i++){
+            userBoxNode.removeChild(videoList[i]) 
+          }
+        }, function(error){
+          console.log(error);
+          unpublish();
+        });
+      }, error => {
+        console.log(error);
+      });
+    }
+    var currentUser = {
+      id: ''
+    }
+    /* 获取 IM Token*/
+    function getIMToken(params) {
+      var index = location.search.substring(1);
+      index = Number(index);
+      // var name = 'user' + new Date().getTime();
+      return Promise.resolve(App.users[index].token);
+      // 此处可通过 App Server 获取 IM Token
+      // return new Promise(function (resolve, reject) {
+      //   utils.ajax({
+      //     url: url,
+      //     headers: {
+      //       'Content-Type': 'application/json'
+      //     },
+      //     method: 'POST',
+      //     body: JSON.stringify({
+      //       roomId: params.roomId,
+      //       userName: name,
+      //       audience: false
+      //     }),
+      //     success: function (result) {
+      //       result = JSON.parse(result);
+      //       resolve(result.data.result.imToken);
+      //     },
+      //     fail: function (error) {
+      //       reject(error);
+      //     }
+      //   });
+      // });
+    }
+    /* 开始: IM 连接相关 */
+    var imInstance = null;
+    function connect(params,callback) {
+      if (imInstance) {
+        return;
+      }
+      var appkey = App.appkey;
+      var params = {
+        appkey: appkey,
+        token: params.token
+      };
+      var callbacks = {
+        connected: function (instance, user) {
+          var userId = user.id;
+          currentUser.id = userId;
+          imInstance = instance;
+          console.log('连接成功，用户 ID: ' + userId);
+          callback();
+        },
+        disconnectd: function (status) {
+          imInstance = null;
+          console.log('连接断开');
+        },
+        error: function () {
+          imInstance = null;
+          console.log('连接异常，状态码: ' + status);
+        },
+          onTokenIncorrect: function () {
+          console.log('Token 不正确，可在融云开发者后台获取 https://developer.rongcloud.cn/');
+        }
+      };
+      initIM(params, callbacks);
+    }
+    function disconnect() {
+      if (!imInstance) {
+        return
+      }
+      imInstance.disconnect();
+    }
+    // connect()
+    /* 结束: IM 连接相关 */
+    function startRTCConnect(){
+      startRTC({roomId: roomIdNode.value},function() {
+        joinRoom(function() {
+          publish();
+        });
+      });
+    }
+    function startRTC(params,callback) {
+      rongRTC = new RongRTC({
+        RongIMLib: RongIMLib,
+        error: function (error) {
+          console.log(error);
+        },
+        logger: function (log) {
+        }
+      });
+      rongRoom = new rongRTC.Room({
+        id: params.roomId,
+        joined: function (user) {
+          console.log(user.id+'加入房间');
+        },
+        left: function (user) {
+          console.log(user,'user.id 离开房间')
+        }
+      });
+      rongStream = new rongRTC.Stream({
+        published: addUserStream,
+        unpublished: removeUserStream
+      });
+      StreamType = rongRTC.StreamType;
+      callback();
+    }
+    function joinRoom(callback) {
+      rongRoom.join({
+        id: currentUser.id
+      }).then(function (users) {
+        console.log("加入房间成功");
+        callback();
+      }, function (error) {
+        console.log(error);
+      });
+    }
+    var createVideo = function (stream) {
+      var video = document.createElement('video');
+      video.srcObject = stream;
+      video.autoplay = true;
+      return video;
+    };
+    function getMedia(){
+      return new Promise(function(resolve,reject){
+        rongStream.get().then(function ({ mediaStream }) {
+          console.log(mediaStream);
+          resolve(mediaStream);
+          var user = {stream:{}};
+          user.stream.mediaStream = mediaStream;
+          appendVideo(user);
+        }, error => {
+          console.log(error);
+          reject();
+        });
+      })
+    }
+    function publish () {
+      getMedia().then(function(mediaStream){
+        rongStream.publish({
+          id: currentUser.id,
+          stream: {
+            type: StreamType.AUDIO_AND_VIDEO,
+            tag: 'rtc',
+            mediaStream: mediaStream
+          }
+        }).then(function () {
+          console.log('发布资源成功');
+          hide(roomIdNode);
+          hide(joinRoomNode);
+        }, function (error) {
+          console.log(error, '发布资源失败:');
+        })
+      })
+    }
+    function unpublish () {
+      rongStream.unpublish({
+        id: currentUser.id,
+          stream: {
+            type: StreamType.AUDIO_AND_VIDEO,
+            tag: 'rtc'
+          }
+      }).then(result => {
+        console.log('取消推送成功');
+      }, error => {
+        console.log(error);
+      });
+    }
+    function subscribe (user) {
+      return new Promise(function(resolve ,reject){
+        rongStream.subscribe(user).then(function(user){
+          resolve(user);
+        },function(error){
+          console.log(error);
+        });
+      })
+    }
+    function unsubscribe (user) {
+      return new Promise(function(resolve ,reject){
+        rongStream.unsubscribe(user).then(function(user){
+          resolve(user);
+        },function(error){
+          console.log(error);
+        });
+      })
+    }
+    function appendVideo (user) {
+      var dom = document.querySelector('.rong-user-box');
+      var videoDom = createVideo(user.stream.mediaStream);
+      dom.appendChild(videoDom);
+      if(user.id){
+        videoDom.id = user.id;
+      }
+    }
+    function removeVideo (user) {
+      var dom = document.querySelector('.rong-user-box');
+      val = '#'+user.id;
+      videoDom = getDom(val);
+      dom.removeChild(videoDom);
+    }
+    function addUserStream (user){
+      console.log('收到其他人发送的资源');
+      subscribe(user).then(function(user){
+        console.log(user,'sub');
+        appendVideo(user)
+      })
+    }
+    function removeUserStream (user) {
+      removeVideo(user);
+      unsubscribe(user).then(function(user){
+        console.log(user,'sub');
+      })
+    }
+    window.onbeforeunload = function (e) {
+      rongStream.unpublish({
+        id: currentUser.id,
+          stream: {
+            type: StreamType.AUDIO_AND_VIDEO,
+            tag: 'rtc'
+          }
+      }).then(result => {
+        console.log('取消推送成功');
+        rongRoom.leave().then(function () {
+          console.log('leave successfully');
+          show(roomIdNode);
+          show(joinRoomNode);
+          for(var i=0;i<userBoxNode.childNodes.length;i++){
+            userBoxNode.removeChild(userBoxNode.childNodes[1]) 
+          }
+        }, function(error){
+          console.log(error);
+          unpublish();
+        });
+      }, error => {
+        console.log(error);
+      });
+    };
+  </script>
+</body>
+</html>
