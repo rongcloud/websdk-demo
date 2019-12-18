@@ -25,9 +25,6 @@
 </template>
 
 <script>
-require('../assets/RongIMLib-2.5.1')  // 此时已将 RongIMLib 赋值到了 window 上
-require('../assets/protobuf-2.3.6.min.js') // 此时已将 Protobuf 赋值到了 window.RongIMLib.RongIMClient 上. 注意: 必须为 protobuf-2.3.6 版本
-
 var RongIMLib = window.RongIMLib;
 var RongIMClient = RongIMLib.RongIMClient;
 

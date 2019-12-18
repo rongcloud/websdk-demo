@@ -30,6 +30,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### 注意事项
 
-1、主要关注 src/components/Init.vue 文件的引入和链接逻辑
+1、需关注 public/index.html RongIMLib 文件的引入
 
-2、protobuf 必须为 2.3.6+ 版本
+2、需关注 src/components/Init.vue 的链接代码
