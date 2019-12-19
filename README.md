@@ -32,6 +32,8 @@ WebSDK in electron-vue: [https://github.com/rongcloud/websdk-demo/tree/master/el
 
 获取历史消息: [https://rongcloud.github.io/websdk-demo/histroy-messages.html](https://rongcloud.github.io/websdk-demo/histroy-messages.html)
 
+聊天室自定义属性: [https://github.com/rongcloud/websdk-demo/tree/master/chrm-kv-demo](https://github.com/rongcloud/websdk-demo/tree/master/chrm-kv-demo)
+
 WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test.html](https://rongcloud.github.io/websdk-demo/api-test.html)
 
 WebSDK Vue Require 示例: [https://rongcloud.github.io/websdk-demo/vue/require.html](https://rongcloud.github.io/websdk-demo/vue/require.html)

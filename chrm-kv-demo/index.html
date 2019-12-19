@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./css/main.css">
+  <script src="//cdn.ronghub.com/RongIMLib-2.5.3.js"></script>
+  <script src="setting.js"></script>
+  <script src="./js/init.js"></script>
+  <script src="./js/utils.js"></script>
+  <title>聊天室 kv 存储 Demo</title>
+</head>
+<body>
+  <div class="rong-chrm-btns">
+    <div id="chrmJoining">
+      <button onclick="RongIM.main.joinChatRoom(0)">加入聊天室1</button>
+      <button onclick="RongIM.main.joinChatRoom(1)">加入聊天室2</button>
+    </div>
+    <div id="chrmJoined" class="rong-chrm-joined" style="display: none;">
+      <button onclick="RongIM.main.showChrmSetDialog([], 'setChatroomEntryForce')">设置 Key（强制）</button>
+      <button onclick="RongIM.main.showChrmSetDialog([], 'setChatroomEntry')">设置 Key（不强制）</button><br>
+      <button onclick="RongIM.main.showChrmSetDialog(['chrmSetValueBox', 'chrmSetDeleteBox'], 'removeChatroomEntryForce')">删除 Key（强制）</button>
+      <button onclick="RongIM.main.showChrmSetDialog(['chrmSetValueBox', 'chrmSetDeleteBox'], 'removeChatroomEntry')">删除 Key（不强制）</button><br>
+      <button onclick="RongIM.main.getAllChatroomEntry()">获取所有 Key</button>
+      <button onclick="RongIM.main.showChrmSetDialog(['chrmSetValueBox', 'chrmSetDeleteBox', 'chrmSetExtraBox', 'chrmSetSendBox'], 'getChatroomEntry')">获取指定 Key</button>
+      <br>
+      <button
+        onclick="RongIM.main.quitChatroom()">退出聊天室</button>
+    </div>
+  </div>
+  <button id="chrmTipsClear" class="rong-tip-clear">点击清屏</button>
+  <ol id="chrmTips" class="rong-tip-show"></ol>
+  <ol id="chrmWSTips" class="rong-tip-show rong-tip-ws-show">
+    <br><br><hr>
+  </ol>
+
+
+  <div id="chrmSetDialog" class="rong-chrm-dialog" style="display: none;">
+    <div class="rong-chrm-dialog-box">
+      <div class="rong-chrm-input-box"><label>key:</label><input id="chrmKey" type="text"></div>
+      <div id="chrmSetValueBox" class="rong-chrm-input-box"><label>value:</label><input id="chrmValue" type="text"></div>
+      <div id="chrmSetExtraBox" class="rong-chrm-input-box"><label>extras:</label><input id="chrmExtra" type="text"></div>
+      <div id="chrmSetDeleteBox" class="rong-chrm-input-box">
+        <label></label>
+        <input id="chrmDelete" type="checkbox">退出是否删除
+      </div>
+      <div id="chrmSetSendBox" class="rong-chrm-input-box">
+        <label></label>
+        <input id="chrmSend" type="checkbox">是否发送通知
+      </div>
+      <div class="rong-chrm-input-box rong-chrm-input-btn-box">
+        <button onclick="RongIM.main.confirmSetChrm()">确定</button>
+        <button onclick="RongIM.main.hideChrmSetDialog()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="chrmLoading" class="rong-chrm-dialog rong-chrm-loading" style="display: none;">
+    <div class="rong-chrm-loading-box">
+      <p class="rong-chrm-loading-content">
+        正在加载中 ....
+      </p>
+    </div>
+  </div>
+
+</body>
+<script src="./js/main.js"></script>
+</html>
