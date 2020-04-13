@@ -2337,7 +2337,7 @@
           }
           var domain = urls[index];
           var url = utils.tplEngine(tpl, {
-            domain: 'https://mdsrv01-ksbj.rongcloud.net:1443',
+            domain: domain,
             path: path
           });
           var headers = {
