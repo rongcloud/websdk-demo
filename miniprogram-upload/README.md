@@ -2,6 +2,7 @@
 
 ### 目录说明
 
+```
 upload-miniprogram
 ├── pages
 │   ├── index 
@@ -10,7 +11,7 @@ upload-miniprogram
 │   ├── lib 依赖库
 │   │   ├── RongIMLib-3.0.4-dev.js 融云小程序 SDK
 │   └── services.js 服务层，连接IM、上传模块封装
-
+```
 
 ### 上传模块说明
 
@@ -86,7 +87,7 @@ const upload = (fileInfo, uploadType) => {
      * bosToken 百度上传认证 authorization 请求头
      * bosDate 百度上传 x-bce-date 请求头
      * bos 百度上传域名
-     * path 百度上传l路径
+     * path 百度上传路径
     */
     let { token, bosToken, bosDate, bos, path } = result;
     let bosHeaders = {
