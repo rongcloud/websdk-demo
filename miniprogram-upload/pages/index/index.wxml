@@ -1,0 +1,12 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="usermotto">
+    <text class="user-motto">{{title}}</text>
+  </view>
+  <view class="userinfo">
+    <button bindtap="upload"> 上传图片 </button>
+  </view>
+  <view class="userinfo">
+    <button bindtap="uploadFile"> 上传文件</button>
+  </view>
+</view>
