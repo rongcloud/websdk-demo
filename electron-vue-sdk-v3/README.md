@@ -1,5 +1,7 @@
 ### electron-vue 引入 websdk
 
+`注:` [electron-vue](https://github.com/SimulatedGREG/electron-vue) 本身已经长时间不维护, 且 issues 无人处理. 正常情况下, 不建议使用. 如集成桌面版项目, 可直接使用 [electron](https://www.electronjs.org/) 和 [vue](https://cn.vuejs.org/)
+
 #### 开发环境
 
 node 8.12.0 及以上版本
@@ -9,6 +11,7 @@ node 8.12.0 及以上版本
 1、安装依赖包
 
 ```
+npm install electron@2.0.4 --save-dev
 npm install
 ```
 
