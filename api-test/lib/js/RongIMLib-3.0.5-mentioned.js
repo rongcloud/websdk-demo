@@ -1,8 +1,8 @@
 /*
-* RongIMLib.js v3.0.1
-* Release Date: Tue Apr 21 2020 09:21:37 GMT+0800 (China Standard Time)
+* RongIMLib.js v3.0.5-dev
+* CodeVersion: 03caf1eb0aea5d9db625b9b939e52338de427ba1
+* Release Date: Wed Aug 12 2020 19:04:27 GMT+0800 (China Standard Time)
 * Copyright 2020 RongCloud
-* Released under the MIT License.
 */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -10,9 +10,9 @@
   (global.RongIMLib = factory());
 }(this, (function () { 'use strict';
 
-  var version = "3.0.1";
+  var versionToServer = "3.0.5";
 
-  var SDK_VERSION = version;
+  var SDK_VERSION = versionToServer;
 
   var ERROR_INFO = {
     TIMEOUT: {
@@ -69,7 +69,7 @@
     },
     ROAMING_SERVICE_UNAVAILABLE_CHATROOM: {
       code: 23414,
-      msg: 'ChatRoom message roaming service is not open'
+      msg: 'ChatRoom message roaming service is not open, Please go to the developer to open this service'
     },
     RECALLMESSAGE_PARAMETER_INVALID: {
       code: 25101,
@@ -111,9 +111,9 @@
       code: 31002,
       msg: 'Your appkey is fake'
     },
-    CONN_SERVER_UNAVAILABLE: {
+    CONN_MINI_SERVICE_NOT_OPEN: {
       code: 31003,
-      msg: 'The server is currently unavailable'
+      msg: 'Mini program service is not open, Please go to the developer to open this service'
     },
     CONN_TOKEN_INCORRECT: {
       code: 31004,
@@ -146,6 +146,22 @@
     RC_CONNECTION_EXIST: {
       code: 34001,
       msg: 'Connection already exists'
+    },
+    CHATROOM_KV_EXCEED: {
+      code: 23423,
+      msg: 'ChatRoom KV setting exceeds maximum'
+    },
+    CHATROOM_KV_OVERWRITE_INVALID: {
+      code: 23424,
+      msg: 'ChatRoom KV already exists'
+    },
+    CHATROOM_KV_STORE_NOT_OPEN: {
+      code: 23426,
+      msg: 'ChatRoom KV storage service is not open, Please go to the developer to open this service'
+    },
+    CHATROOM_KEY_NOT_EXIST: {
+      code: 23427,
+      msg: 'ChatRoom key does not exist'
     }
   };
   var ERROR_CODE = {};
@@ -183,7 +199,7 @@
   };
   var CONNECT_SERVER_STATUS = {
     IDENTIFIER_REJECTED: 2,
-    SERVER_UNAVAILABLE: 3,
+    CONN_MINI_SERVICE_NOT_OPEN: 3,
     TOKEN_INCORRECT: 4,
     NOT_AUTHORIZED: 5,
     REDIRECT: 6,
@@ -194,7 +210,7 @@
     DEVICE_ERROR: 11,
     DOMAIN_INCORRECT: 12
   };
-  var CONNECT_SERVER_STATUS_MAP_ERROR_INFO = (_CONNECT_SERVER_STATU = {}, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.IDENTIFIER_REJECTED] = ERROR_INFO.CONN_APPKEY_FAKE, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.SERVER_UNAVAILABLE] = ERROR_INFO.CONN_SERVER_UNAVAILABLE, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.TOKEN_INCORRECT] = ERROR_INFO.CONN_TOKEN_INCORRECT, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.NOT_AUTHORIZED] = ERROR_INFO.CONN_NOT_AUTHRORIZED, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.REDIRECT] = ERROR_INFO.CONN_REDIRECTED, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.APP_BLOCK_OR_DELETE] = ERROR_INFO.CONN_APP_BLOCKED_OR_DELETED, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.BLOCK] = ERROR_INFO.CONN_USER_BLOCKED, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.TOKEN_EXPIRE] = ERROR_INFO.CONN_TOKEN_INCORRECT, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.DOMAIN_INCORRECT] = ERROR_INFO.CONN_DOMAIN_INCORRECT, _CONNECT_SERVER_STATU);
+  var CONNECT_SERVER_STATUS_MAP_ERROR_INFO = (_CONNECT_SERVER_STATU = {}, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.IDENTIFIER_REJECTED] = ERROR_INFO.CONN_APPKEY_FAKE, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.CONN_MINI_SERVICE_NOT_OPEN] = ERROR_INFO.CONN_MINI_SERVICE_NOT_OPEN, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.TOKEN_INCORRECT] = ERROR_INFO.CONN_TOKEN_INCORRECT, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.NOT_AUTHORIZED] = ERROR_INFO.CONN_NOT_AUTHRORIZED, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.REDIRECT] = ERROR_INFO.CONN_REDIRECTED, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.APP_BLOCK_OR_DELETE] = ERROR_INFO.CONN_APP_BLOCKED_OR_DELETED, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.BLOCK] = ERROR_INFO.CONN_USER_BLOCKED, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.TOKEN_EXPIRE] = ERROR_INFO.CONN_TOKEN_INCORRECT, _CONNECT_SERVER_STATU[CONNECT_SERVER_STATUS.DOMAIN_INCORRECT] = ERROR_INFO.CONN_DOMAIN_INCORRECT, _CONNECT_SERVER_STATU);
   var TRANSPORTER_STATUS = {
     CONNECTED: CONNECTION_STATUS.CONNECTED,
     KICKED_OFFLINE_BY_OTHER_CLIENT: CONNECTION_STATUS.KICKED_OFFLINE_BY_OTHER_CLIENT,
@@ -217,7 +233,11 @@
     PING_TIMEOUT: 2002,
     DISCONNECT_TOO_FAST: 2003,
     EXCEED_MESSAGE_ID_LIMIT: 2004,
-    COMET_REQUEST_ERROR: 2005
+    COMET_REQUEST_ERROR: 2005,
+    MINI_URL_NOT_IN_DOMAIN_LIST: 2006
+  };
+  var MINI_ERROR_MSG_TO_STATUS = {
+    'url not in domain list': TRANSPORTER_STATUS.MINI_URL_NOT_IN_DOMAIN_LIST
   };
   var SERVER_DISCONNECT_STATUS_TO_TRANSPORTER_STATUS = (_SERVER_DISCONNECT_ST = {}, _SERVER_DISCONNECT_ST[SERVER_DISCONNECT_STATUS.KICKED_OFFLINE_BY_OTHER_CLIENT] = TRANSPORTER_STATUS.KICKED_OFFLINE_BY_OTHER_CLIENT, _SERVER_DISCONNECT_ST[SERVER_DISCONNECT_STATUS.BLOCKED] = TRANSPORTER_STATUS.BLOCKED, _SERVER_DISCONNECT_ST);
   var TRANSPORTER_STATUS_NEED_UPDATE_CMP = [TRANSPORTER_STATUS.CLOSE_NORMAL, TRANSPORTER_STATUS.CLOSE_GOING_AWAY, TRANSPORTER_STATUS.CLOSE_PROTOCOL_ERROR, TRANSPORTER_STATUS.CLOSE_UNSUPPORTED, TRANSPORTER_STATUS.UNSUPPORTED_DATA, TRANSPORTER_STATUS.POLICY_VIOLATION, TRANSPORTER_STATUS.MISSING_EXTENSION, TRANSPORTER_STATUS.INTERNAL_ERROR, TRANSPORTER_STATUS.SERVICE_RESTART, TRANSPORTER_STATUS.TRY_AGAIN_LATER, TRANSPORTER_STATUS.TSL_HANDSHAKE, TRANSPORTER_STATUS.PING_FIRST_TIMEOUT, TRANSPORTER_STATUS.DISCONNECT_TOO_FAST, TRANSPORTER_STATUS.COMET_REQUEST_ERROR];
@@ -263,7 +283,9 @@
     LOCATION: 'RC:LBSMsg',
     FILE: 'RC:FileMsg',
     SIGHT: 'RC:SightMsg',
-    COMBINE: 'RC:CombineMsg'
+    COMBINE: 'RC:CombineMsg',
+    CHRM_KV_NOTIFY: 'RC:chrmKVNotiMsg',
+    LOG_COMMAND: 'RC:LogCmdMsg'
   };
   var RTC_API_TYPE = {
     ROOM: 1,
@@ -274,6 +296,14 @@
     AUDIO: 2,
     VIDEO: 3,
     FILE: 4
+  };
+  var CHATROOM_ENTRY_TYPE = {
+    UPDATE: 1,
+    DELETE: 2
+  };
+  var NOTIFICATION_STATUS = {
+    DO_NOT_DISTURB: 1,
+    NOTIFY: 2
   };
   var product = {
     CONNECT_TYPE: CONNECT_TYPE,
@@ -286,7 +316,9 @@
     MESSAGE_TYPE: MESSAGE_TYPE,
     MENTIOND_TYPE: MENTIOND_TYPE,
     SDK_VERSION: SDK_VERSION,
-    FILE_TYPE: FILE_TYPE
+    FILE_TYPE: FILE_TYPE,
+    CHATROOM_ENTRY_TYPE: CHATROOM_ENTRY_TYPE,
+    NOTIFICATION_STATUS: NOTIFICATION_STATUS
   };
 
   var IM_TIMEOUT = 30000;
@@ -294,9 +326,8 @@
   var IM_COMET_PULLMSG_TIMEOUT = 45000;
   var IM_PING_MAX_TIMEOUT = 6000;
   var IM_PING_MIN_TIMEOUT = 2000;
-  var HTTP_TIMEOUT = 60000;
   var PULL_MSG_TIME = 180000;
-  var NAVI_EXPIRED_TIME = 10800000;
+  var NAVI_EXPIRED_TIME = 7200000;
   var CMP_SNIFF_INTERNAL_TIME = 1000;
   var FIRST_PING_TIMEOUT = 1000;
   var NAVI_REQUEST_SUCCESS_CODE = 200;
@@ -305,6 +336,14 @@
   var DOMAIN_SEPARATOR_IN_CMPLIST = ',';
   var MAX_SINGAL_ID = 65535;
   var MINIMUM_CONNECT_DURATION = 5000;
+  var CHATROOM_KEY_LENGTH = {
+    MAX: 128,
+    MIN: 1
+  };
+  var CHATROOM_VALUE_LENGTH = {
+    MAX: 4096,
+    MIN: 1
+  };
   var TYPE_HAS_CONVERSATION = [CONVERSATION_TYPE.PRIVATE, CONVERSATION_TYPE.GROUP, CONVERSATION_TYPE.SYSTEM];
   var PLATFORM = {
     WEB: 'web',
@@ -312,13 +351,16 @@
     ZFB: 'zfb',
     TT: 'tt',
     BAIDU: 'baidu',
-    QUICK_APP: 'quick_app'
+    QUICK_APP: 'quick_app',
+    UNI: 'uni'
   };
   var REQUEST_METHOD = {
     POST: 'post',
     GET: 'get'
   };
   var STORAGE_ROOT_KEY = 'rc-';
+  var STORAGE_DEVICE_ID_KEY = STORAGE_ROOT_KEY + 'deviceId';
+  var STORAGE_SESSION_ID_KEY = STORAGE_ROOT_KEY + 'sessionId';
   var STORAGE_NAVI = {
     ROOT_KEY_TPL: 'nav-{appkey}-{UID}',
     SUB_KEY: {
@@ -334,6 +376,12 @@
       INBOX: 'in'
     }
   };
+  var SESSION_SYNC_TIME = {
+    ROOT_KEY_TPL: 'sync-{appkey}-{userId}',
+    SUB_KEY: {
+      TIME: 't'
+    }
+  };
   var STORAGE_CONVERSATION = {
     ROOT_KEY_TPL: 'con-{appkey}-{userId}',
     SUB_KEY: {
@@ -341,12 +389,28 @@
       UNREAD_COUNT: 'c',
       UNREAD_LAST_TIME: 't',
       HAS_MENTIOND: 'hm',
-      MENTIOND_INFO: 'm'
+      MENTIOND_INFO: 'm',
+      NOTIFICATION: 'no',
+      TOP: 'to'
+    }
+  };
+  var STORAGE_CONVERSATION_STATUS = {
+    ROOT_KEY_TPL: 'con-s-{appkey}-{userId}',
+    SUB_KEY: {
+      TIME: 't'
+    }
+  };
+  var STORAGE_USER_SETTING = {
+    ROOT_KEY_TPL: 'sett-{appkey}-{userId}',
+    SUB_KEY: {
+      VERSION: 'v',
+      SETTINGS: 's'
     }
   };
   var HTTP_PROTOCOL = {
     HTTP: 'http:',
-    HTTPS: 'https:'
+    HTTPS: 'https:',
+    FILE: 'file:'
   };
   var WS_PROTOCOL = {
     WSS: 'wss:',
@@ -359,9 +423,10 @@
   };
   var NAVI_URL_TPL = '{url}/{type}.js?appId={appkey}&token={token}&callBack=' + NAVI_CALLBACK_NAME + '&r={random}&v=' + SDK_VERSION;
   var CMP_URL_TPL = '{protocol}//{domain}/websocket?appId={appkey}&token={token}&apiVer={apiVer}&sdkVer=' + SDK_VERSION;
+  var MINI_CMP_URL_TPL = '{protocol}//{domain}/websocket?appId={appkey}&token={token}&apiVer={apiVer}&sdkVer=' + SDK_VERSION + '&platform={platform}';
   var COMET_REQ_HAS_TOPIC_URL_TPL = '{protocol}//{domain}/websocket?messageid={messageId}&header={headerCode}&sessionid={sessionId}&topic={topic}&targetid={targetId}&pid={pid}';
   var COMET_REQ_NO_TOPIC_URL_TPL = '{protocol}//{domain}/websocket?messageid={messageId}&header={headerCode}&sessionid={sessionId}&pid={pid}';
-  var COMET_PULL_URL_TPL = '{protocol}//{domain}/pullmsg.js?sessionid={sessionId}&timestamp={timestamp}&pid={pid}';
+  var COMET_PULL_URL_TPL = '{protocol}//{domain}/pullmsg.js?sessionid={sessionId}&timestrap={timestamp}&pid={pid}';
   var TIMER_TYPE = {
     INTERVAL: 'interval',
     TIMEOUT: 'timeout'
@@ -371,33 +436,87 @@
     BUSY: 'busy',
     ENDING: 'ending'
   };
+  var PLATFORM_TYPE = {
+    MINI: 'MiniProgram',
+    WEB: 'Web'
+  };
+  var SESSION_SYNC_CHATROOM = {
+    ROOT_KEY_TPL: 'sync-chrm-{appkey}-{userId}'
+  };
 
   var UnKown = 'UnKown';
 
+  var hasMiniBaseEvent = function hasMiniBaseEvent(miniGlobal) {
+    var baseMiniEventNames = ['canIUse', 'getSystemInfo'];
+
+    for (var i = 0, max = baseMiniEventNames.length; i < max; i++) {
+      var baseEventName = baseMiniEventNames[i];
+
+      if (!miniGlobal[baseEventName]) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  var isFromUniappEnv = function isFromUniappEnv() {
+    if (typeof uni !== 'undefined' && hasMiniBaseEvent(uni)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  var isFromUniapp = isFromUniappEnv();
+
+  var isAppPlusEnv = function isAppPlusEnv() {
+    if (isFromUniapp) {
+      var systemInfo = uni.getSystemInfoSync();
+
+      if (['ios', 'android'].includes(systemInfo.platform) && systemInfo.version) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  var isAppPlus = isAppPlusEnv();
+
   var isMiniEnv = function isMiniEnv(global) {
+    if (isAppPlus) {
+      return false;
+    }
+
     return global !== window;
   };
 
   var getEnvInfo = function getEnvInfo() {
-    if (typeof wx !== 'undefined') {
+    if (isAppPlus) {
       return {
-        platform: PLATFORM.WX,
-        global: wx
+        platform: PLATFORM.UNI,
+        global: uni
       };
-    } else if (typeof swan !== 'undefined') {
+    } else if (typeof swan !== 'undefined' && hasMiniBaseEvent(swan)) {
       return {
         platform: PLATFORM.BAIDU,
         global: swan
       };
-    } else if (typeof tt !== 'undefined') {
+    } else if (typeof tt !== 'undefined' && hasMiniBaseEvent(tt)) {
       return {
         platform: PLATFORM.TT,
         global: tt
       };
-    } else if (typeof my !== 'undefined') {
+    } else if (typeof my !== 'undefined' && hasMiniBaseEvent(my)) {
       return {
         platform: PLATFORM.ZFB,
         global: my
+      };
+    } else if (typeof wx !== 'undefined' && hasMiniBaseEvent(wx) && !navigator) {
+      return {
+        platform: PLATFORM.WX,
+        global: wx
       };
     } else {
       return {
@@ -453,11 +572,11 @@
 
   var getProtocol = function getProtocol(global) {
     var location = global.location || {};
+    var isHttp = location.protocol === HTTP_PROTOCOL.HTTP || location.protocol === HTTP_PROTOCOL.FILE;
     var protocol = {
-      http: location.protocol || HTTP_PROTOCOL.HTTPS,
+      http: isHttp ? HTTP_PROTOCOL.HTTP : HTTP_PROTOCOL.HTTPS,
       ws: WS_PROTOCOL.WSS
     };
-    var isHttp = protocol.http === HTTP_PROTOCOL.HTTP;
 
     if (isHttp) {
       protocol.ws = WS_PROTOCOL.WS;
@@ -467,7 +586,7 @@
   };
 
   var adaptGlobalObjectCreate = function adaptGlobalObjectCreate(global, isMini) {
-    if (!isMini && !global.Object.create) {
+    if (!isMini && !isAppPlus && !global.Object.create) {
       global.Object.create = function (o, properties) {
         if (typeof o !== 'object' && typeof o !== 'function') throw new TypeError('Object prototype may only be an Object: ' + o);else if (o === null) throw new Error('This browser\'s implementation of Object.create is a shim and doesn\'t support \'null\' as the first argument.');
         if (typeof properties !== 'undefined') throw new Error('This browser\'s implementation of Object.create is a shim and doesn\'t support a second argument.');
@@ -521,15 +640,17 @@
       global$1 = envInfo.global;
   var isMini = isMiniEnv(global$1);
   var protocol = getProtocol(global$1);
-  var system = isMini ? getMiniSystemInfo(global$1) : getWebSystemInfo();
+  var system = isMini || isAppPlus ? getMiniSystemInfo(global$1) : getWebSystemInfo();
   system.name = platform;
   adaptGlobalObjectCreate(global$1, isMini);
-  global$1 = isMini ? getMiniGlobal(global$1) : global$1;
+  global$1 = isMini || isAppPlus ? getMiniGlobal(global$1) : global$1;
   var env = {
     global: global$1,
     system: system,
     isMini: isMini,
-    protocol: protocol
+    protocol: protocol,
+    isAppPlus: isAppPlus,
+    isFromUniapp: isFromUniapp
   };
 
   var global$2 = env.global,
@@ -801,16 +922,99 @@
 
   var WebStorage$1 = isSupportLocalStorage() ? WebStorage : CacheStorage;
 
-  var isMini$1 = env.isMini;
-  var Storage = isMini$1 ? storage : WebStorage$1,
+  var isMini$1 = env.isMini,
+      isAppPlus$1 = env.isAppPlus;
+  var Storage = isMini$1 || isAppPlus$1 ? storage : WebStorage$1,
       storage$1 = new Storage();
 
   var global$4 = env.global;
+  var TEST_KEY$1 = 'RC_TEST_KEY';
+  var TEST_VALUE$1 = 'RC_TEST_VALUE';
+
+  var isSupportSessionStorage = function isSupportSessionStorage() {
+    var isSupport = false;
+    var sessionStorage = global$4.sessionStorage;
+
+    if (sessionStorage) {
+      try {
+        sessionStorage.setItem(TEST_KEY$1, TEST_VALUE$1);
+        var testVal = sessionStorage.getItem(TEST_KEY$1);
+
+        if (testVal === TEST_VALUE$1) {
+          isSupport = true;
+        }
+
+        sessionStorage.removeItem(TEST_KEY$1);
+      } catch (e) {}
+    }
+
+    return isSupport;
+  };
+
+  var WebSession = function () {
+    function WebSession() {}
+
+    var _proto = WebSession.prototype;
+
+    _proto.set = function set(key, value) {
+      global$4.sessionStorage.setItem(key, JSON$1.stringify({
+        d: value
+      }));
+    };
+
+    _proto.get = function get(key) {
+      var value;
+      var localValue = global$4.sessionStorage.getItem(key);
+
+      try {
+        localValue = JSON$1.parse(localValue);
+      } catch (e) {
+        localValue = {};
+      }
+
+      if (localValue && localValue.d) {
+        value = localValue.d;
+      }
+
+      return value;
+    };
+
+    _proto.remove = function remove(key) {
+      return global$4.sessionStorage.removeItem(key);
+    };
+
+    _proto.getKeys = function getKeys() {
+      var keyList = [];
+
+      for (var key in global$4.sessionStorage) {
+        keyList.push(key);
+      }
+
+      return keyList;
+    };
+
+    return WebSession;
+  }();
+
+  var WebSession$1 = isSupportSessionStorage() ? WebSession : CacheStorage;
+
+  var isMini$2 = env.isMini,
+      isAppPlus$2 = env.isAppPlus;
+  var Session = isMini$2 || isAppPlus$2 ? CacheStorage : WebSession$1,
+      session = new Session();
+
+  var global$5 = env.global,
+      isAppPlus$3 = env.isAppPlus;
 
   var Socket = function () {
     function Socket(options) {
       this.socket = void 0;
-      this.socket = global$4.connectSocket(options);
+
+      if (isAppPlus$3) {
+        options['complete'] = function () {};
+      }
+
+      this.socket = global$5.connectSocket(options);
     }
 
     var _proto = Socket.prototype;
@@ -882,8 +1086,9 @@
     return Socket;
   }();
 
-  var isMini$2 = env.isMini;
-  var Socket$2 = isMini$2 ? Socket : Socket$1;
+  var isMini$3 = env.isMini,
+      isAppPlus$4 = env.isAppPlus;
+  var Socket$2 = isMini$3 || isAppPlus$4 ? Socket : Socket$1;
 
   /*!
    基于 es6-promise
@@ -896,37 +1101,7 @@
    */
   var SparePromise = (function(){function a(a){var b=typeof a;return null!==a&&("object"===b||"function"===b)}function b(a){return "function"==typeof a}function c(a){P=a;}function d(a){Q=a;}function e(){return function(){return process.nextTick(j)}}function f(){return "undefined"!=typeof O?function(){O(j);}:i()}function g(){var a=0,b=new T(j),c=document.createTextNode("");return b.observe(c,{characterData:!0}),function(){c.data=a=++a%2;}}function h(){var a=new MessageChannel;return a.port1.onmessage=j,function(){return a.port2.postMessage(0)}}function i(){var a=setTimeout;return function(){return a(j,1)}}function j(){var a,b,c;for(a=0;N>a;a+=2)b=W[a],c=W[a+1],b(c),W[a]=void 0,W[a+1]=void 0;N=0;}function k(){try{var a=Function("return this")().require("vertx");return O=a.runOnLoop||a.runOnContext,f()}catch(b){return i()}}function l(a,b){var e,f,c=this,d=new this.constructor(n);return void 0===d[Y]&&D(d),e=c._state,e?(f=arguments[e-1],Q(function(){return A(e,d,f,c._result)})):y(c,d,a,b),d}function m(a){var c,b=this;return a&&"object"==typeof a&&a.constructor===b?a:(c=new b(n),u(c,a),c)}function n(){}function o(){return new TypeError("You cannot resolve a promise with itself")}function p(){return new TypeError("A promises callback cannot return that same promise.")}function q(a,b,c,d){try{a.call(b,c,d);}catch(e){return e}}function r(a,b,c){Q(function(a){var d=!1,e=q(c,b,function(c){d||(d=!0,b!==c?u(a,c):w(a,c));},function(b){d||(d=!0,x(a,b));},"Settle: "+(a._label||" unknown promise"));!d&&e&&(d=!0,x(a,e));},a);}function s(a,b){b._state===$?w(a,b._result):b._state===_?x(a,b._result):y(b,void 0,function(b){return u(a,b)},function(b){return x(a,b)});}function t(a,c,d){c.constructor===a.constructor&&d===l&&c.constructor.resolve===m?s(a,c):void 0===d?w(a,c):b(d)?r(a,c,d):w(a,c);}function u(b,c){if(b===c)x(b,o());else if(a(c)){var d=void 0;try{d=c.then;}catch(e){return void x(b,e)}t(b,c,d);}else w(b,c);}function v(a){a._onerror&&a._onerror(a._result),z(a);}function w(a,b){a._state===Z&&(a._result=b,a._state=$,0!==a._subscribers.length&&Q(z,a));}function x(a,b){a._state===Z&&(a._state=_,a._result=b,Q(v,a));}function y(a,b,c,d){var e=a._subscribers,f=e.length;a._onerror=null,e[f]=b,e[f+$]=c,e[f+_]=d,0===f&&a._state&&Q(z,a);}function z(a){var d,e,f,g,b=a._subscribers,c=a._state;if(0!==b.length){for(d=void 0,e=void 0,f=a._result,g=0;g<b.length;g+=3)d=b[g],e=b[g+c],d?A(c,d,e,f):e(f);a._subscribers.length=0;}}function A(a,c,d,e){var f=b(d),g=void 0,h=void 0,i=!0;if(f){try{g=d(e);}catch(j){i=!1,h=j;}if(c===g)return void x(c,p())}else g=e;c._state!==Z||(f&&i?u(c,g):i===!1?x(c,h):a===$?w(c,g):a===_&&x(c,g));}function B(a,b){try{b(function(b){u(a,b);},function(b){x(a,b);});}catch(c){x(a,c);}}function C(){return ab++}function D(a){a[Y]=ab++,a._state=void 0,a._result=void 0,a._subscribers=[];}function E(){return new Error("Array Methods must be provided an Array")}function F(a){return new bb(this,a).promise}function G(a){var b=this;return new b(M(a)?function(c,d){for(var e=a.length,f=0;e>f;f++)b.resolve(a[f]).then(c,d);}:function(a,b){return b(new TypeError("You must pass an array to race."))})}function H(a){var b=this,c=new b(n);return x(c,a),c}function I(){throw new TypeError("You must pass a resolver function as the first argument to the promise constructor")}function J(){throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.")}function K(){var c,d,a=void 0;if("undefined"!=typeof global)a=global;else if("undefined"!=typeof self)a=self;else try{a=Function("return this")();}catch(b){throw new Error("polyfill failed because global object is unavailable in this environment")}if(c=a.Promise){d=null;try{d=Object.prototype.toString.call(c.resolve());}catch(b){}if("[object Promise]"===d&&!c.cast)return}a.Promise=cb;}var M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,$,_,ab,bb,cb,L=void 0;return L=Array.isArray?Array.isArray:function(a){return "[object Array]"===Object.prototype.toString.call(a)},M=L,N=0,O=void 0,P=void 0,Q=function(a,b){W[N]=a,W[N+1]=b,N+=2,2===N&&(P?P(j):X());},R="undefined"!=typeof window?window:void 0,S=R||{},T=S.MutationObserver||S.WebKitMutationObserver,U="undefined"==typeof self&&"undefined"!=typeof process&&"[object process]"==={}.toString.call(process),V="undefined"!=typeof Uint8ClampedArray&&"undefined"!=typeof importScripts&&"undefined"!=typeof MessageChannel,W=new Array(1e3),X=void 0,X=U?e():T?g():V?h():void 0===R&&"function"==typeof require?k():i(),Y=Math.random().toString(36).substring(2),Z=void 0,$=1,_=2,ab=0,bb=function(){function a(a,b){this._instanceConstructor=a,this.promise=new a(n),this.promise[Y]||D(this.promise),M(b)?(this.length=b.length,this._remaining=b.length,this._result=new Array(this.length),0===this.length?w(this.promise,this._result):(this.length=this.length||0,this._enumerate(b),0===this._remaining&&w(this.promise,this._result))):x(this.promise,E());}return a.prototype._enumerate=function(a){for(var b=0;this._state===Z&&b<a.length;b++)this._eachEntry(a[b],b);},a.prototype._eachEntry=function(a,b){var e,f,g,i,c=this._instanceConstructor,d=c.resolve;if(d===m){e=void 0,f=void 0,g=!1;try{e=a.then;}catch(h){g=!0,f=h;}e===l&&a._state!==Z?this._settledAt(a._state,b,a._result):"function"!=typeof e?(this._remaining--,this._result[b]=a):c===cb?(i=new c(n),g?x(i,f):t(i,a,e),this._willSettleAt(i,b)):this._willSettleAt(new c(function(b){return b(a)}),b);}else this._willSettleAt(d(a),b);},a.prototype._settledAt=function(a,b,c){var d=this.promise;d._state===Z&&(this._remaining--,a===_?x(d,c):this._result[b]=c),0===this._remaining&&w(d,this._result);},a.prototype._willSettleAt=function(a,b){var c=this;y(a,void 0,function(a){return c._settledAt($,b,a)},function(a){return c._settledAt(_,b,a)});},a}(),cb=function(){function a(b){this[Y]=C(),this._result=this._state=void 0,this._subscribers=[],n!==b&&("function"!=typeof b&&I(),this instanceof a?B(this,b):J());}return a.prototype["catch"]=function(a){return this.then(null,a)},a.prototype["finally"]=function(a){var c=this,d=c.constructor;return b(a)?c.then(function(b){return d.resolve(a()).then(function(){return b})},function(b){return d.resolve(a()).then(function(){throw b})}):c.then(a,a)},a}(),cb.prototype.then=l,cb.all=F,cb.race=G,cb.resolve=m,cb.reject=H,cb._setScheduler=c,cb._setAsap=d,cb._asap=Q,cb.polyfill=K,cb.Promise=cb,cb})();
 
-  var global$5 = env.global,
-      system$2 = env.system;
-  var isZFB$1 = system$2.name === PLATFORM.ZFB;
-
-  var zfbRequest = function zfbRequest(option) {
-    var url = option.url,
-        method = option.method,
-        body = option.body,
-        headers = option.headers,
-        timeout = option.timeout;
-    method = method || REQUEST_METHOD.GET;
-    headers = headers || {};
-    timeout = timeout || HTTP_TIMEOUT;
-    return global$5.httpRequest({
-      url: url,
-      method: method,
-      data: body,
-      headers: headers,
-      timeout: timeout,
-      success: option.success,
-      fail: function fail(result) {
-        if (result.status === 202) {
-          option.success(result);
-        } else {
-          option.fail(result);
-        }
-      }
-    });
-  };
-
-  var request = isZFB$1 ? zfbRequest : global$5.request;
+  var global$6 = env.global;
   var MiniRequest = (function (option) {
     var success = option.success,
         fail = option.fail,
@@ -942,11 +1117,15 @@
       fail(result.data, result.statusCode);
     };
 
-    xhr = request(option);
+    xhr = global$6.request(option);
     return xhr;
   });
 
-  var global$6 = env.global;
+  var global$7 = env.global;
+
+  var isXDomainRequest = function isXDomainRequest(xhr) {
+    return Object.prototype.toString.call(xhr) === '[object XDomainRequest]' || typeof XDomainRequest === 'object';
+  };
 
   var isValidRequest = function isValidRequest(obj) {
     return typeof obj === 'function' || typeof obj === 'object';
@@ -994,13 +1173,13 @@
         return new ActiveXObject('Microsoft.XMLHTTP');
       })
     };
-    var isXHR = isValidRequest(global$6.XMLHttpRequest) && 'withCredentials' in new XMLHttpRequest();
-    var isXDR = isValidRequest(global$6.XDomainRequest);
+    var isXHR = isValidRequest(global$7.XMLHttpRequest) && 'withCredentials' in new XMLHttpRequest();
+    var isXDR = isValidRequest(global$7.XDomainRequest);
     var key = isXHR ? 'XMLHttpRequest' : isXDR ? 'XDomainRequest' : 'ActiveXObject';
     return item[key]();
   };
 
-  var request$1 = function request(option) {
+  var request = function request(option) {
     var url = option.url,
         method = option.method,
         body = option.body,
@@ -1045,11 +1224,15 @@
       xhr.timeout = timeout;
     }
 
+    if (isXDomainRequest(xhr) && typeof body === 'object') {
+      body = JSON$1.stringify(body);
+    }
+
     xhr.send(body);
     return xhr;
   };
 
-  var request$2 = env.isMini ? MiniRequest : request$1;
+  var request$1 = env.isMini || env.isAppPlus ? MiniRequest : request;
 
   /*
    * JavaScript MD5
@@ -1071,36 +1254,36 @@
    */
   var md5 = (function(){function a(a,b){var c=(65535&a)+(65535&b),d=(a>>16)+(b>>16)+(c>>16);return d<<16|65535&c}function b(a,b){return a<<b|a>>>32-b}function c(c,d,e,f,g,h){return a(b(a(a(d,c),a(f,h)),g),e)}function d(a,b,d,e,f,g,h){return c(b&d|~b&e,a,b,f,g,h)}function e(a,b,d,e,f,g,h){return c(b&e|d&~e,a,b,f,g,h)}function f(a,b,d,e,f,g,h){return c(b^d^e,a,b,f,g,h)}function g(a,b,d,e,f,g,h){return c(d^(b|~e),a,b,f,g,h)}function h(b,c){var h,i,j,k,l,m,n,o,p;for(b[c>>5]|=128<<c%32,b[(c+64>>>9<<4)+14]=c,m=1732584193,n=-271733879,o=-1732584194,p=271733878,h=0;h<b.length;h+=16)i=m,j=n,k=o,l=p,m=d(m,n,o,p,b[h],7,-680876936),p=d(p,m,n,o,b[h+1],12,-389564586),o=d(o,p,m,n,b[h+2],17,606105819),n=d(n,o,p,m,b[h+3],22,-1044525330),m=d(m,n,o,p,b[h+4],7,-176418897),p=d(p,m,n,o,b[h+5],12,1200080426),o=d(o,p,m,n,b[h+6],17,-1473231341),n=d(n,o,p,m,b[h+7],22,-45705983),m=d(m,n,o,p,b[h+8],7,1770035416),p=d(p,m,n,o,b[h+9],12,-1958414417),o=d(o,p,m,n,b[h+10],17,-42063),n=d(n,o,p,m,b[h+11],22,-1990404162),m=d(m,n,o,p,b[h+12],7,1804603682),p=d(p,m,n,o,b[h+13],12,-40341101),o=d(o,p,m,n,b[h+14],17,-1502002290),n=d(n,o,p,m,b[h+15],22,1236535329),m=e(m,n,o,p,b[h+1],5,-165796510),p=e(p,m,n,o,b[h+6],9,-1069501632),o=e(o,p,m,n,b[h+11],14,643717713),n=e(n,o,p,m,b[h],20,-373897302),m=e(m,n,o,p,b[h+5],5,-701558691),p=e(p,m,n,o,b[h+10],9,38016083),o=e(o,p,m,n,b[h+15],14,-660478335),n=e(n,o,p,m,b[h+4],20,-405537848),m=e(m,n,o,p,b[h+9],5,568446438),p=e(p,m,n,o,b[h+14],9,-1019803690),o=e(o,p,m,n,b[h+3],14,-187363961),n=e(n,o,p,m,b[h+8],20,1163531501),m=e(m,n,o,p,b[h+13],5,-1444681467),p=e(p,m,n,o,b[h+2],9,-51403784),o=e(o,p,m,n,b[h+7],14,1735328473),n=e(n,o,p,m,b[h+12],20,-1926607734),m=f(m,n,o,p,b[h+5],4,-378558),p=f(p,m,n,o,b[h+8],11,-2022574463),o=f(o,p,m,n,b[h+11],16,1839030562),n=f(n,o,p,m,b[h+14],23,-35309556),m=f(m,n,o,p,b[h+1],4,-1530992060),p=f(p,m,n,o,b[h+4],11,1272893353),o=f(o,p,m,n,b[h+7],16,-155497632),n=f(n,o,p,m,b[h+10],23,-1094730640),m=f(m,n,o,p,b[h+13],4,681279174),p=f(p,m,n,o,b[h],11,-358537222),o=f(o,p,m,n,b[h+3],16,-722521979),n=f(n,o,p,m,b[h+6],23,76029189),m=f(m,n,o,p,b[h+9],4,-640364487),p=f(p,m,n,o,b[h+12],11,-421815835),o=f(o,p,m,n,b[h+15],16,530742520),n=f(n,o,p,m,b[h+2],23,-995338651),m=g(m,n,o,p,b[h],6,-198630844),p=g(p,m,n,o,b[h+7],10,1126891415),o=g(o,p,m,n,b[h+14],15,-1416354905),n=g(n,o,p,m,b[h+5],21,-57434055),m=g(m,n,o,p,b[h+12],6,1700485571),p=g(p,m,n,o,b[h+3],10,-1894986606),o=g(o,p,m,n,b[h+10],15,-1051523),n=g(n,o,p,m,b[h+1],21,-2054922799),m=g(m,n,o,p,b[h+8],6,1873313359),p=g(p,m,n,o,b[h+15],10,-30611744),o=g(o,p,m,n,b[h+6],15,-1560198380),n=g(n,o,p,m,b[h+13],21,1309151649),m=g(m,n,o,p,b[h+4],6,-145523070),p=g(p,m,n,o,b[h+11],10,-1120210379),o=g(o,p,m,n,b[h+2],15,718787259),n=g(n,o,p,m,b[h+9],21,-343485551),m=a(m,i),n=a(n,j),o=a(o,k),p=a(p,l);return [m,n,o,p]}function i(a){var b,c="",d=32*a.length;for(b=0;d>b;b+=8)c+=String.fromCharCode(255&a[b>>5]>>>b%32);return c}function j(a){var b,d,c=[];for(c[(a.length>>2)-1]=void 0,b=0;b<c.length;b+=1)c[b]=0;for(d=8*a.length,b=0;d>b;b+=8)c[b>>5]|=(255&a.charCodeAt(b/8))<<b%32;return c}function k(a){return i(h(j(a),8*a.length))}function l(a,b){var c,g,d=j(a),e=[],f=[];for(e[15]=f[15]=void 0,d.length>16&&(d=h(d,8*a.length)),c=0;16>c;c+=1)e[c]=909522486^d[c],f[c]=1549556828^d[c];return g=h(e.concat(j(b)),512+8*b.length),i(h(f.concat(g),640))}function m(a){var d,e,b="0123456789abcdef",c="";for(e=0;e<a.length;e+=1)d=a.charCodeAt(e),c+=b.charAt(15&d>>>4)+b.charAt(15&d);return c}function n(a){return unescape(encodeURIComponent(a))}function o(a){return k(n(a))}function p(a){return m(o(a))}function q(a,b){return l(n(a),n(b))}function r(a,b){return m(q(a,b))}function s(a,b,c){return b?c?q(b,a):r(b,a):c?o(a):p(a)}return s})();
 
-  var global$7 = env.global;
-  var Promise$1 = global$7.Promise;
+  var global$8 = env.global;
+  var Promise$1 = global$8.Promise;
 
   var isSupportPromise = function isSupportPromise() {
-    if (!global$7.Promise) return false;
+    if (!global$8.Promise) return false;
 
     var defer = function () {
-      return global$7.Promise.resolve();
+      return global$8.Promise.resolve();
     }();
 
     return defer.then && defer["catch"] && defer["finally"];
   };
 
   var setTimeout$1 = function setTimeout(event, timeout) {
-    return global$7.setTimeout(event, timeout);
+    return global$8.setTimeout(event, timeout);
   };
 
   var clearTimeout$1 = function clearTimeout(id) {
-    return global$7.clearTimeout(id);
+    return global$8.clearTimeout(id);
   };
 
   var setInterval$1 = function setInterval(event, timeout) {
-    return global$7.setInterval(event, timeout);
+    return global$8.setInterval(event, timeout);
   };
 
   var clearInterval$1 = function clearInterval(id) {
-    return global$7.clearInterval(id);
+    return global$8.clearInterval(id);
   };
 
-  var Defer = isSupportPromise() ? global$7.Promise : SparePromise;
+  var Defer = isSupportPromise() ? global$8.Promise : SparePromise;
 
   var noop = function noop(data) {
     return data;
@@ -1110,7 +1293,7 @@
     return Promise$1.resolve(data);
   };
 
-  var JSON$2 = global$7.JSON || JSON$1;
+  var JSON$2 = global$8.JSON || JSON$1;
 
   var allowError = function allowError(event) {
     var result;
@@ -1246,6 +1429,10 @@
     }
   };
 
+  var isFalse = function isFalse(val) {
+    return val === false;
+  };
+
   var isEmpty = function isEmpty(val) {
     var result = true;
 
@@ -1297,6 +1484,7 @@
   };
 
   var formatTime = function formatTime(timestamp, options) {
+    timestamp = timestamp || getCurrentTimestamp();
     options = options || {};
     var temp = options.temp;
     var date = new Date(timestamp),
@@ -1342,12 +1530,13 @@
 
   var isSupportSocket = function isSupportSocket() {
     var isMini = env.isMini;
+    var isAppPlus = env.isAppPlus;
 
-    if (isMini) {
+    if (isMini || isAppPlus) {
       return true;
     }
 
-    var Socket = global$7.WebSocket;
+    var Socket = global$8.WebSocket;
 
     if (isUndefined(Socket)) {
       return false;
@@ -1397,6 +1586,14 @@
   };
 
   var isInclude = function isInclude(source, searchVal) {
+    if (isObject(source)) {
+      var arr = [];
+      forEach(source, function (val) {
+        arr.push(val);
+      });
+      source = arr;
+    }
+
     var index = indexOf(source, searchVal);
     return index !== -1;
   };
@@ -1444,19 +1641,28 @@
     return source;
   };
 
-  var extend = function extend(destination, sources) {
+  var extend = function extend(destination, sources, option) {
+    option = option || {};
+    var _option2 = option,
+        isAllowNull = _option2.isAllowNull;
     destination = destination || {};
     sources = sources || {};
 
     for (var key in sources) {
       var value = sources[key];
 
-      if (!isUndefined(value)) {
+      if (!isUndefined(value) || isAllowNull) {
         destination[key] = value;
       }
     }
 
     return destination;
+  };
+
+  var extendAllowNull = function extendAllowNull(destination, sources) {
+    return extend(destination, sources, {
+      isAllowNull: true
+    });
   };
 
   var extendInShallow = function extendInShallow(destination, sources) {
@@ -1542,7 +1748,7 @@
           args = _options2.args,
           thisArg = _options2.thisArg;
       self.stop();
-      self._timerId = self._timerEvent.call(global$7, function () {
+      self._timerId = self._timerEvent.call(global$8, function () {
         isTimeout && self.stop();
 
         if (thisArg) {
@@ -1558,7 +1764,7 @@
       var self = this;
 
       if (self._timerId) {
-        self._timerClearEvent.call(global$7, self._timerId);
+        self._timerClearEvent.call(global$8, self._timerId);
 
         self.status = TIMER_STATUS.ENDING;
       }
@@ -1659,7 +1865,7 @@
     _proto3.emit = function emit(name, data, error) {
       var _events = this._events[name];
       forEach(_events, function (event) {
-        event(data, error);
+        isFunction(event) && event(data, error);
       });
     };
 
@@ -1671,11 +1877,11 @@
   }();
 
   var decodeURI = function decodeURI(uri) {
-    return global$7.decodeURIComponent(uri);
+    return global$8.decodeURIComponent(uri);
   };
 
   var encodeURI = function encodeURI(uri) {
-    return global$7.encodeURIComponent(uri);
+    return global$8.encodeURIComponent(uri);
   };
 
   var int64ToTimestamp = function int64ToTimestamp(obj) {
@@ -1747,7 +1953,7 @@
       }
 
       self._isRunning = true;
-      event.apply(thisArg, args)["finally"](next);
+      event.apply(thisArg, args).then(next)["catch"](next);
     };
 
     return Queue;
@@ -1757,7 +1963,7 @@
     return seconds * 1000;
   };
 
-  var request$3 = function request(url, options) {
+  var request$2 = function request(url, options) {
     options = options || {};
     return deferred(function (resolve, reject) {
       options = extend(options, {
@@ -1777,7 +1983,7 @@
           });
         }
       });
-      request$2(options);
+      request$1(options);
     });
   };
 
@@ -1787,15 +1993,18 @@
     }
 
     var url = urlList[0];
-    return request$3(url, options).then(function (result) {
+    var fixedNaviResp = {
+      'responseText': '{"isFixedNaviResp":true}'
+    };
+    return request$2(url, options).then(function (result) {
       result = result || {};
       result.urlList = urlList;
       return result;
-    })["catch"](function (error) {
+    })["catch"](function () {
       urlList.splice(0, 1);
 
       if (isEmpty(urlList)) {
-        return Defer.reject(error);
+        return fixedNaviResp;
       } else {
         return requestByUrlList(urlList, options);
       }
@@ -1858,7 +2067,7 @@
               isAllFaild() && _fail();
             }
           }, option);
-          xhr = request$2(opt);
+          xhr = request$1(opt);
           requestXhrs.push(xhr);
         });
         reqCountdownTimers.push(timer);
@@ -1885,7 +2094,7 @@
           timeout = _option.intervalTime,
           max = _option.max;
       _detectCount++;
-      return request$3(url).then(function () {
+      return request$2(url).then(function () {
         return;
       }, function (_ref) {
         var status = _ref.status;
@@ -1961,8 +2170,8 @@
     var ProtocolMark = '://';
     var hasProtocol = isInclude(url, ProtocolMark);
     var localProtocol = env.protocol.http;
-    var _option2 = option,
-        protocol = _option2.protocol;
+    var _option3 = option,
+        protocol = _option3.protocol;
 
     if (protocol) {
       var domain = getDomainByUrl(url);
@@ -2035,20 +2244,91 @@
     return newArr;
   };
 
+  var isStackError = function isStackError(error) {
+    error = error || {};
+    return error.stack && error.stack.toString;
+  };
+
   var consoleError = function consoleError() {
     var _console;
 
     return (_console = console).error.apply(_console, arguments);
   };
 
+  var consoleLog = function consoleLog() {
+    var _console2;
+
+    return (_console2 = console).log.apply(_console2, arguments);
+  };
+
+  var string10to64 = function string10to64(number) {
+    var chars = '0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZa0'.split(''),
+        radix = chars.length + 1,
+        qutient = +number,
+        arr = [];
+
+    do {
+      var mod = qutient % radix;
+      qutient = (qutient - mod) / radix;
+      arr.unshift(chars[mod]);
+    } while (qutient);
+
+    return arr.join('');
+  };
+
+  var getUUID = function getUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0,
+          v = c === 'x' ? r : r & 0x3 | 0x8;
+      return v.toString(16);
+    });
+  };
+
+  var getUUID22 = function getUUID22() {
+    var uuid = getUUID();
+    uuid = uuid.replace(/-/g, '') + 'a';
+    uuid = parseInt(uuid, 16);
+    uuid = string10to64(uuid);
+
+    if (uuid.length > 22) {
+      uuid = uuid.slice(0, 22);
+    } else {
+      var len = 22 - uuid.length;
+
+      for (var i = 0; i < len; i++) {
+        uuid = uuid + '0';
+      }
+    }
+
+    return uuid;
+  };
+
+  var isValidTimestamp = function isValidTimestamp(time) {
+    return isNumber(time) && time !== 0;
+  };
+
+  var formateDate = function formateDate(seperator) {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    return tplEngine('{year}{seperator}{month}{seperator}{day}', {
+      year: year,
+      month: month,
+      day: day,
+      seperator: seperator
+    });
+  };
+
   var utils = {
     Storage: storage$1,
+    Session: session,
     Socket: Socket$2,
     Cache: CacheStorage,
     JSON: JSON$2,
     Defer: Defer,
-    httpRequest: request$2,
-    request: request$3,
+    httpRequest: request$1,
+    request: request$2,
     requestByUrlList: requestByUrlList,
     requestForFaster: requestForFaster,
     md5: md5,
@@ -2057,6 +2337,7 @@
     Timer: Timer,
     Queue: Queue,
     consoleError: consoleError,
+    consoleLog: consoleLog,
     noop: noop,
     deferNoop: deferNoop,
     setTimeout: setTimeout$1,
@@ -2077,6 +2358,7 @@
     getTypeName: getTypeName,
     isPlus: isPlus,
     isEmpty: isEmpty,
+    isFalse: isFalse,
     isEqual: isEqual,
     isValidJSON: isValidJSON,
     isSupportSocket: isSupportSocket,
@@ -2096,6 +2378,7 @@
     map: map,
     filter: filter,
     extend: extend,
+    extendAllowNull: extendAllowNull,
     extendInShallow: extendInShallow,
     deferred: deferred,
     tplEngine: tplEngine,
@@ -2110,7 +2393,12 @@
     getDomainByUrl: getDomainByUrl,
     getValidUrl: getValidUrl,
     quickSort: quickSort,
-    unique: unique
+    unique: unique,
+    isStackError: isStackError,
+    getUUID: getUUID,
+    getUUID22: getUUID22,
+    isValidTimestamp: isValidTimestamp,
+    formateDate: formateDate
   };
 
   function _inheritsLoose(subClass, superClass) {
@@ -2191,11 +2479,13 @@
     NOTIFY_PULL_MSG: 's_ntf',
     RECEIVE_MSG: 's_msg',
     SYNC_STATUS: 's_stat',
-    SYNC_CHRM_KV: 's_cmd'
+    SERVER_NOTIFY: 's_cmd',
+    SETTING_NOTIFY: 's_us'
   };
   var PUBLISH_STATUS_TOPIC = {
     PRIVATE: 'ppMsgS',
-    GROUP: 'pgMsgS'
+    GROUP: 'pgMsgS',
+    CHATROOM: 'chatMsgS'
   };
   var QUERY_TOPIC = {
     GET_SYNC_TIME: 'qrySessionsAtt',
@@ -2204,12 +2494,19 @@
     REMOVE_CONVERSATION_LIST: 'delSessions',
     DELETE_MESSAGES: 'delMsg',
     CLEAR_UNREAD_COUNT: 'updRRTime',
+    PULL_USER_SETTING: 'pullUS',
     PULL_CHRM_MSG: 'chrmPull',
     JOIN_CHATROOM: 'joinChrm',
+    JOIN_EXIST_CHATROOM: 'joinChrmR',
     QUIT_CHATROOM: 'exitChrm',
     GET_CHATROOM_INFO: 'queryChrmI',
+    UPDATE_CHATROOM_KV: 'setKV',
+    DELETE_CHATROOM_KV: 'delKV',
+    PULL_CHATROOM_KV: 'pullKV',
     GET_OLD_CONVERSATION_LIST: 'qryRelation',
     REMOVE_OLD_CONVERSATION: 'delRelation',
+    GET_CONVERSATION_STATUS: 'pullSeAtts',
+    SET_CONVERSATION_STATUS: 'setSeAtt',
     GET_UPLOAD_FILE_TOKEN: 'qnTkn',
     GET_UPLOAD_FILE_URL: 'qnUrl',
     CLEAR_MESSAGES: {
@@ -2222,6 +2519,7 @@
     QUIT_RTC_ROOM: 'rtcRExit',
     PING_RTC: 'rtcPing',
     SET_RTC_DATA: 'rtcSetData',
+    USER_SET_RTC_DATA: 'userSetData',
     GET_RTC_DATA: 'rtcQryData',
     DEL_RTC_DATA: 'rtcDelData',
     SET_RTC_OUT_DATA: 'rtcSetOutData',
@@ -2241,11 +2539,33 @@
     CUSTOMER_SERVICE: 'qryCMsg',
     SYSTEM: 'qrySMsg'
   };
-  var PUBLISH_TOPIC_TO_CONVERSATION_TYPE = (_PUBLISH_TOPIC_TO_CON = {}, _PUBLISH_TOPIC_TO_CON[PUBLISH_TOPIC.PRIVATE] = CONVERSATION_TYPE.PRIVATE, _PUBLISH_TOPIC_TO_CON[PUBLISH_TOPIC.GROUP] = CONVERSATION_TYPE.GROUP, _PUBLISH_TOPIC_TO_CON[PUBLISH_TOPIC.CHATROOM] = CONVERSATION_TYPE.CHATROOM, _PUBLISH_TOPIC_TO_CON[PUBLISH_TOPIC.CUSTOMER_SERVICE] = CONVERSATION_TYPE.CUSTOMER_SERVICE, _PUBLISH_TOPIC_TO_CON);
+  var SERVER_NOTIFY_TYPE = {
+    KV_CHANGED: 2,
+    CONVERSATION_STATUS_CHANGED: 3
+  };
+  var CHATROOM_KV_STATUS_CODE = {
+    AUTO_DELETE: 0x0001,
+    OVERWRITE: 0x0002,
+    OPERATE: 0x0004
+  };
+  var PUBLISH_TOPIC_TO_CONVERSATION_TYPE = (_PUBLISH_TOPIC_TO_CON = {}, _PUBLISH_TOPIC_TO_CON[PUBLISH_TOPIC.PRIVATE] = CONVERSATION_TYPE.PRIVATE, _PUBLISH_TOPIC_TO_CON[PUBLISH_TOPIC.GROUP] = CONVERSATION_TYPE.GROUP, _PUBLISH_TOPIC_TO_CON[PUBLISH_TOPIC.CHATROOM] = CONVERSATION_TYPE.CHATROOM, _PUBLISH_TOPIC_TO_CON[PUBLISH_TOPIC.CUSTOMER_SERVICE] = CONVERSATION_TYPE.CUSTOMER_SERVICE, _PUBLISH_TOPIC_TO_CON[PUBLISH_STATUS_TOPIC.PRIVATE] = CONVERSATION_TYPE.PRIVATE, _PUBLISH_TOPIC_TO_CON[PUBLISH_STATUS_TOPIC.GROUP] = CONVERSATION_TYPE.GROUP, _PUBLISH_TOPIC_TO_CON[PUBLISH_STATUS_TOPIC.CHATROOM] = CONVERSATION_TYPE.CHATROOM, _PUBLISH_TOPIC_TO_CON);
   var CONVERSATION_TYPE_TO_PUBLISH_TOPIC = (_CONVERSATION_TYPE_TO = {}, _CONVERSATION_TYPE_TO[CONVERSATION_TYPE.PRIVATE] = PUBLISH_TOPIC.PRIVATE, _CONVERSATION_TYPE_TO[CONVERSATION_TYPE.GROUP] = PUBLISH_TOPIC.GROUP, _CONVERSATION_TYPE_TO[CONVERSATION_TYPE.CHATROOM] = PUBLISH_TOPIC.CHATROOM, _CONVERSATION_TYPE_TO[CONVERSATION_TYPE.CUSTOMER_SERVICE] = PUBLISH_TOPIC.CUSTOMER_SERVICE, _CONVERSATION_TYPE_TO);
   var CONVERSATION_TYPE_TO_PUBLISH_STATUS_TOPIC = (_CONVERSATION_TYPE_TO2 = {}, _CONVERSATION_TYPE_TO2[CONVERSATION_TYPE.PRIVATE] = PUBLISH_STATUS_TOPIC.PRIVATE, _CONVERSATION_TYPE_TO2[CONVERSATION_TYPE.GROUP] = PUBLISH_STATUS_TOPIC.GROUP, _CONVERSATION_TYPE_TO2);
   var CONVERSATION_TYPE_TO_QUERY_HISTORY_TOPIC = (_CONVERSATION_TYPE_TO3 = {}, _CONVERSATION_TYPE_TO3[CONVERSATION_TYPE.PRIVATE] = QUERY_HISTORY_TOPIC.PRIVATE, _CONVERSATION_TYPE_TO3[CONVERSATION_TYPE.GROUP] = QUERY_HISTORY_TOPIC.GROUP, _CONVERSATION_TYPE_TO3[CONVERSATION_TYPE.CHATROOM] = QUERY_HISTORY_TOPIC.CHATROOM, _CONVERSATION_TYPE_TO3[CONVERSATION_TYPE.CUSTOMER_SERVICE] = QUERY_HISTORY_TOPIC.CUSTOMER_SERVICE, _CONVERSATION_TYPE_TO3[CONVERSATION_TYPE.SYSTEM] = QUERY_HISTORY_TOPIC.SYSTEM, _CONVERSATION_TYPE_TO3);
   var CONVERSATION_TYPE_TO_CLEAR_MESSAGE_TOPIC = (_CONVERSATION_TYPE_TO4 = {}, _CONVERSATION_TYPE_TO4[CONVERSATION_TYPE.PRIVATE] = QUERY_TOPIC.CLEAR_MESSAGES.PRIVATE, _CONVERSATION_TYPE_TO4[CONVERSATION_TYPE.GROUP] = QUERY_TOPIC.CLEAR_MESSAGES.GROUP, _CONVERSATION_TYPE_TO4[CONVERSATION_TYPE.CUSTOMER_SERVICE] = QUERY_TOPIC.CLEAR_MESSAGES.CUSTOMER_SERVICE, _CONVERSATION_TYPE_TO4[CONVERSATION_TYPE.SYSTEM] = QUERY_TOPIC.CLEAR_MESSAGES.SYSTEM, _CONVERSATION_TYPE_TO4);
+  var USER_SETTING_STATUS = {
+    ADD: 1,
+    UPDATE: 2,
+    DELETE: 3
+  };
+  var CONVERSATION_STATUS_CONFIG = {
+    ENABLED: '1',
+    DISABLED: '0'
+  };
+  var CONVERSATION_STATUS_TYPE = {
+    DO_NOT_DISTURB: 1,
+    TOP: 2
+  };
 
   var Header = function () {
     function Header(_type, _retain, _qos, _dup) {
@@ -3013,7 +3333,6 @@
     return msg;
   };
 
-  var _PUBLISH_TOPIC_MAP_SE;
   var ENGINE_EVENT = {
     WATCH: 'watch',
     UN_WATCH: 'unwatch',
@@ -3023,13 +3342,16 @@
     CHANGE_USER: 'changeUser',
     GET_CONNECTION_STATUS: 'getConnectionStatus',
     GET_CONNECTION_USER_ID: 'getConnectionUserId',
+    GET_CONNECTED_TIME: 'getConnectedTime',
     GET_APP_INFO: 'getAppInfo',
     GET_CONVERSATION_LIST: 'getConversationList',
     REMOVE_CONVERSATION_LIST: 'removeConversationList',
     REMOVE_CONVERSATION: 'removeConversation',
     GET_TOTAL_UNREAD_COUNT: 'getTotalUnreadCount',
     CLEAR_UNREAD_COUNT: 'clearUnreadCount',
+    GET_UNREAD_COUNT: 'getUnreadCount',
     GET_LOCAL_CONVERSATION: 'getLocalConversation',
+    SET_CONVERSATION_STATUS_LIST: 'setConversationStatusList',
     SEND_MESSAGE: 'sendMessage',
     GET_HISTORY_MSGS: 'getHistoryMessages',
     DELETE_MESSAGES: 'deleteHistoryMessages',
@@ -3039,11 +3361,18 @@
     QUIT_CHATROOM: 'quitChatRoom',
     GET_CHATROOM_INFO: 'getChatRoomInfo',
     GET_CHATROOM_MSGS: 'getChatRoomHistoryMessages',
+    SET_KV: 'setChatRoomKV',
+    FORCE_SET_KV: 'forceSetChatRoomKV',
+    DEL_KV: 'removeChatRoomKV',
+    FORCE_DEL_KV: 'forceRemoveChatRoomKV',
+    GET_KV: 'getChatRoomKV',
+    GET_ALL_KV: 'getAllChatRoomKV',
     JOIN_RTC: 'joinRTCRoom',
     QUIT_RTC: 'quitRTCRoom',
     PING_RTC: 'RTCPing',
     GET_RTC_ROOM_INFO: 'getRTCRoomInfo',
     SET_RTC_DATA: 'setRTCData',
+    SET_RTC_USER_DATA: 'setRTCUserData',
     GET_RTC_DATA: 'getRTCData',
     DEL_RTC_DATA: 'removeRTCData',
     SET_RTC_OUT_DATA: 'setRTCOutData',
@@ -3062,25 +3391,115 @@
   var IM_EVENT = {
     STATUS: 'status',
     MESSAGE: 'message',
-    CONVERSATION: 'conversation'
+    CONVERSATION: 'conversation',
+    SETTING: 'setting',
+    CHATROOM: 'chatroom'
   };
   var TRANSPORT_EVENT = {
     SIGNAL: 'signal',
     STATUS: 'status'
   };
-  var SERVER_TASK = {
-    DISCONNECTED: 'disconnected',
-    SYNC_SELF_MSG: 'sync_self_other_client_msg',
-    NOTIFY_PULL: 'notify_pull_msg',
-    RECEIVE_MSG: 'receive_msg',
-    SYNC_STATUS: 'sync_status',
-    SYNC_CHRM_KV: 'sync_chrm_kv'
+  var SERVER_EVENT_NAME = {
+    STATUS: 'status',
+    NOTIFY_PULL: 'notifyPull',
+    DIRECT_MSG: 'directMessage',
+    CHRM_KV_CHANGED: 'chatRoomKV',
+    CHRM_KV_SET: 'chatRoomKVSet',
+    MESSAGE_SEND: 'sendMessage',
+    JOIN_CHATROOM: 'joinChatRoom',
+    BEFORE_JOIN_CHATROOM: 'beforeJoinChatRoom',
+    USER_SETTING_CHANGED: 'userSetting',
+    CONVERSATION_STATUS_CHANGED: 'converStatusChanged',
+    CONVERSATION_STATUS_SETED: 'converStatusSeted'
   };
-  var PUBLISH_TOPIC_MAP_SERVER_TASK = (_PUBLISH_TOPIC_MAP_SE = {}, _PUBLISH_TOPIC_MAP_SE[PUBLISH_TOPIC.NOTIFY_PULL_MSG] = SERVER_TASK.NOTIFY_PULL, _PUBLISH_TOPIC_MAP_SE[PUBLISH_TOPIC.RECEIVE_MSG] = SERVER_TASK.RECEIVE_MSG, _PUBLISH_TOPIC_MAP_SE[PUBLISH_TOPIC.SYNC_STATUS] = SERVER_TASK.SYNC_STATUS, _PUBLISH_TOPIC_MAP_SE[PUBLISH_TOPIC.SYNC_CHRM_KV] = SERVER_TASK.SYNC_CHRM_KV, _PUBLISH_TOPIC_MAP_SE);
+
+  var _APP_ENGINE_EVENT_LOG;
+  var PLATFORM$1 = 'Web';
+  var LEVEL = {
+    FATAL: 0,
+    ERROR: 1,
+    WARN: 2,
+    INFO: 3,
+    DEBUG: 4
+  };
+  var STORE_SIZE = {
+    ADVANCED: 500,
+    LOW: 500
+  };
+  var LOG_TYPE = {
+    'IM': 'IM',
+    'RTC': 'RTC'
+  };
+  var TAG = {
+    L_GET_NAVI_T: 'L-get_navi-T',
+    L_GET_NAVI_R: 'L-get_navi-R',
+    L_PING_WS_T: 'L-ping_ws-T',
+    L_PING_WS_R: 'L-ping_ws-R',
+    L_NETWORK_CHANGED_S: 'L-network_changed-S',
+    L_DECODE_MSG_E: 'L-decode_msg-E',
+    L_RECONNECT_T: 'L-reconnect-T',
+    L_RECONNECT_R: 'L-reconnect-R',
+    L_PULL_CHRM_KV_T: 'L-pull-chrm-kv-T',
+    L_PULL_CHRM_KV_R: 'L-pull-chrm-kv-R',
+    L_PING_S: 'L-ping-S',
+    L_CRASH_E: 'L-crash-E',
+    L_COMET_SEND_SIGNAL_E: 'L-comet_send_signal-E',
+    A_INIT_O: 'A-init-O',
+    A_CONNECT_T: 'A-connect-T',
+    A_CONNECT_R: 'A-connect-R',
+    A_DISCONNECT_T: 'A-disconnect-T',
+    A_DISCONNECT_R: 'A-disconnect-R',
+    A_RECONNECT_T: 'A-reconnect-T',
+    A_RECONNECT_R: 'A-reconnect-R',
+    A_JOIN_CHATROOM_T: 'A-join_chatroom-T',
+    A_JOIN_CHATROOM_R: 'A-join_chatroom-R',
+    A_QUIT_CHATROOM_T: 'A-quit_chatroom-T',
+    A_QUIT_CHATROOM_R: 'A-quit_chatroom-R',
+    P_NOTIFY_CHRM_KV_S: 'P-notify-chrm-kv-R',
+    G_CRASH_E: 'G-crash-E',
+    G_UPLOAD_LOG_S: 'G-upload_log-S',
+    G_UPLOAD_LOG_E: 'G-upload_log-E'
+  };
+  var APP_ENGINE_EVENT_LOG_TAG = (_APP_ENGINE_EVENT_LOG = {}, _APP_ENGINE_EVENT_LOG[ENGINE_EVENT.CONNECT] = {
+    req: TAG.A_CONNECT_T,
+    resp: TAG.A_CONNECT_R
+  }, _APP_ENGINE_EVENT_LOG[ENGINE_EVENT.DISCONNECT] = {
+    req: TAG.A_DISCONNECT_T,
+    resp: TAG.A_DISCONNECT_R
+  }, _APP_ENGINE_EVENT_LOG[ENGINE_EVENT.RECONNECT] = {
+    req: TAG.A_RECONNECT_T,
+    resp: TAG.A_RECONNECT_R
+  }, _APP_ENGINE_EVENT_LOG[ENGINE_EVENT.JOIN_CHATROOM] = {
+    req: TAG.A_JOIN_CHATROOM_T,
+    resp: TAG.A_JOIN_CHATROOM_R
+  }, _APP_ENGINE_EVENT_LOG[ENGINE_EVENT.QUIT_CHATROOM] = {
+    req: TAG.A_QUIT_CHATROOM_T,
+    resp: TAG.A_QUIT_CHATROOM_R
+  }, _APP_ENGINE_EVENT_LOG);
+  var REPORT_TYPE = {
+    REALTIME: 0,
+    FULL: 1
+  };
+  var CSV_LOG_TPL = '{sessionId},{time},{type},{level},{tag},{content}\n';
+  var REALTIME_URL_TPL = '{protocol}{url}?version={version}&appkey={appkey}&userId={userId}&deviceId={deviceId}&deviceInfo={deviceInfo}&platform={platform}';
+  var MSGNOTIF_URL_TPL = '{protocol}{url}?version={version}&appkey={appkey}&userId={userId}&logId={logId}&deviceId={deviceId}&deviceInfo={deviceInfo}&platform={platform}';
+  var LOG_CMD_MSG_SENDER = 'rongcloudsystem';
+  var NO_FULL_LOG = 'nodata';
+  var REQUEST_TIMEOUT = 15000;
+  var DEFAULT_SERVER_OPTION = {
+    isOpen: true,
+    url: 'logcollection.ronghub.com',
+    realtimeLevel: LEVEL.ERROR,
+    realtimeInterval: 20000,
+    realtimeMaxTimes: 5,
+    fullInterval: 5000,
+    fullMaxTimes: 3,
+    fullLevel: LEVEL.DEBUG
+  };
+  var IGNORE_ERROR_CODE = [ERROR_CODE.RC_CONNECTION_EXIST];
 
   var isEmpty$1 = utils.isEmpty,
-      tplEngine$1 = utils.tplEngine,
-      getRandomNum$1 = utils.getRandomNum;
+      tplEngine$1 = utils.tplEngine;
 
   var getTransporterUrl = function getTransporterUrl(option) {
     var domain = option.domain,
@@ -3089,18 +3508,28 @@
         connectType = option.connectType,
         protocol = option.protocol;
     var isComet = connectType === CONNECT_TYPE.COMET;
+    var cmpTpl = CMP_URL_TPL;
 
     if (isEmpty$1(protocol)) {
       protocol = isComet ? env.protocol.http : env.protocol.ws;
     }
 
-    return tplEngine$1(CMP_URL_TPL, {
+    var tplOption = {
       domain: domain,
       appkey: appkey,
       protocol: protocol,
-      apiVer: getRandomNum$1(1e6),
+      apiVer: env.isFromUniapp ? 'uniapp' : 'normal',
       token: utils.encodeURI(token)
-    });
+    };
+
+    if (env.isMini) {
+      cmpTpl = MINI_CMP_URL_TPL;
+      utils.extend(tplOption, {
+        platform: PLATFORM_TYPE.MINI
+      });
+    }
+
+    return tplEngine$1(cmpTpl, tplOption);
   };
 
   var isGroup = function isGroup(type) {
@@ -3124,7 +3553,8 @@
     var isStatusMessage = option.isStatusMessage;
     var isPersited = option.isPersited,
         isCounted = option.isCounted,
-        isMentiond = option.isMentiond;
+        isMentiond = option.isMentiond,
+        disableNotification = option.disableNotification;
 
     if (isStatusMessage) {
       isPersited = isCounted = false;
@@ -3142,6 +3572,10 @@
 
     if (isMentiond) {
       sessionId = sessionId | 0x04;
+    }
+
+    if (disableNotification) {
+      sessionId = sessionId | 0x20;
     }
 
     return sessionId;
@@ -3177,17 +3611,36 @@
     };
   };
 
+  var getPersitedAndCountedAndSlientBySessionId = function getPersitedAndCountedAndSlientBySessionId(sessionId) {
+    var binaryNum = Number(sessionId).toString(2);
+    var sessionIdArr = [];
+
+    for (var i = 0; i < binaryNum.length; i++) {
+      var index = binaryNum.length - 1 - i;
+      sessionIdArr.push(Number(binaryNum[index]));
+    }
+
+    return {
+      isPersited: Boolean(sessionIdArr[0]),
+      isCounted: Boolean(sessionIdArr[1]),
+      disableNotification: Boolean(sessionIdArr[5])
+    };
+  };
+
   var getMessageOptionByStatus = function getMessageOptionByStatus(status) {
     var isPersited = true,
         isCounted = true,
-        isMentiond = false;
+        isMentiond = false,
+        disableNotification = false;
     isPersited = !!(status & 0x10);
     isCounted = !!(status & 0x20);
     isMentiond = !!(status & 0x40);
+    disableNotification = !!(status & 0x200);
     return {
       isPersited: isPersited,
       isCounted: isCounted,
-      isMentiond: isMentiond
+      isMentiond: isMentiond,
+      disableNotification: disableNotification
     };
   };
 
@@ -3233,15 +3686,28 @@
       });
 
       self._socket.onError(function (data) {
+        data = self._formatCloseData(data);
         self.eventEmitter.emit(KEY.ERROR, data);
       });
 
       self._socket.onClose(function (data) {
+        data = self._formatCloseData(data);
         self.eventEmitter.emit(KEY.CLOSE, data);
       });
     }
 
     var _proto = RCSocket.prototype;
+
+    _proto._formatCloseData = function _formatCloseData(data) {
+      if (env.isMini || env.isAppPlus) {
+        data = data || {};
+        var _data = data,
+            errMsg = _data.errMsg;
+        data.code = MINI_ERROR_MSG_TO_STATUS[errMsg];
+      }
+
+      return data;
+    };
 
     _proto.send = function send(data) {
       return this._socket.send(data);
@@ -3417,18 +3883,36 @@
   }();
 
   var ChatRoomMessageTimeSyner = function () {
-    function ChatRoomMessageTimeSyner() {
+    function ChatRoomMessageTimeSyner(option) {
+      this._rootKey = void 0;
       this._pullTimes = {};
+      option = option || {};
+      var _option2 = option,
+          appkey = _option2.appkey,
+          userId = _option2.userId;
+      this._rootKey = utils.tplEngine(SESSION_SYNC_TIME.ROOT_KEY_TPL, {
+        appkey: appkey,
+        userId: userId
+      });
     }
 
     var _proto4 = ChatRoomMessageTimeSyner.prototype;
 
     _proto4.set = function set(chrmId, time) {
       this._pullTimes[chrmId] = time;
+      utils.Session.set(this._rootKey, this._pullTimes);
     };
 
     _proto4.get = function get(chrmId) {
-      return this._pullTimes[chrmId] || 0;
+      var pullTimes;
+
+      if (utils.isEmpty(this._pullTimes)) {
+        pullTimes = utils.Session.get(this._rootKey) || {};
+      } else {
+        pullTimes = this._pullTimes;
+      }
+
+      return pullTimes[chrmId] || 0;
     };
 
     _proto4.setByMessage = function setByMessage(msg) {
@@ -3442,6 +3926,78 @@
     };
 
     return ChatRoomMessageTimeSyner;
+  }();
+
+  var JoinedChatRoomSyner = function () {
+    function JoinedChatRoomSyner(option) {
+      this._rootKey = void 0;
+      this._joinedChatRoomInfos = [];
+      option = option || {};
+      var _option3 = option,
+          appkey = _option3.appkey,
+          userId = _option3.userId;
+      this._rootKey = utils.tplEngine(SESSION_SYNC_CHATROOM.ROOT_KEY_TPL, {
+        appkey: appkey,
+        userId: userId
+      });
+    }
+
+    var _proto5 = JoinedChatRoomSyner.prototype;
+
+    _proto5.set = function set(option) {
+      var _this = this;
+
+      var chrmId = option.chrmId,
+          count = option.count,
+          isOpenJoinMulitpleChrmService = option.isOpenJoinMulitpleChrmService;
+      var backupJoinedChatRoomInfos = utils.copy(this._joinedChatRoomInfos);
+
+      if (isOpenJoinMulitpleChrmService) {
+        utils.forEach(backupJoinedChatRoomInfos, function (chrmInfo, index) {
+          if (chrmInfo.chrmId === option.chrmId) {
+            _this._joinedChatRoomInfos.splice(index, 1);
+          }
+        });
+
+        this._joinedChatRoomInfos.push({
+          chrmId: chrmId,
+          count: count
+        });
+      } else {
+        this._joinedChatRoomInfos = [{
+          chrmId: chrmId,
+          count: count
+        }];
+      }
+
+      utils.Session.set(this._rootKey, this._joinedChatRoomInfos);
+    };
+
+    _proto5.get = function get() {
+      if (utils.isEmpty(this._joinedChatRoomInfos)) {
+        return utils.Session.get(this._rootKey) || [];
+      } else {
+        return this._joinedChatRoomInfos;
+      }
+    };
+
+    _proto5.remove = function remove(chrmId) {
+      var joinedChatRoom = utils.isEmpty(this._joinedChatRoomInfos) ? this._joinedChatRoomInfos : utils.Session.get(this._rootKey);
+      if (utils.isEmpty(joinedChatRoom)) return;
+      utils.forEach(joinedChatRoom, function (chrmInfo, index) {
+        if (chrmInfo.chrmId === chrmId) {
+          return joinedChatRoom.splice(index, 1);
+        }
+      });
+      utils.Session.set(this._rootKey, joinedChatRoom);
+    };
+
+    _proto5.clear = function clear() {
+      this._joinedChatRoomInfos = [];
+      utils.Session.remove(this._rootKey);
+    };
+
+    return JoinedChatRoomSyner;
   }();
 
   var getUIDByToken = function getUIDByToken(token) {
@@ -3469,7 +4025,7 @@
     return navDomainList;
   };
 
-  var getCMPDomainList = function getCMPDomainList(option) {
+  var getCMPDomainList = function getCMPDomainList(option, customOption) {
     var server = option.server,
         backupServer = option.backupServer;
     server = server || '';
@@ -3486,6 +4042,11 @@
         cmpList.push(cmp);
       }
     });
+
+    if (!utils.isUndefined(customOption.customCMP) && !utils.isEmpty(customOption.customCMP)) {
+      cmpList = customOption.customCMP;
+    }
+
     return cmpList;
   };
 
@@ -3537,21 +4098,6 @@
     return timeout;
   };
 
-  var fixConversationData = function fixConversationData(conversation) {
-    conversation = conversation || {};
-    conversation.latestMessage = conversation.latestMessage || {};
-    conversation.latestMessage.sentTime = conversation.latestMessage.sentTime || 0;
-    return conversation;
-  };
-
-  var sortConversationList = function sortConversationList(conversationList) {
-    return utils.quickSort(conversationList, function (before, after) {
-      before = fixConversationData(before);
-      after = fixConversationData(after);
-      return after.latestMessage.sentTime <= before.latestMessage.sentTime;
-    });
-  };
-
   var DelayTimer = {
     _delayTime: 0,
     setTime: function setTime(time) {
@@ -3565,6 +4111,108 @@
     }
   };
 
+  var isInValidConversationData = function isInValidConversationData(conversation) {
+    return !conversation.type || !conversation.targetId || !utils.isObject(conversation.latestMessage) || utils.isUndefined(conversation.unreadMessageCount);
+  };
+
+  var fixConversationData = function fixConversationData(conversation) {
+    conversation = conversation || {};
+    var _conversation = conversation,
+        targetId = _conversation.targetId,
+        type = _conversation.type;
+    var defaultType = CONVERSATION_TYPE.PRIVATE,
+        defaultId = '',
+        defaultMsg = {
+      messageType: MESSAGE_TYPE.TEXT,
+      sentTime: DelayTimer.getTime(),
+      content: {
+        content: ''
+      },
+      senderUserId: targetId,
+      targetId: targetId,
+      type: type
+    };
+    conversation.type = type || defaultType;
+    conversation.targetId = targetId || defaultId;
+    conversation.latestMessage = conversation.latestMessage || defaultMsg;
+    return conversation;
+  };
+
+  var sortConversationList = function sortConversationList(conversationList) {
+    if (utils.isEmpty(conversationList)) {
+      return [];
+    }
+
+    return utils.quickSort(conversationList, function (before, after) {
+      before = before || {};
+      after = after || {};
+      var beforeLatestMessage = before.latestMessage || {},
+          afterLatestMessage = after.latestMessage || {},
+          beforeLatestSentTime = beforeLatestMessage.sentTime || 0,
+          afterLatestSentTime = afterLatestMessage.sentTime || 0;
+      var flag = false;
+
+      if (before.isTop && !after.isTop) {
+        flag = false;
+      } else if (!before.isTop && after.isTop) {
+        flag = true;
+      } else {
+        flag = afterLatestSentTime <= beforeLatestSentTime;
+      }
+
+      return flag;
+    });
+  };
+
+  var splitConversationListByIsTop = function splitConversationListByIsTop(conversationList) {
+    var topConversationList = [],
+        unToppedConversationList = [];
+    utils.forEach(conversationList, function (conversation) {
+      var hasMentiond = conversation.hasMentiond,
+          mentiondInfo = conversation.mentiondInfo;
+      conversation.hasMentioned = hasMentiond;
+      conversation.mentionedInfo = mentiondInfo;
+      var isTop = conversation.isTop || false;
+
+      if (isTop) {
+        topConversationList.push(conversation);
+      } else {
+        unToppedConversationList.push(conversation);
+      }
+    });
+    return {
+      topConversationList: topConversationList || [],
+      unToppedConversationList: unToppedConversationList || []
+    };
+  };
+
+  var sortConList = function sortConList(conversationList) {
+    if (utils.isEmpty(conversationList)) {
+      return [];
+    }
+
+    var splitConversationList = splitConversationListByIsTop(conversationList);
+
+    var _sortListBySentTime = function _sortListBySentTime(convers) {
+      return utils.quickSort(convers, function (before, after) {
+        before = before || {};
+        after = after || {};
+        var beforeLatestMessage = before.latestMessage || {},
+            afterLatestMessage = after.latestMessage || {},
+            beforeLatestSentTime = beforeLatestMessage.sentTime || 0,
+            afterLatestSentTime = afterLatestMessage.sentTime || 0;
+        return afterLatestSentTime <= beforeLatestSentTime;
+      });
+    };
+
+    var topConversationList = _sortListBySentTime(splitConversationList.topConversationList);
+
+    var unToppedConversationList = _sortListBySentTime(splitConversationList.unToppedConversationList);
+
+    topConversationList.push.apply(topConversationList, unToppedConversationList);
+    return topConversationList;
+  };
+
   var isSupportStatusMessage = function isSupportStatusMessage(type) {
     return !!CONVERSATION_TYPE_TO_PUBLISH_STATUS_TOPIC[type];
   };
@@ -3573,6 +4221,479 @@
     var type = option.type,
         targetId = option.targetId;
     return type + '_' + targetId;
+  };
+
+  var getConversationByKey = function getConversationByKey(key) {
+    key = key || '';
+    var arr = key.split('_');
+
+    if (arr.length === 2) {
+      return {
+        type: arr[0],
+        targetId: arr[1]
+      };
+    } else {
+      return {
+        type: CONVERSATION_TYPE.PRIVATE,
+        targetId: ''
+      };
+    }
+  };
+
+  var getChatRoomKVOptStatus = function getChatRoomKVOptStatus(entity, action) {
+    var status = 0;
+
+    if (entity.isAutoDelete) {
+      status = status | CHATROOM_KV_STATUS_CODE.AUTO_DELETE;
+    }
+
+    if (entity.isOverwrite) {
+      status = status | CHATROOM_KV_STATUS_CODE.OVERWRITE;
+    }
+
+    if (utils.isEqual(action, CHATROOM_ENTRY_TYPE.DELETE)) {
+      status = status | CHATROOM_KV_STATUS_CODE.OPERATE;
+    }
+
+    return status;
+  };
+
+  var getChatRoomKVByStatus = function getChatRoomKVByStatus(status) {
+    var isDeleteOpt = !!(status & CHATROOM_KV_STATUS_CODE.OPERATE);
+    return {
+      isAutoDelete: !!(status & CHATROOM_KV_STATUS_CODE.AUTO_DELETE),
+      isOverwrite: !!(status & CHATROOM_KV_STATUS_CODE.OVERWRITE),
+      type: isDeleteOpt ? CHATROOM_ENTRY_TYPE.DELETE : CHATROOM_ENTRY_TYPE.UPDATE
+    };
+  };
+
+  var TextCompressor = {
+    _dataType: {
+      Tail: 0x30,
+      Compressed: 0x40,
+      NormalExt: 0x50,
+      Normal: 0x60,
+      Mark: 0x70
+    },
+    _chars: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+    _scale: 62,
+    _max: 238327,
+    _indexOf: function _indexOf(map, source, fromIndex) {
+      var result = {
+        length: 0,
+        offset: -1
+      };
+
+      if (fromIndex >= source.length - 1) {
+        return result;
+      }
+
+      var c1 = source.charAt(fromIndex);
+      var c2 = source.charAt(fromIndex + 1);
+      var items = map[c1 + c2];
+
+      if (items[0] === fromIndex) {
+        return result;
+      }
+
+      var space1 = source.length - fromIndex;
+
+      for (var i = 0, len = items.length; i < len; i++) {
+        var item = items[i];
+        var space2 = fromIndex - item;
+
+        if (space2 > TextCompressor._max) {
+          continue;
+        }
+
+        var end = Math.min(space1, space2);
+
+        if (end <= result.length) {
+          break;
+        }
+
+        if (result.length > 2) {
+          if (source.charAt(item + result.length - 1) !== source.charAt(fromIndex + result.length - 1)) {
+            continue;
+          }
+        }
+
+        var m = 2;
+
+        for (var j = m; j < end; j++) {
+          if (source.charAt(item + j) === source.charAt(fromIndex + j)) {
+            m++;
+          } else {
+            break;
+          }
+        }
+
+        if (m >= result.length) {
+          result.length = m;
+          result.offset = item;
+        }
+      }
+
+      return result;
+    },
+    _numberEncode: function _numberEncode(num) {
+      var result = [],
+          remainder = 0;
+
+      do {
+        remainder = num % TextCompressor._scale;
+        result.push(TextCompressor._chars.charAt(remainder));
+        num = (num - remainder) / TextCompressor._scale;
+      } while (num > 0);
+
+      return result.join('');
+    },
+    _numberDecode: function _numberDecode(str) {
+      var num = 0,
+          index = 0;
+
+      for (var i = str.length - 1; i >= 0; i--) {
+        index = TextCompressor._chars.indexOf(str.charAt(i));
+
+        if (index === -1) {
+          throw new Error('decode number error, data is \'' + str + '\'');
+        }
+
+        num = num * TextCompressor._scale + index;
+      }
+
+      return num;
+    },
+    compress: function compress(data) {
+      var map = {};
+
+      for (var p = 0; p < data.length - 1; p++) {
+        var c1 = data.charAt(p);
+        var c2 = data.charAt(p + 1);
+        var c = c1 + c2;
+
+        if (!map.hasOwnProperty(c)) {
+          map[c] = [p];
+          continue;
+        }
+
+        map[c].push(p);
+      }
+
+      var compressedData = [],
+          normalBlockBuffer = [];
+
+      var encodeNormalBlock = function encodeNormalBlock() {
+        if (normalBlockBuffer.length > 0) {
+          var normalBlock = normalBlockBuffer.join('');
+          normalBlockBuffer = [];
+
+          if (normalBlock.length > 26) {
+            var normalExtBlockLength = TextCompressor._numberEncode(normalBlock.length);
+
+            var normalExtBlockHeader = String.fromCharCode(TextCompressor._dataType.NormalExt | normalExtBlockLength.length);
+            compressedData.push(normalExtBlockHeader + normalExtBlockLength);
+          } else {
+            var normalBlockHeader = String.fromCharCode(TextCompressor._dataType.Normal | normalBlock.length);
+            compressedData.push(normalBlockHeader);
+          }
+
+          compressedData.push(normalBlock);
+        }
+      };
+
+      var i = 0;
+
+      while (i < data.length) {
+        var r = TextCompressor._indexOf(map, data, i);
+
+        if (r.length < 2) {
+          normalBlockBuffer.push(data.charAt(i++));
+          continue;
+        }
+
+        if (r.length < 4) {
+          normalBlockBuffer.push(data.substr(i, r.length));
+          i += r.length;
+          continue;
+        }
+
+        var offset = TextCompressor._numberEncode(i - r.offset);
+
+        var length = TextCompressor._numberEncode(r.length);
+
+        if (offset.length + length.length >= r.length) {
+          normalBlockBuffer.push(data.substr(i, r.length));
+          i += r.length;
+          continue;
+        }
+
+        encodeNormalBlock();
+        var compressedBlockHeader = String.fromCharCode(TextCompressor._dataType.Compressed | offset.length << 2 | length.length);
+        compressedData.push(compressedBlockHeader + offset + length);
+        i += r.length;
+      }
+
+      encodeNormalBlock();
+
+      var dataLengthTo62 = TextCompressor._numberEncode(data.length);
+
+      var tailBlockHeader = String.fromCharCode(TextCompressor._dataType.Tail | dataLengthTo62.length);
+      compressedData.push(tailBlockHeader + dataLengthTo62);
+      return compressedData.join('');
+    },
+    uncompress: function uncompress(data) {
+      var i = 0;
+      var result = '';
+
+      label1: do {
+        var header = data.charCodeAt(i++);
+        var headerType = header & TextCompressor._dataType.Mark;
+        var headerVal = header & 0xF;
+
+        switch (headerType) {
+          case TextCompressor._dataType.Compressed:
+            var p1 = headerVal >> 2;
+            var p2 = headerVal & 3;
+
+            if (p1 === 0 || p2 === 0) {
+              throw new Error('Data parsing error,at ' + i);
+            }
+
+            var offset = TextCompressor._numberDecode(data.substr(i, p1));
+
+            var len = TextCompressor._numberDecode(data.substr(i += p1, p2));
+
+            offset = result.length - offset;
+
+            if (offset + len > result.length) {
+              throw new Error('Data parsing error,at ' + i);
+            }
+
+            i += p2;
+            result += result.substr(offset, len);
+            break;
+
+          case TextCompressor._dataType.Tail:
+            var num = TextCompressor._numberDecode(data.substr(i, headerVal));
+
+            if (num !== result.length) {
+              throw new Error('Data parsing error,at ' + i);
+            }
+
+            i += headerVal;
+            break label1;
+
+          case TextCompressor._dataType.NormalExt:
+            var normalNum = TextCompressor._numberDecode(data.substr(i, headerVal));
+
+            result += data.substr(i += headerVal, normalNum);
+            i += normalNum;
+            break;
+
+          case TextCompressor._dataType.Normal:
+            result += data.substr(i, headerVal);
+            i += headerVal;
+            break;
+
+          case TextCompressor._dataType.Mark:
+            if (headerVal > 10) {
+              throw new Error('Data parsing error,at ' + i);
+            }
+
+            result += data.substr(i, 16 + headerVal);
+            i += 16 + headerVal;
+            break;
+
+          default:
+            throw new Error('Data parsing error,at ' + i + ' header:' + headerType);
+        }
+      } while (i < data.length);
+
+      return result;
+    }
+  };
+
+  var isBelowIE = function isBelowIE(version) {
+    var system = env.system;
+    var flag = system.model === 'IE' && Number(system.version) < version ? true : false;
+    return flag;
+  };
+
+  var stringToCsv = function stringToCsv(str) {
+    var csvStr = str.replace(/"/g, '""');
+    var tpl = '"{csvStr}"';
+    return tplEngine$1(tpl, {
+      csvStr: csvStr
+    });
+  };
+
+  var getWebSessionId = function getWebSessionId() {
+    var sessionId = utils.Session.get(STORAGE_SESSION_ID_KEY);
+
+    if (utils.isEmpty(sessionId)) {
+      sessionId = utils.getUUID22().slice(0, 10);
+      utils.Session.set(STORAGE_SESSION_ID_KEY, sessionId);
+    }
+
+    return sessionId;
+  };
+
+  var getDeviceId = function getDeviceId() {
+    var deviceId = utils.Storage.get(STORAGE_DEVICE_ID_KEY);
+
+    if (utils.isEmpty(deviceId)) {
+      deviceId = utils.getUUID22();
+      utils.Storage.set(STORAGE_DEVICE_ID_KEY, deviceId);
+    }
+
+    return deviceId;
+  };
+
+  var getDeviceInfo = function getDeviceInfo() {
+    var tpl = '{brower}|{version}|{sessionId}';
+    return tplEngine$1(tpl, {
+      brower: env.system.model,
+      version: env.system.version,
+      sessionId: getWebSessionId()
+    });
+  };
+
+  var getReportLogUrl = function getReportLogUrl(params) {
+    var entireUrl = '',
+        protocol = env.protocol.http + '//';
+    var urlConf = {
+      protocol: protocol,
+      url: params.url,
+      version: SDK_VERSION,
+      appkey: params.appkey,
+      deviceId: getDeviceId(),
+      deviceInfo: getDeviceInfo(),
+      platform: PLATFORM$1,
+      userId: params.userId
+    };
+
+    switch (params.type) {
+      case REPORT_TYPE.REALTIME:
+        entireUrl = tplEngine$1(REALTIME_URL_TPL, urlConf);
+        break;
+
+      case REPORT_TYPE.FULL:
+        entireUrl = tplEngine$1(MSGNOTIF_URL_TPL, utils.extend(urlConf, {
+          logId: params.logId
+        }));
+        break;
+
+      default:
+        break;
+    }
+
+    return entireUrl;
+  };
+
+  var isLogCommandMsg = function isLogCommandMsg(msg) {
+    var content = msg.content;
+    return msg.messageType === MESSAGE_TYPE.LOG_COMMAND && msg.senderUserId === LOG_CMD_MSG_SENDER && content.platform === 'Web';
+  };
+
+  var isValidChatRoomKey = function isValidChatRoomKey(key) {
+    if (!utils.isString(key)) {
+      return;
+    }
+
+    var isValid = /^[A-Za-z0-9_=+-]+$/.test(key),
+        keyLen = key.length,
+        isLimit = keyLen <= CHATROOM_KEY_LENGTH.MAX && keyLen >= CHATROOM_KEY_LENGTH.MIN;
+    return isValid && isLimit;
+  };
+
+  var isValidChatRoomValue = function isValidChatRoomValue(value) {
+    if (!utils.isString(value)) {
+      return;
+    }
+
+    var valLen = value.length;
+    return valLen <= CHATROOM_VALUE_LENGTH.MAX && valLen >= CHATROOM_VALUE_LENGTH.MIN;
+  };
+
+  var genUploadFileName = function genUploadFileName(type, fileName) {
+    var tpl = '{type}__RC-{date}_{random}_{timestamp}{uuid}{extension}';
+    var random = Math.floor(Math.random() * 1000 % 10000);
+    var uuid = utils.getUUID();
+    var fileNameArr, extension;
+
+    if (fileName) {
+      fileNameArr = fileName.split('.');
+      extension = '.' + fileNameArr[fileNameArr.length - 1];
+    }
+
+    return tplEngine$1(tpl, {
+      type: type,
+      date: utils.formateDate('-'),
+      random: random,
+      uuid: uuid,
+      timestamp: DelayTimer.getTime(),
+      extension: extension || ''
+    });
+  };
+
+  var getUploadFileDomains = function getUploadFileDomains(navi) {
+    var uploadServer = navi.uploadServer,
+        bosAddr = navi.bosAddr;
+    return {
+      qiniu: uploadServer,
+      bos: bosAddr
+    };
+  };
+
+  var mergeConversationList = function mergeConversationList(option) {
+    option = option || {};
+    var _option4 = option,
+        conversationList = _option4.conversationList,
+        updatedConversationList = _option4.updatedConversationList;
+    var allConversationList = updatedConversationList.concat(conversationList);
+    var hashTable = {};
+    var newList = [];
+    var invalidDataIndexList = [];
+    utils.forEach(allConversationList, function (conversation) {
+      if (!utils.isObject(conversation)) {
+        return;
+      }
+
+      var key = getConversationKey(conversation),
+          hashItem = hashTable[key] || {},
+          hashIndex = utils.isUndefined(hashItem.index) ? newList.length : hashItem.index,
+          hashVal = hashItem.val || {},
+          cacheUpdatedItems = hashVal.updatedItems || {},
+          updatedItems = conversation.updatedItems || {};
+      conversation = utils.extend(conversation, hashVal);
+      utils.forEach(cacheUpdatedItems, function (item, key) {
+        conversation[key] = item.val;
+      });
+      utils.forEach(updatedItems, function (item, key) {
+        var cacheItem = cacheUpdatedItems[key] || {},
+            cacheItemUpdatedTime = cacheItem.time || 0;
+
+        if (item.time > cacheItemUpdatedTime) {
+          conversation[key] = item.val;
+        }
+      });
+      hashTable[key] = {
+        index: hashIndex,
+        val: conversation
+      };
+      newList[hashIndex] = conversation;
+      isInValidConversationData(conversation) && invalidDataIndexList.push(hashIndex);
+    });
+    utils.forEach(invalidDataIndexList, function (invalidIndex) {
+      var conversation = newList[invalidIndex];
+      newList[invalidIndex] = fixConversationData(conversation);
+    });
+    newList = sortConList(newList);
+    return utils.map(newList, function (item) {
+      delete item.updatedItems;
+      return item;
+    });
   };
 
   var common = {
@@ -3592,6 +4713,7 @@
     SignalId: SignalId,
     MessageTimeSyner: MessageTimeSyner,
     ChatRoomMessageTimeSyner: ChatRoomMessageTimeSyner,
+    JoinedChatRoomSyner: JoinedChatRoomSyner,
     getCMPDomainList: getCMPDomainList,
     getNaviListByToken: getNaviListByToken,
     getValidToken: getValidToken,
@@ -3603,7 +4725,24 @@
     sortConversationList: sortConversationList,
     DelayTimer: DelayTimer,
     isSupportStatusMessage: isSupportStatusMessage,
-    getConversationKey: getConversationKey
+    getConversationKey: getConversationKey,
+    getConversationByKey: getConversationByKey,
+    getChatRoomKVOptStatus: getChatRoomKVOptStatus,
+    getChatRoomKVByStatus: getChatRoomKVByStatus,
+    TextCompressor: TextCompressor,
+    isBelowIE: isBelowIE,
+    getReportLogUrl: getReportLogUrl,
+    isLogCommandMsg: isLogCommandMsg,
+    getWebSessionId: getWebSessionId,
+    getDeviceId: getDeviceId,
+    stringToCsv: stringToCsv,
+    isValidChatRoomKey: isValidChatRoomKey,
+    isValidChatRoomValue: isValidChatRoomValue,
+    genUploadFileName: genUploadFileName,
+    getUploadFileDomains: getUploadFileDomains,
+    mergeConversationList: mergeConversationList,
+    sortConList: sortConList,
+    getPersitedAndCountedAndSlientBySessionId: getPersitedAndCountedAndSlientBySessionId
   };
 
   var EventEmitter$1 = utils.EventEmitter,
@@ -3789,15 +4928,14 @@
         _transporterEventEmiiter.emit(TRANSPORT_EVENT.SIGNAL, signal);
       }
 
-      if (signal && utils.isNumber(signal.timestamp)) {
+      if (signal && utils.isValidTimestamp(signal.timestamp)) {
         common.DelayTimer.setTime(signal.timestamp);
       }
     };
 
     _proto2.handleConnAck = function handleConnAck(signal) {
       var self = this;
-      var _deferHandler = self._deferHandler,
-          _transporterEventEmiiter = self._transporterEventEmiiter;
+      var _deferHandler = self._deferHandler;
       var status = signal.status;
       var isConnected = status === SUCCESS_CODE;
       var event = isConnected ? _deferHandler.resolve : _deferHandler.reject;
@@ -3806,8 +4944,6 @@
       if (isConnected) {
         self._connectedTime = utils.getCurrentTimestamp();
       }
-
-      isConnected && _transporterEventEmiiter.emit(TRANSPORT_EVENT.STATUS, TRANSPORTER_STATUS.CONNECTED);
     };
 
     _proto2.disconnect = function disconnect() {
@@ -3819,46 +4955,372 @@
     return SocketTransporter;
   }();
 
+  var logEventEmitter = new utils.EventEmitter();
+  var LogEventName = 'log';
+  var LocalLogPrefix = '[Rong]';
+  var ServerOption = DEFAULT_SERVER_OPTION;
   var Option = {
-    isShowLocal: false,
-    platform: 'Web'
+    isDebug: false,
+    isUploadToServer: true,
+    appkey: '',
+    userId: '',
+    isNetworkUnavailable: true
   };
-  var eventEmitter = new utils.EventEmitter();
-  var LogPrefix = '[RongCloud]';
-  var EventName = {
-    Log: 'log'
+  var realTimeUploadHasStarted = false,
+      RealtimeUploadTimes = 1,
+      isRealtimeUploading = false,
+      fullLogId = '';
+
+  var isFirstDefaultUpload = function isFirstDefaultUpload(interval) {
+    return interval === 20000;
   };
+
+  var getRealtimeUploadInterval = function getRealtimeUploadInterval(uploadTimes) {
+    var realtimeInterval = ServerOption.realtimeInterval;
+    return realtimeInterval * Math.pow(2, uploadTimes - 1);
+  };
+
+  var getFullUploadInterval = function getFullUploadInterval(uploadTimes) {
+    var fullInterval = ServerOption.fullInterval;
+    return fullInterval * Math.pow(2, uploadTimes - 1);
+  };
+
+  var getCSVForLog = function getCSVForLog(log) {
+    log = log || {};
+    var content = log.content || {};
+    utils.forEach(content, function (val, key) {
+      if (utils.isObject(val) || utils.isArray(val)) {
+        content[key] = utils.toJSON(val);
+      }
+    });
+    content = utils.toJSON(content) || '""';
+    content = common.stringToCsv(content);
+    return utils.tplEngine(CSV_LOG_TPL, {
+      sessionId: common.getWebSessionId(),
+      time: log.time,
+      type: log.type,
+      level: log.level,
+      tag: log.tag,
+      content: content
+    });
+  };
+
+  var setServerOption = function setServerOption(serverData) {
+    var logSwitch = serverData.logSwitch,
+        logPolicy = serverData.logPolicy;
+    var isOpen = !!logSwitch;
+    if (utils.isEmpty(serverData)) return;
+    ServerOption.isOpen = isOpen;
+
+    if (!isOpen) {
+      return;
+    }
+
+    var logConf = utils.parseJSON(logPolicy || '') || {};
+    var url = logConf.url,
+        level = logConf.level,
+        itv = logConf.itv,
+        times = logConf.times;
+    utils.extend(ServerOption, {
+      url: url,
+      realtimeLevel: Number(level),
+      realtimeInterval: Number(itv) * 1000,
+      realtimeMaxTimes: Number(times)
+    });
+  };
+
+  var setServerResponseOption = function setServerResponseOption(resText) {
+    var resConf = utils.parseJSON(resText || '');
+    var nextTime = resConf.nextTime,
+        level = resConf.level,
+        logSwitch = resConf.logSwitch;
+    if (utils.isEmpty(resConf)) return;
+    var isOpen = !!logSwitch;
+    ServerOption.isOpen = isOpen;
+    if (!isOpen) return;
+    utils.extend(ServerOption, {
+      realtimeLevel: Number(level),
+      realtimeInterval: Number(nextTime) * 1000
+    });
+  };
+
+  var getLogLevel = function getLogLevel(log) {
+    log = log || {};
+    var _Option = Option,
+        isNetworkUnavailable = _Option.isNetworkUnavailable,
+        _log = log,
+        level = _log.level,
+        isLevelToDegrad = utils.isEqual(level, LEVEL.ERROR) || utils.isEqual(level, LEVEL.WARN);
+
+    if (isNetworkUnavailable && isLevelToDegrad) {
+      log.level = LEVEL.INFO;
+    }
+
+    return log;
+  };
+
+  var LogStore = {
+    _list: [],
+    MaxSize: common.isBelowIE(9) ? STORE_SIZE.LOW : STORE_SIZE.ADVANCED,
+    add: function add(log) {
+      log = getLogLevel(log);
+
+      LogStore._list.push(log);
+
+      var currentSize = LogStore._list.length,
+          maxSize = LogStore.MaxSize;
+
+      if (currentSize > maxSize) {
+        LogStore._list.splice(0, currentSize - maxSize);
+      }
+    },
+    get: function get(option) {
+      var type = option.type,
+          uploadLevel = option.level;
+      var _list = LogStore._list;
+      var uploadList = [];
+      utils.forEach(_list, function (log, index) {
+        var logTime = log.time || 0,
+            logLevel = log.level || LEVEL.DEBUG,
+            isUploadLevel = logLevel <= uploadLevel,
+            fullUploadOption = option.fullUploadOption || {},
+            startTime = fullUploadOption.startTime || 0,
+            endTime = fullUploadOption.endTime || common.DelayTimer.getTime();
+        var isUpload = isUploadLevel;
+
+        switch (type) {
+          case REPORT_TYPE.REALTIME:
+            isUpload = isUpload && !log.isUploaded;
+            isUpload && (LogStore._list[index].isUploaded = true);
+            break;
+
+          case REPORT_TYPE.FULL:
+            isUpload = isUpload && logTime >= startTime && logTime <= endTime;
+            break;
+
+          default:
+        }
+
+        if (isUpload) {
+          uploadList.push(log);
+        }
+      });
+      return uploadList;
+    },
+    clear: function clear() {
+      LogStore._list = [];
+    }
+  };
+
+  var upload = function upload(option) {
+    var url = option.url,
+        logList = option.logList,
+        type = option.type;
+    var requestUrl = common.getReportLogUrl({
+      type: type,
+      appkey: Option.appkey || '',
+      userId: Option.userId || '',
+      url: url || ServerOption.url || DEFAULT_SERVER_OPTION.url,
+      logId: option.logId
+    });
+    var csvLog = '';
+    utils.forEach(logList, function (log) {
+      csvLog += getCSVForLog(log);
+    });
+
+    if (utils.isEmpty(csvLog) && type === REPORT_TYPE.REALTIME) {
+      return utils.Defer.reject();
+    }
+
+    if (utils.isEmpty(csvLog) && type === REPORT_TYPE.FULL) {
+      csvLog = NO_FULL_LOG;
+    }
+
+    csvLog = common.TextCompressor.compress(csvLog);
+    return utils.request(requestUrl, {
+      method: REQUEST_METHOD.POST,
+      body: csvLog,
+      timeout: REQUEST_TIMEOUT
+    });
+  };
+
+  var uploadRealtime = function uploadRealtime() {
+    if (isRealtimeUploading) {
+      return;
+    }
+
+    var interval = getRealtimeUploadInterval(RealtimeUploadTimes);
+    var realtimeMaxTimes = ServerOption.realtimeMaxTimes,
+        realtimeLevel = ServerOption.realtimeLevel;
+
+    if (RealtimeUploadTimes < realtimeMaxTimes) {
+      RealtimeUploadTimes++;
+    }
+
+    if (isFirstDefaultUpload(interval)) {
+      RealtimeUploadTimes = 1;
+    }
+
+    utils.setTimeout(function () {
+      var logList = LogStore.get({
+        type: REPORT_TYPE.REALTIME,
+        level: realtimeLevel
+      });
+      isRealtimeUploading = true;
+      upload({
+        logList: logList,
+        type: REPORT_TYPE.REALTIME
+      }).then(function (response) {
+        isRealtimeUploading = false;
+        var responseText = response.responseText || '{}';
+        var conf = response.responseText || {};
+        setServerResponseOption(responseText);
+
+        if (ServerOption.isOpen) {
+          RealtimeUploadTimes = utils.isEmpty(conf) ? RealtimeUploadTimes : 1;
+          uploadRealtime();
+        }
+      })["catch"](function () {
+        isRealtimeUploading = false;
+        uploadRealtime();
+      });
+    }, interval);
+  };
+
+  var uploadFull = function uploadFull(uploadTimes, option, connectedTime) {
+    if (!Option.isUploadToServer || env.isMini) {
+      return;
+    }
+
+    uploadTimes = uploadTimes || 0;
+    option = option || {};
+    var _option = option,
+        uri = _option.uri,
+        logId = _option.logId;
+    var isFirst = uploadTimes === 0;
+    var interval = isFirst ? 0 : getFullUploadInterval(uploadTimes);
+    var fullMaxTimes = ServerOption.fullMaxTimes,
+        fullLevel = ServerOption.fullLevel;
+    if (fullLogId === logId) return;
+
+    if (uploadTimes <= fullMaxTimes) {
+      uploadTimes++;
+    } else {
+      return;
+    }
+
+    fullLogId = logId;
+
+    (function (option) {
+      utils.setTimeout(function () {
+        var logList = LogStore.get({
+          type: REPORT_TYPE.FULL,
+          level: fullLevel,
+          fullUploadOption: option
+        });
+        if (logList.length === 0 && Number(option.endTime) < connectedTime) return;
+        upload({
+          logId: logId,
+          url: uri,
+          logList: logList,
+          type: REPORT_TYPE.FULL
+        }).then(function () {})["catch"](function () {
+          uploadFull(uploadTimes, option, connectedTime);
+        });
+      }, interval);
+    })(option);
+  };
+
+  var writeLocalLog = function writeLocalLog(log) {
+    var time = log.time;
+    var formatedTime = utils.formatTime(time);
+    var localLog = LocalLogPrefix + ":" + formatedTime + ": " + utils.toJSON(log);
+    logEventEmitter.emit(LogEventName, localLog);
+
+    if (Option.isDebug) {
+      utils.consoleLog(localLog);
+    }
+  };
+
+  var isIgnoreErrorCode = function isIgnoreErrorCode(code) {
+    return utils.indexOf(IGNORE_ERROR_CODE, code) > -1;
+  };
+
   var Logger = {
     _events: [],
+    LogStore: LogStore,
     setOption: function setOption(option) {
       Option = utils.extend(Option, option);
     },
-    watch: function watch(event) {
-      eventEmitter.on(EventName.Log, event);
+    setServerOption: setServerOption,
+    watchLog: function watchLog(event) {
+      logEventEmitter.on(LogEventName, event);
 
       Logger._events.push(event);
     },
     write: function write(log) {
-      var time = utils.getCurrentTimestamp();
+      log = log || {};
+      log.tag = log.tag || TAG.L_CRASH_E;
+      log.time = log.time || common.DelayTimer.getTime();
+      log.type = log.type || LOG_TYPE.IM;
+      LogStore.add(log);
+      writeLocalLog(log);
+    },
+    fatal: function fatal(tag, content) {
+      Logger.write({
+        tag: tag,
+        content: content,
+        level: LEVEL.FATAL
+      });
+    },
+    error: function error(tag, content) {
+      Logger.write({
+        tag: tag,
+        content: content,
+        level: LEVEL.ERROR
+      });
+    },
+    warn: function warn(tag, content) {
+      Logger.write({
+        tag: tag,
+        content: content,
+        level: LEVEL.WARN
+      });
+    },
+    info: function info(tag, content) {
+      Logger.write({
+        tag: tag,
+        content: content,
+        level: LEVEL.INFO
+      });
+    },
+    debug: function debug(tag, content) {
+      Logger.write({
+        tag: tag,
+        content: content,
+        level: LEVEL.DEBUG
+      });
+    },
+    startRealtimeUpload: function startRealtimeUpload() {
+      if (realTimeUploadHasStarted) return;
 
-      if (utils.isObject(log)) {
-        log.time = time;
+      if (Option.isUploadToServer && !env.isMini) {
+        uploadRealtime();
       }
 
-      var formatedTime = utils.formatTime(time);
-      var logContent = LogPrefix + ":" + formatedTime + ": " + utils.toJSON(log);
-      eventEmitter.emit(EventName.Log, logContent);
-
-      if (Option.isShowLocal) {
-        console.log(logContent);
-      }
-    }
+      realTimeUploadHasStarted = true;
+    },
+    resetRealtimeUpload: function resetRealtimeUpload() {
+      RealtimeUploadTimes = 1;
+    },
+    uploadFull: uploadFull,
+    isIgnoreErrorCode: isIgnoreErrorCode
   };
 
   var EventEmitter$2 = utils.EventEmitter,
       DeferHandler$2 = utils.DeferHandler,
       httpRequest = utils.httpRequest,
-      request$4 = utils.request,
+      request$3 = utils.request,
       Defer$1 = utils.Defer;
 
   var CometTransporter = function () {
@@ -3866,7 +5328,7 @@
       this._option = void 0;
       this._transporterEventEmiiter = new EventEmitter$2();
       this._deferHandler = new DeferHandler$2();
-      this._pid = utils.getCurrentTimestamp() + Math.random() + '';
+      this._pid = utils.encodeURI(utils.getCurrentTimestamp() + Math.random() + '');
       this._domain = void 0;
       this._sessionid = void 0;
       this._xhrCache = new utils.Cache();
@@ -3897,11 +5359,20 @@
       });
       var xhr = httpRequest({
         url: url,
+        body: {
+          pid: _pid
+        },
+        timeout: IM_COMET_PULLMSG_TIMEOUT,
         success: function success(responseText) {
           _pullSignalTimer.stop();
 
-          self.handleCometResponse(responseText);
-          !self._isDisconnected && self._startPullSignal();
+          var isSuccess = self.handleCometResponse(responseText);
+
+          if (isSuccess) {
+            !self._isDisconnected && self._startPullSignal();
+          } else if (!self._isDisconnected) {
+            _transporterEventEmiiter.emit(TRANSPORT_EVENT.STATUS, TRANSPORTER_STATUS.COMET_REQUEST_ERROR);
+          }
 
           self._xhrCache.remove(url);
         },
@@ -3939,7 +5410,7 @@
 
     _proto.connect = function connect(user, option) {
       var self = this;
-      var _transporterEventEmiiter = self._transporterEventEmiiter,
+      var _pid = self._pid,
           _self$_option = self._option,
           appkey = _self$_option.appkey,
           connectType = _self$_option.connectType;
@@ -3964,16 +5435,18 @@
         var response = utils.isObject(responseText) ? responseText : utils.parseJSON(responseText);
         var isConnectSuccess = utils.isEqual(response.status, SUCCESS_CODE);
 
-        if (isConnectSuccess && utils.isObject(response) && utils.isNumber(response.timestamp)) {
+        if (isConnectSuccess && utils.isObject(response) && utils.isValidTimestamp(response.timestamp)) {
           common.DelayTimer.setTime(response.timestamp);
         }
 
         return isConnectSuccess ? Defer$1.resolve(response) : Defer$1.reject(response);
       };
 
-      return request$4(url).then(success).then(function (response) {
-        _transporterEventEmiiter.emit(TRANSPORT_EVENT.STATUS, CONNECTION_STATUS.CONNECTED);
-
+      return request$3(url, {
+        body: {
+          pid: _pid
+        }
+      }).then(success).then(function (response) {
         self._sessionid = response.sessionid;
 
         self._startPullSignal();
@@ -4022,7 +5495,7 @@
 
           self._xhrCache.remove(currentTime);
 
-          Logger.write({
+          Logger.error(TAG.L_COMET_SEND_SIGNAL_E, {
             content: {
               info: 'comet error',
               error: error
@@ -4037,7 +5510,7 @@
     _proto.handleCometResponse = function handleCometResponse(responseText) {
       var self = this;
       var _transporterEventEmiiter = self._transporterEventEmiiter;
-      var response = utils.isObject(responseText) ? responseText : utils.parseJSON(responseText);
+      var response = utils.isString(responseText) ? utils.parseJSON(responseText) : responseText;
 
       if (!response) {
         return false;
@@ -4058,7 +5531,7 @@
 
         _transporterEventEmiiter.emit(TRANSPORT_EVENT.SIGNAL, signal);
 
-        if (signal && utils.isNumber(signal.timestamp)) {
+        if (signal && utils.isValidTimestamp(signal.timestamp)) {
           common.DelayTimer.setTime(signal.timestamp);
         }
       });
@@ -4130,6 +5603,7 @@
     RtcUserListOutput: 'RtcUserListOutput',
     SetUserStatusInput: 'SetUserStatusInput',
     RtcSetDataInput: 'RtcSetDataInput',
+    RtcUserSetDataInput: 'RtcUserSetDataInput',
     RtcDataInput: 'RtcDataInput',
     RtcSetOutDataInput: 'RtcSetOutDataInput',
     MCFollowInput: 'MCFollowInput',
@@ -4144,11 +5618,26 @@
     GetQNupTokenInput: 'GetQNupTokenInput',
     GetQNupTokenOutput: 'GetQNupTokenOutput',
     GetQNdownloadUrlInput: 'GetQNdownloadUrlInput',
-    GetQNdownloadUrlOutput: 'GetQNdownloadUrlOutput'
+    GetQNdownloadUrlOutput: 'GetQNdownloadUrlOutput',
+    SetChrmKV: 'SetChrmKV',
+    ChrmKVOutput: 'ChrmKVOutput',
+    QueryChrmKV: 'QueryChrmKV',
+    ChrmNotifyMsg: 'ChrmNotifyMsg',
+    SetUserSettingInput: 'SetUserSettingInput',
+    SetUserSettingOutput: 'SetUserSettingOutput',
+    PullUserSettingInput: 'PullUserSettingInput',
+    PullUserSettingOutput: 'PullUserSettingOutput',
+    UserSettingNotification: 'UserSettingNotification',
+    SessionReq: 'SessionReq',
+    SessionStates: 'SessionStates',
+    SessionState: 'SessionState',
+    SessionStateItem: 'SessionStateItem',
+    SessionStateModifyReq: 'SessionStateModifyReq',
+    SessionStateModifyResp: 'SessionStateModifyResp'
   };
 
   var _SSMsg;
-  var SSMsg = (_SSMsg = {}, _SSMsg[PBName.UpStreamMessage] = ['sessionId', 'classname', 'content', 'pushText', 'userId', 'configFlag', 'appData'], _SSMsg[PBName.DownStreamMessages] = ['list', 'syncTime', 'finished'], _SSMsg[PBName.DownStreamMessage] = ['fromUserId', 'type', 'groupId', 'classname', 'content', 'dataTime', 'status', 'msgId'], _SSMsg[PBName.SessionsAttQryInput] = ['nothing'], _SSMsg[PBName.SessionsAttOutput] = ['inboxTime', 'sendboxTime', 'totalUnreadCount'], _SSMsg[PBName.SyncRequestMsg] = ['syncTime', 'ispolling', 'isweb', 'isPullSend', 'isKeeping', 'sendBoxSyncTime'], _SSMsg[PBName.ChrmPullMsg] = ['syncTime', 'count'], _SSMsg[PBName.NotifyMsg] = ['type', 'time', 'chrmId'], _SSMsg[PBName.HistoryMsgInput] = ['targetId', 'time', 'count', 'order'], _SSMsg[PBName.HistoryMsgOuput] = ['list', 'syncTime', 'hasMsg'], _SSMsg[PBName.RelationQryInput] = ['type', 'count', 'startTime', 'order'], _SSMsg[PBName.RelationsOutput] = ['info'], _SSMsg[PBName.DeleteSessionsInput] = ['sessions'], _SSMsg[PBName.SessionInfo] = ['type', 'channelId'], _SSMsg[PBName.DeleteSessionsOutput] = ['nothing'], _SSMsg[PBName.RelationsInput] = ['type', 'msg', 'count', 'offset', 'startTime', 'endTime'], _SSMsg[PBName.DeleteMsgInput] = ['type', 'conversationId', 'msgs'], _SSMsg[PBName.CleanHisMsgInput] = ['targetId', 'dataTime', 'conversationType'], _SSMsg[PBName.SessionMsgReadInput] = ['type', 'msgTime', 'channelId'], _SSMsg[PBName.ChrmInput] = ['nothing'], _SSMsg[PBName.QueryChatRoomInfoInput] = ['count', 'order'], _SSMsg[PBName.QueryChatRoomInfoOutput] = ['userTotalNums', 'userInfos'], _SSMsg[PBName.GetQNupTokenInput] = ['type'], _SSMsg[PBName.GetQNdownloadUrlInput] = ['type', 'key', 'fileName'], _SSMsg[PBName.GetQNupTokenOutput] = ['deadline', 'token'], _SSMsg[PBName.GetQNdownloadUrlOutput] = ['downloadUrl'], _SSMsg);
+  var SSMsg = (_SSMsg = {}, _SSMsg[PBName.UpStreamMessage] = ['sessionId', 'classname', 'content', 'pushText', 'userId', 'configFlag', 'appData'], _SSMsg[PBName.DownStreamMessages] = ['list', 'syncTime', 'finished'], _SSMsg[PBName.DownStreamMessage] = ['fromUserId', 'type', 'groupId', 'classname', 'content', 'dataTime', 'status', 'msgId'], _SSMsg[PBName.SessionsAttQryInput] = ['nothing'], _SSMsg[PBName.SessionsAttOutput] = ['inboxTime', 'sendboxTime', 'totalUnreadCount'], _SSMsg[PBName.SyncRequestMsg] = ['syncTime', 'ispolling', 'isweb', 'isPullSend', 'isKeeping', 'sendBoxSyncTime'], _SSMsg[PBName.ChrmPullMsg] = ['syncTime', 'count'], _SSMsg[PBName.NotifyMsg] = ['type', 'time', 'chrmId'], _SSMsg[PBName.HistoryMsgInput] = ['targetId', 'time', 'count', 'order'], _SSMsg[PBName.HistoryMsgOuput] = ['list', 'syncTime', 'hasMsg'], _SSMsg[PBName.RelationQryInput] = ['type', 'count', 'startTime', 'order'], _SSMsg[PBName.RelationsOutput] = ['info'], _SSMsg[PBName.DeleteSessionsInput] = ['sessions'], _SSMsg[PBName.SessionInfo] = ['type', 'channelId'], _SSMsg[PBName.DeleteSessionsOutput] = ['nothing'], _SSMsg[PBName.RelationsInput] = ['type', 'msg', 'count', 'offset', 'startTime', 'endTime'], _SSMsg[PBName.DeleteMsgInput] = ['type', 'conversationId', 'msgs'], _SSMsg[PBName.CleanHisMsgInput] = ['targetId', 'dataTime', 'conversationType'], _SSMsg[PBName.SessionMsgReadInput] = ['type', 'msgTime', 'channelId'], _SSMsg[PBName.ChrmInput] = ['nothing'], _SSMsg[PBName.QueryChatRoomInfoInput] = ['count', 'order'], _SSMsg[PBName.QueryChatRoomInfoOutput] = ['userTotalNums', 'userInfos'], _SSMsg[PBName.GetQNupTokenInput] = ['type'], _SSMsg[PBName.GetQNdownloadUrlInput] = ['type', 'key', 'fileName'], _SSMsg[PBName.GetQNupTokenOutput] = ['deadline', 'token'], _SSMsg[PBName.GetQNdownloadUrlOutput] = ['downloadUrl'], _SSMsg[PBName.SetChrmKV] = ['entry', 'bNotify', 'notification', 'type'], _SSMsg[PBName.ChrmKVOutput] = ['entries', 'bFullUpdate', 'syncTime'], _SSMsg[PBName.QueryChrmKV] = ['timestamp'], _SSMsg[PBName.ChrmNotifyMsg] = ['type', 'time', 'chrmId'], _SSMsg[PBName.SetUserSettingInput] = ['version', 'value'], _SSMsg[PBName.SetUserSettingOutput] = ['version', 'reserve'], _SSMsg[PBName.PullUserSettingInput] = ['version', 'reserve'], _SSMsg[PBName.PullUserSettingOutput] = ['items', 'version'], _SSMsg);
 
   var Codec = {};
   utils.forEach(SSMsg, function (paramList, name) {
@@ -4207,7 +5696,7 @@
   e.name=f,this.tn.skip("="),e.id=h(this.tn.next()),f=this.tn.peek(),"["===f&&this._parseFieldOptions(e),this.tn.skip(";");}return a.fields.push(e),e},g._parseMessageOneOf=function(a){var e,d,f,c=this.tn.next();if(!b.NAME.test(c))throw Error("illegal oneof name: "+c);for(d=c,f=[],this.tn.skip("{");"}"!==(c=this.tn.next());)e=this._parseMessageField(a,"optional",c),e.oneof=d,f.push(e.id);this.tn.omit(";"),a.oneofs[d]=f;},g._parseFieldOptions=function(a){this.tn.skip("[");for(var b,c=!0;"]"!==(b=this.tn.peek());)c||this.tn.skip(","),this._parseOption(a,!0),c=!1;this.tn.next();},g._parseEnum=function(a){var e,c={name:"",values:[],options:{}},d=this.tn.next();if(!b.NAME.test(d))throw Error("illegal name: "+d);for(c.name=d,this.tn.skip("{");"}"!==(d=this.tn.next());)if("option"===d)this._parseOption(c);else{if(!b.NAME.test(d))throw Error("illegal name: "+d);this.tn.skip("="),e={name:d,id:h(this.tn.next(),!0)},d=this.tn.peek(),"["===d&&this._parseFieldOptions({options:{}}),this.tn.skip(";"),c.values.push(e);}this.tn.omit(";"),a.enums.push(c);},g._parseExtensionRanges=function(){var c,d,e,b=[];do{for(d=[];;){switch(c=this.tn.next()){case"min":e=a.ID_MIN;break;case"max":e=a.ID_MAX;break;default:e=i(c);}if(d.push(e),2===d.length)break;if("to"!==this.tn.peek()){d.push(e);break}this.tn.next();}b.push(d);}while(this.tn.omit(","));return this.tn.skip(";"),b},g._parseExtend=function(a){var d,c=this.tn.next();if(!b.TYPEREF.test(c))throw Error("illegal extend reference: "+c);for(d={ref:c,fields:[]},this.tn.skip("{");"}"!==(c=this.tn.next());)if(b.RULE.test(c))this._parseMessageField(d,c);else{if(!b.TYPEREF.test(c))throw Error("illegal extend token: "+c);if(!this.proto3)throw Error("illegal field rule: "+c);this._parseMessageField(d,"optional",c);}return this.tn.omit(";"),a.messages.push(d),d},g.toString=function(){return "Parser at line "+this.tn.line},c.Parser=f,c}(e,e.Lang),e.Reflect=function(a){function k(b){if("string"==typeof b&&(b=a.TYPES[b]),"undefined"==typeof b.defaultValue)throw Error("default value for type "+b.name+" is not supported");return b==a.TYPES.bytes?new f(0):b.defaultValue}function l(b,c){if(b&&"number"==typeof b.low&&"number"==typeof b.high&&"boolean"==typeof b.unsigned&&b.low===b.low&&b.high===b.high)return new a.Long(b.low,b.high,"undefined"==typeof c?b.unsigned:c);if("string"==typeof b)return a.Long.fromString(b,c||!1,10);if("number"==typeof b)return a.Long.fromNumber(b,c||!1);throw Error("not convertible to Long")}function o(b,c){var d=c.readVarint32(),e=7&d,f=d>>>3;switch(e){case a.WIRE_TYPES.VARINT:do d=c.readUint8();while(128===(128&d));break;case a.WIRE_TYPES.BITS64:c.offset+=8;break;case a.WIRE_TYPES.LDELIM:d=c.readVarint32(),c.offset+=d;break;case a.WIRE_TYPES.STARTGROUP:o(f,c);break;case a.WIRE_TYPES.ENDGROUP:if(f===b)return !1;throw Error("Illegal GROUPEND after unknown group: "+f+" ("+b+" expected)");case a.WIRE_TYPES.BITS32:c.offset+=4;break;default:throw Error("Illegal wire type in unknown group "+b+": "+e)}return !0}var g,h,i,j,m,n,p,q,r,s,t,u,v,w,x,y,z,A,B,c={},d=function(a,b,c){this.builder=a,this.parent=b,this.name=c,this.className;},e=d.prototype;return e.fqn=function(){for(var a=this.name,b=this;;){if(b=b.parent,null==b)break;a=b.name+"."+a;}return a},e.toString=function(a){return (a?this.className+" ":"")+this.fqn()},e.build=function(){throw Error(this.toString(!0)+" cannot be built directly")},c.T=d,g=function(a,b,c,e,f){d.call(this,a,b,c),this.className="Namespace",this.children=[],this.options=e||{},this.syntax=f||"proto2";},h=g.prototype=Object.create(d.prototype),h.getChildren=function(a){var b,c,d;if(a=a||null,null==a)return this.children.slice();for(b=[],c=0,d=this.children.length;d>c;++c)this.children[c]instanceof a&&b.push(this.children[c]);return b},h.addChild=function(a){var b;if(b=this.getChild(a.name))if(b instanceof m.Field&&b.name!==b.originalName&&null===this.getChild(b.originalName))b.name=b.originalName;else{if(!(a instanceof m.Field&&a.name!==a.originalName&&null===this.getChild(a.originalName)))throw Error("Duplicate name in namespace "+this.toString(!0)+": "+a.name);a.name=a.originalName;}this.children.push(a);},h.getChild=function(a){var c,d,b="number"==typeof a?"id":"name";for(c=0,d=this.children.length;d>c;++c)if(this.children[c][b]===a)return this.children[c];return null},h.resolve=function(a,b){var g,d="string"==typeof a?a.split("."):a,e=this,f=0;if(""===d[f]){for(;null!==e.parent;)e=e.parent;f++;}do{do{if(!(e instanceof c.Namespace)){e=null;break}if(g=e.getChild(d[f]),!(g&&g instanceof c.T&&(!b||g instanceof c.Namespace))){e=null;break}e=g,f++;}while(f<d.length);if(null!=e)break;if(null!==this.parent)return this.parent.resolve(a,b)}while(null!=e);return e},h.qn=function(a){var e,f,b=[],d=a;do b.unshift(d.name),d=d.parent;while(null!==d);for(e=1;e<=b.length;e++)if(f=b.slice(b.length-e),a===this.resolve(f,a instanceof c.Namespace))return f.join(".");return a.fqn()},h.build=function(){var e,c,d,a={},b=this.children;for(c=0,d=b.length;d>c;++c)e=b[c],e instanceof g&&(a[e.name]=e.build());return Object.defineProperty&&Object.defineProperty(a,"$options",{value:this.buildOpt()}),a},h.buildOpt=function(){var c,d,e,f,a={},b=Object.keys(this.options);for(c=0,d=b.length;d>c;++c)e=b[c],f=this.options[b[c]],a[e]=f;return a},h.getOption=function(a){return "undefined"==typeof a?this.options:"undefined"!=typeof this.options[a]?this.options[a]:null},c.Namespace=g,i=function(b,c,d,e){if(this.type=b,this.resolvedType=c,this.isMapKey=d,this.syntax=e,d&&a.MAP_KEY_TYPES.indexOf(b)<0)throw Error("Invalid map key type: "+b.name)},j=i.prototype,i.defaultFieldValue=k,j.verifyValue=function(c){var f,g,h,d=function(a,b){throw Error("Illegal value for "+this.toString(!0)+" of type "+this.type.name+": "+a+" ("+b+")")}.bind(this);switch(this.type){case a.TYPES.int32:case a.TYPES.sint32:case a.TYPES.sfixed32:return ("number"!=typeof c||c===c&&0!==c%1)&&d(typeof c,"not an integer"),c>4294967295?0|c:c;case a.TYPES.uint32:case a.TYPES.fixed32:return ("number"!=typeof c||c===c&&0!==c%1)&&d(typeof c,"not an integer"),0>c?c>>>0:c;case a.TYPES.int64:case a.TYPES.sint64:case a.TYPES.sfixed64:if(a.Long)try{return l(c,!1)}catch(e){d(typeof c,e.message);}else d(typeof c,"requires Long.js");case a.TYPES.uint64:case a.TYPES.fixed64:if(a.Long)try{return l(c,!0)}catch(e){d(typeof c,e.message);}else d(typeof c,"requires Long.js");case a.TYPES.bool:return "boolean"!=typeof c&&d(typeof c,"not a boolean"),c;case a.TYPES["float"]:case a.TYPES["double"]:return "number"!=typeof c&&d(typeof c,"not a number"),c;case a.TYPES.string:return "string"==typeof c||c&&c instanceof String||d(typeof c,"not a string"),""+c;case a.TYPES.bytes:return b.isByteBuffer(c)?c:b.wrap(c);case a.TYPES["enum"]:for(f=this.resolvedType.getChildren(a.Reflect.Enum.Value),h=0;h<f.length;h++){if(f[h].name==c)return f[h].id;if(f[h].id==c)return f[h].id}if("proto3"===this.syntax)return ("number"!=typeof c||c===c&&0!==c%1)&&d(typeof c,"not an integer"),(c>4294967295||0>c)&&d(typeof c,"not in range for uint32"),c;d(c,"not a valid enum value");case a.TYPES.group:case a.TYPES.message:if(c&&"object"==typeof c||d(typeof c,"object expected"),c instanceof this.resolvedType.clazz)return c;if(c instanceof a.Builder.Message){g={};for(h in c)c.hasOwnProperty(h)&&(g[h]=c[h]);c=g;}return new this.resolvedType.clazz(c)}throw Error("[INTERNAL] Illegal value for "+this.toString(!0)+": "+c+" (undefined type "+this.type+")")},j.calculateLength=function(b,c){if(null===c)return 0;var d;switch(this.type){case a.TYPES.int32:return 0>c?f.calculateVarint64(c):f.calculateVarint32(c);case a.TYPES.uint32:return f.calculateVarint32(c);case a.TYPES.sint32:return f.calculateVarint32(f.zigZagEncode32(c));case a.TYPES.fixed32:case a.TYPES.sfixed32:case a.TYPES["float"]:return 4;case a.TYPES.int64:case a.TYPES.uint64:return f.calculateVarint64(c);case a.TYPES.sint64:return f.calculateVarint64(f.zigZagEncode64(c));case a.TYPES.fixed64:case a.TYPES.sfixed64:return 8;case a.TYPES.bool:return 1;case a.TYPES["enum"]:return f.calculateVarint32(c);case a.TYPES["double"]:return 8;case a.TYPES.string:return d=f.calculateUTF8Bytes(c),f.calculateVarint32(d)+d;case a.TYPES.bytes:if(c.remaining()<0)throw Error("Illegal value for "+this.toString(!0)+": "+c.remaining()+" bytes remaining");return f.calculateVarint32(c.remaining())+c.remaining();case a.TYPES.message:return d=this.resolvedType.calculate(c),f.calculateVarint32(d)+d;case a.TYPES.group:return d=this.resolvedType.calculate(c),d+f.calculateVarint32(b<<3|a.WIRE_TYPES.ENDGROUP)}throw Error("[INTERNAL] Illegal value to encode in "+this.toString(!0)+": "+c+" (unknown type)")},j.encodeValue=function(b,c,d){var e,g;if(null===c)return d;switch(this.type){case a.TYPES.int32:0>c?d.writeVarint64(c):d.writeVarint32(c);break;case a.TYPES.uint32:d.writeVarint32(c);break;case a.TYPES.sint32:d.writeVarint32ZigZag(c);break;case a.TYPES.fixed32:d.writeUint32(c);break;case a.TYPES.sfixed32:d.writeInt32(c);break;case a.TYPES.int64:case a.TYPES.uint64:d.writeVarint64(c);break;case a.TYPES.sint64:d.writeVarint64ZigZag(c);break;case a.TYPES.fixed64:d.writeUint64(c);break;case a.TYPES.sfixed64:d.writeInt64(c);break;case a.TYPES.bool:"string"==typeof c?d.writeVarint32("false"===c.toLowerCase()?0:!!c):d.writeVarint32(c?1:0);break;case a.TYPES["enum"]:d.writeVarint32(c);break;case a.TYPES["float"]:d.writeFloat32(c);break;case a.TYPES["double"]:d.writeFloat64(c);break;case a.TYPES.string:d.writeVString(c);break;case a.TYPES.bytes:if(c.remaining()<0)throw Error("Illegal value for "+this.toString(!0)+": "+c.remaining()+" bytes remaining");e=c.offset,d.writeVarint32(c.remaining()),d.append(c),c.offset=e;break;case a.TYPES.message:g=(new f).LE(),this.resolvedType.encode(c,g),d.writeVarint32(g.offset),d.append(g.flip());break;case a.TYPES.group:this.resolvedType.encode(c,d),d.writeVarint32(b<<3|a.WIRE_TYPES.ENDGROUP);break;default:throw Error("[INTERNAL] Illegal value to encode in "+this.toString(!0)+": "+c+" (unknown type)")}return d},j.decode=function(b,c,d){if(c!=this.type.wireType)throw Error("Unexpected wire type for element");var e,f;switch(this.type){case a.TYPES.int32:return 0|b.readVarint32();case a.TYPES.uint32:return b.readVarint32()>>>0;case a.TYPES.sint32:return 0|b.readVarint32ZigZag();case a.TYPES.fixed32:return b.readUint32()>>>0;case a.TYPES.sfixed32:return 0|b.readInt32();case a.TYPES.int64:return b.readVarint64();case a.TYPES.uint64:return b.readVarint64().toUnsigned();case a.TYPES.sint64:return b.readVarint64ZigZag();case a.TYPES.fixed64:return b.readUint64();case a.TYPES.sfixed64:return b.readInt64();case a.TYPES.bool:return !!b.readVarint32();case a.TYPES["enum"]:return b.readVarint32();case a.TYPES["float"]:return b.readFloat();case a.TYPES["double"]:return b.readDouble();case a.TYPES.string:return b.readVString();case a.TYPES.bytes:if(f=b.readVarint32(),b.remaining()<f)throw Error("Illegal number of bytes for "+this.toString(!0)+": "+f+" required but got only "+b.remaining());return e=b.clone(),e.limit=e.offset+f,b.offset+=f,e;case a.TYPES.message:return f=b.readVarint32(),this.resolvedType.decode(b,f);case a.TYPES.group:return this.resolvedType.decode(b,-1,d)}throw Error("[INTERNAL] Illegal decode type")},j.valueFromString=function(b){if(!this.isMapKey)throw Error("valueFromString() called on non-map-key element");switch(this.type){case a.TYPES.int32:case a.TYPES.sint32:case a.TYPES.sfixed32:case a.TYPES.uint32:case a.TYPES.fixed32:return this.verifyValue(parseInt(b));case a.TYPES.int64:case a.TYPES.sint64:case a.TYPES.sfixed64:case a.TYPES.uint64:case a.TYPES.fixed64:return this.verifyValue(b);case a.TYPES.bool:return "true"===b;case a.TYPES.string:return this.verifyValue(b);case a.TYPES.bytes:return f.fromBinary(b)}},j.valueToString=function(b){if(!this.isMapKey)throw Error("valueToString() called on non-map-key element");return this.type===a.TYPES.bytes?b.toString("binary"):b.toString()},c.Element=i,m=function(a,b,c,d,e,f){g.call(this,a,b,c,d,f),this.className="Message",this.extensions=void 0,this.clazz=null,this.isGroup=!!e,this._fields=null,this._fieldsById=null,this._fieldsByName=null;},n=m.prototype=Object.create(g.prototype),n.build=function(c){var d,h,e,g;if(this.clazz&&!c)return this.clazz;for(d=function(a,c){function k(b,c,d,e){var g,h,i,j,l,m,n;if(null===b||"object"!=typeof b)return e&&e instanceof a.Reflect.Enum&&(g=a.Reflect.Enum.getName(e.object,b),null!==g)?g:b;if(f.isByteBuffer(b))return c?b.toBase64():b.toBuffer();if(a.Long.isLong(b))return d?b.toString():a.Long.fromValue(b);if(Array.isArray(b))return h=[],b.forEach(function(a,b){h[b]=k(a,c,d,e);}),h;if(h={},b instanceof a.Map){for(i=b.entries(),j=i.next();!j.done;j=i.next())h[b.keyElem.valueToString(j.value[0])]=k(j.value[1],c,d,b.valueElem.resolvedType);return h}l=b.$type,m=void 0;for(n in b)b.hasOwnProperty(n)&&(h[n]=l&&(m=l.getChild(n))?k(b[n],c,d,m.resolvedType):k(b[n],c,d));return h}var i,j,d=c.getChildren(a.Reflect.Message.Field),e=c.getChildren(a.Reflect.Message.OneOf),g=function(b){var i,j,k,l;for(a.Builder.Message.call(this),i=0,j=e.length;j>i;++i)this[e[i].name]=null;for(i=0,j=d.length;j>i;++i)k=d[i],this[k.name]=k.repeated?[]:k.map?new a.Map(k):null,!k.required&&"proto3"!==c.syntax||null===k.defaultValue||(this[k.name]=k.defaultValue);if(arguments.length>0)if(1!==arguments.length||null===b||"object"!=typeof b||!("function"!=typeof b.encode||b instanceof g)||Array.isArray(b)||b instanceof a.Map||f.isByteBuffer(b)||b instanceof ArrayBuffer||a.Long&&b instanceof a.Long)for(i=0,j=arguments.length;j>i;++i)"undefined"!=typeof(l=arguments[i])&&this.$set(d[i].name,l);else this.$set(b);},h=g.prototype=Object.create(a.Builder.Message.prototype);for(h.add=function(b,d,e){var f=c._fieldsByName[b];if(!e){if(!f)throw Error(this+"#"+b+" is undefined");if(!(f instanceof a.Reflect.Message.Field))throw Error(this+"#"+b+" is not a field: "+f.toString(!0));if(!f.repeated)throw Error(this+"#"+b+" is not a repeated field");d=f.verifyValue(d,!0);}return null===this[b]&&(this[b]=[]),this[b].push(d),this},h.$add=h.add,h.set=function(b,d,e){var f,g,h;if(b&&"object"==typeof b){e=d;for(f in b)b.hasOwnProperty(f)&&"undefined"!=typeof(d=b[f])&&this.$set(f,d,e);return this}if(g=c._fieldsByName[b],e)this[b]=d;else{if(!g)throw Error(this+"#"+b+" is not a field: undefined");if(!(g instanceof a.Reflect.Message.Field))throw Error(this+"#"+b+" is not a field: "+g.toString(!0));this[g.name]=d=g.verifyValue(d);}return g&&g.oneof&&(h=this[g.oneof.name],null!==d?(null!==h&&h!==g.name&&(this[h]=null),this[g.oneof.name]=g.name):h===b&&(this[g.oneof.name]=null)),this},h.$set=h.set,h.get=function(b,d){if(d)return this[b];var e=c._fieldsByName[b];if(!(e&&e instanceof a.Reflect.Message.Field))throw Error(this+"#"+b+" is not a field: undefined");if(!(e instanceof a.Reflect.Message.Field))throw Error(this+"#"+b+" is not a field: "+e.toString(!0));return this[e.name]},h.$get=h.get,i=0;i<d.length;i++)j=d[i],j instanceof a.Reflect.Message.ExtensionField||c.builder.options.populateAccessors&&function(a){var d,e,f,b=a.originalName.replace(/(_[a-zA-Z])/g,function(a){return a.toUpperCase().replace("_","")});b=b.substring(0,1).toUpperCase()+b.substring(1),d=a.originalName.replace(/([A-Z])/g,function(a){return "_"+a}),e=function(b,c){return this[a.name]=c?b:a.verifyValue(b),this},f=function(){return this[a.name]},null===c.getChild("set"+b)&&(h["set"+b]=e),null===c.getChild("set_"+d)&&(h["set_"+d]=e),null===c.getChild("get"+b)&&(h["get"+b]=f),null===c.getChild("get_"+d)&&(h["get_"+d]=f);}(j);return h.encode=function(a,d){var e,f;"boolean"==typeof a&&(d=a,a=void 0),e=!1,a||(a=new b,e=!0),f=a.littleEndian;try{return c.encode(this,a.LE(),d),(e?a.flip():a).LE(f)}catch(g){throw a.LE(f),g}},g.encode=function(a,b,c){return new g(a).encode(b,c)},h.calculate=function(){return c.calculate(this)},h.encodeDelimited=function(a){var d,b=!1;return a||(a=new f,b=!0),d=(new f).LE(),c.encode(this,d).flip(),a.writeVarint32(d.remaining()),a.append(d),b?a.flip():a},h.encodeAB=function(){try{return this.encode().toArrayBuffer()}catch(a){throw a.encoded&&(a.encoded=a.encoded.toArrayBuffer()),a}},h.toArrayBuffer=h.encodeAB,h.encodeNB=function(){try{return this.encode().toBuffer()}catch(a){throw a.encoded&&(a.encoded=a.encoded.toBuffer()),a}},h.toBuffer=h.encodeNB,h.encode64=function(){try{return this.encode().toBase64()}catch(a){throw a.encoded&&(a.encoded=a.encoded.toBase64()),a}},h.toBase64=h.encode64,h.encodeHex=function(){try{return this.encode().toHex()}catch(a){throw a.encoded&&(a.encoded=a.encoded.toHex()),a}},h.toHex=h.encodeHex,h.toRaw=function(a,b){return k(this,!!a,!!b,this.$type)},h.encodeJSON=function(){return JSON.stringify(k(this,!0,!0,this.$type))},g.decode=function(a,b){var d,e;"string"==typeof a&&(a=f.wrap(a,b?b:"base64")),a=f.isByteBuffer(a)?a:f.wrap(a),d=a.littleEndian;try{return e=c.decode(a.LE()),a.LE(d),e}catch(g){throw a.LE(d),g}},g.decodeDelimited=function(a,b){var d,e,g;if("string"==typeof a&&(a=f.wrap(a,b?b:"base64")),a=f.isByteBuffer(a)?a:f.wrap(a),a.remaining()<1)return null;if(d=a.offset,e=a.readVarint32(),a.remaining()<e)return a.offset=d,null;try{return g=c.decode(a.slice(a.offset,a.offset+e).LE()),a.offset+=e,g}catch(h){throw a.offset+=e,h}},g.decode64=function(a){return g.decode(a,"base64")},g.decodeHex=function(a){return g.decode(a,"hex")},g.decodeJSON=function(a){return new g(JSON.parse(a))},h.toString=function(){return c.toString()},Object.defineProperty&&(Object.defineProperty(g,"$options",{value:c.buildOpt()}),Object.defineProperty(h,"$options",{value:g["$options"]}),Object.defineProperty(g,"$type",{value:c}),Object.defineProperty(h,"$type",{value:c})),g}(a,this),this._fields=[],this._fieldsById={},this._fieldsByName={},e=0,g=this.children.length;g>e;e++)if(h=this.children[e],h instanceof t||h instanceof m||h instanceof x){if(d.hasOwnProperty(h.name))throw Error("Illegal reflect child of "+this.toString(!0)+": "+h.toString(!0)+" cannot override static property '"+h.name+"'");d[h.name]=h.build();}else if(h instanceof m.Field)h.build(),this._fields.push(h),this._fieldsById[h.id]=h,this._fieldsByName[h.name]=h;else if(!(h instanceof m.OneOf||h instanceof w))throw Error("Illegal reflect child of "+this.toString(!0)+": "+this.children[e].toString(!0));return this.clazz=d},n.encode=function(a,b,c){var e,h,f,g,i,d=null;for(f=0,g=this._fields.length;g>f;++f)e=this._fields[f],h=a[e.name],e.required&&null===h?null===d&&(d=e):e.encode(c?h:e.verifyValue(h),b,a);if(null!==d)throw i=Error("Missing at least one required field for "+this.toString(!0)+": "+d),i.encoded=b,i;return b},n.calculate=function(a){for(var e,f,b=0,c=0,d=this._fields.length;d>c;++c){if(e=this._fields[c],f=a[e.name],e.required&&null===f)throw Error("Missing at least one required field for "+this.toString(!0)+": "+e);b+=e.calculate(f,a);}return b},n.decode=function(b,c,d){var g,h,i,j,e,f,k,l,m,n,p,q;for(c="number"==typeof c?c:-1,e=b.offset,f=new this.clazz;b.offset<e+c||-1===c&&b.remaining()>0;){if(g=b.readVarint32(),h=7&g,i=g>>>3,h===a.WIRE_TYPES.ENDGROUP){if(i!==d)throw Error("Illegal group end indicator for "+this.toString(!0)+": "+i+" ("+(d?d+" expected":"not a group")+")");break}if(j=this._fieldsById[i])j.repeated&&!j.options.packed?f[j.name].push(j.decode(h,b)):j.map?(l=j.decode(h,b),f[j.name].set(l[0],l[1])):(f[j.name]=j.decode(h,b),j.oneof&&(m=f[j.oneof.name],null!==m&&m!==j.name&&(f[m]=null),f[j.oneof.name]=j.name));else switch(h){case a.WIRE_TYPES.VARINT:b.readVarint32();break;case a.WIRE_TYPES.BITS32:b.offset+=4;break;case a.WIRE_TYPES.BITS64:b.offset+=8;break;case a.WIRE_TYPES.LDELIM:k=b.readVarint32(),b.offset+=k;break;case a.WIRE_TYPES.STARTGROUP:for(;o(i,b););break;default:throw Error("Illegal wire type for unknown field "+i+" in "+this.toString(!0)+"#decode: "+h)}}for(n=0,p=this._fields.length;p>n;++n)if(j=this._fields[n],null===f[j.name])if("proto3"===this.syntax)f[j.name]=j.defaultValue;else{if(j.required)throw q=Error("Missing at least one required field for "+this.toString(!0)+": "+j.name),q.decoded=f,q;a.populateDefaults&&null!==j.defaultValue&&(f[j.name]=j.defaultValue);}return f},c.Message=m,p=function(b,c,e,f,g,h,i,j,k,l){d.call(this,b,c,h),this.className="Message.Field",this.required="required"===e,this.repeated="repeated"===e,this.map="map"===e,this.keyType=f||null,this.type=g,this.resolvedType=null,this.id=i,this.options=j||{},this.defaultValue=null,this.oneof=k||null,this.syntax=l||"proto2",this.originalName=this.name,this.element=null,this.keyElement=null,!this.builder.options.convertFieldsToCamelCase||this instanceof m.ExtensionField||(this.name=a.Util.toCamelCase(this.name));},q=p.prototype=Object.create(d.prototype),q.build=function(){this.element=new i(this.type,this.resolvedType,!1,this.syntax),this.map&&(this.keyElement=new i(this.keyType,void 0,!0,this.syntax)),"proto3"!==this.syntax||this.repeated||this.map?"undefined"!=typeof this.options["default"]&&(this.defaultValue=this.verifyValue(this.options["default"])):this.defaultValue=i.defaultFieldValue(this.type);},q.verifyValue=function(b,c){var d,e,f;if(c=c||!1,d=function(a,b){throw Error("Illegal value for "+this.toString(!0)+" of type "+this.type.name+": "+a+" ("+b+")")}.bind(this),null===b)return this.required&&d(typeof b,"required"),"proto3"===this.syntax&&this.type!==a.TYPES.message&&d(typeof b,"proto3 field without field presence cannot be null"),null;if(this.repeated&&!c){for(Array.isArray(b)||(b=[b]),f=[],e=0;e<b.length;e++)f.push(this.element.verifyValue(b[e]));return f}return this.map&&!c?b instanceof a.Map?b:(b instanceof Object||d(typeof b,"expected ProtoBuf.Map or raw object for map field"),new a.Map(this,b)):(!this.repeated&&Array.isArray(b)&&d(typeof b,"no array expected"),this.element.verifyValue(b))},q.hasWirePresence=function(b,c){if("proto3"!==this.syntax)return null!==b;if(this.oneof&&c[this.oneof.name]===this.name)return !0;switch(this.type){case a.TYPES.int32:case a.TYPES.sint32:case a.TYPES.sfixed32:case a.TYPES.uint32:case a.TYPES.fixed32:return 0!==b;case a.TYPES.int64:case a.TYPES.sint64:case a.TYPES.sfixed64:case a.TYPES.uint64:case a.TYPES.fixed64:return 0!==b.low||0!==b.high;case a.TYPES.bool:return b;case a.TYPES["float"]:case a.TYPES["double"]:return 0!==b;case a.TYPES.string:return b.length>0;case a.TYPES.bytes:return b.remaining()>0;case a.TYPES["enum"]:return 0!==b;case a.TYPES.message:return null!==b;default:return !0}},q.encode=function(b,c,d){var e,g,h,i,j;if(null===this.type||"object"!=typeof this.type)throw Error("[INTERNAL] Unresolved type in "+this.toString(!0)+": "+this.type);if(null===b||this.repeated&&0==b.length)return c;try{if(this.repeated)if(this.options.packed&&a.PACKABLE_WIRE_TYPES.indexOf(this.type.wireType)>=0){for(c.writeVarint32(this.id<<3|a.WIRE_TYPES.LDELIM),c.ensureCapacity(c.offset+=1),g=c.offset,e=0;e<b.length;e++)this.element.encodeValue(this.id,b[e],c);h=c.offset-g,i=f.calculateVarint32(h),i>1&&(j=c.slice(g,c.offset),g+=i-1,c.offset=g,c.append(j)),c.writeVarint32(h,g-i);}else for(e=0;e<b.length;e++)c.writeVarint32(this.id<<3|this.type.wireType),this.element.encodeValue(this.id,b[e],c);else this.map?b.forEach(function(b,d){var g=f.calculateVarint32(8|this.keyType.wireType)+this.keyElement.calculateLength(1,d)+f.calculateVarint32(16|this.type.wireType)+this.element.calculateLength(2,b);c.writeVarint32(this.id<<3|a.WIRE_TYPES.LDELIM),c.writeVarint32(g),c.writeVarint32(8|this.keyType.wireType),this.keyElement.encodeValue(1,d,c),c.writeVarint32(16|this.type.wireType),this.element.encodeValue(2,b,c);},this):this.hasWirePresence(b,d)&&(c.writeVarint32(this.id<<3|this.type.wireType),this.element.encodeValue(this.id,b,c));}catch(k){throw Error("Illegal value for "+this.toString(!0)+": "+b+" ("+k+")")}return c},q.calculate=function(b,c){var d,e,g;if(b=this.verifyValue(b),null===this.type||"object"!=typeof this.type)throw Error("[INTERNAL] Unresolved type in "+this.toString(!0)+": "+this.type);if(null===b||this.repeated&&0==b.length)return 0;d=0;try{if(this.repeated)if(this.options.packed&&a.PACKABLE_WIRE_TYPES.indexOf(this.type.wireType)>=0){for(d+=f.calculateVarint32(this.id<<3|a.WIRE_TYPES.LDELIM),g=0,e=0;e<b.length;e++)g+=this.element.calculateLength(this.id,b[e]);d+=f.calculateVarint32(g),d+=g;}else for(e=0;e<b.length;e++)d+=f.calculateVarint32(this.id<<3|this.type.wireType),d+=this.element.calculateLength(this.id,b[e]);else this.map?b.forEach(function(b,c){var g=f.calculateVarint32(8|this.keyType.wireType)+this.keyElement.calculateLength(1,c)+f.calculateVarint32(16|this.type.wireType)+this.element.calculateLength(2,b);d+=f.calculateVarint32(this.id<<3|a.WIRE_TYPES.LDELIM),d+=f.calculateVarint32(g),d+=g;},this):this.hasWirePresence(b,c)&&(d+=f.calculateVarint32(this.id<<3|this.type.wireType),d+=this.element.calculateLength(this.id,b));}catch(h){throw Error("Illegal value for "+this.toString(!0)+": "+b+" ("+h+")")}return d},q.decode=function(b,c,d){var e,f,h,j,k,l,m,g=!this.map&&b==this.type.wireType||!d&&this.repeated&&this.options.packed&&b==a.WIRE_TYPES.LDELIM||this.map&&b==a.WIRE_TYPES.LDELIM;if(!g)throw Error("Illegal wire type for field "+this.toString(!0)+": "+b+" ("+this.type.wireType+" expected)");if(b==a.WIRE_TYPES.LDELIM&&this.repeated&&this.options.packed&&a.PACKABLE_WIRE_TYPES.indexOf(this.type.wireType)>=0&&!d){for(f=c.readVarint32(),f=c.offset+f,h=[];c.offset<f;)h.push(this.decode(this.type.wireType,c,!0));return h}if(this.map){if(j=i.defaultFieldValue(this.keyType),e=i.defaultFieldValue(this.type),f=c.readVarint32(),c.remaining()<f)throw Error("Illegal number of bytes for "+this.toString(!0)+": "+f+" required but got only "+c.remaining());for(k=c.clone(),k.limit=k.offset+f,c.offset+=f;k.remaining()>0;)if(l=k.readVarint32(),b=7&l,m=l>>>3,1===m)j=this.keyElement.decode(k,b,m);else{if(2!==m)throw Error("Unexpected tag in map field key/value submessage");e=this.element.decode(k,b,m);}return [j,e]}return this.element.decode(c,b,this.id)},c.Message.Field=p,r=function(a,b,c,d,e,f,g){p.call(this,a,b,c,null,d,e,f,g),this.extension;},r.prototype=Object.create(p.prototype),c.Message.ExtensionField=r,s=function(a,b,c){d.call(this,a,b,c),this.fields=[];},c.Message.OneOf=s,t=function(a,b,c,d,e){g.call(this,a,b,c,d,e),this.className="Enum",this.object=null;},t.getName=function(a,b){var e,d,c=Object.keys(a);for(d=0;d<c.length;++d)if(a[e=c[d]]===b)return e;return null},u=t.prototype=Object.create(g.prototype),u.build=function(b){var c,d,e,f;if(this.object&&!b)return this.object;for(c=new a.Builder.Enum,d=this.getChildren(t.Value),e=0,f=d.length;f>e;++e)c[d[e]["name"]]=d[e]["id"];return Object.defineProperty&&Object.defineProperty(c,"$options",{value:this.buildOpt(),enumerable:!1}),this.object=c},c.Enum=t,v=function(a,b,c,e){d.call(this,a,b,c),this.className="Enum.Value",this.id=e;},v.prototype=Object.create(d.prototype),c.Enum.Value=v,w=function(a,b,c,e){d.call(this,a,b,c),this.field=e;},w.prototype=Object.create(d.prototype),c.Extension=w,x=function(a,b,c,d){g.call(this,a,b,c,d),this.className="Service",this.clazz=null;},y=x.prototype=Object.create(g.prototype),y.build=function(b){return this.clazz&&!b?this.clazz:this.clazz=function(a,b){var g,c=function(b){a.Builder.Service.call(this),this.rpcImpl=b||function(a,b,c){setTimeout(c.bind(this,Error("Not implemented, see: https://github.com/dcodeIO/ProtoBuf.js/wiki/Services")),0);};},d=c.prototype=Object.create(a.Builder.Service.prototype),e=b.getChildren(a.Reflect.Service.RPCMethod);for(g=0;g<e.length;g++)!function(a){d[a.name]=function(c,d){try{try{c=a.resolvedRequestType.clazz.decode(f.wrap(c));}catch(e){if(!(e instanceof TypeError))throw e}if(null===c||"object"!=typeof c)throw Error("Illegal arguments");c instanceof a.resolvedRequestType.clazz||(c=new a.resolvedRequestType.clazz(c)),this.rpcImpl(a.fqn(),c,function(c,e){if(c)return d(c),void 0;try{e=a.resolvedResponseType.clazz.decode(e);}catch(f){}return e&&e instanceof a.resolvedResponseType.clazz?(d(null,e),void 0):(d(Error("Illegal response type received in service method "+b.name+"#"+a.name)),void 0)});}catch(e){setTimeout(d.bind(this,e),0);}},c[a.name]=function(b,d,e){new c(b)[a.name](d,e);},Object.defineProperty&&(Object.defineProperty(c[a.name],"$options",{value:a.buildOpt()}),Object.defineProperty(d[a.name],"$options",{value:c[a.name]["$options"]}));}(e[g]);return Object.defineProperty&&(Object.defineProperty(c,"$options",{value:b.buildOpt()}),Object.defineProperty(d,"$options",{value:c["$options"]}),Object.defineProperty(c,"$type",{value:b}),Object.defineProperty(d,"$type",{value:b})),c}(a,this)},c.Service=x,z=function(a,b,c,e){d.call(this,a,b,c),this.className="Service.Method",this.options=e||{};},A=z.prototype=Object.create(d.prototype),A.buildOpt=h.buildOpt,c.Service.Method=z,B=function(a,b,c,d,e,f,g,h){z.call(this,a,b,c,h),this.className="Service.RPCMethod",this.requestName=d,this.responseName=e,this.requestStream=f,this.responseStream=g,this.resolvedRequestType=null,this.resolvedResponseType=null;},B.prototype=Object.create(z.prototype),c.Service.RPCMethod=B,c}(e),e.Builder=function(a,b,c){function f(a){a.messages&&a.messages.forEach(function(b){b.syntax=a.syntax,f(b);}),a.enums&&a.enums.forEach(function(b){b.syntax=a.syntax;});}var d=function(a){this.ns=new c.Namespace(this,null,""),this.ptr=this.ns,this.resolved=!1,this.result=null,this.files={},this.importRoot=null,this.options=a||{};},e=d.prototype;return d.isMessage=function(a){return "string"!=typeof a.name?!1:"undefined"!=typeof a.values||"undefined"!=typeof a.rpc?!1:!0},d.isMessageField=function(a){return "string"!=typeof a.rule||"string"!=typeof a.name||"string"!=typeof a.type||"undefined"==typeof a.id?!1:!0},d.isEnum=function(a){return "string"!=typeof a.name?!1:"undefined"!=typeof a.values&&Array.isArray(a.values)&&0!==a.values.length?!0:!1},d.isService=function(a){return "string"==typeof a.name&&"object"==typeof a.rpc&&a.rpc?!0:!1},d.isExtend=function(a){return "string"!=typeof a.ref?!1:!0},e.reset=function(){return this.ptr=this.ns,this},e.define=function(a){if("string"!=typeof a||!b.TYPEREF.test(a))throw Error("illegal namespace: "+a);return a.split(".").forEach(function(a){var b=this.ptr.getChild(a);null===b&&this.ptr.addChild(b=new c.Namespace(this,this.ptr,a)),this.ptr=b;},this),this},e.create=function(b){var e,f,g,h,i;if(!b)return this;if(Array.isArray(b)){if(0===b.length)return this;b=b.slice();}else b=[b];for(e=[b];e.length>0;){if(b=e.pop(),!Array.isArray(b))throw Error("not a valid namespace: "+JSON.stringify(b));for(;b.length>0;){if(f=b.shift(),d.isMessage(f)){if(g=new c.Message(this,this.ptr,f.name,f.options,f.isGroup,f.syntax),h={},f.oneofs&&Object.keys(f.oneofs).forEach(function(a){g.addChild(h[a]=new c.Message.OneOf(this,g,a));},this),f.fields&&f.fields.forEach(function(a){if(null!==g.getChild(0|a.id))throw Error("duplicate or invalid field id in "+g.name+": "+a.id);if(a.options&&"object"!=typeof a.options)throw Error("illegal field options in "+g.name+"#"+a.name);var b=null;if("string"==typeof a.oneof&&!(b=h[a.oneof]))throw Error("illegal oneof in "+g.name+"#"+a.name+": "+a.oneof);a=new c.Message.Field(this,g,a.rule,a.keytype,a.type,a.name,a.id,a.options,b,f.syntax),b&&b.fields.push(a),g.addChild(a);},this),i=[],f.enums&&f.enums.forEach(function(a){i.push(a);}),f.messages&&f.messages.forEach(function(a){i.push(a);}),f.services&&f.services.forEach(function(a){i.push(a);}),f.extensions&&(g.extensions="number"==typeof f.extensions[0]?[f.extensions]:f.extensions),this.ptr.addChild(g),i.length>0){e.push(b),b=i,i=null,this.ptr=g,g=null;continue}i=null;}else if(d.isEnum(f))g=new c.Enum(this,this.ptr,f.name,f.options,f.syntax),f.values.forEach(function(a){g.addChild(new c.Enum.Value(this,g,a.name,a.id));},this),this.ptr.addChild(g);else if(d.isService(f))g=new c.Service(this,this.ptr,f.name,f.options),Object.keys(f.rpc).forEach(function(a){var b=f.rpc[a];g.addChild(new c.Service.RPCMethod(this,g,a,b.request,b.response,!!b.request_stream,!!b.response_stream,b.options));},this),this.ptr.addChild(g);else{if(!d.isExtend(f))throw Error("not a valid definition: "+JSON.stringify(f));if(g=this.ptr.resolve(f.ref,!0))f.fields.forEach(function(b){var d,e,f,h;if(null!==g.getChild(0|b.id))throw Error("duplicate extended field id in "+g.name+": "+b.id);
   if(g.extensions&&(d=!1,g.extensions.forEach(function(a){b.id>=a[0]&&b.id<=a[1]&&(d=!0);}),!d))throw Error("illegal extended field id in "+g.name+": "+b.id+" (not within valid ranges)");e=b.name,this.options.convertFieldsToCamelCase&&(e=a.Util.toCamelCase(e)),f=new c.Message.ExtensionField(this,g,b.rule,b.type,this.ptr.fqn()+"."+e,b.id,b.options),h=new c.Extension(this,this.ptr,b.name,f),f.extension=h,this.ptr.addChild(h),g.addChild(f);},this);else if(!/\.?google\.protobuf\./.test(f.ref))throw Error("extended message "+f.ref+" is not defined")}f=null,g=null;}b=null,this.ptr=this.ptr.parent;}return this.resolved=!1,this.result=null,this},e["import"]=function(b,c){var e,g,h,i,j,k,l,m,d="/";if("string"==typeof c){if(a.Util.IS_NODE,this.files[c]===!0)return this.reset();this.files[c]=!0;}else if("object"==typeof c){if(e=c.root,a.Util.IS_NODE,(e.indexOf("\\")>=0||c.file.indexOf("\\")>=0)&&(d="\\"),g=e+d+c.file,this.files[g]===!0)return this.reset();this.files[g]=!0;}if(b.imports&&b.imports.length>0){for(i=!1,"object"==typeof c?(this.importRoot=c.root,i=!0,h=this.importRoot,c=c.file,(h.indexOf("\\")>=0||c.indexOf("\\")>=0)&&(d="\\")):"string"==typeof c?this.importRoot?h=this.importRoot:c.indexOf("/")>=0?(h=c.replace(/\/[^\/]*$/,""),""===h&&(h="/")):c.indexOf("\\")>=0?(h=c.replace(/\\[^\\]*$/,""),d="\\"):h=".":h=null,j=0;j<b.imports.length;j++)if("string"==typeof b.imports[j]){if(!h)throw Error("cannot determine import root");if(k=b.imports[j],"google/protobuf/descriptor.proto"===k)continue;if(k=h+d+k,this.files[k]===!0)continue;if(/\.proto$/i.test(k)&&!a.DotProto&&(k=k.replace(/\.proto$/,".json")),l=a.Util.fetch(k),null===l)throw Error("failed to import '"+k+"' in '"+c+"': file not found");/\.json$/i.test(k)?this["import"](JSON.parse(l+""),k):this["import"](a.DotProto.Parser.parse(l),k);}else c?/\.(\w+)$/.test(c)?this["import"](b.imports[j],c.replace(/^(.+)\.(\w+)$/,function(a,b,c){return b+"_import"+j+"."+c})):this["import"](b.imports[j],c+"_import"+j):this["import"](b.imports[j]);i&&(this.importRoot=null);}return b["package"]&&this.define(b["package"]),b.syntax&&f(b),m=this.ptr,b.options&&Object.keys(b.options).forEach(function(a){m.options[a]=b.options[a];}),b.messages&&(this.create(b.messages),this.ptr=m),b.enums&&(this.create(b.enums),this.ptr=m),b.services&&(this.create(b.services),this.ptr=m),b["extends"]&&this.create(b["extends"]),this.reset()},e.resolveAll=function(){var d;if(null==this.ptr||"object"==typeof this.ptr.type)return this;if(this.ptr instanceof c.Namespace)this.ptr.children.forEach(function(a){this.ptr=a,this.resolveAll();},this);else if(this.ptr instanceof c.Message.Field){if(b.TYPE.test(this.ptr.type))this.ptr.type=a.TYPES[this.ptr.type];else{if(!b.TYPEREF.test(this.ptr.type))throw Error("illegal type reference in "+this.ptr.toString(!0)+": "+this.ptr.type);if(d=(this.ptr instanceof c.Message.ExtensionField?this.ptr.extension.parent:this.ptr.parent).resolve(this.ptr.type,!0),!d)throw Error("unresolvable type reference in "+this.ptr.toString(!0)+": "+this.ptr.type);if(this.ptr.resolvedType=d,d instanceof c.Enum){if(this.ptr.type=a.TYPES["enum"],"proto3"===this.ptr.syntax&&"proto3"!==d.syntax)throw Error("proto3 message cannot reference proto2 enum")}else{if(!(d instanceof c.Message))throw Error("illegal type reference in "+this.ptr.toString(!0)+": "+this.ptr.type);this.ptr.type=d.isGroup?a.TYPES.group:a.TYPES.message;}}if(this.ptr.map){if(!b.TYPE.test(this.ptr.keyType))throw Error("illegal key type for map field in "+this.ptr.toString(!0)+": "+this.ptr.keyType);this.ptr.keyType=a.TYPES[this.ptr.keyType];}}else if(this.ptr instanceof a.Reflect.Service.Method){if(!(this.ptr instanceof a.Reflect.Service.RPCMethod))throw Error("illegal service type in "+this.ptr.toString(!0));if(d=this.ptr.parent.resolve(this.ptr.requestName,!0),!(d&&d instanceof a.Reflect.Message))throw Error("Illegal type reference in "+this.ptr.toString(!0)+": "+this.ptr.requestName);if(this.ptr.resolvedRequestType=d,d=this.ptr.parent.resolve(this.ptr.responseName,!0),!(d&&d instanceof a.Reflect.Message))throw Error("Illegal type reference in "+this.ptr.toString(!0)+": "+this.ptr.responseName);this.ptr.resolvedResponseType=d;}else if(!(this.ptr instanceof a.Reflect.Message.OneOf||this.ptr instanceof a.Reflect.Extension||this.ptr instanceof a.Reflect.Enum.Value))throw Error("illegal object in namespace: "+typeof this.ptr+": "+this.ptr);return this.reset()},e.build=function(a){var b,c,d;if(this.reset(),this.resolved||(this.resolveAll(),this.resolved=!0,this.result=null),null===this.result&&(this.result=this.ns.build()),!a)return this.result;for(b="string"==typeof a?a.split("."):a,c=this.result,d=0;d<b.length;d++){if(!c[b[d]]){c=null;break}c=c[b[d]];}return c},e.lookup=function(a,b){return a?this.ns.resolve(a,b):this.ns},e.toString=function(){return "Builder"},d.Message=function(){},d.Enum=function(){},d.Service=function(){},d}(e,e.Lang,e.Reflect),e.Map=function(a,b){function e(a){var b=0;return {next:function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}}var c=function(a,c){var d,e,f,g;if(!a.map)throw Error("field is not a map");if(this.field=a,this.keyElem=new b.Element(a.keyType,null,!0,a.syntax),this.valueElem=new b.Element(a.type,a.resolvedType,!1,a.syntax),this.map={},Object.defineProperty(this,"size",{get:function(){return Object.keys(this.map).length}}),c)for(d=Object.keys(c),e=0;e<d.length;e++)f=this.keyElem.valueFromString(d[e]),g=this.valueElem.verifyValue(c[d[e]]),this.map[this.keyElem.valueToString(f)]={key:f,value:g};},d=c.prototype;return d.clear=function(){this.map={};},d["delete"]=function(a){var b=this.keyElem.valueToString(this.keyElem.verifyValue(a)),c=b in this.map;return delete this.map[b],c},d.entries=function(){var d,c,a=[],b=Object.keys(this.map);for(c=0;c<b.length;c++)a.push([(d=this.map[b[c]]).key,d.value]);return e(a)},d.keys=function(){var c,a=[],b=Object.keys(this.map);for(c=0;c<b.length;c++)a.push(this.map[b[c]].key);return e(a)},d.values=function(){var c,a=[],b=Object.keys(this.map);for(c=0;c<b.length;c++)a.push(this.map[b[c]].value);return e(a)},d.forEach=function(a,b){var e,d,c=Object.keys(this.map);for(d=0;d<c.length;d++)a.call(b,(e=this.map[c[d]]).value,e.key,this);},d.set=function(a,b){var c=this.keyElem.verifyValue(a),d=this.valueElem.verifyValue(b);return this.map[this.keyElem.valueToString(c)]={key:c,value:d},this},d.get=function(a){var b=this.keyElem.valueToString(this.keyElem.verifyValue(a));return b in this.map?this.map[b].value:void 0},d.has=function(a){var b=this.keyElem.valueToString(this.keyElem.verifyValue(a));return b in this.map},c}(e,e.Reflect),e.loadProto=function(a,b,c){return ("string"==typeof b||b&&"string"==typeof b.file&&"string"==typeof b.root)&&(c=b,b=void 0),e.loadJson(e.DotProto.Parser.parse(a),b,c)},e.protoFromString=e.loadProto,e.loadProtoFile=function(a,b,c){if(b&&"object"==typeof b?(c=b,b=null):b&&"function"==typeof b||(b=null),b)return e.Util.fetch("string"==typeof a?a:a.root+"/"+a.file,function(d){if(null===d)return b(Error("Failed to fetch file")),void 0;try{b(null,e.loadProto(d,c,a));}catch(f){b(f);}});var d=e.Util.fetch("object"==typeof a?a.root+"/"+a.file:a);return null===d?null:e.loadProto(d,c,a)},e.protoFromFile=e.loadProtoFile,e.newBuilder=function(a){return a=a||{},"undefined"==typeof a.convertFieldsToCamelCase&&(a.convertFieldsToCamelCase=e.convertFieldsToCamelCase),"undefined"==typeof a.populateAccessors&&(a.populateAccessors=e.populateAccessors),new e.Builder(a)},e.loadJson=function(a,b,c){return ("string"==typeof b||b&&"string"==typeof b.file&&"string"==typeof b.root)&&(c=b,b=null),b&&"object"==typeof b||(b=e.newBuilder()),"string"==typeof a&&(a=JSON.parse(a)),b["import"](a,c),b.resolveAll(),b},e.loadJsonFile=function(a,b,c){if(b&&"object"==typeof b?(c=b,b=null):b&&"function"==typeof b||(b=null),b)return e.Util.fetch("string"==typeof a?a:a.root+"/"+a.file,function(d){if(null===d)return b(Error("Failed to fetch file")),void 0;try{b(null,e.loadJson(JSON.parse(d),c,a));}catch(f){b(f);}});var d=e.Util.fetch("object"==typeof a?a.root+"/"+a.file:a);return null===d?null:e.loadJson(JSON.parse(d),c,a)},h=a,i=e.loadProto(h,void 0,"").build("Modules").probuf}(d,c,b);return e}
 
-  var SSMsg$1 = "\npackage Modules;\nmessage probuf {\n  message " + PBName.SetUserStatusInput + "\n  {\n    optional int32 status=1;\n  }\n\n  message SetUserStatusOutput\n  {\n    optional int32 nothing=1;\n  }\n\n  message GetUserStatusInput\n  {\n    optional int32 nothing=1;\n  }\n\n  message GetUserStatusOutput\n  {\n    optional string status=1;\n    optional string subUserId=2;\n  }\n\n  message SubUserStatusInput\n  {\n    repeated string userid =1;\n  }\n\n  message SubUserStatusOutput\n  {\n    optional int32 nothing=1; \n  }\n  message VoipDynamicInput\n  {\n    required int32  engineType = 1;\n    required string channelName = 2;\n    optional string channelExtra = 3;\n  }\n\n  message VoipDynamicOutput\n  {\n      required string dynamicKey=1;\n  }\n  message " + PBName.NotifyMsg + " {\n    required int32 type = 1;\n    optional int64 time = 2;\n    optional string chrmId=3;\n  }\n  message " + PBName.SyncRequestMsg + " {\n    required int64 syncTime = 1;\n    required bool ispolling = 2;\n    optional bool isweb=3;\n    optional bool isPullSend=4;\n    optional bool isKeeping=5;\n    optional int64 sendBoxSyncTime=6;\n  }\n  message " + PBName.UpStreamMessage + " {\n    required int32 sessionId = 1;\n    required string classname = 2;\n    required bytes content = 3;\n    optional string pushText = 4;\n    optional string appData = 5;\n    repeated string userId = 6;\n    optional int64 delMsgTime = 7;\n    optional string delMsgId = 8;\n    optional int32 configFlag = 9;\n  }\n  message " + PBName.DownStreamMessages + " {\n    repeated DownStreamMessage list = 1;\n    required int64 syncTime = 2;\n    optional bool finished = 3;\n  }\n  message " + PBName.DownStreamMessage + " {\n    required string fromUserId = 1;\n    required ChannelType type = 2;\n    optional string groupId = 3;\n    required string classname = 4;\n    required bytes content = 5;\n    required int64 dataTime = 6;\n    required int64 status = 7;\n    optional int64 extra = 8;\n    optional string msgId = 9;\n    optional int32 direction = 10;\n  }\n  enum ChannelType {\n    PERSON = 1;\n    PERSONS = 2;\n    GROUP = 3;\n    TEMPGROUP = 4;\n    CUSTOMERSERVICE = 5;\n    NOTIFY = 6;\n    MC=7;\n    MP=8;\n  }\n  message CreateDiscussionInput {\n    optional string name = 1;\n  }\n  message CreateDiscussionOutput {\n    required string id = 1;\n  }\n  message ChannelInvitationInput {\n    repeated string users = 1;\n  }\n  message LeaveChannelInput {\n    required int32 nothing = 1;\n  }\n  message ChannelEvictionInput {\n    required string user = 1;\n  }\n  message RenameChannelInput {\n    required string name = 1;\n  }\n  message ChannelInfoInput {\n    required int32 nothing = 1;\n  }\n  message ChannelInfoOutput {\n    required ChannelType type = 1;\n    required string channelId = 2;\n    required string channelName = 3;\n    required string adminUserId = 4;\n    repeated string firstTenUserIds = 5;\n    required int32 openStatus = 6;\n  }\n  message ChannelInfosInput {\n    required int32 page = 1;\n    optional int32 number = 2;\n  }\n  message ChannelInfosOutput {\n    repeated ChannelInfoOutput channels = 1;\n    required int32 total = 2;\n  }\n  message MemberInfo {\n    required string userId = 1;\n    required string userName = 2;\n    required string userPortrait = 3;\n    required string extension = 4;\n  }\n  message GroupMembersInput {\n    required int32 page = 1;\n    optional int32 number = 2;\n  }\n  message GroupMembersOutput {\n    repeated MemberInfo members = 1;\n    required int32 total = 2;\n  }\n  message GetUserInfoInput {\n    required int32 nothing = 1;\n  }\n  message GetUserInfoOutput {\n    required string userId = 1;\n    required string userName = 2;\n    required string userPortrait = 3;\n  }\n  message GetSessionIdInput {\n    required int32 nothing = 1;\n  }\n  message GetSessionIdOutput {\n    required int32 sessionId = 1;\n  }\n  enum FileType {\n    image = " + FILE_TYPE.IMAGE + ";\n    audio = " + FILE_TYPE.AUDIO + ";\n    video = " + FILE_TYPE.VIDEO + ";\n    file = " + FILE_TYPE.FILE + ";\n  }\n  message " + PBName.GetQNupTokenInput + " {\n    required FileType type = 1;\n  }\n  message " + PBName.GetQNdownloadUrlInput + " {\n    required FileType type = 1;\n    required string key = 2;\n    optional string  fileName = 3;\n  }\n  message " + PBName.GetQNupTokenOutput + " {\n    required int64 deadline = 1;\n    required string token = 2;\n  }\n  message " + PBName.GetQNdownloadUrlOutput + " {\n    required string downloadUrl = 1;\n  }\n  message Add2BlackListInput {\n    required string userId = 1;\n  }\n  message RemoveFromBlackListInput {\n    required string userId = 1;\n  }\n  message QueryBlackListInput {\n    required int32 nothing = 1;\n  }\n  message QueryBlackListOutput {\n    repeated string userIds = 1;\n  }\n  message BlackListStatusInput {\n    required string userId = 1;\n  }\n  message BlockPushInput {\n    required string blockeeId = 1;\n  }\n  message ModifyPermissionInput {\n    required int32 openStatus = 1;\n  }\n  message GroupInput {\n    repeated GroupInfo groupInfo = 1;\n  }\n  message GroupOutput {\n    required int32 nothing = 1;\n  }\n  message GroupInfo {\n    required string id = 1;\n    required string name = 2;\n  }\n  message GroupHashInput {\n    required string userId = 1;\n    required string groupHashCode = 2;\n  }\n  message GroupHashOutput {\n    required GroupHashType result = 1;\n  }\n  enum GroupHashType {\n    group_success = 0x00;\n    group_failure = 0x01;\n  }\n  message " + PBName.ChrmInput + " {\n    required int32 nothing = 1;\n  }\n  message ChrmOutput {\n    required int32 nothing = 1;\n  }\n  message " + PBName.ChrmPullMsg + " {\n    required int64 syncTime = 1;\n    required int32 count = 2;\n  }\n  \n  message ChrmPullMsgNew \n  {\n    required int32 count = 1;\n    required int64 syncTime = 2;\n    optional string chrmId=3;\n  }\n  message " + PBName.RelationQryInput + "\n  {\n    optional ChannelType type = 1;\n    optional int32 count = 2;\n    optional int64 startTime = 3;\n    optional int32 order = 4;\n  }\n  message " + PBName.RelationsInput + "\n  {\n    required ChannelType type = 1;\n    optional DownStreamMessage msg =2;\n    optional int32 count = 3;\n    optional int32 offset = 4;\n    optional int64 startTime = 5;\n    optional int64 endTime = 6;\n  }\n  message " + PBName.RelationsOutput + "\n  {\n    repeated RelationInfo info = 1;\n  }\n  message RelationInfo\n  {\n    required ChannelType type = 1;\n    required string userId = 2;\n    optional DownStreamMessage msg =3;\n    optional int64 readMsgTime= 4;\n    optional int64 unreadCount= 5;\n  }\n  message RelationInfoReadTime\n  {\n    required ChannelType type = 1;\n    required int64 readMsgTime= 2;\n    required string targetId = 3;\n  }\n  message " + PBName.CleanHisMsgInput + "\n  {\n      required string targetId = 1;\n      required int64 dataTime = 2;\n      optional int32 conversationType= 3;\n  }\n  message HistoryMessageInput\n  {\n    required string targetId = 1;\n    required int64 dataTime =2;\n    required int32 size  = 3;\n  }\n\n  message HistoryMessagesOuput\n  {\n    repeated DownStreamMessage list = 1;\n    required int64 syncTime = 2;\n    required int32 hasMsg = 3;\n  }\n  message " + PBName.QueryChatRoomInfoInput + "\n  {\n    required int32 count= 1;\n    optional int32 order= 2;\n  }\n\n  message " + PBName.QueryChatRoomInfoOutput + "\n  {\n    optional int32 userTotalNums = 1;\n    repeated ChrmMember userInfos = 2;\n  }\n  message ChrmMember\n  {\n    required int64 time = 1;\n    required string id = 2;\n  }\n  message MPFollowInput\n  {\n    required string id = 1;\n  }\n\n  message MPFollowOutput\n  {\n    required int32 nothing = 1;\n    optional MpInfo info =2;\n  }\n\n  message " + PBName.MCFollowInput + "\n  {\n    required string id = 1;\n  }\n\n  message MCFollowOutput\n  {\n    required int32 nothing = 1;\n    optional MpInfo info =2;\n  }\n\n  message MpInfo  \n  {\n    required string mpid=1;\n    required string name = 2;\n    required string type = 3;\n    required int64 time=4;\n    optional string portraitUrl=5;\n    optional string extra =6;\n  }\n\n  message SearchMpInput\n  {\n    required int32 type=1;\n    required string id=2;\n  }\n\n  message SearchMpOutput\n  {\n    required int32 nothing=1;\n    repeated MpInfo info = 2;\n  }\n\n  message PullMpInput\n  {\n    required int64 time=1;\n    required string mpid=2;\n  }\n\n  message PullMpOutput\n  {\n    required int32 status=1;\n    repeated MpInfo info = 2;\n  }\n  message " + PBName.HistoryMsgInput + "\n  {\n    optional string targetId = 1;\n    optional int64 time = 2;\n    optional int32 count  = 3;\n    optional int32 order = 4;\n  }\n\n  message " + PBName.HistoryMsgOuput + "\n  {\n    repeated DownStreamMessage list=1;\n    required int64 syncTime=2;\n    required int32 hasMsg=3;\n  }\n  message " + PBName.RtcQueryListInput + "{\n    optional int32 order=1;\n  }\n\n  message " + PBName.RtcKeyDeleteInput + "{\n    repeated string key=1;\n  }\n\n  message " + PBName.RtcValueInfo + "{\n    required string key=1;\n    required string value=2;\n  }\n\n  message RtcUserInfo{\n    required string userId=1;\n    repeated " + PBName.RtcValueInfo + " userData=2;\n  }\n\n  message " + PBName.RtcUserListOutput + "{\n    repeated RtcUserInfo list=1;\n    optional string token=2;\n  }\n  message RtcRoomInfoOutput{\n    optional string roomId = 1;\n    repeated " + PBName.RtcValueInfo + " roomData = 2;\n    optional int32 userCount = 3;\n    repeated RtcUserInfo list=4;\n  }\n  message " + PBName.RtcInput + "{\n    required int32 roomType=1;\n    optional int32 broadcastType=2;\n  }\n  message RtcQryInput{ \n    required bool isInterior=1;\n    required targetType target=2;\n    repeated string key=3;\n  }\n  message " + PBName.RtcQryOutput + "{\n    repeated " + PBName.RtcValueInfo + " outInfo=1;\n  }\n  message RtcDelDataInput{\n    repeated string key=1;\n    required bool isInterior=2;\n    required targetType target=3;\n  }\n  message " + PBName.RtcDataInput + "{ \n    required bool interior=1;\n    required targetType target=2;\n    repeated string key=3;\n    optional string objectName=4;\n    optional string content=5;\n  }\n  message " + PBName.RtcSetDataInput + "{\n    required bool interior=1;\n    required targetType target=2;\n    required string key=3;\n    required string value=4;\n    optional string objectName=5;\n    optional string content=6;\n  }\n  message RtcOutput\n  {\n    optional int32 nothing=1; \n  }\n  message " + PBName.RtcTokenOutput + "{\n    required string rtcToken=1;\n  }\n  enum targetType {\n    ROOM =1 ;\n    PERSON = 2;\n  }\n  message " + PBName.RtcSetOutDataInput + "{\n    required targetType target=1;\n    repeated " + PBName.RtcValueInfo + " valueInfo=2;\n    optional string objectName=3;\n    optional string content=4;\n  }\n  message " + PBName.RtcQryUserOutDataInput + "{\n    repeated string userId = 1;\n  }\n  message " + PBName.RtcUserOutDataOutput + "{\n    repeated RtcUserInfo user = 1;\n  }\n  message " + PBName.SessionsAttQryInput + "{\n    required int32 nothing = 1;\n  }\n  message " + PBName.SessionsAttOutput + "{\n    required int64 inboxTime = 1;\n    required int64 sendboxTime = 2;\n    required int64 totalUnreadCount = 3;\n  }\n  message " + PBName.SessionMsgReadInput + "\n  {\n    required ChannelType type = 1;\n    required int64 msgTime = 2;\n    required string channelId = 3;\n  }\n  message SessionMsgReadOutput\n  {\n    optional int32 nothing=1; \n  }\n  message " + PBName.DeleteSessionsInput + "\n  {\n    repeated SessionInfo sessions = 1;\n  }\n  message " + PBName.SessionInfo + "\n  {\n    required ChannelType type = 1;\n    required string channelId = 2;\n  }\n  message " + PBName.DeleteSessionsOutput + "\n  {\n    optional int32 nothing=1; \n  }\n  message " + PBName.DeleteMsgInput + "\n  {\n    optional ChannelType type = 1;\n    optional string conversationId = 2;\n    repeated DeleteMsg msgs = 3;\n  }\n  message DeleteMsg\n  {\n    optional string msgId = 1;\n    optional int64 msgDataTime = 2;\n    optional int32 direct = 3;\n  }\n\n}\n";
+  var SSMsg$1 = "\npackage Modules;\nmessage probuf {\n  message " + PBName.SetUserStatusInput + "\n  {\n    optional int32 status=1;\n  }\n\n  message SetUserStatusOutput\n  {\n    optional int32 nothing=1;\n  }\n\n  message GetUserStatusInput\n  {\n    optional int32 nothing=1;\n  }\n\n  message GetUserStatusOutput\n  {\n    optional string status=1;\n    optional string subUserId=2;\n  }\n\n  message SubUserStatusInput\n  {\n    repeated string userid =1;\n  }\n\n  message SubUserStatusOutput\n  {\n    optional int32 nothing=1; \n  }\n  message VoipDynamicInput\n  {\n    required int32  engineType = 1;\n    required string channelName = 2;\n    optional string channelExtra = 3;\n  }\n\n  message VoipDynamicOutput\n  {\n      required string dynamicKey=1;\n  }\n  message " + PBName.NotifyMsg + " {\n    required int32 type = 1;\n    optional int64 time = 2;\n    optional string chrmId=3;\n  }\n  message " + PBName.SyncRequestMsg + " {\n    required int64 syncTime = 1;\n    required bool ispolling = 2;\n    optional bool isweb=3;\n    optional bool isPullSend=4;\n    optional bool isKeeping=5;\n    optional int64 sendBoxSyncTime=6;\n  }\n  message " + PBName.UpStreamMessage + " {\n    required int32 sessionId = 1;\n    required string classname = 2;\n    required bytes content = 3;\n    optional string pushText = 4;\n    optional string appData = 5;\n    repeated string userId = 6;\n    optional int64 delMsgTime = 7;\n    optional string delMsgId = 8;\n    optional int32 configFlag = 9;\n  }\n  message " + PBName.DownStreamMessages + " {\n    repeated DownStreamMessage list = 1;\n    required int64 syncTime = 2;\n    optional bool finished = 3;\n  }\n  message " + PBName.DownStreamMessage + " {\n    required string fromUserId = 1;\n    required ChannelType type = 2;\n    optional string groupId = 3;\n    required string classname = 4;\n    required bytes content = 5;\n    required int64 dataTime = 6;\n    required int64 status = 7;\n    optional int64 extra = 8;\n    optional string msgId = 9;\n    optional int32 direction = 10;\n  }\n  enum ChannelType {\n    PERSON = 1;\n    PERSONS = 2;\n    GROUP = 3;\n    TEMPGROUP = 4;\n    CUSTOMERSERVICE = 5;\n    NOTIFY = 6;\n    MC=7;\n    MP=8;\n  }\n  message CreateDiscussionInput {\n    optional string name = 1;\n  }\n  message CreateDiscussionOutput {\n    required string id = 1;\n  }\n  message ChannelInvitationInput {\n    repeated string users = 1;\n  }\n  message LeaveChannelInput {\n    required int32 nothing = 1;\n  }\n  message ChannelEvictionInput {\n    required string user = 1;\n  }\n  message RenameChannelInput {\n    required string name = 1;\n  }\n  message ChannelInfoInput {\n    required int32 nothing = 1;\n  }\n  message ChannelInfoOutput {\n    required ChannelType type = 1;\n    required string channelId = 2;\n    required string channelName = 3;\n    required string adminUserId = 4;\n    repeated string firstTenUserIds = 5;\n    required int32 openStatus = 6;\n  }\n  message ChannelInfosInput {\n    required int32 page = 1;\n    optional int32 number = 2;\n  }\n  message ChannelInfosOutput {\n    repeated ChannelInfoOutput channels = 1;\n    required int32 total = 2;\n  }\n  message MemberInfo {\n    required string userId = 1;\n    required string userName = 2;\n    required string userPortrait = 3;\n    required string extension = 4;\n  }\n  message GroupMembersInput {\n    required int32 page = 1;\n    optional int32 number = 2;\n  }\n  message GroupMembersOutput {\n    repeated MemberInfo members = 1;\n    required int32 total = 2;\n  }\n  message GetUserInfoInput {\n    required int32 nothing = 1;\n  }\n  message GetUserInfoOutput {\n    required string userId = 1;\n    required string userName = 2;\n    required string userPortrait = 3;\n  }\n  message GetSessionIdInput {\n    required int32 nothing = 1;\n  }\n  message GetSessionIdOutput {\n    required int32 sessionId = 1;\n  }\n  enum FileType {\n    image = " + FILE_TYPE.IMAGE + ";\n    audio = " + FILE_TYPE.AUDIO + ";\n    video = " + FILE_TYPE.VIDEO + ";\n    file = " + FILE_TYPE.FILE + ";\n  }\n  message " + PBName.GetQNupTokenInput + " {\n    required FileType type = 1;\n    optional string key = 2;\n  }\n  message " + PBName.GetQNdownloadUrlInput + " {\n    required FileType type = 1;\n    required string key = 2;\n    optional string  fileName = 3;\n  }\n  message " + PBName.GetQNupTokenOutput + " {\n    required int64 deadline = 1;\n    required string token = 2;\n    optional string bosToken = 3;\n    optional string bosDate = 4;\n    optional string path = 5;\n  }\n  message " + PBName.GetQNdownloadUrlOutput + " {\n    required string downloadUrl = 1;\n  }\n  message Add2BlackListInput {\n    required string userId = 1;\n  }\n  message RemoveFromBlackListInput {\n    required string userId = 1;\n  }\n  message QueryBlackListInput {\n    required int32 nothing = 1;\n  }\n  message QueryBlackListOutput {\n    repeated string userIds = 1;\n  }\n  message BlackListStatusInput {\n    required string userId = 1;\n  }\n  message BlockPushInput {\n    required string blockeeId = 1;\n  }\n  message ModifyPermissionInput {\n    required int32 openStatus = 1;\n  }\n  message GroupInput {\n    repeated GroupInfo groupInfo = 1;\n  }\n  message GroupOutput {\n    required int32 nothing = 1;\n  }\n  message GroupInfo {\n    required string id = 1;\n    required string name = 2;\n  }\n  message GroupHashInput {\n    required string userId = 1;\n    required string groupHashCode = 2;\n  }\n  message GroupHashOutput {\n    required GroupHashType result = 1;\n  }\n  enum GroupHashType {\n    group_success = 0x00;\n    group_failure = 0x01;\n  }\n  message " + PBName.ChrmInput + " {\n    required int32 nothing = 1;\n  }\n  message ChrmOutput {\n    required int32 nothing = 1;\n  }\n  message " + PBName.ChrmPullMsg + " {\n    required int64 syncTime = 1;\n    required int32 count = 2;\n  }\n  \n  message ChrmPullMsgNew \n  {\n    required int32 count = 1;\n    required int64 syncTime = 2;\n    optional string chrmId=3;\n  }\n  message " + PBName.RelationQryInput + "\n  {\n    optional ChannelType type = 1;\n    optional int32 count = 2;\n    optional int64 startTime = 3;\n    optional int32 order = 4;\n  }\n  message " + PBName.RelationsInput + "\n  {\n    required ChannelType type = 1;\n    optional DownStreamMessage msg =2;\n    optional int32 count = 3;\n    optional int32 offset = 4;\n    optional int64 startTime = 5;\n    optional int64 endTime = 6;\n  }\n  message " + PBName.RelationsOutput + "\n  {\n    repeated RelationInfo info = 1;\n  }\n  message RelationInfo\n  {\n    required ChannelType type = 1;\n    required string userId = 2;\n    optional DownStreamMessage msg =3;\n    optional int64 readMsgTime= 4;\n    optional int64 unreadCount= 5;\n  }\n  message RelationInfoReadTime\n  {\n    required ChannelType type = 1;\n    required int64 readMsgTime= 2;\n    required string targetId = 3;\n  }\n  message " + PBName.CleanHisMsgInput + "\n  {\n      required string targetId = 1;\n      required int64 dataTime = 2;\n      optional int32 conversationType= 3;\n  }\n  message HistoryMessageInput\n  {\n    required string targetId = 1;\n    required int64 dataTime =2;\n    required int32 size  = 3;\n  }\n\n  message HistoryMessagesOuput\n  {\n    repeated DownStreamMessage list = 1;\n    required int64 syncTime = 2;\n    required int32 hasMsg = 3;\n  }\n  message " + PBName.QueryChatRoomInfoInput + "\n  {\n    required int32 count= 1;\n    optional int32 order= 2;\n  }\n\n  message " + PBName.QueryChatRoomInfoOutput + "\n  {\n    optional int32 userTotalNums = 1;\n    repeated ChrmMember userInfos = 2;\n  }\n  message ChrmMember\n  {\n    required int64 time = 1;\n    required string id = 2;\n  }\n  message MPFollowInput\n  {\n    required string id = 1;\n  }\n\n  message MPFollowOutput\n  {\n    required int32 nothing = 1;\n    optional MpInfo info =2;\n  }\n\n  message " + PBName.MCFollowInput + "\n  {\n    required string id = 1;\n  }\n\n  message MCFollowOutput\n  {\n    required int32 nothing = 1;\n    optional MpInfo info =2;\n  }\n\n  message MpInfo  \n  {\n    required string mpid=1;\n    required string name = 2;\n    required string type = 3;\n    required int64 time=4;\n    optional string portraitUrl=5;\n    optional string extra =6;\n  }\n\n  message SearchMpInput\n  {\n    required int32 type=1;\n    required string id=2;\n  }\n\n  message SearchMpOutput\n  {\n    required int32 nothing=1;\n    repeated MpInfo info = 2;\n  }\n\n  message PullMpInput\n  {\n    required int64 time=1;\n    required string mpid=2;\n  }\n\n  message PullMpOutput\n  {\n    required int32 status=1;\n    repeated MpInfo info = 2;\n  }\n  message " + PBName.HistoryMsgInput + "\n  {\n    optional string targetId = 1;\n    optional int64 time = 2;\n    optional int32 count  = 3;\n    optional int32 order = 4;\n  }\n\n  message " + PBName.HistoryMsgOuput + "\n  {\n    repeated DownStreamMessage list=1;\n    required int64 syncTime=2;\n    required int32 hasMsg=3;\n  }\n  message " + PBName.RtcQueryListInput + "{\n    optional int32 order=1;\n  }\n\n  message " + PBName.RtcKeyDeleteInput + "{\n    repeated string key=1;\n  }\n\n  message " + PBName.RtcValueInfo + "{\n    required string key=1;\n    required string value=2;\n  }\n\n  message RtcUserInfo{\n    required string userId=1;\n    repeated " + PBName.RtcValueInfo + " userData=2;\n  }\n\n  message " + PBName.RtcUserListOutput + "{\n    repeated RtcUserInfo list=1;\n    optional string token=2;\n    optional string sessionId=3;\n  }\n  message RtcRoomInfoOutput{\n    optional string roomId = 1;\n    repeated " + PBName.RtcValueInfo + " roomData = 2;\n    optional int32 userCount = 3;\n    repeated RtcUserInfo list=4;\n  }\n  message " + PBName.RtcInput + "{\n    required int32 roomType=1;\n    optional int32 broadcastType=2;\n  }\n  message RtcQryInput{ \n    required bool isInterior=1;\n    required targetType target=2;\n    repeated string key=3;\n  }\n  message " + PBName.RtcQryOutput + "{\n    repeated " + PBName.RtcValueInfo + " outInfo=1;\n  }\n  message RtcDelDataInput{\n    repeated string key=1;\n    required bool isInterior=2;\n    required targetType target=3;\n  }\n  message " + PBName.RtcDataInput + "{ \n    required bool interior=1;\n    required targetType target=2;\n    repeated string key=3;\n    optional string objectName=4;\n    optional string content=5;\n  }\n  message " + PBName.RtcSetDataInput + "{\n    required bool interior=1;\n    required targetType target=2;\n    required string key=3;\n    required string value=4;\n    optional string objectName=5;\n    optional string content=6;\n  }\n  message " + PBName.RtcUserSetDataInput + " {\n    repeated " + PBName.RtcValueInfo + " valueInfo = 1;\n    required string objectName = 2;\n    repeated " + PBName.RtcValueInfo + " content = 3;\n  }\n  message RtcOutput\n  {\n    optional int32 nothing=1; \n  }\n  message " + PBName.RtcTokenOutput + "{\n    required string rtcToken=1;\n  }\n  enum targetType {\n    ROOM =1 ;\n    PERSON = 2;\n  }\n  message " + PBName.RtcSetOutDataInput + "{\n    required targetType target=1;\n    repeated " + PBName.RtcValueInfo + " valueInfo=2;\n    optional string objectName=3;\n    optional string content=4;\n  }\n  message " + PBName.RtcQryUserOutDataInput + "{\n    repeated string userId = 1;\n  }\n  message " + PBName.RtcUserOutDataOutput + "{\n    repeated RtcUserInfo user = 1;\n  }\n  message " + PBName.SessionsAttQryInput + "{\n    required int32 nothing = 1;\n  }\n  message " + PBName.SessionsAttOutput + "{\n    required int64 inboxTime = 1;\n    required int64 sendboxTime = 2;\n    required int64 totalUnreadCount = 3;\n  }\n  message " + PBName.SessionMsgReadInput + "\n  {\n    required ChannelType type = 1;\n    required int64 msgTime = 2;\n    required string channelId = 3;\n  }\n  message SessionMsgReadOutput\n  {\n    optional int32 nothing=1; \n  }\n  message " + PBName.DeleteSessionsInput + "\n  {\n    repeated SessionInfo sessions = 1;\n  }\n  message " + PBName.SessionInfo + "\n  {\n    required ChannelType type = 1;\n    required string channelId = 2;\n  }\n  message " + PBName.DeleteSessionsOutput + "\n  {\n    optional int32 nothing=1; \n  }\n  message " + PBName.DeleteMsgInput + "\n  {\n    optional ChannelType type = 1;\n    optional string conversationId = 2;\n    repeated DeleteMsg msgs = 3;\n  }\n  message DeleteMsg\n  {\n    optional string msgId = 1;\n    optional int64 msgDataTime = 2;\n    optional int32 direct = 3;\n  }\n  message ChrmKVEntity {\n    required string key = 1;\n    required string value = 2;\n    optional int32 status = 3;\n    optional int64 timestamp = 4;\n    optional string uid = 5;\n  }\n  message " + PBName.SetChrmKV + " {\n    required ChrmKVEntity entry = 1;\n    optional bool bNotify = 2;\n    optional UpStreamMessage notification = 3;\n    optional ChannelType type = 4;\n  }\n  message " + PBName.ChrmKVOutput + " {\n    repeated ChrmKVEntity entries = 1;\n    optional bool bFullUpdate = 2;\n    optional int64 syncTime = 3;\n  }\n  message " + PBName.QueryChrmKV + " {\n    required int64 timestamp = 1;\n  }\n  message " + PBName.ChrmNotifyMsg + " {\t\n    required int32 type= 1;\n    optional int64 time= 2;\n    optional string chrmId=3;\n  }\n  message " + PBName.SetUserSettingInput + " {\n    required int64 version=1;\n    required string value=2;\n  }\n  message " + PBName.SetUserSettingOutput + " {\n    required int64 version=1;\n    required bool reserve=2;\n  }\n  message " + PBName.PullUserSettingInput + " {\n    required int64 version=1;//\u5F53\u524D\u5BA2\u6237\u7AEF\u7684\u6700\u5927\u7248\u672C\u53F7\n    optional bool reserve=2;\n  }\n  message " + PBName.PullUserSettingOutput + " {\n    repeated UserSettingItem items = 1;\n    required int64 version=2;\n  }\n  message UserSettingItem {\n    required string targetId= 1;\n    required ChannelType type = 2;\n    required string key = 4;\n    required bytes value = 5;\n    required int64 version=6;\n    required int32 status=7;\n  }\n  message " + PBName.SessionReq + " {\n    required int64 time = 1;\n  }\n  message " + PBName.SessionStates + " {\n    required int64 version=1;\n    repeated SessionState state= 2;\n  }\n  message " + PBName.SessionState + " {\n    required ChannelType type = 1;\n    required string channelId = 2;  \n    optional int64 time = 3;\n    repeated SessionStateItem stateItem = 4;\n  }\n  message " + PBName.SessionStateItem + " {\n    required SessionStateType sessionStateType = 1;\n    required string value = 2;\n  }\n  enum SessionStateType {\n    IsSilent = 1;\n    IsTop = 2;\n  }\n  message " + PBName.SessionStateModifyReq + " {\n    required int64 version=1;\n    repeated SessionState state= 2;\n  }\n  message " + PBName.SessionStateModifyResp + " {\n    required int64 version=1;\n  }\n}\n";
 
   var Codec$1 = {};
 
@@ -4252,7 +5741,7 @@
       var _formatEventMap;
 
       var self = this;
-      var formatEventMap = (_formatEventMap = {}, _formatEventMap[PBName.DownStreamMessages] = self.formatSyncMessages, _formatEventMap[PBName.DownStreamMessage] = self.formatReceivedMessage, _formatEventMap[PBName.UpStreamMessage] = self.formatSentMessage, _formatEventMap[PBName.HistoryMsgOuput] = self.formatHistoryMessages, _formatEventMap[PBName.RelationsOutput] = self.formatConversationList, _formatEventMap[PBName.QueryChatRoomInfoOutput] = self.formatChatRoomInfos, _formatEventMap[PBName.RtcUserListOutput] = self.formatRTCUserList, _formatEventMap[PBName.RtcQryOutput] = self.formatRTCData, _formatEventMap);
+      var formatEventMap = (_formatEventMap = {}, _formatEventMap[PBName.DownStreamMessages] = self.formatSyncMessages, _formatEventMap[PBName.DownStreamMessage] = self.formatReceivedMessage, _formatEventMap[PBName.UpStreamMessage] = self.formatSentMessage, _formatEventMap[PBName.HistoryMsgOuput] = self.formatHistoryMessages, _formatEventMap[PBName.RelationsOutput] = self.formatConversationList, _formatEventMap[PBName.QueryChatRoomInfoOutput] = self.formatChatRoomInfos, _formatEventMap[PBName.RtcUserListOutput] = self.formatRTCUserList, _formatEventMap[PBName.RtcQryOutput] = self.formatRTCData, _formatEventMap[PBName.ChrmKVOutput] = self.formatChatRoomKVList, _formatEventMap[PBName.PullUserSettingOutput] = self.formatUserSetting, _formatEventMap[PBName.SessionStates] = self.formatConversationStatus, _formatEventMap);
       var decodedData = data;
       var formatEvent = formatEventMap[pbName];
 
@@ -4271,7 +5760,7 @@
       return decodedData;
     };
 
-    _proto.formatMessageContent = function formatMessageContent(content) {
+    _proto.formatBytes = function formatBytes(content) {
       try {
         var _content = content,
             offset = _content.offset,
@@ -4344,6 +5833,7 @@
           isPersited = _common$getMessageOpt.isPersited,
           isCounted = _common$getMessageOpt.isCounted,
           isMentiond = _common$getMessageOpt.isMentiond,
+          disableNotification = _common$getMessageOpt.disableNotification,
           targetId = isGroup$1(type) || isChatRoom$1(type) ? groupId : fromUserId,
           senderUserId = isSelfSend ? currentUserId : fromUserId,
           sentTime = utils.int64ToTimestamp(dataTime),
@@ -4356,6 +5846,7 @@
         messageDirection = MESSAGE_DIRECTION.SEND;
       }
 
+      var isMentioned = isMentiond;
       return {
         type: type,
         targetId: targetId,
@@ -4365,11 +5856,13 @@
         isPersited: isPersited,
         isCounted: isCounted,
         isMentiond: isMentiond,
+        isMentioned: isMentioned,
         sentTime: sentTime,
         isOffLineMessage: isOffLineMessage,
         messageDirection: messageDirection,
         receivedTime: common.DelayTimer.getTime(),
-        content: self.formatMessageContent(content)
+        disableNotification: disableNotification,
+        content: self.formatBytes(content)
       };
     };
 
@@ -4385,10 +5878,12 @@
           date = signal.date,
           topic = signal.topic,
           targetId = signal.targetId,
-          _common$getPersitedAn = common.getPersitedAndCountedBySessionId(sessionId),
+          _common$getPersitedAn = common.getPersitedAndCountedAndSlientBySessionId(sessionId),
           isPersited = _common$getPersitedAn.isPersited,
           isCounted = _common$getPersitedAn.isCounted,
-          type = PUBLISH_TOPIC_TO_CONVERSATION_TYPE[topic] || CONVERSATION_TYPE.PRIVATE;
+          disableNotification = _common$getPersitedAn.disableNotification,
+          type = PUBLISH_TOPIC_TO_CONVERSATION_TYPE[topic] || CONVERSATION_TYPE.PRIVATE,
+          isStatusMessage = utils.isInclude(PUBLISH_STATUS_TOPIC, topic);
 
       return {
         type: type,
@@ -4397,12 +5892,14 @@
         messageUId: messageUId,
         isPersited: isPersited,
         isCounted: isCounted,
+        isStatusMessage: isStatusMessage,
         senderUserId: currentUserId,
-        content: self.formatMessageContent(content),
+        content: self.formatBytes(content),
         sentTime: utils.secondsToMilliseconds(date),
         receivedTime: common.DelayTimer.getTime(),
         messageDirection: MESSAGE_DIRECTION.SEND,
-        isOffLineMessage: false
+        isOffLineMessage: false,
+        disableNotification: disableNotification
       };
     };
 
@@ -4514,13 +6011,104 @@
       return room;
     };
 
+    _proto.formatChatRoomKVList = function formatChatRoomKVList(data) {
+      var kvEntries = data.entries,
+          isFullUpdate = data.bFullUpdate,
+          syncTime = data.syncTime;
+      kvEntries = kvEntries || [];
+      kvEntries = utils.map(kvEntries, function (kv) {
+        var key = kv.key,
+            value = kv.value,
+            status = kv.status,
+            timestamp = kv.timestamp,
+            uid = kv.uid;
+
+        var _common$getChatRoomKV = common.getChatRoomKVByStatus(status),
+            isAutoDelete = _common$getChatRoomKV.isAutoDelete,
+            isOverwrite = _common$getChatRoomKV.isOverwrite,
+            type = _common$getChatRoomKV.type;
+
+        return {
+          key: key,
+          value: value,
+          isAutoDelete: isAutoDelete,
+          isOverwrite: isOverwrite,
+          type: type,
+          userId: uid,
+          timestamp: utils.int64ToTimestamp(timestamp)
+        };
+      });
+      return {
+        kvEntries: kvEntries,
+        isFullUpdate: isFullUpdate,
+        syncTime: syncTime
+      };
+    };
+
+    _proto.formatUserSetting = function formatUserSetting(data) {
+      var self = this;
+      var items = data.items,
+          version = data.version;
+      var settings = {};
+      utils.forEach(items || [], function (setting) {
+        var key = setting.key,
+            version = setting.version,
+            value = setting.value;
+        setting.version = utils.int64ToTimestamp(version);
+        setting.value = self.formatBytes(value);
+        settings[key] = setting;
+      });
+      return {
+        settings: settings,
+        version: version
+      };
+    };
+
+    _proto.formatConversationStatus = function formatConversationStatus(data) {
+      var stateList = data.state;
+      var statusList = [];
+      utils.forEach(stateList, function (session) {
+        var type = session.type,
+            targetId = session.channelId,
+            updatedTime = session.time,
+            stateItem = session.stateItem;
+        var notificationStatus = NOTIFICATION_STATUS.NOTIFY,
+            isTop = false;
+        utils.forEach(stateItem, function (_ref) {
+          var sessionStateType = _ref.sessionStateType,
+              value = _ref.value;
+
+          switch (sessionStateType) {
+            case CONVERSATION_STATUS_TYPE.DO_NOT_DISTURB:
+              notificationStatus = utils.isEqual(value, CONVERSATION_STATUS_CONFIG.ENABLED) ? NOTIFICATION_STATUS.DO_NOT_DISTURB : NOTIFICATION_STATUS.NOTIFY;
+              break;
+
+            case CONVERSATION_STATUS_TYPE.TOP:
+              isTop = utils.isEqual(value, CONVERSATION_STATUS_CONFIG.ENABLED);
+              break;
+
+            default:
+              break;
+          }
+        });
+        statusList.push({
+          type: type,
+          targetId: targetId,
+          notificationStatus: notificationStatus,
+          isTop: isTop,
+          updatedTime: utils.int64ToTimestamp(updatedTime)
+        });
+      });
+      return statusList;
+    };
+
     _proto.encodeServerConfParams = function encodeServerConfParams() {
       var modules = this.codec.getModule(PBName.SessionsAttQryInput);
       modules.setNothing(1);
       return modules.getArrayData();
     };
 
-    _proto.encodeUpMsg = function encodeUpMsg(conversation, option) {
+    _proto.getUpMsgModule = function getUpMsgModule(conversation, option) {
       var type = conversation.type;
       var messageType = option.messageType,
           isMentiond = option.isMentiond,
@@ -4533,9 +6121,9 @@
           isFilerWhiteBlacklist = option.isFilerWhiteBlacklist,
           isVoipPush = option.isVoipPush;
       var isGroupType = common.isGroup(type);
-      var flag = 0;
       var modules = this.codec.getModule(PBName.UpStreamMessage);
       var sessionId = common.getSessionId(option);
+      var flag = 0;
       modules.setSessionId(sessionId);
 
       if (isGroupType && isMentiond && content) {
@@ -4553,6 +6141,11 @@
       modules.setConfigFlag(flag);
       modules.setClassname(messageType);
       modules.setContent(utils.toJSON(content));
+      return modules;
+    };
+
+    _proto.encodeUpMsg = function encodeUpMsg(conversation, option) {
+      var modules = this.getUpMsgModule(conversation, option);
       return modules.getArrayData();
     };
 
@@ -4727,6 +6320,20 @@
       return modules.getArrayData();
     };
 
+    _proto.encodeUserSetRTCData = function encodeUserSetRTCData(message, valueInfo, objectName) {
+      var modules = this.codec.getModule(PBName.RtcUserSetDataInput);
+      modules.setObjectName(objectName);
+      var val = this.codec.getModule(PBName.RtcValueInfo);
+      val.setKey(message.name);
+      val.setValue(message.content);
+      modules.setContent(val);
+      val = this.codec.getModule(PBName.RtcValueInfo);
+      val.setKey('uris');
+      val.setValue(valueInfo);
+      modules.setValueInfo(val);
+      return modules.getArrayData();
+    };
+
     _proto.encodeGetRTCData = function encodeGetRTCData(keys, isInner, apiType) {
       var modules = this.codec.getModule(PBName.RtcDataInput);
       modules.setInterior(isInner);
@@ -4828,9 +6435,10 @@
       return modules.getArrayData();
     };
 
-    _proto.encodeGetFileToken = function encodeGetFileToken(fileType) {
+    _proto.encodeGetFileToken = function encodeGetFileToken(fileType, fileName) {
       var modules = this.codec.getModule(PBName.GetQNupTokenInput);
       modules.setType(fileType);
+      modules.setKey(fileName);
       return modules.getArrayData();
     };
 
@@ -4846,215 +6454,127 @@
       return modules.getArrayData();
     };
 
+    _proto.encodeModifyChatRoomKV = function encodeModifyChatRoomKV(chrm, entry, action, currentUserId) {
+      var modules = this.codec.getModule(PBName.SetChrmKV);
+      var key = entry.key,
+          value = entry.value,
+          extra = entry.notificationExtra,
+          isSendNotification = entry.isSendNotification;
+      var status = common.getChatRoomKVOptStatus(entry, action);
+      var serverEntry = {
+        key: key,
+        status: status,
+        value: value || '',
+        uid: currentUserId
+      };
+
+      if (utils.isEmpty(serverEntry.status)) {
+        delete serverEntry.status;
+      }
+
+      modules.setEntry(serverEntry);
+
+      if (isSendNotification) {
+        var conversation = {
+          type: CONVERSATION_TYPE.CHATROOM,
+          targetId: chrm.id
+        };
+        var msgContent = {
+          key: key,
+          value: value,
+          extra: extra,
+          type: action
+        };
+        var msgModule = this.getUpMsgModule(conversation, {
+          messageType: MESSAGE_TYPE.CHRM_KV_NOTIFY,
+          content: msgContent,
+          isPersited: false,
+          isCounted: false
+        });
+        modules.setNotification(msgModule);
+        modules.setBNotify(true);
+        modules.setType(CONVERSATION_TYPE.CHATROOM);
+      }
+
+      return modules.getArrayData();
+    };
+
+    _proto.encodePullChatRoomKV = function encodePullChatRoomKV(time) {
+      var modules = this.codec.getModule(PBName.QueryChrmKV);
+      modules.setTimestamp(time);
+      return modules.getArrayData();
+    };
+
+    _proto.encodePullUserSetting = function encodePullUserSetting(version) {
+      var modules = this.codec.getModule(PBName.PullUserSettingInput);
+      modules.setVersion(version);
+      return modules.getArrayData();
+    };
+
+    _proto.encodeGetConversationStatus = function encodeGetConversationStatus(time) {
+      var modules = this.codec.getModule(PBName.SessionReq);
+      modules.setTime(time);
+      return modules.getArrayData();
+    };
+
+    _proto.encodeSetConversationStatus = function encodeSetConversationStatus(statusList) {
+      var _this2 = this;
+
+      var modules = this.codec.getModule(PBName.SessionStateModifyReq),
+          currentTime = common.DelayTimer.getTime();
+      var stateModuleList = [];
+      utils.forEach(statusList, function (status) {
+        var stateModules = _this2.codec.getModule(PBName.SessionState);
+
+        var type = status.type,
+            targetId = status.targetId,
+            notificationStatus = status.notificationStatus,
+            isTop = status.isTop;
+        var stateItemModuleList = [];
+        stateModules.setType(type);
+        stateModules.setChannelId(targetId);
+        stateModules.setTime(currentTime);
+        var isNotDisturb = utils.isEqual(notificationStatus, NOTIFICATION_STATUS.DO_NOT_DISTURB);
+        var TypeToVal = {};
+
+        if (!utils.isUndefined(notificationStatus)) {
+          TypeToVal[CONVERSATION_STATUS_TYPE.DO_NOT_DISTURB] = isNotDisturb;
+        }
+
+        if (!utils.isUndefined(isTop)) {
+          TypeToVal[CONVERSATION_STATUS_TYPE.TOP] = isTop;
+        }
+
+        utils.forEach(TypeToVal, function (val, type) {
+          if (!utils.isUndefined(val)) {
+            var stateItemModules = _this2.codec.getModule(PBName.SessionStateItem);
+
+            val = val ? CONVERSATION_STATUS_CONFIG.ENABLED : CONVERSATION_STATUS_CONFIG.DISABLED;
+            stateItemModules.setSessionStateType(Number(type));
+            stateItemModules.setValue(val);
+            stateItemModuleList.push(stateItemModules);
+          }
+        });
+        stateModules.setStateItem(stateItemModuleList);
+        stateModuleList.push(stateModules);
+      });
+      modules.setVersion(currentTime);
+      modules.setState(stateModuleList);
+      return modules.getArrayData();
+    };
+
     return Codec$$1;
   }();
 
-  var Defer$2 = utils.Defer;
-  var MessageTimeSyner$1 = common.MessageTimeSyner,
-      ChatRoomMessageTimeSyner$1 = common.ChatRoomMessageTimeSyner;
-  var EVENT_NAME = {
-    MESSAGE_RECEIVED: 'msg-received'
-  };
-
-  var MessagePullManager = function () {
-    function MessagePullManager(serverEngine, option) {
-      this.isPulling = true;
-      this._sentMsgCacheInPolling = {};
-      this._serverEngine = void 0;
-      this._eventEmitter = new utils.EventEmitter();
-      this._messageTimeSyner = void 0;
-      this._chatRoomMessageTimeSyner = new ChatRoomMessageTimeSyner$1();
-      this._pullMessageQueue = new utils.Queue();
-      this._pullMessageTimer = new utils.Timer({
-        type: TIMER_TYPE.INTERVAL,
-        timeout: PULL_MSG_TIME
-      });
-      var self = this;
-      var startSyncTime = option.startSyncTime;
-      var appkey = serverEngine.option.appkey,
-          userId = serverEngine._selfUserId;
-      utils.extend(self, {
-        _serverEngine: serverEngine,
-        _messageTimeSyner: new MessageTimeSyner$1({
-          appkey: appkey,
-          userId: userId,
-          startSyncTime: startSyncTime
-        })
-      });
-      self.pull();
-
-      self._pullMessageTimer.start(self.pull, {
-        thisArg: self
-      });
-    }
-
-    var _proto = MessagePullManager.prototype;
-
-    _proto.watchMessage = function watchMessage(event) {
-      this._eventEmitter.on(EVENT_NAME.MESSAGE_RECEIVED, event);
-    };
-
-    _proto.pull = function pull(option) {
-      this._pullMessageQueue.add({
-        event: this._pullMessageList,
-        args: [option],
-        thisArg: this
-      });
-    };
-
-    _proto.setReceivedMessage = function setReceivedMessage(message) {
-      this._setPullTime(message);
-    };
-
-    _proto.setSentMessage = function setSentMessage(message) {
-      if (this.isPulling) {
-        this._setSentMsgCacheInPolling(message);
-      } else {
-        this._setPullTime(message);
-      }
-    };
-
-    _proto.resetChrmTime = function resetChrmTime(id) {
-      this._chatRoomMessageTimeSyner.set(id, 0);
-    };
-
-    _proto.close = function close() {
-      this._pullMessageTimer.stop();
-
-      this._sentMsgCacheInPolling = {};
-    };
-
-    _proto._setPullTime = function _setPullTime(message) {
-      var isChatRoom = message.type === CONVERSATION_TYPE.CHATROOM;
-      isChatRoom ? this._chatRoomMessageTimeSyner.setByMessage(message) : this._messageTimeSyner.setByMessage(message);
-    };
-
-    _proto._setSentMsgCacheInPolling = function _setSentMsgCacheInPolling(message) {
-      var messageUId = message.messageUId;
-
-      if (utils.isUndefined(messageUId)) {
-        return;
-      }
-
-      this._sentMsgCacheInPolling[messageUId] = message;
-    };
-
-    _proto._consumeSentMsgCacheInPolling = function _consumeSentMsgCacheInPolling() {
-      var self = this;
-      var _sentMsgCacheInPolling = self._sentMsgCacheInPolling;
-      utils.forEach(_sentMsgCacheInPolling, function (message) {
-        self._setPullTime(message);
-      });
-      self._sentMsgCacheInPolling = {};
-    };
-
-    _proto._displatchMessages = function _displatchMessages(option) {
-      var self = this;
-      var message = option.message,
-          finished = option.finished,
-          isPullChatRoomMsg = option.isPullChatRoomMsg,
-          normalSyncTime = option.normalSyncTime,
-          isLastInAPull = option.isLastInAPull;
-      var inboxTime = normalSyncTime.inboxTime,
-          sendboxTime = normalSyncTime.sendboxTime;
-      var sentTime = message.sentTime,
-          messageDirection = message.messageDirection,
-          messageUId = message.messageUId;
-      var isSelfSend = messageDirection === MESSAGE_DIRECTION.SEND;
-      var pullTime = isSelfSend ? sendboxTime : inboxTime;
-
-      if (sentTime <= pullTime && !isPullChatRoomMsg) {
-        return;
-      }
-
-      if (self._sentMsgCacheInPolling[messageUId]) {
-        return;
-      }
-
-      self._eventEmitter.emit(EVENT_NAME.MESSAGE_RECEIVED, {
-        message: message,
-        finished: finished,
-        isLastInAPull: isLastInAPull
-      });
-    };
-
-    _proto._pullMessageList = function _pullMessageList(option) {
-      var self = this;
-      self.isPulling = true;
-      var _serverEngine = self._serverEngine,
-          _messageTimeSyner = self._messageTimeSyner,
-          _chatRoomMessageTimeSyner = self._chatRoomMessageTimeSyner;
-
-      var _ref = option || {},
-          serverPullTime = _ref.time,
-          type = _ref.type,
-          chrmId = _ref.chrmId,
-          count = _ref.count;
-
-      var isPullChatRoomMsg = type === PULL_MSG_TYPE.CHATROOM;
-
-      var syncTime = _messageTimeSyner.get();
-
-      var currentReceiveTime = isPullChatRoomMsg ? _chatRoomMessageTimeSyner.get(chrmId) : syncTime.inboxTime;
-      syncTime = utils.copy(syncTime);
-
-      if (serverPullTime && serverPullTime < currentReceiveTime) {
-        return Defer$2.resolve();
-      }
-
-      var onMessage = function onMessage(event) {
-        var message = event.message,
-            finished = event.finished,
-            isLastInAPull = event.isLastInAPull;
-
-        self._displatchMessages({
-          message: message,
-          finished: finished,
-          isPullChatRoomMsg: isPullChatRoomMsg,
-          isLastInAPull: isLastInAPull,
-          normalSyncTime: syncTime,
-          chatRoomReceiveTime: currentReceiveTime
-        });
-      };
-
-      var pullOption = {
-        onMessage: onMessage
-      };
-      var defer = isPullChatRoomMsg ? _serverEngine.pullChrmMessageList(chrmId, currentReceiveTime, count, pullOption) : _serverEngine.pullMessageList(syncTime, pullOption);
-      return defer.then(function (result) {
-        var finished = result.finished;
-
-        if (finished) {
-          self._consumeSentMsgCacheInPolling();
-        }
-
-        self.isPulling = !finished;
-        return result;
-      })["catch"](function (error) {
-        self.isPulling = false;
-        Logger.write({
-          content: {
-            info: 'end pull error',
-            error: error
-          }
-        });
-      });
-    };
-
-    return MessagePullManager;
-  }();
-
   var DeferHandler$3 = utils.DeferHandler,
-      Defer$3 = utils.Defer;
+      Defer$2 = utils.Defer;
   var SignalId$1 = common.SignalId;
-  var EmitterName = IM_EVENT;
 
   var ServerEngine = function () {
     function ServerEngine(option) {
       this._transporter = void 0;
       this._serverEventEmitter = new utils.EventEmitter();
       this._deferHandler = new DeferHandler$3();
-      this._messagePullManager = void 0;
       this._serverDataCodec = void 0;
       this._selfUserId = void 0;
       this._connectedTime = void 0;
@@ -5065,18 +6585,10 @@
         self._handleSignal(signal);
       });
       transporter.watchStatus(function (status) {
-        Logger.write({
-          content: {
-            info: 'server status changed',
-            status: status
-          }
-        });
+        Logger.info(TAG.L_NETWORK_CHANGED_S, status);
 
         self._handleStatus(status);
       });
-
-      self._watchServerTask();
-
       self._serverDataCodec = new Codec$2(option);
       utils.extend(self, {
         _transporter: transporter,
@@ -5086,33 +6598,6 @@
 
     var _proto = ServerEngine.prototype;
 
-    _proto._afterConnect = function _afterConnect(_ref) {
-      var userId = _ref.userId,
-          timestamp = _ref.timestamp;
-      var self = this;
-      var isOldServer = self.option.isOldServer;
-      var getServerConfig = isOldServer ? self.getOldServerConfig : self.getServerConfig;
-      self._selfUserId = userId;
-      self._connectedTime = timestamp;
-      return getServerConfig.call(self, userId).then(function (syncTime) {
-        var messagePullManager = new MessagePullManager(self, {
-          startSyncTime: syncTime
-        });
-        messagePullManager.watchMessage(function (_ref2) {
-          var message = _ref2.message,
-              finished = _ref2.finished,
-              isLastInAPull = _ref2.isLastInAPull;
-          messagePullManager.setReceivedMessage(message);
-
-          self._notifyMessage(message, finished, isLastInAPull);
-        });
-        self._messagePullManager = messagePullManager;
-        return {
-          id: userId
-        };
-      });
-    };
-
     _proto._handleStatus = function _handleStatus(status) {
       if (common.isDisconnected(status)) {
         this.disconnect();
@@ -5121,11 +6606,27 @@
         var NotSwitchStauts = [TRANSPORTER_STATUS.KICKED_OFFLINE_BY_OTHER_CLIENT];
 
         if (isDisconnectTooFast && !utils.isInclude(NotSwitchStauts, status)) {
-          return this._serverEventEmitter.emit(EmitterName.STATUS, TRANSPORTER_STATUS.DISCONNECT_TOO_FAST);
+          return this._serverEventEmitter.emit(SERVER_EVENT_NAME.STATUS, TRANSPORTER_STATUS.DISCONNECT_TOO_FAST);
         }
       }
 
-      this._serverEventEmitter.emit(EmitterName.STATUS, status);
+      this._serverEventEmitter.emit(SERVER_EVENT_NAME.STATUS, status);
+    };
+
+    _proto._handleSignal = function _handleSignal(signal) {
+      var self = this;
+      var _deferHandler = self._deferHandler;
+      var messageId = signal.messageId;
+
+      if (messageId && signal.getIdentifier) {
+        var deferId = signal.getIdentifier();
+
+        _deferHandler.resolve(deferId, signal);
+      }
+
+      self._handleSignalAck(signal);
+
+      self._dispatchTask(signal);
     };
 
     _proto._handleSignalAck = function _handleSignalAck(signal) {
@@ -5146,71 +6647,76 @@
       }
     };
 
-    _proto._handleSignal = function _handleSignal(signal) {
-      var self = this;
-      var _deferHandler = self._deferHandler;
-      var messageId = signal.messageId;
-
-      if (messageId && signal.getIdentifier) {
-        var deferId = signal.getIdentifier();
-
-        _deferHandler.resolve(deferId, signal);
-      }
-
-      self._handleSignalAck(signal);
-
-      self._dispatchTask(signal);
-    };
-
-    _proto._watchServerTask = function _watchServerTask() {
-      var self = this;
-      var _serverEventEmitter = self._serverEventEmitter,
-          currentUserId = self._selfUserId,
-          connectedTime = self._connectedTime;
-
-      _serverEventEmitter.on(SERVER_TASK.SYNC_SELF_MSG, function (signal) {
-        self._receiveMsgFromOtherDevice(signal);
-      });
-
-      _serverEventEmitter.on(SERVER_TASK.NOTIFY_PULL, function (signal) {
-        var notifyPullConfig = self._serverDataCodec.decodeByPBName(signal.data, PBName.NotifyMsg);
-
-        self._messagePullManager.pull(notifyPullConfig);
-      });
-
-      _serverEventEmitter.on(SERVER_TASK.RECEIVE_MSG, function (signal) {
-        var _messagePullManager = self._messagePullManager;
-
-        if (!_messagePullManager || _messagePullManager.isPulling) {
-          return;
-        }
-
-        var msg = self._serverDataCodec.decodeByPBName(signal.data, PBName.DownStreamMessage, {
-          currentUserId: currentUserId,
-          connectedTime: connectedTime
-        });
-
-        self._messagePullManager.setReceivedMessage(msg);
-
-        self._notifyMessage(msg);
-      });
-    };
-
     _proto._dispatchTask = function _dispatchTask(signal) {
-      var _serverEventEmitter = this._serverEventEmitter;
+      var self = this;
 
       if (signal instanceof DisconnectReader) {
         var status = signal.status;
         status = SERVER_DISCONNECT_STATUS_TO_TRANSPORTER_STATUS[status] || status;
-        return this._handleStatus(status);
+        return self._handleStatus(status);
       }
 
       if (signal instanceof PublishReader) {
+        var _PUBLISH_TOPIC$NOTIFY;
+
         var isSyncMsgSentBySelfOtherClient = signal.syncMsg,
             topic = signal.topic;
-        var task = isSyncMsgSentBySelfOtherClient ? SERVER_TASK.SYNC_SELF_MSG : PUBLISH_TOPIC_MAP_SERVER_TASK[topic];
-        task && _serverEventEmitter.emit(task, signal);
+
+        if (isSyncMsgSentBySelfOtherClient) {
+          return self._receiveMsgFromOtherDevice(signal);
+        }
+
+        var task = (_PUBLISH_TOPIC$NOTIFY = {}, _PUBLISH_TOPIC$NOTIFY[PUBLISH_TOPIC.NOTIFY_PULL_MSG] = self._notifyPullMessage, _PUBLISH_TOPIC$NOTIFY[PUBLISH_TOPIC.RECEIVE_MSG] = self._notifyDirectMessage, _PUBLISH_TOPIC$NOTIFY[PUBLISH_TOPIC.SERVER_NOTIFY] = self._notifyForServer, _PUBLISH_TOPIC$NOTIFY[PUBLISH_TOPIC.SETTING_NOTIFY] = self._notifySettingChanged, _PUBLISH_TOPIC$NOTIFY)[topic] || utils.noop;
+        task.call(self, signal);
       }
+    };
+
+    _proto._notifyPullMessage = function _notifyPullMessage(signal) {
+      var notifyPullConfig = this._serverDataCodec.decodeByPBName(signal.data, PBName.NotifyMsg);
+
+      this._serverEventEmitter.emit(SERVER_EVENT_NAME.NOTIFY_PULL, notifyPullConfig);
+    };
+
+    _proto._notifyDirectMessage = function _notifyDirectMessage(signal) {
+      var currentUserId = this._selfUserId,
+          connectedTime = this._connectedTime;
+
+      var msg = this._serverDataCodec.decodeByPBName(signal.data, PBName.DownStreamMessage, {
+        currentUserId: currentUserId,
+        connectedTime: connectedTime
+      });
+
+      this._serverEventEmitter.emit(SERVER_EVENT_NAME.DIRECT_MSG, msg);
+    };
+
+    _proto._notifyForServer = function _notifyForServer(signal) {
+      var self = this,
+          notifyData = self._serverDataCodec.decodeByPBName(signal.data, PBName.ChrmNotifyMsg),
+          type = notifyData.type;
+
+      Logger.info(TAG.P_NOTIFY_CHRM_KV_S, notifyData);
+
+      switch (type) {
+        case SERVER_NOTIFY_TYPE.KV_CHANGED:
+          self._serverEventEmitter.emit(SERVER_EVENT_NAME.CHRM_KV_CHANGED, notifyData);
+
+          break;
+
+        case SERVER_NOTIFY_TYPE.CONVERSATION_STATUS_CHANGED:
+          self._serverEventEmitter.emit(SERVER_EVENT_NAME.CONVERSATION_STATUS_CHANGED, notifyData.time);
+
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    _proto._notifySettingChanged = function _notifySettingChanged(signal) {
+      var self = this,
+          notifyData = self._serverDataCodec.decodeByPBName(signal.data, PBName.UserSettingNotification);
+
+      self._serverEventEmitter.emit(SERVER_EVENT_NAME.USER_SETTING_CHANGED, notifyData);
     };
 
     _proto._sendSignal = function _sendSignal(writer, decodePBName, option) {
@@ -5256,8 +6762,8 @@
           }, option));
         }
 
-        var exec = isSuccess ? Defer$3.resolve : Defer$3.reject;
-        return exec.call(Defer$3, result);
+        var exec = isSuccess ? Defer$2.resolve : Defer$2.reject;
+        return exec.call(Defer$2, result);
       });
     };
 
@@ -5270,24 +6776,22 @@
 
     _proto._receiveMsgFromOtherDevice = function _receiveMsgFromOtherDevice(signal) {
       var self = this;
-      var _messagePullManager = self._messagePullManager,
-          _deferHandler = self._deferHandler,
+      var _deferHandler = self._deferHandler,
           currentUserId = self._selfUserId,
           connectType = self.option.connectType,
           _serverDataCodec = self._serverDataCodec;
       var isComet = connectType === CONNECT_TYPE.COMET;
+      var data = signal.data,
+          topic = signal.topic;
 
-      var msg = _serverDataCodec.decodeByPBName(signal.data, PBName.UpStreamMessage, {
+      var msg = _serverDataCodec.decodeByPBName(data, PBName.UpStreamMessage, {
         currentUserId: currentUserId,
         signal: signal
       });
 
-      if (isComet && !_messagePullManager.isPulling) {
+      if (isComet || msg.isStatusMessage) {
         msg.sentTime = common.DelayTimer.getTime();
-
-        _messagePullManager.setReceivedMessage(msg);
-
-        return self._notifyMessage(msg);
+        return self._serverEventEmitter.emit(SERVER_EVENT_NAME.DIRECT_MSG, msg);
       }
 
       return utils.deferred(function (resolve, reject) {
@@ -5300,41 +6804,32 @@
       }).then(function (ackSignal) {
         msg.messageUId = ackSignal.messageUId;
         msg.sentTime = ackSignal.timestamp;
-
-        if (!_messagePullManager.isPulling) {
-          _messagePullManager.setReceivedMessage(msg);
-
-          self._notifyMessage(msg);
-        }
+        return self._serverEventEmitter.emit(SERVER_EVENT_NAME.DIRECT_MSG, msg);
       })["catch"](function (error) {
-        Logger.write({
+        Logger.error(TAG.L_DECODE_MSG_E, {
           content: {
             info: 'received msg from other device error',
             error: error,
-            msg: msg
+            topic: topic
           }
         });
       });
     };
 
-    _proto._notifyMessage = function _notifyMessage(message, finished, isLastInAPull) {
+    _proto.watch = function watch(events) {
       var self = this;
-      var _serverEventEmitter = self._serverEventEmitter;
-      finished = utils.isUndefined(finished) ? true : finished;
-
-      _serverEventEmitter.emit(EmitterName.MESSAGE, {
-        message: message,
-        isLastInAPull: isLastInAPull,
-        hasMore: !finished
+      events = events || {};
+      utils.forEach(events, function (event, eventName) {
+        utils.isFunction(event) && self._serverEventEmitter.on(eventName, event);
       });
     };
 
-    _proto.watchMessage = function watchMessage(watcher) {
-      this._serverEventEmitter.on(EmitterName.MESSAGE, watcher);
-    };
-
-    _proto.watchStatus = function watchStatus(watcher) {
-      this._serverEventEmitter.on(EmitterName.STATUS, watcher);
+    _proto.unwatch = function unwatch(events) {
+      var self = this;
+      events = events || {};
+      utils.forEach(events, function (event, eventName) {
+        utils.isFunction(event) && self._serverEventEmitter.off(eventName, event);
+      });
     };
 
     _proto.connect = function connect(user, option) {
@@ -5342,11 +6837,17 @@
       var _transporter = self._transporter;
       return _transporter.connect(user, option).then(function (result) {
         var isConnectSuccess = utils.isEqual(result.status, SUCCESS_CODE);
-        return isConnectSuccess ? Defer$3.resolve(result) : Defer$3.reject(result);
-      }).then(function (result) {
-        return self._afterConnect(result);
-      }, function (_ref3) {
-        var status = _ref3.status;
+        return isConnectSuccess ? Defer$2.resolve(result) : Defer$2.reject(result);
+      }).then(function (_ref) {
+        var userId = _ref.userId,
+            timestamp = _ref.timestamp;
+        self._selfUserId = userId;
+        self._connectedTime = timestamp;
+        return {
+          id: userId
+        };
+      }, function (_ref2) {
+        var status = _ref2.status;
         var errorInfo = CONNECT_SERVER_STATUS_MAP_ERROR_INFO[status] || {
           code: status
         };
@@ -5355,17 +6856,20 @@
     };
 
     _proto.disconnect = function disconnect() {
-      var appkey = this.option.appkey,
-          _messagePullManager = this._messagePullManager;
+      var appkey = this.option.appkey;
       var _transporter = this._transporter,
           _selfUserId = this._selfUserId;
-      _messagePullManager && _messagePullManager.close();
       _transporter && _transporter.disconnect();
       SignalId$1.clear({
         appkey: appkey,
         userId: _selfUserId
       });
-      return Defer$3.resolve(_selfUserId);
+      return Defer$2.resolve(_selfUserId);
+    };
+
+    _proto.getConnectedTime = function getConnectedTime() {
+      var connectedTime = this._connectedTime;
+      return connectedTime;
     };
 
     _proto.getServerConfig = function getServerConfig() {
@@ -5431,13 +6935,13 @@
         return utils.Defer.resolve(msg);
       }
 
-      return self._sendSignal(signal).then(function (_ref4) {
-        var messageUId = _ref4.messageUId,
-            timestamp = _ref4.timestamp;
+      return self._sendSignal(signal).then(function (_ref3) {
+        var messageUId = _ref3.messageUId,
+            timestamp = _ref3.timestamp;
         msg.messageUId = messageUId;
         msg.sentTime = timestamp;
 
-        self._messagePullManager.setSentMessage(msg);
+        self._serverEventEmitter.emit(SERVER_EVENT_NAME.MESSAGE_SEND, msg);
 
         return msg;
       });
@@ -5462,8 +6966,8 @@
       }, upMsgArgs, PUBLISH_TOPIC.RECALL);
     };
 
-    _proto.getFileToken = function getFileToken(fileType) {
-      var data = this._serverDataCodec.encodeGetFileToken(fileType);
+    _proto.getFileToken = function getFileToken(fileType, fileName) {
+      var data = this._serverDataCodec.encodeGetFileToken(fileType, fileName);
 
       var writer = new QueryWriter(QUERY_TOPIC.GET_UPLOAD_FILE_TOKEN, data, this._selfUserId);
       return this._sendSignalForData(writer, PBName.GetQNupTokenOutput);
@@ -5535,8 +7039,8 @@
     };
 
     _proto.getTotalUnreadCount = function getTotalUnreadCount() {
-      return this.getServerConfig().then(function (_ref5) {
-        var totalUnreadCount = _ref5.totalUnreadCount;
+      return this.getServerConfig().then(function (_ref4) {
+        var totalUnreadCount = _ref4.totalUnreadCount;
         return totalUnreadCount;
       });
     };
@@ -5553,19 +7057,24 @@
     _proto.joinChatRoom = function joinChatRoom(chrm, option) {
       var self = this;
       var id = chrm.id;
-      var count = option.count;
+      var count = option.count,
+          isJoinExist = option.isJoinExist,
+          isAutoRejoin = option.isAutoRejoin;
 
       var data = self._serverDataCodec.encodeJoinOrQuitChatRoom();
 
-      var writer = new QueryWriter(QUERY_TOPIC.JOIN_CHATROOM, data, id);
-      return self._sendSignalForData(writer).then(function (result) {
-        self._messagePullManager.resetChrmTime(id);
+      var topic = isJoinExist ? QUERY_TOPIC.JOIN_EXIST_CHATROOM : QUERY_TOPIC.JOIN_CHATROOM;
+      var writer = new QueryWriter(topic, data, id);
 
-        self._messagePullManager.pull({
+      self._serverEventEmitter.emit(SERVER_EVENT_NAME.BEFORE_JOIN_CHATROOM, {
+        id: id
+      });
+
+      return self._sendSignalForData(writer).then(function (result) {
+        self._serverEventEmitter.emit(SERVER_EVENT_NAME.JOIN_CHATROOM, {
+          id: id,
           count: count,
-          type: PULL_MSG_TYPE.CHATROOM,
-          time: 0,
-          chrmId: id
+          isAutoRejoin: isAutoRejoin
         });
 
         return result;
@@ -5609,6 +7118,76 @@
       });
     };
 
+    _proto.modifyChatRoomKV = function modifyChatRoomKV(chrm, entry) {
+      var self = this;
+
+      var _selfUserId = self._selfUserId,
+          _serverDataCodec = self._serverDataCodec,
+          chatRoomId = chrm.id,
+          action = entry.type || CHATROOM_ENTRY_TYPE.UPDATE,
+          data = _serverDataCodec.encodeModifyChatRoomKV(chrm, entry, action, _selfUserId),
+          topic = utils.isEqual(action, CHATROOM_ENTRY_TYPE.DELETE) ? QUERY_TOPIC.DELETE_CHATROOM_KV : QUERY_TOPIC.UPDATE_CHATROOM_KV,
+          writer = new QueryWriter(topic, data, chatRoomId);
+
+      return this._sendSignalForData(writer).then(function () {
+        self._serverEventEmitter.emit(SERVER_EVENT_NAME.CHRM_KV_SET, {
+          id: chatRoomId,
+          data: {
+            kvEntries: [entry],
+            syncTime: common.DelayTimer.getTime()
+          }
+        });
+      });
+    };
+
+    _proto.pullChatRoomKV = function pullChatRoomKV(chrm, time) {
+      var _serverDataCodec = this._serverDataCodec,
+          chatRoomId = chrm.id,
+          data = _serverDataCodec.encodePullChatRoomKV(time),
+          writer = new QueryWriter(QUERY_TOPIC.PULL_CHATROOM_KV, data, chatRoomId);
+
+      return this._sendSignalForData(writer, PBName.ChrmKVOutput);
+    };
+
+    _proto.getUserSettings = function getUserSettings(version) {
+      var _serverDataCodec = this._serverDataCodec,
+          _selfUserId = this._selfUserId,
+          data = _serverDataCodec.encodePullUserSetting(version),
+          writer = new QueryWriter(QUERY_TOPIC.PULL_USER_SETTING, data, _selfUserId);
+
+      return this._sendSignalForData(writer, PBName.PullUserSettingOutput);
+    };
+
+    _proto.getConversationStatus = function getConversationStatus(time) {
+      var _serverDataCodec = this._serverDataCodec,
+          _selfUserId = this._selfUserId,
+          data = _serverDataCodec.encodeGetConversationStatus(time),
+          writer = new QueryWriter(QUERY_TOPIC.GET_CONVERSATION_STATUS, data, _selfUserId);
+
+      return this._sendSignalForData(writer, PBName.SessionStates);
+    };
+
+    _proto.setConversationStatusList = function setConversationStatusList(statusList) {
+      var self = this;
+
+      var _serverDataCodec = this._serverDataCodec,
+          _selfUserId = this._selfUserId,
+          data = _serverDataCodec.encodeSetConversationStatus(statusList),
+          writer = new QueryWriter(QUERY_TOPIC.SET_CONVERSATION_STATUS, data, _selfUserId);
+
+      return this._sendSignalForData(writer, PBName.SessionStateModifyResp).then(function (_ref5) {
+        var version = _ref5.version;
+        statusList = utils.map(statusList, function (status) {
+          status.updatedTime = version;
+          return status;
+        });
+
+        self._serverEventEmitter.emit(SERVER_EVENT_NAME.CONVERSATION_STATUS_SETED, statusList);
+
+        return true;
+      });
+    };
+
     _proto.joinRTCRoom = function joinRTCRoom(room) {
       var data = this._serverDataCodec.encodeJoinRTCRoom(room);
 
@@ -5626,7 +7205,7 @@
     _proto.RTCPing = function RTCPing(room) {
       var data = this._serverDataCodec.encodeJoinRTCRoom(room);
 
-      var writer = new PublishWriter(QUERY_TOPIC.PING_RTC, data, room.id);
+      var writer = new QueryWriter(QUERY_TOPIC.PING_RTC, data, room.id);
       return this._sendSignalForData(writer);
     };
 
@@ -5662,6 +7241,13 @@
       var data = this._serverDataCodec.encodeSetRTCData(key, value, isInner, apiType, message);
 
       var writer = new PublishWriter(QUERY_TOPIC.SET_RTC_DATA, data, roomId);
+      return this._sendSignalForData(writer);
+    };
+
+    _proto.setRTCUserData = function setRTCUserData(roomId, message, valueInfo, objectName) {
+      var data = this._serverDataCodec.encodeUserSetRTCData(message, valueInfo, objectName);
+
+      var writer = new PublishWriter(QUERY_TOPIC.USER_SET_RTC_DATA, data, roomId);
       return this._sendSignalForData(writer);
     };
 
@@ -5720,7 +7306,7 @@
         appkey: appkey,
         userId: userId
       }).get();
-      return Defer$3.resolve(syncTime);
+      return Defer$2.resolve(syncTime);
     };
 
     _proto.getOldConversationList = function getOldConversationList(option, formatOpt) {
@@ -5749,8 +7335,10 @@
   }();
 
   var NAVIGATORS = ['nav.cn.ronghub.com', 'nav2-cn.ronghub.com'];
-  var MINI_SOCKET_DOMAIN_LIST = ['wsproxy.cn.ronghub.com'];
+  var MINI_SOCKET_DOMAIN_LIST = ['wsproxy.cn.ronghub.com', 'wsap-cn.ronghub.com'];
   var MINI_COMET_DOMAIN_LIST = ['cometproxy-cn.ronghub.com', 'mini-cn.ronghub.com'];
+  var MINI_UPLOAD_DOMAIN_QINIU = 'https://upload.qiniup.com';
+  var MINI_UPLOAD_DOMAIN_BOS = 'https://gz.bcebos.com';
   var NETWORK_DETECT_OPTION = {
     url: 'https://cdn.ronghub.com/im_detecting',
     intervalTime: 1500
@@ -5760,7 +7348,7 @@
     navigators: NAVIGATORS,
     detect: NETWORK_DETECT_OPTION,
     isOldServer: true,
-    debug: false
+    isDebug: false
   };
   var GET_MESSAGES_OPTION = {
     count: 20,
@@ -5776,8 +7364,9 @@
     count: 20,
     order: CHATROOM_ORDER.DESC
   };
+  var CHATROOM_NOT_PULL_MSG_COUNT = -1;
   var JOIN_CHATROOM_OPTION = {
-    count: -1
+    count: CHATROOM_NOT_PULL_MSG_COUNT
   };
   var GET_CHATROOM_MESSAGES = {
     count: 20,
@@ -5953,6 +7542,47 @@
       isPersited: false
     }
   };
+  var BASE_NAVI_RESP = {
+    isFixedNaviResp: true,
+    code: 300,
+    userId: '',
+    server: '',
+    backupServer: '',
+    voipCallInfo: '{"strategy":1,"callEngine":[{"engineType":4,"mediaServer":"https://rtc-info.ronghub.com","maxStreamCount":20},{"engineType":3,"vendorKey":"","signKey":"","blinkCMPServer":"rtccmp.ronghub.com:80","blinkSnifferServer":"rtccmp.ronghub.com:80"}]}',
+    kvStorage: 1,
+    uploadServer: 'upload.qiniup.com',
+    openMp: 1,
+    openUS: 1,
+    logSwitch: 1,
+    logPolicy: '{"url": "logcollection.ronghub.com","level": 1,"itv": 6,"times": 5}',
+    bosAddr: 'gz.bcebos.com',
+    joinMChrm: true,
+    activeServer: '',
+    alone: true,
+    chatroomMsg: true,
+    compDays: 0,
+    errorMessage: '',
+    extkitSwitch: 1,
+    gifSize: 2048,
+    grpMsgLimit: 1,
+    historyMsg: true,
+    isFormatted: 1,
+    location: '',
+    monitor: 0,
+    msgAck: '',
+    offlinelogserver: '',
+    onlinelogserver: '',
+    openHttpDNS: true,
+    qnAddr: '',
+    videoTimes: 120,
+    voipServer: ''
+  };
+  var CMP_HOST_HTTPS = {
+    backupServer: 'wsap-cn.ronghub.com:443'
+  };
+  var CMP_HOST_HTTP = {
+    backupServer: 'wsap-cn.ronghub.com:80'
+  };
 
   var RCStorage$1 = common.RCStorage;
 
@@ -6051,9 +7681,36 @@
     var isComet = utils.isEqual(connectType, CONNECT_TYPE.COMET);
     var CmpDomainList = isComet ? MINI_COMET_DOMAIN_LIST : MINI_SOCKET_DOMAIN_LIST;
     var naviResp = {
-      backupServer: CmpDomainList.join(DOMAIN_SEPARATOR_IN_CMPLIST)
+      backupServer: CmpDomainList.join(DOMAIN_SEPARATOR_IN_CMPLIST),
+      uploadServer: MINI_UPLOAD_DOMAIN_QINIU,
+      bosAddr: MINI_UPLOAD_DOMAIN_BOS
     };
     return utils.Defer.resolve(naviResp);
+  };
+
+  var getNaviRespByWS = function getNaviRespByWS(navi) {
+    var protocol = env.protocol.http;
+    var optionCMP = protocol === HTTP_PROTOCOL.HTTP ? CMP_HOST_HTTP : CMP_HOST_HTTPS;
+    return utils.extend(navi, optionCMP);
+  };
+
+  var getPreparedNaviResp = function getPreparedNaviResp(option) {
+    var appkey = option.appkey;
+    var naviResp = BASE_NAVI_RESP;
+    var voipCallInfo = naviResp.voipCallInfo;
+
+    try {
+      var parseVoipCallInfo = utils.parseJSON(voipCallInfo);
+      utils.forEach(parseVoipCallInfo.callEngine, function (item) {
+        if (item.engineType === 3) {
+          item.vendorKey = appkey;
+        }
+      });
+      var jsonVoipCallInfo = utils.toJSON(parseVoipCallInfo);
+      naviResp.voipCallInfo = jsonVoipCallInfo;
+    } catch (error) {}
+
+    return getNaviRespByWS(naviResp);
   };
 
   var NaviManager = function () {
@@ -6071,24 +7728,26 @@
       var option = self.option,
           localNaviHandler = self.localNaviHandler;
       var navigators = option.navigators,
-          token = option.token;
+          token = option.token,
+          connectType = option.connectType;
 
       if (env.isMini) {
-        return getMiniNavi(option);
+        return getMiniNavi(option).then(function (miniNaviResp) {
+          localNaviHandler.set(miniNaviResp);
+          return utils.Defer.resolve(miniNaviResp);
+        });
       }
 
-      Logger.write({
-        content: {
-          navigators: navigators,
-          token: token
-        }
+      Logger.info(TAG.L_GET_NAVI_T, {
+        navigators: navigators,
+        token: token
       });
       var localConfigForNavi = self.getLocalConfig();
 
       if (localNaviHandler.isValid()) {
-        Logger.write({
+        Logger.info(TAG.L_GET_NAVI_R, {
           content: {
-            info: 'get local navi',
+            info: 'local navi',
             localConfigForNavi: localConfigForNavi
           }
         });
@@ -6103,14 +7762,15 @@
       });
       return utils.requestByUrlList(urlList).then(function (_ref) {
         var responseText = _ref.responseText;
-        Logger.write({
+        Logger.info(TAG.L_GET_NAVI_R, {
           content: {
-            info: 'get remote navi resp',
+            info: 'remote navi',
             responseText: responseText
           }
         });
         var resp = parseNaviResponse(responseText);
-        var code = resp.code;
+        var code = resp.code,
+            isFixedNaviResp = resp.isFixedNaviResp;
         var isSuccess = code === NAVI_REQUEST_SUCCESS_CODE;
 
         if (isSuccess) {
@@ -6121,6 +7781,14 @@
             msg: resp.errorMessage
           });
           return utils.Defer.reject(error);
+        } else if (isFixedNaviResp) {
+          if (connectType === CONNECT_TYPE.COMET) {
+            return utils.Defer.reject(ERROR_INFO.NAVI_REQUEST_ERROR);
+          }
+
+          var naviResp = getPreparedNaviResp(option);
+          localNaviHandler.set(naviResp);
+          return naviResp;
         } else {
           return utils.Defer.reject(utils.extendInShallow(ERROR_INFO.NAVI_REQUEST_ERROR, {
             error: responseText
@@ -6131,6 +7799,14 @@
           error: error
         }));
       });
+    };
+
+    _proto2.setLocalConfig = function setLocalConfig(config) {
+      if (utils.isObject(config)) {
+        var localConf = this.getLocalConfig() || {};
+        var newConf = utils.extend(localConf, config);
+        this.localNaviHandler.set(newConf);
+      }
     };
 
     _proto2.getLocalConfig = function getLocalConfig() {
@@ -6209,226 +7885,1241 @@
     return CMPManager;
   }();
 
-  var RCStorage$2 = common.RCStorage;
+  var _STORAGE_KEY_MAP_CONV;
   var SUB_KEY = STORAGE_CONVERSATION.SUB_KEY;
+  var STORAGE_KEY_MAP_CONVERSATION = (_STORAGE_KEY_MAP_CONV = {}, _STORAGE_KEY_MAP_CONV[SUB_KEY.UNREAD_COUNT] = {
+    keyName: 'unreadMessageCount',
+    defaultVal: 0
+  }, _STORAGE_KEY_MAP_CONV[SUB_KEY.HAS_MENTIOND] = {
+    keyName: 'hasMentiond',
+    defaultVal: false
+  }, _STORAGE_KEY_MAP_CONV[SUB_KEY.MENTIOND_INFO] = {
+    keyName: 'mentiondInfo',
+    defaultVal: null
+  }, _STORAGE_KEY_MAP_CONV[SUB_KEY.UNREAD_LAST_TIME] = {
+    keyName: 'lastUnreadTime',
+    defaultVal: 0
+  }, _STORAGE_KEY_MAP_CONV[SUB_KEY.NOTIFICATION] = {
+    keyName: 'notificationStatus',
+    defaultVal: NOTIFICATION_STATUS.NOTIFY
+  }, _STORAGE_KEY_MAP_CONV[SUB_KEY.TOP] = {
+    keyName: 'isTop',
+    defaultVal: false
+  }, _STORAGE_KEY_MAP_CONV);
+  var conversationKeyMapStorageKey = {};
+  utils.forEach(STORAGE_KEY_MAP_CONVERSATION, function (_ref, storeKey) {
+    var keyName = _ref.keyName;
+    conversationKeyMapStorageKey[keyName] = storeKey;
+  });
+  var CONVERSATION_KEY_MAP_STORAGE_KEY = conversationKeyMapStorageKey;
+
+  var ConversationStore = function () {
+    function ConversationStore(option) {
+      this._storage = void 0;
+      var StorageKey = utils.tplEngine(STORAGE_CONVERSATION.ROOT_KEY_TPL, option);
+      this._storage = new common.RCStorage(StorageKey);
+    }
+
+    var _proto = ConversationStore.prototype;
+
+    _proto.set = function set(option, conversation) {
+      conversation = conversation || {};
+      var key = common.getConversationKey(option);
+      var local = this._storage.get(key) || {};
+      utils.forEach(conversation, function (val, key) {
+        var storageKey = CONVERSATION_KEY_MAP_STORAGE_KEY[key];
+
+        if (utils.isUndefined(storageKey) || utils.isUndefined(val)) {
+          return;
+        }
+
+        var defaultVal = STORAGE_KEY_MAP_CONVERSATION[storageKey].defaultVal;
+
+        if (utils.isEqual(defaultVal, val)) {
+          delete local[storageKey];
+        } else {
+          local[storageKey] = val;
+        }
+      });
+
+      if (!local[SUB_KEY.UNREAD_COUNT]) {
+        delete local[SUB_KEY.UNREAD_LAST_TIME];
+      }
+
+      if (utils.isEmpty(local)) {
+        this._storage.remove(key);
+      } else {
+        this._storage.set(key, local);
+      }
+    };
+
+    _proto.get = function get(option) {
+      var key = common.getConversationKey(option),
+          local = this._storage.get(key) || {};
+      var conversation = {};
+      utils.forEach(STORAGE_KEY_MAP_CONVERSATION, function (val, key) {
+        var keyName = val.keyName,
+            defaultVal = val.defaultVal;
+        conversation[keyName] = local[key] || defaultVal;
+      });
+      return conversation;
+    };
+
+    _proto.getValues = function getValues(event) {
+      var setEvent = event || utils.noop;
+      var values = this._storage.getValues() || {};
+      var storeConversationList = [];
+      utils.forEach(values, function (store, key) {
+        var _common$getConversati = common.getConversationByKey(key),
+            type = _common$getConversati.type,
+            targetId = _common$getConversati.targetId;
+
+        var conversation = {};
+        utils.forEach(store, function (val, storeKey) {
+          var _ref2 = STORAGE_KEY_MAP_CONVERSATION[storeKey] || {},
+              keyName = _ref2.keyName,
+              defaultVal = _ref2.defaultVal;
+
+          conversation[keyName] = val || defaultVal;
+        });
+        conversation = utils.extend(conversation, {
+          type: type,
+          targetId: targetId
+        });
+        conversation = setEvent(conversation);
+        storeConversationList.push(conversation);
+      });
+      return storeConversationList;
+    };
+
+    return ConversationStore;
+  }();
+
+  var PullQueueManager = function () {
+    function PullQueueManager(option) {
+      this.isLoading = false;
+      this._queue = new utils.Queue();
+      this._option = void 0;
+      option = option || {};
+      this._option = option;
+    }
+
+    var _proto = PullQueueManager.prototype;
+
+    _proto._execEvent = function _execEvent() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var self = this;
+
+      var _this$_option = this._option,
+          event = _this$_option.event,
+          thisArg = _this$_option.thisArg,
+          onBefore = this._option.onBefore || function () {
+        return args;
+      },
+          onFinished = this._option.onFinished || utils.noop,
+          onError = this._option.onError || utils.noop;
+
+      onBefore.apply(void 0, args);
+      self.isLoading = true;
+      return event.apply(thisArg, args).then(function (result) {
+        self.isLoading = false;
+        onFinished.apply(void 0, [result].concat(args));
+      })["catch"](function (error) {
+        self.isLoading = false;
+        onError(error);
+      });
+    };
+
+    _proto.pull = function pull() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      this._queue.add({
+        event: this._execEvent,
+        args: args,
+        thisArg: this
+      });
+    };
+
+    return PullQueueManager;
+  }();
+
+  var EventName = {
+    CHANGED: 'changed'
+  };
+
+  var ConversationStatusManager = function () {
+    function ConversationStatusManager(serverEngine) {
+      var _serverEngine$watch;
+
+      this._serverEngine = void 0;
+      this._eventEmitter = new utils.EventEmitter();
+      this._timeStorage = void 0;
+      this._handleSetConversationStatus = void 0;
+      this._handleConversationStatusChanged = void 0;
+      var self = this,
+          userId = serverEngine._selfUserId,
+          appkey = serverEngine.option.appkey,
+          storageKey = utils.tplEngine(STORAGE_CONVERSATION_STATUS.ROOT_KEY_TPL, {
+        appkey: appkey,
+        userId: userId
+      }),
+          timeStorage = new common.RCStorage(storageKey),
+          firstPullTime = timeStorage.get(STORAGE_CONVERSATION_STATUS.SUB_KEY.TIME) || 0;
+      var pullQueue = new PullQueueManager({
+        event: self.pull,
+        thisArg: self,
+        onFinished: function onFinished(list) {
+          self._set(list);
+        }
+      });
+
+      self._handleConversationStatusChanged = function (time) {
+        pullQueue.pull(time);
+      };
+
+      self._handleSetConversationStatus = function (list) {
+        self._set(list);
+      };
+
+      self._timeStorage = timeStorage;
+      self._serverEngine = serverEngine;
+      serverEngine.watch((_serverEngine$watch = {}, _serverEngine$watch[SERVER_EVENT_NAME.CONVERSATION_STATUS_CHANGED] = self._handleConversationStatusChanged, _serverEngine$watch[SERVER_EVENT_NAME.CONVERSATION_STATUS_SETED] = self._handleSetConversationStatus, _serverEngine$watch));
+      pullQueue.pull(firstPullTime);
+    }
+
+    var _proto = ConversationStatusManager.prototype;
+
+    _proto.watchChanged = function watchChanged(event) {
+      this._eventEmitter.on(EventName.CHANGED, event);
+    };
+
+    _proto.close = function close() {
+      var _this$_serverEngine$u;
+
+      this._serverEngine.unwatch((_this$_serverEngine$u = {}, _this$_serverEngine$u[SERVER_EVENT_NAME.CONVERSATION_STATUS_CHANGED] = this._handleConversationStatusChanged, _this$_serverEngine$u[SERVER_EVENT_NAME.CONVERSATION_STATUS_SETED] = this._handleSetConversationStatus, _this$_serverEngine$u));
+    };
+
+    _proto.pull = function pull(newPullTime) {
+      if (common.getConnectType(this._serverEngine.option) === CONNECT_TYPE.COMET) {
+        return utils.Defer.reject();
+      }
+
+      var time = this._timeStorage.get(STORAGE_CONVERSATION_STATUS.SUB_KEY.TIME) || 0;
+
+      if (newPullTime >= time) {
+        return this._serverEngine.getConversationStatus(time);
+      } else {
+        return utils.Defer.reject();
+      }
+    };
+
+    _proto._set = function _set(list) {
+      var self = this;
+
+      if (utils.isUndefined(list)) {
+        return;
+      }
+
+      var time = self._timeStorage.get(STORAGE_CONVERSATION_STATUS.SUB_KEY.TIME) || 0;
+      var listCount = list.length;
+      utils.forEach(list, function (statusItem, index) {
+        var updatedTime = statusItem.updatedTime || 0;
+        time = updatedTime > time ? updatedTime : time;
+
+        self._eventEmitter.emit(EventName.CHANGED, {
+          statusItem: statusItem,
+          isLastInAPull: index === listCount - 1
+        });
+      });
+
+      self._timeStorage.set(STORAGE_CONVERSATION_STATUS.SUB_KEY.TIME, time);
+    };
+
+    return ConversationStatusManager;
+  }();
+
+  var EventName$1 = {
+    CHANGED: 'conversationChanged'
+  };
 
   var ConversationManager = function () {
-    function ConversationManager(option) {
-      this._storage = void 0;
-      this._onChanged = void 0;
-      this.updatedConversations = {};
-      var StorageKey = utils.tplEngine(STORAGE_CONVERSATION.ROOT_KEY_TPL, option);
-      this._storage = new RCStorage$2(StorageKey);
-      this._onChanged = option.onChanged || utils.noop;
+    function ConversationManager(option, serverEngine) {
+      this._selfUserId = void 0;
+      this._store = void 0;
+      this._eventEmitter = new utils.EventEmitter();
+      this._statusManager = void 0;
+      this._allConversationList = [];
+      this._updatedConversations = {};
+      var self = this;
+      var statusManager = new ConversationStatusManager(serverEngine);
+      statusManager.watchChanged(function (_ref) {
+        var statusItem = _ref.statusItem,
+            isLastInAPull = _ref.isLastInAPull;
+
+        self._addStatus(statusItem, isLastInAPull);
+      });
+      self._store = new ConversationStore(option);
+      self._selfUserId = option.userId;
+      self._statusManager = statusManager;
     }
 
     var _proto = ConversationManager.prototype;
 
-    _proto._getUpdatedConversationList = function _getUpdatedConversationList() {
-      var self = this;
-      var updatedConversations = self.updatedConversations;
-      var updatedConversationList = [];
-      utils.forEach(updatedConversations, function (conversation) {
-        var storageConversation = self.get(conversation);
-        conversation.unreadMessageCount = storageConversation.unreadMessageCount || 0, conversation.hasMentiond = storageConversation.hasMentiond || false, conversation.mentiondInfo = storageConversation.mentiondInfo;
-        updatedConversationList.push(conversation);
-      });
+    _proto.watch = function watch(events) {
+      var conversation = events.conversation;
 
-      if (utils.isEmpty(updatedConversationList)) {
-        return [];
-      }
-
-      return common.sortConversationList(updatedConversationList);
+      this._eventEmitter.on(EventName$1.CHANGED, conversation);
     };
 
-    _proto._update = function _update() {
+    _proto.addMessage = function addMessage(msgArgs) {
       var self = this;
-
-      var updatedConversationList = self._getUpdatedConversationList();
-
-      if (!utils.isEmpty(updatedConversationList)) {
-        (function (list) {
-          utils.setTimeout(function () {
-            self._onChanged(list);
-
-            self.updatedConversations = {};
-          }, 0);
-        })(updatedConversationList);
-      }
-    };
-
-    _proto.addMessage = function addMessage(message, option) {
-      option = option || {};
-      var self = this,
-          _option = option,
-          isLastInAPull = _option.isLastInAPull,
+      var message = msgArgs.message,
+          isLastInAPull = msgArgs.isLastInAPull,
           type = message.type,
-          sentTime = message.sentTime,
-          messageDirection = message.messageDirection,
-          targetId = message.targetId,
-          content = message.content,
-          messageType = message.messageType,
-          isMentiond = message.isMentiond,
-          isCounted = message.isCounted,
-          isHasConversationType = utils.isInclude(TYPE_HAS_CONVERSATION, type);
+          isPersited = message.isPersited,
+          isSaveConversationType = utils.isInclude(TYPE_HAS_CONVERSATION, type);
 
-      if (!isHasConversationType) {
+      if (!isSaveConversationType) {
         return;
       }
 
-      var isRecall = utils.isEqual(messageType, RECALL_MESSAGE_TYPE);
-      var hasContent = utils.isObject(content);
-      var isOtherSend = messageDirection === MESSAGE_DIRECTION.RECEIVE;
-      var storageConversation = self.get({
-        type: type,
-        targetId: targetId
-      });
       var hasChanged = false;
-      var lastUnreadTime = storageConversation.lastUnreadTime || 0;
-      var unreadMessageCount = storageConversation.unreadMessageCount || 0;
-      var isNotAdded = sentTime > lastUnreadTime;
 
-      if (isOtherSend && isCounted && isNotAdded && (hasChanged = true)) {
-        storageConversation.unreadMessageCount = unreadMessageCount + 1;
-        storageConversation.lastUnreadTime = sentTime;
-      } else if (isOtherSend && isRecall && hasContent && (hasChanged = true)) {
-        var isRecallMsgNotRead = lastUnreadTime >= content.sentTime;
+      var storageConversation = self._store.get(message);
 
-        if (isRecallMsgNotRead && unreadMessageCount) {
-          storageConversation.unreadMessageCount = unreadMessageCount - 1;
-        }
-      }
+      var calcEvents = [self._setUnreadCount, self._setMentiondInfo];
+      utils.forEach(calcEvents, function (event) {
+        var _event$call = event.call(self, message, storageConversation),
+            hasCalcChanged = _event$call.hasChanged,
+            conversation = _event$call.conversation;
 
-      if (isOtherSend && isMentiond && hasContent && content.mentionedInfo && (hasChanged = true)) {
-        storageConversation.hasMentiond = true;
-        storageConversation.mentiondInfo = content.mentionedInfo;
-      }
+        hasChanged = hasChanged || hasCalcChanged;
+        storageConversation = conversation;
+      });
 
       if (hasChanged) {
-        self.set(message, storageConversation);
+        self._store.set(message, storageConversation);
       }
 
-      self._setCache(message);
+      if (isPersited) {
+        var conversation = self._getConversationByMessage(message);
+
+        conversation.updatedItems = {
+          latestMessage: {
+            time: message.sentTime,
+            val: message
+          }
+        };
+
+        self._setUpdatedConversation(conversation);
+      }
 
       var isNeedNotifyUpdate = utils.isUndefined(isLastInAPull) ? true : isLastInAPull;
 
       if (isNeedNotifyUpdate) {
-        self._update();
+        self._notifyConversationChanged();
       }
-    };
-
-    _proto._setCache = function _setCache(message) {
-      var self = this;
-      var type = message.type,
-          targetId = message.targetId,
-          isPersited = message.isPersited;
-      var key = common.getConversationKey(message);
-      var cacheConversation = self.updatedConversations[key] || {};
-      cacheConversation = common.fixConversationData(cacheConversation);
-      var cacheMsgSentTime = cacheConversation.latestMessage.sentTime || 0;
-      var newMsgSentTime = message.sentTime;
-      var isMsgNotAdded = cacheMsgSentTime <= newMsgSentTime;
-
-      if (isPersited && isMsgNotAdded) {
-        cacheConversation = {
-          type: type,
-          targetId: targetId,
-          latestMessage: message
-        };
-        self.updatedConversations[key] = cacheConversation;
-      }
-    };
-
-    _proto.set = function set(option, storageConversationOption) {
-      var _setVals;
-
-      var unreadMessageCount = storageConversationOption.unreadMessageCount,
-          lastUnreadTime = storageConversationOption.lastUnreadTime,
-          hasMentiond = storageConversationOption.hasMentiond,
-          mentiondInfo = storageConversationOption.mentiondInfo,
-          key = common.getConversationKey(option),
-          storageConversation = this._storage.get(key) || {},
-          setVals = (_setVals = {}, _setVals[SUB_KEY.UNREAD_COUNT] = {
-        val: unreadMessageCount
-      }, _setVals[SUB_KEY.UNREAD_LAST_TIME] = {
-        val: lastUnreadTime
-      }, _setVals[SUB_KEY.HAS_MENTIOND] = {
-        val: hasMentiond,
-        checkEvent: function checkEvent(val) {
-          return val;
-        }
-      }, _setVals[SUB_KEY.MENTIOND_INFO] = {
-        val: mentiondInfo,
-        checkEvent: utils.isObject
-      }, _setVals);
-      utils.forEach(setVals, function (_ref, key) {
-        var val = _ref.val,
-            checkEvent = _ref.checkEvent;
-
-        checkEvent = checkEvent || function (val) {
-          return !utils.isEmpty(val);
-        };
-
-        if (utils.isUndefined(val)) {
-          return;
-        }
-
-        if (checkEvent(val)) {
-          storageConversation[key] = val;
-        } else {
-          delete storageConversation[key];
-        }
-      });
-
-      this._storage.set(key, storageConversation);
     };
 
     _proto.get = function get(option) {
-      var key = common.getConversationKey(option);
-      var storageConversation = this._storage.get(key) || {};
-      return {
-        unreadMessageCount: storageConversation[SUB_KEY.UNREAD_COUNT] || 0,
-        lastUnreadTime: storageConversation[SUB_KEY.UNREAD_LAST_TIME] || 0,
-        hasMentiond: storageConversation[SUB_KEY.HAS_MENTIOND] || false,
-        mentiondInfo: storageConversation[SUB_KEY.MENTIOND_INFO]
-      };
+      var conversation = this._store.get(option);
+
+      var notificationStatus = conversation.notificationStatus,
+          isNotDisturb = utils.isEqual(notificationStatus, NOTIFICATION_STATUS.DO_NOT_DISTURB);
+
+      if (isNotDisturb) {
+        conversation.unreadMessageCount = 0;
+      }
+
+      return conversation;
     };
 
-    _proto.remove = function remove(option) {
-      var key = common.getConversationKey(option);
+    _proto.read = function read(option) {
+      var self = this,
+          type = option.type,
+          targetId = option.targetId,
+          _store = self._store,
+          _updatedConversations = self._updatedConversations,
+          key = common.getConversationKey(option),
+          updatedConversation = _updatedConversations[key] || {};
+      var storeConversation = _store.get(option) || {},
+          _storeConversation = storeConversation,
+          unreadMessageCount = _storeConversation.unreadMessageCount,
+          hasMentiond = _storeConversation.hasMentiond;
 
-      this._storage.remove(key);
+      if (unreadMessageCount || hasMentiond) {
+        var updatedTime = common.DelayTimer.getTime();
+        var updatedValues = {
+          type: type,
+          targetId: targetId,
+          unreadMessageCount: 0,
+          hasMentiond: false,
+          mentiondInfo: null,
+          updatedItems: {
+            unreadMessageCount: {
+              time: updatedTime,
+              val: 0
+            },
+            hasMentiond: {
+              time: updatedTime,
+              val: false
+            },
+            mentiondInfo: {
+              time: updatedTime,
+              val: null
+            }
+          }
+        };
+        storeConversation = utils.extendAllowNull(storeConversation, updatedValues);
+
+        _store.set(option, storeConversation);
+
+        _updatedConversations[key] = utils.extendAllowNull(updatedConversation, updatedValues);
+
+        self._notifyConversationChanged();
+      }
     };
 
     _proto.getTotalUnreadCount = function getTotalUnreadCount() {
-      var allVals = this._storage.getValues() || {};
+      var _store = this._store,
+          conversationList = _store.getValues();
+
       var totalCount = 0;
-      utils.forEach(allVals, function (val) {
-        var count = val[SUB_KEY.UNREAD_COUNT] || 0;
-        totalCount += count;
+      utils.forEach(conversationList, function (_ref2) {
+        var unreadMessageCount = _ref2.unreadMessageCount;
+        unreadMessageCount = utils.isNumber(unreadMessageCount) ? unreadMessageCount : 0;
+        totalCount += unreadMessageCount;
       });
       return totalCount;
     };
 
-    _proto.read = function read(option) {
-      var self = this;
-      var key = common.getConversationKey(option);
-      var localConversation = self.get(option) || {};
-      var localUnread = localConversation.unreadMessageCount;
+    _proto.getUnreadCount = function getUnreadCount(option) {
+      var _store = this._store;
+      var storeConversation = _store.get(option) || {};
+      var unreadMessageCount = storeConversation.unreadMessageCount;
+      var count = utils.isNumber(unreadMessageCount) ? unreadMessageCount : 0;
+      return count;
+    };
 
-      if (localUnread) {
-        self.remove(option);
-        var cacheConversation = self.updatedConversations[key];
+    _proto.close = function close() {
+      this._statusManager.close();
+    };
 
-        if (cacheConversation) ; else {
-          self.updatedConversations[key] = option;
+    _proto._getConversationByMessage = function _getConversationByMessage(message) {
+      var type = message.type,
+          targetId = message.targetId,
+          storeConversation = this._store.get(message);
+
+      var conversation = utils.extend(storeConversation, {
+        type: type,
+        targetId: targetId,
+        latestMessage: message
+      });
+      return conversation;
+    };
+
+    _proto._getUpdatedConversationList = function _getUpdatedConversationList() {
+      var self = this,
+          updatedConversations = self._updatedConversations,
+          list = [];
+      utils.forEach(updatedConversations, function (conversation) {
+        var storageItems = self._store.get(conversation);
+
+        utils.forEach(storageItems, function (val, key) {
+          conversation[key] = val;
+        });
+        list.push(conversation);
+      });
+      return common.sortConList(list);
+    };
+
+    _proto._setUnreadCount = function _setUnreadCount(message, conversation) {
+      var content = message.content,
+          messageType = message.messageType,
+          sentTime = message.sentTime,
+          isCounted = message.isCounted,
+          messageDirection = message.messageDirection,
+          senderUserId = message.senderUserId,
+          isSelfSend = utils.isEqual(messageDirection, MESSAGE_DIRECTION.SEND) || utils.isEqual(senderUserId, this._selfUserId),
+          isRecall = utils.isEqual(messageType, RECALL_MESSAGE_TYPE),
+          hasContent = utils.isObject(content);
+      var hasChanged = false;
+      var lastUnreadTime = conversation.lastUnreadTime || 0,
+          unreadMessageCount = conversation.unreadMessageCount || 0,
+          hasBeenAdded = lastUnreadTime > sentTime;
+
+      if (hasBeenAdded || isSelfSend) {
+        return {
+          hasChanged: hasChanged,
+          conversation: conversation
+        };
+      }
+
+      if (isCounted) {
+        conversation.unreadMessageCount = unreadMessageCount + 1;
+        conversation.lastUnreadTime = sentTime;
+        hasChanged = true;
+      }
+
+      if (isRecall && hasContent) {
+        var isNotRead = lastUnreadTime >= content.sentTime;
+
+        if (isNotRead && unreadMessageCount) {
+          conversation.unreadMessageCount = unreadMessageCount - 1;
+          hasChanged = true;
         }
+      }
 
-        self._update();
+      return {
+        hasChanged: hasChanged,
+        conversation: conversation
+      };
+    };
+
+    _proto._setMentiondInfo = function _setMentiondInfo(message, conversation) {
+      var content = message.content,
+          messageDirection = message.messageDirection,
+          isMentiond = message.isMentiond,
+          isSelfSend = utils.isEqual(messageDirection, MESSAGE_DIRECTION.SEND),
+          hasContent = utils.isObject(content);
+      var hasChanged = false;
+
+      if (isSelfSend) ; else if (isMentiond && hasContent && content.mentionedInfo) {
+        conversation.hasMentiond = true;
+        conversation.mentiondInfo = content.mentionedInfo;
+        hasChanged = true;
+      }
+
+      return {
+        hasChanged: hasChanged,
+        conversation: conversation
+      };
+    };
+
+    _proto._setUpdatedConversation = function _setUpdatedConversation(conversation) {
+      if (utils.isObject(conversation) && conversation.targetId && conversation.type) {
+        var self = this,
+            cacheKey = common.getConversationKey(conversation),
+            cacheConversation = self._updatedConversations[cacheKey];
+        self._updatedConversations[cacheKey] = utils.extendAllowNull(cacheConversation, conversation);
+      }
+    };
+
+    _proto._notifyConversationChanged = function _notifyConversationChanged() {
+      var self = this,
+          _eventEmitter = self._eventEmitter,
+          updatedConversationList = self._getUpdatedConversationList();
+
+      if (utils.isEmpty(updatedConversationList)) ; else {
+        utils.setTimeout(function () {
+          _eventEmitter.emit(EventName$1.CHANGED, {
+            updatedConversationList: updatedConversationList
+          });
+
+          self._updatedConversations = {};
+        }, 0);
+      }
+    };
+
+    _proto._addStatus = function _addStatus(conversationStatus, isLastInAPull) {
+      var type = conversationStatus.type,
+          targetId = conversationStatus.targetId,
+          updatedTime = conversationStatus.updatedTime,
+          notificationStatus = conversationStatus.notificationStatus,
+          isTop = conversationStatus.isTop,
+          option = {
+        type: type,
+        targetId: targetId
+      };
+      var updatedItems = {};
+
+      if (!utils.isUndefined(notificationStatus)) {
+        updatedItems['notificationStatus'] = {
+          time: updatedTime,
+          val: notificationStatus
+        };
+      }
+
+      if (!utils.isUndefined(isTop)) {
+        updatedItems['isTop'] = {
+          time: updatedTime,
+          val: isTop
+        };
+      }
+
+      this._setUpdatedConversation({
+        type: type,
+        targetId: targetId,
+        updatedItems: updatedItems
+      });
+
+      this._store.set(option, {
+        notificationStatus: notificationStatus,
+        isTop: isTop
+      });
+
+      if (isLastInAPull) {
+        this._notifyConversationChanged();
       }
     };
 
     return ConversationManager;
+  }();
+
+  var MessageTimeSyner$1 = common.MessageTimeSyner,
+      ChatRoomMessageTimeSyner$1 = common.ChatRoomMessageTimeSyner;
+  var EVENT_NAME$1 = {
+    MESSAGE_RECEIVED: 'msg-received'
+  };
+
+  var MessagePullManager = function () {
+    function MessagePullManager(serverEngine, option) {
+      var _serverEngine$watch;
+
+      this._serverEngine = void 0;
+      this._pullQueue = void 0;
+      this._messageTimeSyner = void 0;
+      this._chatRoomMessageTimeSyner = void 0;
+      this._eventEmitter = new utils.EventEmitter();
+      this._pullMessageTimer = new utils.Timer({
+        type: TIMER_TYPE.INTERVAL,
+        timeout: PULL_MSG_TIME
+      });
+      this._sentMsgCacheInPulling = {};
+      this._handleDirectMessage = void 0;
+      this._handleNotifyPull = void 0;
+      this._handleJoinChatRoom = void 0;
+      this._handleSendMessage = void 0;
+      var self = this;
+      var appkey = serverEngine.option.appkey,
+          userId = serverEngine._selfUserId;
+      var startSyncTime = option.startSyncTime;
+      var pullQueue = new PullQueueManager({
+        event: this._pullEvent,
+        thisArg: this,
+        onFinished: function onFinished() {},
+        onError: function onError() {}
+      });
+
+      self._handleDirectMessage = function (message) {
+        !pullQueue.isLoading && self.notifyMessage({
+          message: message,
+          hasMore: false
+        });
+      };
+
+      self._handleNotifyPull = function (option) {
+        pullQueue.pull(option);
+      };
+
+      self._handleJoinChatRoom = function (_ref) {
+        var id = _ref.id,
+            count = _ref.count,
+            isAutoRejoin = _ref.isAutoRejoin;
+
+        if (utils.isEqual(count, CHATROOM_NOT_PULL_MSG_COUNT)) {
+          self._chatRoomMessageTimeSyner.set(id, common.DelayTimer.getTime());
+        } else {
+          var type = PULL_MSG_TYPE.CHATROOM,
+              chrmId = id;
+          var time = isAutoRejoin ? self._chatRoomMessageTimeSyner.get(id) + 1 : 0;
+
+          self._chatRoomMessageTimeSyner.set(id, time);
+
+          pullQueue.pull({
+            type: type,
+            time: time,
+            chrmId: chrmId,
+            count: count
+          });
+        }
+      };
+
+      self._handleSendMessage = function (message) {
+        pullQueue.isLoading ? self._setSentMsgCacheInPulling(message) : self._setPullTime(message);
+      };
+
+      serverEngine.watch((_serverEngine$watch = {}, _serverEngine$watch[SERVER_EVENT_NAME.DIRECT_MSG] = self._handleDirectMessage, _serverEngine$watch[SERVER_EVENT_NAME.NOTIFY_PULL] = self._handleNotifyPull, _serverEngine$watch[SERVER_EVENT_NAME.JOIN_CHATROOM] = self._handleJoinChatRoom, _serverEngine$watch[SERVER_EVENT_NAME.MESSAGE_SEND] = self._handleSendMessage, _serverEngine$watch));
+      self._serverEngine = serverEngine;
+      self._pullQueue = pullQueue;
+      self._messageTimeSyner = new MessageTimeSyner$1({
+        appkey: appkey,
+        userId: userId,
+        startSyncTime: startSyncTime
+      });
+      self._chatRoomMessageTimeSyner = new ChatRoomMessageTimeSyner$1({
+        appkey: appkey,
+        userId: userId
+      });
+
+      self._pullMessageTimer.start(pullQueue.pull, {
+        thisArg: pullQueue
+      });
+
+      pullQueue.pull();
+    }
+
+    var _proto = MessagePullManager.prototype;
+
+    _proto.watchMessage = function watchMessage(event) {
+      this._eventEmitter.on(EVENT_NAME$1.MESSAGE_RECEIVED, event);
+    };
+
+    _proto.notifyMessage = function notifyMessage(messageArgs) {
+      var message = messageArgs.message;
+
+      this._setPullTime(message);
+
+      this._eventEmitter.emit(EVENT_NAME$1.MESSAGE_RECEIVED, messageArgs);
+    };
+
+    _proto.close = function close() {
+      var _this$_serverEngine$u;
+
+      this._pullMessageTimer.stop();
+
+      this._sentMsgCacheInPulling = {};
+
+      this._serverEngine.unwatch((_this$_serverEngine$u = {}, _this$_serverEngine$u[SERVER_EVENT_NAME.DIRECT_MSG] = this._handleDirectMessage, _this$_serverEngine$u[SERVER_EVENT_NAME.NOTIFY_PULL] = this._handleNotifyPull, _this$_serverEngine$u[SERVER_EVENT_NAME.JOIN_CHATROOM] = this._handleJoinChatRoom, _this$_serverEngine$u[SERVER_EVENT_NAME.MESSAGE_SEND] = this._handleSendMessage, _this$_serverEngine$u));
+    };
+
+    _proto._pullEvent = function _pullEvent(option) {
+      option = option || {};
+
+      var self = this,
+          _serverEngine = self._serverEngine,
+          _messageTimeSyner = self._messageTimeSyner,
+          _chatRoomMessageTimeSyner = self._chatRoomMessageTimeSyner,
+          _option = option,
+          type = _option.type,
+          chrmId = _option.chrmId,
+          serverPullTime = _option.time,
+          count = _option.count,
+          isPullChrmMsg = utils.isEqual(type, PULL_MSG_TYPE.CHATROOM),
+          msgSyncTime = _messageTimeSyner.get(),
+          currentReceiveTime = isPullChrmMsg ? _chatRoomMessageTimeSyner.get(chrmId) : msgSyncTime.inboxTime,
+          syncTime = utils.copy(msgSyncTime);
+
+      if (serverPullTime && serverPullTime < currentReceiveTime) {
+        return utils.Defer.resolve();
+      }
+
+      var onMessage = function onMessage(_ref2) {
+        var message = _ref2.message,
+            finished = _ref2.finished,
+            isLastInAPull = _ref2.isLastInAPull;
+
+        self._displatchMessages({
+          message: message,
+          finished: finished,
+          isPullChrmMsg: isPullChrmMsg,
+          isLastInAPull: isLastInAPull,
+          normalSyncTime: syncTime,
+          chatRoomReceiveTime: currentReceiveTime
+        });
+      };
+
+      if (isPullChrmMsg) {
+        return _serverEngine.pullChrmMessageList(chrmId, currentReceiveTime, count, {
+          onMessage: onMessage
+        });
+      } else {
+        return _serverEngine.pullMessageList(syncTime, {
+          onMessage: onMessage
+        });
+      }
+    };
+
+    _proto._displatchMessages = function _displatchMessages(option) {
+      var self = this,
+          message = option.message,
+          finished = option.finished,
+          isPullChrmMsg = option.isPullChrmMsg,
+          isLastInAPull = option.isLastInAPull,
+          _ref3 = option.normalSyncTime || {},
+          inboxTime = _ref3.inboxTime,
+          sendboxTime = _ref3.sendboxTime,
+          sentTime = message.sentTime,
+          messageDirection = message.messageDirection,
+          messageUId = message.messageUId,
+          isSelfSend = messageDirection === MESSAGE_DIRECTION.SEND,
+          pullTime = isSelfSend ? sendboxTime : inboxTime;
+
+      if (sentTime <= pullTime && !isPullChrmMsg) {
+        return;
+      }
+
+      if (self._sentMsgCacheInPulling[messageUId]) {
+        return;
+      }
+
+      self.notifyMessage({
+        message: message,
+        hasMore: !finished,
+        isLastInAPull: isLastInAPull
+      });
+    };
+
+    _proto._setPullTime = function _setPullTime(message) {
+      var isChatRoom = message.type === CONVERSATION_TYPE.CHATROOM;
+      isChatRoom ? this._chatRoomMessageTimeSyner.setByMessage(message) : this._messageTimeSyner.setByMessage(message);
+    };
+
+    _proto._setSentMsgCacheInPulling = function _setSentMsgCacheInPulling(message) {
+      var messageUId = message.messageUId;
+
+      if (utils.isUndefined(messageUId)) {
+        return;
+      }
+
+      this._sentMsgCacheInPulling[messageUId] = message;
+    };
+
+    _proto._consumeSentMsgCacheInPulling = function _consumeSentMsgCacheInPulling() {
+      var self = this;
+      var _sentMsgCacheInPulling = self._sentMsgCacheInPulling;
+      utils.forEach(_sentMsgCacheInPulling, function (message) {
+        self._setPullTime(message);
+      });
+      self._sentMsgCacheInPulling = {};
+    };
+
+    return MessagePullManager;
+  }();
+
+  var ChatRoomKVStore = function () {
+    function ChatRoomKVStore(chrmId, currentUserId) {
+      this._chatRoomId = void 0;
+      this._kvCaches = {};
+      this._currentUserId = void 0;
+      this._chatRoomId = chrmId;
+      this._currentUserId = currentUserId;
+    }
+
+    var _proto = ChatRoomKVStore.prototype;
+
+    _proto.setEntries = function setEntries(data) {
+      data = data || {};
+      var self = this;
+      var _data = data,
+          kvList = _data.kvEntries,
+          isFullUpdate = _data.isFullUpdate;
+      kvList = kvList || [];
+      isFullUpdate = isFullUpdate || false;
+      isFullUpdate && self.clear();
+      utils.forEach(kvList, function (kv) {
+        self.setEntry(kv, {
+          isFullUpdate: isFullUpdate
+        });
+      });
+    };
+
+    _proto.setEntry = function setEntry(kv, option) {
+      option = option || {};
+      var _option = option,
+          isFullUpdate = _option.isFullUpdate,
+          key = kv.key,
+          type = kv.type,
+          isOverwrite = kv.isOverwrite,
+          userId = kv.userId,
+          latestUserId = this.getSetUserId(key),
+          isDeleteOpt = utils.isEqual(type, CHATROOM_ENTRY_TYPE.DELETE),
+          isSameAtLastSetUser = utils.isEqual(latestUserId, userId),
+          isKeyNotExist = !this.isExisted(key);
+      var event = isDeleteOpt ? this.remove : this.add;
+
+      if (isFullUpdate) {
+        event.call(this, kv);
+      } else if (isOverwrite || isSameAtLastSetUser || isKeyNotExist) {
+        event.call(this, kv);
+      }
+    };
+
+    _proto.add = function add(kv) {
+      var key = kv.key;
+      kv.isDeleted = false;
+      this._kvCaches[key] = kv;
+    };
+
+    _proto.remove = function remove(kv) {
+      var key = kv.key;
+      var cacheKV = this.get(key) || {};
+      cacheKV.isDeleted = true;
+      this._kvCaches[key] = cacheKV;
+    };
+
+    _proto.clear = function clear() {
+      this._kvCaches = {};
+    };
+
+    _proto.get = function get(key) {
+      return this._kvCaches[key];
+    };
+
+    _proto.getSetUserId = function getSetUserId(key) {
+      var cache = this.get(key) || {};
+      return cache.userId;
+    };
+
+    _proto.getValue = function getValue(key) {
+      var kv = this._kvCaches[key] || {};
+      var isDeleted = kv.isDeleted;
+      return isDeleted ? null : kv.value;
+    };
+
+    _proto.getAll = function getAll() {
+      var kvEntries = {};
+      utils.forEach(this._kvCaches, function (kv, key) {
+        if (!kv.isDeleted) {
+          kvEntries[key] = kv.value;
+        }
+      });
+      return kvEntries;
+    };
+
+    _proto.getUpdatedTime = function getUpdatedTime() {
+      var maxTime = 0;
+      utils.forEach(this._kvCaches, function (entry) {
+        var timestamp = entry.timestamp || 0;
+
+        if (maxTime < timestamp) {
+          maxTime = timestamp;
+        }
+      });
+      return maxTime;
+    };
+
+    _proto.isExisted = function isExisted(key) {
+      var cache = this.get(key) || {};
+      var value = cache.value,
+          isDeletedOnLatestOperate = cache.isDeleted;
+      return value && !isDeletedOnLatestOperate;
+    };
+
+    return ChatRoomKVStore;
+  }();
+
+  var storeCaches = {};
+
+  var get = function get(chrmId) {
+    return storeCaches[chrmId];
+  };
+
+  var set$1 = function set(chrmId, data, currentUserId) {
+    var kvStore = get(chrmId);
+
+    if (utils.isEmpty(kvStore)) {
+      kvStore = new ChatRoomKVStore(chrmId, currentUserId);
+    }
+
+    kvStore.setEntries(data);
+    storeCaches[chrmId] = kvStore;
+  };
+
+  var getValue = function getValue(chrmId, key) {
+    var kvStore = get(chrmId);
+    var value = kvStore ? kvStore.getValue(key) : null;
+    return value;
+  };
+
+  var getAll = function getAll(chrmId) {
+    var kvStore = get(chrmId);
+    var kvs = {};
+
+    if (kvStore) {
+      kvs = kvStore.getAll();
+    }
+
+    return kvs;
+  };
+
+  var clear = function clear(chrmId) {
+    var kvStore = get(chrmId) || {};
+    kvStore.clear && kvStore.clear();
+  };
+
+  var ChatRoomKVStore$1 = {
+    get: get,
+    set: set$1,
+    getValue: getValue,
+    getAll: getAll,
+    clear: clear
+  };
+
+  var PullTimeCache = {
+    _caches: {},
+    set: function set(chrmId, time) {
+      PullTimeCache._caches[chrmId] = time;
+    },
+    get: function get(chrmId) {
+      return PullTimeCache._caches[chrmId] || 0;
+    },
+    clear: function clear(chrmId) {
+      PullTimeCache._caches[chrmId] = 0;
+    }
+  };
+
+  var ChatRoomKVManager = function () {
+    function ChatRoomKVManager(serverEngine) {
+      var _serverEngine$watch;
+
+      this._serverEngine = void 0;
+      this._pullQueue = void 0;
+      this._handleChrmKVSet = void 0;
+      this._handleChrmKVChanged = void 0;
+      this._handleBeforeJoinChrm = void 0;
+      var self = this;
+      var userId = serverEngine._selfUserId;
+      var pullQueue = new PullQueueManager({
+        event: this._pullEvent,
+        thisArg: this,
+        onFinished: function onFinished(data, option) {
+          if (!data || !option.chrmId) {
+            return;
+          }
+
+          var chrmId = option.chrmId;
+
+          if (data.isFullUpdate) {
+            self._reset(chrmId);
+          }
+
+          Logger.info(TAG.L_PULL_CHRM_KV_R, {
+            data: data,
+            option: option
+          });
+          ChatRoomKVStore$1.set(chrmId, data, userId);
+          PullTimeCache.set(chrmId, data.syncTime || 0);
+        }
+      });
+
+      self._handleChrmKVSet = function (_ref) {
+        var id = _ref.id,
+            data = _ref.data;
+        ChatRoomKVStore$1.set(id, data, userId);
+      };
+
+      self._handleChrmKVChanged = function (data) {
+        self.pull(data);
+      };
+
+      self._handleBeforeJoinChrm = function (_ref2) {
+        var id = _ref2.id;
+
+        self._reset(id);
+      };
+
+      serverEngine.watch((_serverEngine$watch = {}, _serverEngine$watch[SERVER_EVENT_NAME.CHRM_KV_SET] = self._handleChrmKVSet, _serverEngine$watch[SERVER_EVENT_NAME.CHRM_KV_CHANGED] = self._handleChrmKVChanged, _serverEngine$watch[SERVER_EVENT_NAME.BEFORE_JOIN_CHATROOM] = self._handleBeforeJoinChrm, _serverEngine$watch));
+      this._serverEngine = serverEngine;
+      this._pullQueue = pullQueue;
+    }
+
+    var _proto = ChatRoomKVManager.prototype;
+
+    _proto._reset = function _reset(chrmId) {
+      ChatRoomKVStore$1.clear(chrmId);
+      PullTimeCache.clear(chrmId);
+    };
+
+    _proto._pullEvent = function _pullEvent(data) {
+      var time = data.time,
+          chrmId = data.chrmId,
+          currentTime = PullTimeCache.get(chrmId),
+          isUpdated = currentTime > time;
+      Logger.info(TAG.L_PULL_CHRM_KV_T, {
+        currentTime: currentTime,
+        serverTime: time,
+        isUpdated: isUpdated,
+        data: data
+      });
+
+      if (isUpdated) {
+        Logger.info(TAG.L_PULL_CHRM_KV_R, {
+          info: 'kv is updated. not pull again'
+        });
+        return utils.Defer.resolve();
+      }
+
+      return this._serverEngine.pullChatRoomKV({
+        id: chrmId
+      }, currentTime);
+    };
+
+    _proto.pull = function pull(data) {
+      this._pullQueue.pull(data);
+    };
+
+    _proto.getValue = function getValue(chrmId, key) {
+      return ChatRoomKVStore$1.getValue(chrmId, key);
+    };
+
+    _proto.getAll = function getAll(chrmId) {
+      return ChatRoomKVStore$1.getAll(chrmId);
+    };
+
+    _proto.close = function close() {
+      var _self$_serverEngine$u;
+
+      var self = this;
+
+      self._serverEngine.unwatch((_self$_serverEngine$u = {}, _self$_serverEngine$u[SERVER_EVENT_NAME.CHRM_KV_SET] = self._handleChrmKVSet, _self$_serverEngine$u[SERVER_EVENT_NAME.CHRM_KV_CHANGED] = self._handleChrmKVChanged, _self$_serverEngine$u[SERVER_EVENT_NAME.BEFORE_JOIN_CHATROOM] = self._handleBeforeJoinChrm, _self$_serverEngine$u));
+    };
+
+    return ChatRoomKVManager;
+  }();
+
+  var SettingStore = function () {
+    function SettingStore(appkey, userId) {
+      this._storage = void 0;
+      var storageKey = utils.tplEngine(STORAGE_USER_SETTING.ROOT_KEY_TPL, {
+        appkey: appkey,
+        userId: userId
+      });
+      this._storage = new common.RCStorage(storageKey);
+    }
+
+    var _proto = SettingStore.prototype;
+
+    _proto.set = function set(serverData) {
+      var self = this,
+          _storage = self._storage,
+          settings = serverData.settings,
+          oldSettingItems = _storage.get(STORAGE_USER_SETTING.SUB_KEY.SETTINGS) || {};
+      var newSettingItems = oldSettingItems,
+          isChanged = false;
+      utils.forEach(settings, function (newSetting, key) {
+        newSetting = newSetting || {};
+        var oldSetting = oldSettingItems[key] || {},
+            _newSetting = newSetting,
+            newVersion = _newSetting.version,
+            status = _newSetting.status,
+            newValue = _newSetting.value,
+            oldGlobalVersion = _storage.get(STORAGE_USER_SETTING.SUB_KEY.VERSION) || 0,
+            isNeedUpdateItem = newVersion > (oldSetting.version || 0),
+            isNeedUpdateVersion = newVersion > oldGlobalVersion;
+
+        if (!isNeedUpdateItem) {
+          return;
+        }
+
+        isChanged = true;
+
+        switch (status) {
+          case USER_SETTING_STATUS.ADD:
+          case USER_SETTING_STATUS.UPDATE:
+            newSettingItems[key] = {
+              value: newValue,
+              version: newVersion
+            };
+            break;
+
+          case USER_SETTING_STATUS.DELETE:
+            delete newSettingItems[key];
+            break;
+
+          default:
+        }
+
+        if (isNeedUpdateVersion) {
+          _storage.set(STORAGE_USER_SETTING.SUB_KEY.VERSION, newVersion);
+        }
+      });
+
+      if (!isChanged) {
+        return;
+      }
+
+      if (utils.isEmpty(newSettingItems)) {
+        _storage.remove(STORAGE_USER_SETTING.SUB_KEY.SETTINGS);
+      } else {
+        _storage.set(STORAGE_USER_SETTING.SUB_KEY.SETTINGS, newSettingItems);
+      }
+    };
+
+    _proto.getSetting = function getSetting() {
+      var settings = this._storage.get(STORAGE_USER_SETTING.SUB_KEY.SETTINGS) || {};
+      return utils.map(settings, function (set) {
+        set = set || {};
+        return set.value;
+      });
+    };
+
+    _proto.getVersion = function getVersion() {
+      return this._storage.get(STORAGE_USER_SETTING.SUB_KEY.VERSION) || 0;
+    };
+
+    return SettingStore;
+  }();
+
+  var EventNames = {
+    CHANGED: 'change'
+  };
+
+  var SettingManager = function () {
+    function SettingManager(serverEngine, option) {
+      var _serverEngine$watch;
+
+      this._serverEngine = void 0;
+      this._settingStore = void 0;
+      this._pullQueue = void 0;
+      this._eventEmitter = new utils.EventEmitter();
+      this._handleNotifySettingChanged = void 0;
+      var self = this,
+          appkey = option.appkey,
+          userId = option.userId,
+          isAutoPull = option.isAutoPull,
+          settingStore = new SettingStore(appkey, userId),
+          localVersion = settingStore.getVersion() || 0;
+      var pullQueue = new PullQueueManager({
+        event: serverEngine.getUserSettings,
+        thisArg: serverEngine,
+        onFinished: function onFinished(serverData) {
+          if (serverData && serverData.version) {
+            self._settingStore.set(serverData);
+
+            self._eventEmitter.emit(EventNames.CHANGED, self.get());
+          }
+        }
+      });
+
+      self._handleNotifySettingChanged = function (notifyData) {
+        var version = notifyData.version,
+            localVersion = self._settingStore.getVersion();
+
+        if (version >= localVersion) {
+          pullQueue.pull(localVersion);
+        }
+      };
+
+      self._settingStore = new SettingStore(appkey, userId);
+      self._pullQueue = pullQueue;
+      self._serverEngine = serverEngine;
+      serverEngine.watch((_serverEngine$watch = {}, _serverEngine$watch[SERVER_EVENT_NAME.USER_SETTING_CHANGED] = self._handleNotifySettingChanged, _serverEngine$watch));
+      isAutoPull && pullQueue.pull(localVersion);
+    }
+
+    var _proto = SettingManager.prototype;
+
+    _proto.watchSettingChanged = function watchSettingChanged(event) {
+      this._eventEmitter.on(EventNames.CHANGED, event);
+    };
+
+    _proto.get = function get() {
+      return this._settingStore.getSetting() || {};
+    };
+
+    _proto.close = function close() {
+      var _this$_serverEngine$u;
+
+      this._serverEngine.unwatch((_this$_serverEngine$u = {}, _this$_serverEngine$u[SERVER_EVENT_NAME.USER_SETTING_CHANGED] = this._handleNotifySettingChanged, _this$_serverEngine$u));
+    };
+
+    return SettingManager;
   }();
 
   var WebIMEngine = function () {
@@ -6438,32 +9129,22 @@
       this._naviManager = void 0;
       this._cmpManager = new CMPManager();
       this._conversationManager = void 0;
+      this._messageManager = void 0;
+      this._chatRoomKVManager = void 0;
+      this._userSettingManager = void 0;
       this._serverEngine = void 0;
       this._imEventEmitter = new utils.EventEmitter();
       this._connectionStatus = CONNECTION_STATUS.DISCONNECTED;
       this._connectedDomain = void 0;
       this._networkDetecter = void 0;
+      this._joinedChatRoomSyner = void 0;
       var self = this;
-      var _imEventEmitter = self._imEventEmitter;
       var detect = option.detect;
       var serverEngine = new ServerEngine(option);
-      serverEngine.watchStatus(function (status) {
-        self._handleConnectionStatus(status);
-      });
-      serverEngine.watchMessage(function (event) {
-        var message = event.message,
-            hasMore = event.hasMore,
-            isLastInAPull = event.isLastInAPull;
-
-        self._conversationManager.addMessage(message, {
-          hasMore: hasMore,
-          isLastInAPull: isLastInAPull
-        });
-
-        _imEventEmitter.emit(IM_EVENT.MESSAGE, {
-          message: message,
-          hasMore: hasMore
-        });
+      serverEngine.watch({
+        status: function status(_status) {
+          self._handleConnectionStatus(_status);
+        }
       });
       this._serverEngine = serverEngine;
       this._option = option;
@@ -6488,12 +9169,31 @@
 
     var _proto = WebIMEngine.prototype;
 
+    _proto._notifyMessage = function _notifyMessage(event) {
+      var self = this;
+      var message = event.message;
+      var _serverEngine = self._serverEngine;
+
+      var connectedTime = _serverEngine.getConnectedTime();
+
+      if (common.isLogCommandMsg(message)) {
+        var content = message.content;
+        Logger.uploadFull(0, content, connectedTime);
+        return;
+      }
+
+      this._conversationManager.addMessage(event);
+
+      this._imEventEmitter.emit(IM_EVENT.MESSAGE, event);
+    };
+
     _proto._handleConnectionStatus = function _handleConnectionStatus(status) {
       var _cmpManager = this._cmpManager,
           _naviManager = this._naviManager,
           _connectedDomain = this._connectedDomain;
       var isNeedUpdateCMPList = utils.isInclude(TRANSPORTER_STATUS_NEED_UPDATE_CMP, status);
       var isNeedReconnect = utils.isInclude(TRANSPORTER_STATUS_NEED_RECONNECT, status);
+      var isKickedOfflineByOtherClient = utils.isEqual(CONNECTION_STATUS.KICKED_OFFLINE_BY_OTHER_CLIENT, status);
 
       if (isNeedUpdateCMPList) {
         _cmpManager.addInvalid(_connectedDomain);
@@ -6506,7 +9206,12 @@
       }
 
       if (isNeedReconnect) {
-        this.reconnect();
+        this.disconnect();
+        this.reconnect(true);
+      }
+
+      if (isKickedOfflineByOtherClient) {
+        this.disconnect();
       }
 
       var connectionStatus = TRANSPORTER_STATUS_TO_CONNECTION_STATUS[status] || status;
@@ -6520,8 +9225,7 @@
     _proto._handleConnectError = function _handleConnectError(errorInfo) {
       var _user = this._user;
       var code = errorInfo.code || errorInfo.status;
-
-      this._serverEngine.disconnect();
+      this.disconnect();
 
       if (code === ERROR_INFO.CONN_REDIRECTED.code) {
         this._naviManager.clear();
@@ -6533,34 +9237,93 @@
       return utils.Defer.reject(errorInfo);
     };
 
+    _proto._afterConnect = function _afterConnect(connectUser, syncTime) {
+      var self = this,
+          _serverEngine = self._serverEngine,
+          appkey = self._option.appkey,
+          _imEventEmitter = self._imEventEmitter,
+          _naviManager = self._naviManager,
+          id = connectUser.id,
+          localNavi = _naviManager.getLocalConfig() || {};
+      Logger.setOption({
+        userId: id
+      });
+      self._user.id = id;
+      var conversationManager = new ConversationManager({
+        appkey: appkey,
+        userId: id
+      }, _serverEngine);
+      conversationManager.watch({
+        conversation: function conversation(_ref) {
+          var updatedConversationList = _ref.updatedConversationList;
+
+          _imEventEmitter.emit(IM_EVENT.CONVERSATION, {
+            updatedConversationList: updatedConversationList
+          });
+        }
+      });
+      self._conversationManager = conversationManager;
+      var messageManager = new MessagePullManager(_serverEngine, {
+        startSyncTime: syncTime
+      });
+      messageManager.watchMessage(function (event) {
+        self._notifyMessage(event);
+      });
+      self._messageManager = messageManager;
+      self._chatRoomKVManager = new ChatRoomKVManager(_serverEngine);
+      var isAutoPull = !!Number(localNavi.openUS);
+      var userSettingManager = new SettingManager(_serverEngine, {
+        appkey: appkey,
+        userId: id,
+        isAutoPull: isAutoPull
+      });
+      self._joinedChatRoomSyner = new common.JoinedChatRoomSyner({
+        appkey: appkey,
+        userId: id
+      });
+      userSettingManager.watchSettingChanged(function (config) {
+        config = config || {};
+        var _config = config,
+            voipCallInfo = _config.VoipInfo;
+
+        _naviManager.setLocalConfig({
+          voipCallInfo: utils.toJSON(voipCallInfo)
+        });
+
+        self._imEventEmitter.emit(IM_EVENT.SETTING, config);
+      });
+      self._userSettingManager = userSettingManager;
+    };
+
     _proto.watch = function watch(watchers) {
+      var _events;
+
       var statusWatcher = watchers.status,
           messageWatcher = watchers.message,
-          conversationWatcher = watchers.conversation;
-
-      this._imEventEmitter.on(IM_EVENT.STATUS, function (event) {
-        statusWatcher && statusWatcher(event);
-      });
-
-      this._imEventEmitter.on(IM_EVENT.MESSAGE, function (event) {
-        messageWatcher && messageWatcher(event);
-      });
-
-      this._imEventEmitter.on(IM_EVENT.CONVERSATION, function (event) {
-        conversationWatcher && conversationWatcher(event);
+          conversationWatcher = watchers.conversation,
+          chatroomWatcher = watchers.chatroom;
+      var self = this;
+      var events = (_events = {}, _events[IM_EVENT.STATUS] = statusWatcher, _events[IM_EVENT.MESSAGE] = messageWatcher, _events[IM_EVENT.CONVERSATION] = conversationWatcher, _events[IM_EVENT.CHATROOM] = chatroomWatcher, _events);
+      utils.forEach(events, function (event, eventName) {
+        utils.isFunction(event) && self._imEventEmitter.on(eventName, event);
       });
     };
 
     _proto.unwatch = function unwatch(watchers) {
       var _imEventEmitter = this._imEventEmitter;
+      var offEventNameObj = {
+        status: 'IM_EVENT.STATUS',
+        message: 'IM_EVENT.MESSAGE',
+        conversation: 'IM_EVENT.CONVERSATION',
+        chatroom: 'IM_EVENT.CHATROOM'
+      };
 
       if (watchers) {
-        var statusWatcher = watchers.status,
-            messageWatcher = watchers.message,
-            conversationWatcher = watchers.conversation;
-        statusWatcher && _imEventEmitter.off(IM_EVENT.STATUS, statusWatcher);
-        messageWatcher && _imEventEmitter.off(IM_EVENT.MESSAGE, messageWatcher);
-        conversationWatcher && _imEventEmitter.off(IM_EVENT.CONVERSATION, conversationWatcher);
+        utils.forEach(watchers, function (val, key) {
+          if (offEventNameObj[key]) {
+            _imEventEmitter.off(key, val);
+          }
+        });
       } else {
         _imEventEmitter.clear();
       }
@@ -6577,55 +9340,60 @@
 
     _proto.getAppInfo = function getAppInfo() {
       var _option = this._option,
-          _naviManager = this._naviManager;
-      return utils.extend({
-        navi: _naviManager.getLocalConfig()
-      }, _option);
+          _naviManager = this._naviManager,
+          _userSettingManager = this._userSettingManager;
+      return utils.extendInShallow(_option, {
+        navi: _naviManager.getLocalConfig(),
+        serverConfig: _userSettingManager ? _userSettingManager.get() : {}
+      });
     };
 
-    _proto.connect = function connect(user) {
-      this._handleConnectionStatus(CONNECTION_STATUS.CONNECTING);
-
+    _proto.connect = function connect(user, options) {
+      Logger.startRealtimeUpload();
       var self = this;
       var _option = self._option,
           _serverEngine = self._serverEngine,
-          _cmpManager = self._cmpManager,
-          _imEventEmitter = self._imEventEmitter;
+          _cmpManager = self._cmpManager;
       var naviOpt = common.getNavReqOption(_option, user);
       var naviManager = new NaviManager(naviOpt);
+      var getServerConfig = _option.isOldServer ? _serverEngine.getOldServerConfig : _serverEngine.getServerConfig;
+      options = options || {};
+      var isAutoReconnect = options.isAutoReconnect;
+
+      self._handleConnectionStatus(CONNECTION_STATUS.CONNECTING);
+
       self._user = utils.copy(user);
       self._naviManager = naviManager;
+      var connectUser;
       return naviManager.get().then(function (configForNavi) {
-        var cmpDomainList = common.getCMPDomainList(configForNavi);
+        var cmpDomainList = common.getCMPDomainList(configForNavi, _option);
+        Logger.setServerOption(configForNavi);
 
         _cmpManager.setDomainList(cmpDomainList);
 
         return _cmpManager.getFaster();
-      }).then(function (_ref) {
-        var domain = _ref.domain;
+      }).then(function (_ref2) {
+        var domain = _ref2.domain;
         self._connectedDomain = domain;
         return _serverEngine.connect(user, {
           domain: domain
         });
-      }).then(function (connectUser) {
-        var id = connectUser.id;
-        self._conversationManager = new ConversationManager({
-          appkey: _option.appkey,
-          userId: id,
-          onChanged: function onChanged(updatedConversationList) {
-            _imEventEmitter.emit(IM_EVENT.CONVERSATION, {
-              updatedConversationList: updatedConversationList
-            });
-          }
-        });
-        self._user.id = id;
+      }).then(function (user) {
+        connectUser = user;
+        isAutoReconnect && self.rejoinChatRoom();
+        return getServerConfig.call(_serverEngine, user.id);
+      }).then(function (serverConfig) {
+        self._afterConnect(connectUser, serverConfig);
+
+        self._handleConnectionStatus(CONNECTION_STATUS.CONNECTED);
+
         return connectUser;
-      }, function (error) {
+      })["catch"](function (error) {
         return self._handleConnectError(error);
       });
     };
 
-    _proto.reconnect = function reconnect() {
+    _proto.reconnect = function reconnect(isAutoReconnect) {
       var self = this;
       var _user = self._user;
 
@@ -6634,27 +9402,34 @@
       }
 
       return self._networkDetecter.start().then(function () {
-        return self.connect(_user);
+        return self.connect(_user, {
+          isAutoReconnect: isAutoReconnect
+        });
       });
     };
 
-    _proto.disconnect = function disconnect() {
-      this._handleConnectionStatus(CONNECTION_STATUS.DISCONNECTED);
-
-      this._networkDetecter.stop();
-
+    _proto.disconnect = function disconnect(isNotify) {
+      isNotify && this._handleConnectionStatus(CONNECTION_STATUS.DISCONNECTED);
+      this._networkDetecter && this._networkDetecter.stop();
+      this._messageManager && this._messageManager.close();
+      this._chatRoomKVManager && this._chatRoomKVManager.close();
+      this._userSettingManager && this._userSettingManager.close();
+      this._conversationManager && this._conversationManager.close();
       return this._serverEngine.disconnect();
     };
 
     _proto.changeUser = function changeUser(user) {
-      this.disconnect();
+      this.disconnect(true);
       return this.connect(user);
     };
 
     _proto.sendMessage = function sendMessage(conversation, option) {
       var self = this;
       return self._serverEngine.sendMessage(conversation, option).then(function (message) {
-        self._conversationManager.addMessage(message);
+        self._conversationManager.addMessage({
+          message: message,
+          hasMore: false
+        });
 
         return message;
       });
@@ -6663,7 +9438,10 @@
     _proto.recallMessage = function recallMessage(conversation, message, option) {
       var self = this;
       return self._serverEngine.recallMessage(conversation, message, option).then(function (message) {
-        self._conversationManager.addMessage(message);
+        self._conversationManager.addMessage({
+          message: message,
+          hasMore: false
+        });
 
         return message;
       });
@@ -6678,11 +9456,11 @@
         afterDecode: function afterDecode(conversation) {
           var localConversation = _conversationManager.get(conversation);
 
-          conversation.unreadMessageCount = localConversation.unreadMessageCount || 0;
-          conversation.hasMentiond = localConversation.hasMentiond || false;
-          conversation.mentiondInfo = localConversation.mentiondInfo;
+          conversation = utils.extendAllowNull(conversation, localConversation);
           return conversation;
         }
+      }).then(function (list) {
+        return common.sortConList(list);
       });
     };
 
@@ -6716,6 +9494,16 @@
       }
     };
 
+    _proto.getUnreadCount = function getUnreadCount(conversation) {
+      var isOldServer = this._option.isOldServer;
+
+      if (isOldServer) {
+        var count = this._conversationManager.getUnreadCount(conversation);
+
+        return utils.Defer.resolve(count);
+      }
+    };
+
     _proto.clearUnreadCount = function clearUnreadCount(conversation, option) {
       var isOldServer = this._option.isOldServer,
           _serverEngine = this._serverEngine;
@@ -6727,6 +9515,139 @@
       } else {
         return _serverEngine.clearUnreadCount(conversation, option);
       }
+    };
+
+    _proto.joinChatRoom = function joinChatRoom(chrm, option) {
+      var self = this;
+      var _serverEngine = self._serverEngine,
+          _naviManager = self._naviManager,
+          _chatRoomKVManager = self._chatRoomKVManager,
+          _joinedChatRoomSyner = self._joinedChatRoomSyner;
+      var isAutoRejoin = option.isAutoRejoin;
+      return _serverEngine.joinChatRoom(chrm, option).then(function () {
+        return _naviManager.get();
+      }).then(function (configForNavi) {
+        var isOpenKVStorageService = configForNavi.kvStorage,
+            isOpenJoinMulitpleChrmService = configForNavi.joinMChrm;
+        !isAutoRejoin && _joinedChatRoomSyner.set({
+          chrmId: chrm.id,
+          count: option.count,
+          isOpenJoinMulitpleChrmService: isOpenJoinMulitpleChrmService
+        });
+        var initialTime = 0;
+        return isOpenKVStorageService ? _chatRoomKVManager.pull({
+          time: initialTime,
+          chrmId: chrm.id
+        }) : utils.Defer.resolve();
+      });
+    };
+
+    _proto.quitChatRoom = function quitChatRoom(chrm) {
+      var self = this;
+      var _serverEngine = self._serverEngine;
+      return _serverEngine.quitChatRoom(chrm).then(function () {
+        self._joinedChatRoomSyner.remove(chrm.id);
+
+        return utils.Defer.resolve();
+      });
+    };
+
+    _proto.rejoinChatRoom = function rejoinChatRoom() {
+      var self = this;
+      var _joinedChatRoomSyner = self._joinedChatRoomSyner,
+          _imEventEmitter = self._imEventEmitter;
+
+      var joinedChrmInfos = _joinedChatRoomSyner.get();
+
+      utils.forEach(joinedChrmInfos, function (chrmInfo) {
+        var chrmId = chrmInfo.chrmId,
+            count = chrmInfo.count;
+        var isAutoRejoin = true,
+            isJoinExist = true;
+        return self.joinChatRoom({
+          id: chrmId
+        }, {
+          count: count,
+          isAutoRejoin: isAutoRejoin,
+          isJoinExist: isJoinExist
+        }).then(function () {
+          _imEventEmitter.emit(IM_EVENT.CHATROOM, {
+            chatroomId: chrmId,
+            count: count
+          });
+        }, function (reason) {
+          _imEventEmitter.emit(IM_EVENT.CHATROOM, {
+            chatroomId: chrmId,
+            count: count,
+            errorCode: reason
+          });
+        });
+      });
+    };
+
+    _proto.setChatRoomKV = function setChatRoomKV(chrm, entry) {
+      var self = this;
+      utils.extend(entry, {
+        type: CHATROOM_ENTRY_TYPE.UPDATE,
+        userId: self._user.id
+      });
+      entry.type = CHATROOM_ENTRY_TYPE.UPDATE;
+      return self._serverEngine.modifyChatRoomKV(chrm, entry);
+    };
+
+    _proto.forceSetChatRoomKV = function forceSetChatRoomKV(chrm, entry) {
+      entry.isOverwrite = true;
+      return this.setChatRoomKV(chrm, entry);
+    };
+
+    _proto.removeChatRoomKV = function removeChatRoomKV(chrm, entry) {
+      var self = this;
+      utils.extend(entry, {
+        type: CHATROOM_ENTRY_TYPE.DELETE,
+        userId: self._user.id
+      });
+      return self._serverEngine.modifyChatRoomKV(chrm, entry);
+    };
+
+    _proto.forceRemoveChatRoomKV = function forceRemoveChatRoomKV(chrm, entry) {
+      entry.isOverwrite = true;
+      return this.removeChatRoomKV(chrm, entry);
+    };
+
+    _proto.getChatRoomKV = function getChatRoomKV(chrm, key) {
+      var value = this._chatRoomKVManager.getValue(chrm.id, key);
+
+      if (utils.isEmpty(value)) {
+        return utils.Defer.reject(ERROR_INFO.CHATROOM_KEY_NOT_EXIST);
+      } else {
+        return utils.Defer.resolve(value);
+      }
+    };
+
+    _proto.getAllChatRoomKV = function getAllChatRoomKV(chrm) {
+      var kvs = this._chatRoomKVManager.getAll(chrm.id);
+
+      return utils.Defer.resolve(kvs);
+    };
+
+    _proto.getFileToken = function getFileToken(fileType, originName) {
+      var self = this;
+      var fileName = common.genUploadFileName(fileType, originName);
+      var uploadDomains = common.getUploadFileDomains(self._naviManager.getLocalConfig());
+      return self._serverEngine.getFileToken(fileType, fileName).then(function (data) {
+        return utils.extendInShallow(uploadDomains, data);
+      });
+    };
+
+    _proto.getFileUrl = function getFileUrl(fileType, fileName, originName, uploadResp) {
+      var self = this;
+      uploadResp = uploadResp || {};
+
+      if (uploadResp.isBosRes) {
+        return utils.Defer.resolve(uploadResp);
+      }
+
+      return self._serverEngine.getFileUrl(fileType, fileName, originName);
     };
 
     return WebIMEngine;
@@ -6756,36 +9677,56 @@
 
     var _proto = EngineDispatcher.prototype;
 
-    _proto.exec = function exec(params) {
+    _proto._isEventNeedConnect = function _isEventNeedConnect(eventName) {
+      var engine = this._engine,
+          connectionStatus = engine.getConnectionStatus(),
+          isNotConnected = connectionStatus !== CONNECTION_STATUS.CONNECTED,
+          isEventNeedConnected = utils.isInclude(ENGINE_EVENT_NEED_CONNECTED, eventName);
+      return isNotConnected && isEventNeedConnected;
+    };
+
+    _proto._isEventNeedDisconnect = function _isEventNeedDisconnect(eventName) {
+      var engine = this._engine,
+          connectionStatus = engine.getConnectionStatus(),
+          isConnecting = common.isConnected(connectionStatus) || common.isConnecting(connectionStatus),
+          isEventNeedDisconnected = utils.isInclude(ENGINE_EVENT_NEED_DISCONNECTED, eventName);
+      return isConnecting && isEventNeedDisconnected;
+    };
+
+    _proto._exec = function _exec(params) {
       var event = params.event;
       var engine = this._engine;
-      var connectionStatus = engine.getConnectionStatus();
-      var isNotConnected = connectionStatus !== CONNECTION_STATUS.CONNECTED;
-      var isEventNeedConnected = utils.isInclude(ENGINE_EVENT_NEED_CONNECTED, event);
 
-      if (isNotConnected && isEventNeedConnected) {
+      if (this._isEventNeedConnect(event)) {
         return utils.Defer.reject(ERROR_INFO.NOT_CONNECTED);
       }
 
-      var isConnecting = common.isConnected(connectionStatus) || common.isConnecting(connectionStatus);
-      var isEventNeedDisconnected = utils.isInclude(ENGINE_EVENT_NEED_DISCONNECTED, event);
-
-      if (isConnecting && isEventNeedDisconnected) {
+      if (this._isEventNeedDisconnect(event)) {
         return utils.Defer.reject(ERROR_INFO.RC_CONNECTION_EXIST);
       }
 
       var execResult = execEngineByEvent(params, engine);
       return utils.isPromise(execResult) ? execResult["catch"](function (error) {
         var errorCode = error.status || error.code || error;
+        var msg = utils.isObject(error) ? error.msg : null;
         var errorInfo = ERROR_CODE_TO_INFO[errorCode] || {
           code: errorCode
         };
+
+        if (msg) {
+          errorInfo.msg = msg;
+        }
+
         var isValidErrorCode = utils.isNumberData(errorCode);
 
         if (!isValidErrorCode) {
-          Logger.write({
+          if (utils.isStackError(error)) {
+            error = error.stack.toString();
+          }
+
+          Logger.fatal(TAG.L_CRASH_E, {
             content: {
-              info: 'SDK Error',
+              desc: 'SDK Error',
               error: error
             }
           });
@@ -6798,13 +9739,49 @@
       }) : execResult;
     };
 
+    _proto.exec = function exec(params) {
+      var event = params.event;
+
+      var LOG_TAG = APP_ENGINE_EVENT_LOG_TAG[event],
+          isNeedLog = !utils.isEmpty(LOG_TAG),
+          _ref = LOG_TAG || {},
+          reqLogTag = _ref.req,
+          respLogTag = _ref.resp;
+
+      isNeedLog && Logger.info(reqLogTag, params);
+
+      var execResult = this._exec(params);
+
+      if (utils.isPromise(execResult)) {
+        return execResult.then(function (result) {
+          isNeedLog && Logger.info(respLogTag, result);
+          return result;
+        })["catch"](function (error) {
+          error = error || {};
+          var _error = error,
+              code = _error.code;
+
+          if (isNeedLog && !Logger.isIgnoreErrorCode(code)) {
+            Logger.error(respLogTag, error);
+          }
+
+          return utils.Defer.reject(error);
+        });
+      } else {
+        isNeedLog && Logger.info(respLogTag, execResult);
+        return execResult;
+      }
+    };
+
     return EngineDispatcher;
   }();
 
-  var Type = function Type(name, validator) {
+  var Type = function Type(name, validator, options) {
+    options = options || {};
     var self = this;
     self.validate = validator;
     self.name = name;
+    self.errorInfo = options.errorInfo;
 
     self.canBeNull = function () {
       self.validate = function (data) {
@@ -6825,8 +9802,29 @@
   Type.Function = new Type('Function', utils.isFunction);
   Type.Object = new Type('Object', utils.isObject);
   Type.Array = new Type('Array', utils.isArray);
+  Type.NotAllUndefined = new Type('AllUndefined', function (obj) {
+    if (utils.isObject(obj) || utils.isArray(obj)) {
+      var isNotUndefined = false;
+      utils.forEach(obj, function (val) {
+        if (!utils.isUndefined(val)) {
+          isNotUndefined = true;
+        }
+      });
+      return isNotUndefined;
+    } else {
+      return !utils.isUndefined(obj);
+    }
+  });
   var conversationType = common.getConversationTypeList().join('、');
-  Type.ConversationType = new Type(conversationType, common.isValidConversationType);
+  Type.ConversationType = new Type(conversationType, common.isValidConversationType, {
+    errorInfo: 'Not all settings are empty'
+  });
+  Type.ChatRoomEntryKey = new Type('ChatRoomEntryKey', common.isValidChatRoomKey, {
+    errorInfo: 'ChatRoom Key length must be 1 - 128, Only letters、numbers、+、=、-、_ are supported'
+  });
+  Type.ChatRoomEntryValue = new Type('ChatRoomEntryValue', common.isValidChatRoomValue, {
+    errorInfo: 'ChatRoom Value length must be 1 - 4096'
+  });
 
   var Struct = function () {
     function Struct(structure, funcName, paths) {
@@ -6988,6 +9986,11 @@
       };
       var jsonInfo = utils.toJSON(info);
       if (utils.isEmpty(funcName)) delete info[funcName];
+
+      if (structure.errorInfo) {
+        info = structure.errorInfo;
+      }
+
       return {
         isError: true,
         info: info,
@@ -7079,44 +10082,7 @@
 
       Conversation.merge = function merge(option) {
         try {
-          var conversationList = option.conversationList,
-              updatedConversationList = option.updatedConversationList;
-          conversationList = updatedConversationList.concat(conversationList);
-          conversationList = common.sortConversationList(conversationList);
-          var hashTable = {};
-          var newList = [];
-          utils.forEach(conversationList, function (conversation) {
-            if (!utils.isObject(conversation)) {
-              return;
-            }
-
-            var type = conversation.type,
-                targetId = conversation.targetId;
-            var localConversation = _engineDispatcher.exec({
-              event: ENGINE_EVENT.GET_LOCAL_CONVERSATION,
-              args: [conversation]
-            }) || {};
-            localConversation.unreadMessageCount = localConversation.unreadMessageCount || 0;
-            var key = type + '_' + targetId;
-            var hashItem = hashTable[key];
-
-            if (hashItem) {
-              var index = hashItem.index,
-                  val = hashItem.val;
-              val = utils.extend(conversation, val);
-              val.unreadMessageCount = localConversation.unreadMessageCount;
-              newList[index] = val;
-              hashTable[key].val = val;
-            } else {
-              conversation.unreadMessageCount = localConversation.unreadMessageCount;
-              newList.push(conversation);
-              hashTable[key] = {
-                index: newList.length - 1,
-                val: conversation
-              };
-            }
-          });
-          return newList;
+          return common.mergeConversationList(option);
         } catch (e) {
           utils.consoleError(e);
         }
@@ -7211,6 +10177,13 @@
           return utils.Defer.reject(formatInfo);
         }
 
+        var _option2 = option,
+            isMentiond = _option2.isMentiond,
+            mentiondType = _option2.mentiondType,
+            mentiondUserIdList = _option2.mentiondUserIdList;
+        isMentiond && (option.isMentioned = isMentiond);
+        mentiondType && (option.mentionedType = mentiondType);
+        mentiondUserIdList && (option.mentionedUserIdList = mentiondUserIdList);
         option = utils.extendInShallow(SEND_MESSAGE_TYPE_OPTION[messageType], option);
         option = utils.extendInShallow(SEND_MESSAGE_OPTION, option);
         return _engineDispatcher.exec({
@@ -7241,6 +10214,14 @@
         return _engineDispatcher.exec({
           event: ENGINE_EVENT.CLEAR_UNREAD_COUNT,
           args: [this, option]
+        });
+      };
+
+      _proto.getUnreadCount = function getUnreadCount() {
+        var conversation = this;
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.GET_UNREAD_COUNT,
+          args: [conversation]
         });
       };
 
@@ -7297,6 +10278,64 @@
         return _engineDispatcher.exec({
           event: ENGINE_EVENT.CLEAR_MESSAGES,
           args: [this, option]
+        });
+      };
+
+      _proto.setStatus = function setStatus(option) {
+        var _validate9 = validate({
+          notificationStatus: Type.Number.canBeNull(),
+          isTop: Type.Boolean.canBeNull()
+        }, option, 'conversation.setStatus'),
+            isError = _validate9.isError,
+            info = _validate9.info;
+
+        if (isError) {
+          return utils.Defer.reject(info);
+        }
+
+        var allUndefinedValidate = validate(Type.NotAllUndefined, option);
+        isError = allUndefinedValidate.isError;
+
+        if (isError) {
+          info = allUndefinedValidate.info;
+          return utils.Defer.reject(info);
+        }
+
+        var notificationStatus = option.notificationStatus,
+            isTop = option.isTop;
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.SET_CONVERSATION_STATUS_LIST,
+          args: [[{
+            type: this.type,
+            targetId: this.targetId,
+            notificationStatus: notificationStatus,
+            isTop: isTop
+          }]]
+        });
+      };
+
+      _proto.setStatusList = function setStatusList(statusList) {
+        var _validate10 = validate([{
+          notificationStatus: Type.Number.canBeNull(),
+          isTop: Type.Boolean.canBeNull()
+        }], statusList, 'conversation.setStatusList'),
+            isError = _validate10.isError,
+            info = _validate10.info;
+
+        if (isError) {
+          return utils.Defer.reject(info);
+        }
+
+        var self = this;
+        statusList = utils.map(statusList, function (status) {
+          return utils.extend(status, {
+            type: self.type,
+            targetId: self.targetId
+          });
+        });
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.SET_CONVERSATION_STATUS_LIST,
+          args: [statusList]
         });
       };
 
@@ -7357,6 +10396,25 @@
         });
       };
 
+      _proto.joinExist = function joinExist(option) {
+        var _validate3 = validate({
+          count: Type.Number.canBeNull()
+        }, option, 'chatRoom.joinExist'),
+            isError = _validate3.isError,
+            info = _validate3.info;
+
+        if (isError) {
+          return utils.Defer.reject(info);
+        }
+
+        option['isJoinExist'] = true;
+        option = utils.extendInShallow(JOIN_CHATROOM_OPTION, option);
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.JOIN_CHATROOM,
+          args: [this, option]
+        });
+      };
+
       _proto.quit = function quit() {
         return _engineDispatcher.exec({
           event: ENGINE_EVENT.QUIT_CHATROOM,
@@ -7365,12 +10423,12 @@
       };
 
       _proto.getInfo = function getInfo(option) {
-        var _validate3 = validate({
+        var _validate4 = validate({
           count: Type.Number.canBeNull(),
           order: Type.Number.canBeNull()
         }, option, 'chatRoom.getInfo'),
-            isError = _validate3.isError,
-            info = _validate3.info;
+            isError = _validate4.isError,
+            info = _validate4.info;
 
         if (isError) {
           return utils.Defer.reject(info);
@@ -7386,12 +10444,12 @@
       _proto.send = function send(option) {
         var eventName = 'chatRoom.send';
 
-        var _validate4 = validate({
+        var _validate5 = validate({
           messageType: Type.String,
           content: Type.Object
         }, option, eventName),
-            isError = _validate4.isError,
-            info = _validate4.info;
+            isError = _validate5.isError,
+            info = _validate5.info;
 
         if (isError) {
           return utils.Defer.reject(info);
@@ -7422,13 +10480,13 @@
       };
 
       _proto.getMessages = function getMessages(option) {
-        var _validate5 = validate({
+        var _validate6 = validate({
           count: Type.Number.canBeNull(),
           order: Type.Number.canBeNull(),
           timestrap: Type.Number
         }, option, 'chatRoom.getInfo'),
-            isError = _validate5.isError,
-            info = _validate5.info;
+            isError = _validate6.isError,
+            info = _validate6.info;
 
         if (isError) {
           return utils.Defer.reject(info);
@@ -7438,6 +10496,98 @@
         return _engineDispatcher.exec({
           event: ENGINE_EVENT.GET_CHATROOM_MSGS,
           args: [this, option]
+        });
+      };
+
+      _proto.setEntry = function setEntry(option) {
+        var _validate7 = validate({
+          key: Type.ChatRoomEntryKey,
+          value: Type.ChatRoomEntryValue
+        }, option, 'chatRoom.setEntry'),
+            isError = _validate7.isError,
+            info = _validate7.info;
+
+        if (isError) {
+          return utils.Defer.reject(info);
+        }
+
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.SET_KV,
+          args: [this, option]
+        });
+      };
+
+      _proto.forceSetEntry = function forceSetEntry(option) {
+        var _validate8 = validate({
+          key: Type.ChatRoomEntryKey,
+          value: Type.ChatRoomEntryValue
+        }, option, 'chatRoom.forceSetEntry'),
+            isError = _validate8.isError,
+            info = _validate8.info;
+
+        if (isError) {
+          return utils.Defer.reject(info);
+        }
+
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.FORCE_SET_KV,
+          args: [this, option]
+        });
+      };
+
+      _proto.removeEntry = function removeEntry(option) {
+        var _validate9 = validate({
+          key: Type.ChatRoomEntryKey
+        }, option, 'chatRoom.removeEntry'),
+            isError = _validate9.isError,
+            info = _validate9.info;
+
+        if (isError) {
+          return utils.Defer.reject(info);
+        }
+
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.DEL_KV,
+          args: [this, option]
+        });
+      };
+
+      _proto.forceRemoveEntry = function forceRemoveEntry(option) {
+        var _validate10 = validate({
+          key: Type.ChatRoomEntryKey
+        }, option, 'chatRoom.forceRemoveEntry'),
+            isError = _validate10.isError,
+            info = _validate10.info;
+
+        if (isError) {
+          return utils.Defer.reject(info);
+        }
+
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.FORCE_DEL_KV,
+          args: [this, option]
+        });
+      };
+
+      _proto.getEntry = function getEntry(key) {
+        var _validate11 = validate(Type.ChatRoomEntryKey, key, 'chatRoom.getEntry'),
+            isError = _validate11.isError,
+            info = _validate11.info;
+
+        if (isError) {
+          return utils.Defer.reject(info);
+        }
+
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.GET_KV,
+          args: [this, key]
+        });
+      };
+
+      _proto.getAllEntries = function getAllEntries() {
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.GET_ALL_KV,
+          args: [this]
         });
       };
 
@@ -7534,6 +10684,13 @@
 
       _proto.setUserData = function setUserData(key, value, isInner, message) {
         return this.setData(key, value, isInner, RTC_API_TYPE.PERSON, message);
+      };
+
+      _proto.setRTCUserData = function setRTCUserData(message, valueInfo, objectName) {
+        return _engineDispatcher.exec({
+          event: ENGINE_EVENT.SET_RTC_USER_DATA,
+          args: [this.roomId, message, valueInfo, objectName]
+        });
       };
 
       _proto.getUserData = function getUserData(keys, isInner) {
@@ -7645,6 +10802,12 @@
       });
     };
 
+    _proto.getConnectedTime = function getConnectedTime() {
+      return this._engineDispatcher.exec({
+        event: ENGINE_EVENT.GET_CONNECTED_TIME
+      });
+    };
+
     _proto.getAppInfo = function getAppInfo() {
       return this._engineDispatcher.exec({
         event: ENGINE_EVENT.GET_APP_INFO
@@ -7655,7 +10818,8 @@
       var _validate2 = validate({
         conversation: Type.Function.canBeNull(),
         message: Type.Function.canBeNull(),
-        status: Type.Function.canBeNull()
+        status: Type.Function.canBeNull(),
+        setting: Type.Function.canBeNull()
       }, watchers, 'im.watch'),
           isError = _validate2.isError,
           jsonInfo = _validate2.jsonInfo;
@@ -7703,7 +10867,8 @@
 
     _proto.disconnect = function disconnect() {
       return this._engineDispatcher.exec({
-        event: ENGINE_EVENT.DISCONNECT
+        event: ENGINE_EVENT.DISCONNECT,
+        args: [true]
       });
     };
 
@@ -7724,17 +10889,17 @@
       });
     };
 
-    _proto.getFileToken = function getFileToken(fileType) {
+    _proto.getFileToken = function getFileToken(fileType, originName) {
       return this._engineDispatcher.exec({
         event: ENGINE_EVENT.GET_UPLOAD_TOKEN,
-        args: [fileType]
+        args: [fileType, originName]
       });
     };
 
-    _proto.getFileUrl = function getFileUrl(fileType, fileName, originName) {
+    _proto.getFileUrl = function getFileUrl(fileType, fileName, originName, uploadResp) {
       return this._engineDispatcher.exec({
         event: ENGINE_EVENT.GET_UPLOAD_URL,
-        args: [fileType, fileName, originName]
+        args: [fileType, fileName, originName, uploadResp]
       });
     };
 
@@ -7743,19 +10908,35 @@
 
   var imInstance;
 
+  var initLogger = function initLogger(option, im) {
+    var isDebug = option.isDebug,
+        appkey = option.appkey,
+        logCollectEvent = option.logger;
+    utils.isFunction(logCollectEvent) && Logger.watchLog(logCollectEvent);
+    Logger.setOption({
+      isDebug: isDebug,
+      appkey: appkey
+    });
+    Logger.info(TAG.A_INIT_O, {
+      content: option
+    });
+    im.watch({
+      status: function status(_ref) {
+        var _status = _ref.status;
+        Logger.setOption({
+          isNetworkUnavailable: utils.isEqual(_status, CONNECTION_STATUS.NETWORK_UNAVAILABLE)
+        });
+      }
+    });
+  };
+
   var init = function init(option) {
     option = utils.extendInShallow(IM_OPTION, option);
     option.connectType = common.getConnectType(option);
-    var _option = option,
-        logger = _option.logger,
-        debug = _option.debug;
-    utils.isFunction(logger) && Logger.watch(logger);
-    debug && Logger.setOption({
-      isShowLocal: true
-    });
 
     if (!imInstance) {
       imInstance = new IM(option);
+      initLogger(option, imInstance);
     }
 
     return imInstance;

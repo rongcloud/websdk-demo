@@ -132,6 +132,12 @@
     console.log('Reveice Msg', utils.toJSON(message));
   }
 
+  function watchChatroom(entries) {
+    vueInstance.addOutput('监听到聊天室 KV 更新', entries, 0, [], {
+      color: utils.TypeColor.MSG
+    });
+  }
+
   function autoRun() {
     Vue.nextTick(function () {
       runOneByOne(function () {
@@ -161,10 +167,11 @@
     setConfig(config);
     return Service.init(config, {
       status: watchStatus,
-      message: watchMessage
-    }).then(function (userId) {
+      message: watchMessage,
+      chatroom: watchChatroom
+    }).then(function ({ id }) {
       Storage.set(Storage.ConfigKey, config);
-      loginSuccessEvent(userId, config);
+      loginSuccessEvent(id, config);
     }).catch(function (error) {
       console.log(error);
       vueInstance.$Message.error({

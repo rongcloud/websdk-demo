@@ -64,8 +64,8 @@
       }
       config.navigators = navigators;
     }
-
-    config.isDebug = true;
+    // config.customCMP = ['120.92.13.84:80']
+    // config.isDebug = true;
     im = RongIMLib.init(config);
     
     im.watch({
@@ -76,7 +76,7 @@
         var message = event.message;
         var hasMore = event.hasMore;
         watcher.message(message);
-        console.log('received messages', event);
+        console.warn('received messages', event);
         // message.xxx.xxx;
       },
       status: function (event) {
@@ -87,13 +87,18 @@
         if (unHandleStatus.indexOf(status) === -1) {
           watcher.status(status);
         }
+      },
+      chatroom: function (event) {
+        console.warn('chatroom', event);
+        var updatedEntries = event.updatedEntries;
+        watcher.chatroom(updatedEntries);
       }
     });
+    if(!config.customCMP){
+      delete config.customCMP;
+    }
     
-    return im.connect(config).then(function (user) {
-      selfUserId = user.id;
-      return user.id;
-    });
+    return im.connect(config);
   }
 
   /**
@@ -216,8 +221,13 @@
    */
   function getUnreadCount(conversationType, targetId) {
     conversationType = Number(conversationType);
-    console.log(conversationType, targetId);
-    return utils.Defer.resolve('TODO');
+    var conversation = im.Conversation.get({
+      type: conversationType,
+      targetId: targetId
+    });
+    return conversation.getUnreadCount()
+    // console.log(conversationType, targetId);
+    // return utils.Defer.resolve('TODO');
   }
 
   /**
@@ -263,15 +273,17 @@
    * @param {string} text 文字内容
    * @param {number} conversationType 会话类型
    * @param {string} targetId 目标 id (对方 id、群组 id、聊天室 id 等)
+   * @param {booleam} disableNotification 是否推送消息
    */
-  function sendTextMessage(text, conversationType, targetId, isStatusMessage) {
+  function sendTextMessage(text, conversationType, targetId, isStatusMessage, disableNotification) {
     var content = {
       content: text // 文本内容
     };
     return sendMessage(conversationType, targetId, {
       content: content,
       messageType: 'RC:TxtMsg',
-      isStatusMessage: isStatusMessage
+      isStatusMessage: isStatusMessage,
+      disableNotification: disableNotification
     });
   }
 
@@ -289,14 +301,15 @@
    * @param {string} base64 图片 base64 缩略图
    * @param {string} imageUri 图片上传后的 url
    */
-  function sendImageMessage(base64, imageUri, conversationType, targetId) {
+  function sendImageMessage(base64, imageUri, conversationType, targetId, disableNotification) {
     var content = {
       content: base64, // 压缩后的 base64 略缩图, 用来快速展示图片
       imageUri: imageUri // 上传到服务器的 url. 用来展示高清图片
     };
     return sendMessage(conversationType, targetId, {
       content: content,
-      messageType: 'RC:ImgMsg'
+      messageType: 'RC:ImgMsg',
+      disableNotification
     });
   }
 
@@ -309,7 +322,7 @@
    * @param {string} fileType 文件类型
    * @param {string} fileUrl 文件上传后的 url
    */
-  function sendFileMessage(fileName, fileSize, fileType, fileUrl, conversationType, targetId) {
+  function sendFileMessage(fileName, fileSize, fileType, fileUrl, conversationType, targetId, disableNotification) {
     var content = {
       name: fileName, // 文件名
       size: fileSize, // 文件大小
@@ -318,7 +331,8 @@
     };
     return sendMessage(conversationType, targetId, {
       content: content,
-      messageType: 'RC:FileMsg'
+      messageType: 'RC:FileMsg',
+      disableNotification
     });
   }
 
@@ -330,7 +344,7 @@
    * @param {string} remoteUrl 语音上传后的 url
    * @param {number} duration 语音时长
    */
-  function sendVoiceMessage(remoteUrl, type, duration, conversationType, targetId) {
+  function sendVoiceMessage(remoteUrl, type, duration, conversationType, targetId, disableNotification) {
     var content = {
       remoteUrl: remoteUrl, // 音频 url, 建议格式: aac
       duration: duration, // 音频时长
@@ -338,7 +352,8 @@
     };
     return sendMessage(conversationType, targetId, {
       content: content,
-      messageType: 'RC:HQVCMsg'
+      messageType: 'RC:HQVCMsg',
+      disableNotification
     });
   }
 
@@ -350,20 +365,23 @@
    * @param {string} messageUId 撤回的消息 Uid
    * @param {number} sentTime 撤回的消息 sentTime
    */
-  function sendRecallMessage(messageUId, sentTime, conversationType, targetId) {
+  function sendRecallMessage(messageUId, sentTime, conversationType, targetId, disableNotification) {
     var recallMsg;
     if (messageUId && sentTime && conversationType && targetId) {
       recallMsg = {
         messageUId: messageUId,
-        sentTime: sentTime
+        sentTime: sentTime,
+        disableNotification: disableNotification
       };
     } else {
       var lastMsg = CacheMsg.getLast() || {};
       recallMsg = lastMsg;
+      recallMsg.disableNotification = disableNotification;
     }
     return im.Conversation.get({
       type: conversationType,
-      targetId: targetId
+      targetId: targetId,
+      
     }).recall(recallMsg);
   }
 
@@ -374,7 +392,30 @@
    * @param {string} text 文字内容
    * @param {string} methiondId @ 对象的 id
    */
-  function sendAtMessage(text, methiondId, conversationType, targetId) {
+  function sendAtMessage(text, methiondId, conversationType, targetId, disableNotification) {
+    conversationType = Number(conversationType);
+
+    var isMentioned = true;
+
+    var content = {
+      content: text
+    };
+
+    return im.Conversation.get({
+      type: conversationType,
+      targetId: targetId
+    }).send({
+      content: content,
+      messageType: 'RC:TxtMsg',
+      isMentioned: isMentioned,
+      mentionedUserIdList: [methiondId], // @ 人 id 列表
+      mentionedType: 2,
+      disableNotification
+    });
+  }
+
+  //测试错误参数下发送 @  消息
+  function sendAtMessageByErrorParamField(text, methiondId, conversationType, targetId, disableNotification) {
     conversationType = Number(conversationType);
 
     var isMentioned = true;
@@ -391,7 +432,8 @@
       messageType: 'RC:TxtMsg',
       isMentiond: isMentioned,
       mentiondUserIdList: [methiondId], // @ 人 id 列表
-      mentiondType: 2
+      mentiondType: 1,
+      disableNotification
     });
   }
 
@@ -420,7 +462,7 @@
    * @param {string} messageType 注册消息的 Web 端类型名
    * @param {*} props 消息包含的字段集合
    */
-  function sendRegisterMessage(messageType, props, conversationType, targetId) {
+  function sendRegisterMessage(messageType, props, conversationType, targetId, disableNotification) {
     var content = props.split(',');
     return im.Conversation.get({
       type: conversationType,
@@ -429,7 +471,8 @@
       messageType: messageType,
       content: {
         content: content
-      }
+      },
+      disableNotification
     });
   }
 
@@ -445,7 +488,7 @@
    * @param {number} longitude 经度
    * @param {string} poi 位置信息
    */
-  function sendLocationMessage(base64, latitude, longitude, poi, conversationType, targetId) {
+  function sendLocationMessage(base64, latitude, longitude, poi, conversationType, targetId, disableNotification) {
     var content = {
       latitude: latitude,
       longitude: longitude,
@@ -457,7 +500,8 @@
       targetId: targetId
     }).send({
       messageType: 'RC:LBSMsg',
-      content: content
+      content: content,
+      disableNotification
     });
   }
 
@@ -470,7 +514,7 @@
    * @param {number} imageUri 显示图片的 url(图片信息)
    * @param {string} url 点击图文后打开的 url
    */
-  function sendRichContentMessage(title, content, imageUri, url, conversationType, targetId) {
+  function sendRichContentMessage(title, content, imageUri, url, conversationType, targetId, disableNotification) {
     content = {
       title: title,
       content: content,
@@ -483,7 +527,8 @@
       targetId: targetId
     }).send({
       messageType: 'RC:ImgTextMsg',
-      content: content
+      content: content,
+      disableNotification
     });
   }
 
@@ -498,6 +543,21 @@
     return im.ChatRoom.get({
       id: chatRoomId
     }).join({
+      count: count
+    });
+  }
+
+  /**
+   * 加入已存在的聊天室
+   * 文档: https://docs.rongcloud.cn/im/imlib/web/chatroom/#join
+   *
+   * @param {string} chatRoomId 聊天室 id
+   * @param {number} count 拉取消息数量
+   */
+  function joinExistChatRoom(chatRoomId, count) {
+    return im.ChatRoom.get({
+      id: chatRoomId
+    }).joinExist({
       count: count
     });
   }
@@ -692,6 +752,16 @@
     }).quit();
   }
 
+  function setConversationStatus(isNotification, isTop, conversationType, targetId) {
+    return im.Conversation.get({
+      type: conversationType,
+      targetId: targetId
+    }).setStatus({
+      notificationStatus: isNotification,
+      isTop: isTop
+    });
+  }
+
   function getLastCacheMsgUId() {
     return CacheMsg.getLast().messageUId;
   }
@@ -723,6 +793,7 @@
     sendFileMessage: sendFileMessage,
     sendVoiceMessage: sendVoiceMessage,
     sendAtMessage: sendAtMessage,
+    sendAtMessageByErrorParamField: sendAtMessageByErrorParamField,
     sendLocationMessage: sendLocationMessage,
     sendRichContentMessage: sendRichContentMessage,
     sendRecallMessage: sendRecallMessage,
@@ -732,6 +803,7 @@
     clearUnreadCount: clearUnreadCount,
 
     joinChatRoom: joinChatRoom,
+    joinExistChatRoom: joinExistChatRoom,
     quitChatRoom: quitChatRoom,
     getChatRoomInfo: getChatRoomInfo,
     getChatRoomHistoryMessages: getChatRoomHistoryMessages,
@@ -760,7 +832,8 @@
     getRTCRoomInfo: getRTCRoomInfo,
     getRTCUserInfoList: getRTCUserInfoList,
     setRTCUserInfo: setRTCUserInfo,
-    removeRTCUserInfo: removeRTCUserInfo
+    removeRTCUserInfo: removeRTCUserInfo,
+    setConversationStatus: setConversationStatus
   };
   
 })(window);

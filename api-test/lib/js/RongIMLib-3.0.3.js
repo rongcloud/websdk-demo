@@ -1,6 +1,6 @@
 /*
-* RongIMLib.js v3.0.2-dev
-* Release Date: Fri May 22 2020 11:47:37 GMT+0800 (China Standard Time)
+* RongIMLib.js v3.0.3-dev
+* Release Date: Tue Jun 09 2020 15:21:33 GMT+0800 (China Standard Time)
 * Copyright 2020 RongCloud
 * Released under the MIT License.
 */
@@ -10,7 +10,7 @@
   (global.RongIMLib = factory());
 }(this, (function () { 'use strict';
 
-  var versionToServer = "3.0.2";
+  var versionToServer = "3.0.3";
 
   var SDK_VERSION = versionToServer;
 
@@ -382,7 +382,8 @@
   };
   var HTTP_PROTOCOL = {
     HTTP: 'http:',
-    HTTPS: 'https:'
+    HTTPS: 'https:',
+    FILE: 'file:'
   };
   var WS_PROTOCOL = {
     WSS: 'wss:',
@@ -395,6 +396,7 @@
   };
   var NAVI_URL_TPL = '{url}/{type}.js?appId={appkey}&token={token}&callBack=' + NAVI_CALLBACK_NAME + '&r={random}&v=' + SDK_VERSION;
   var CMP_URL_TPL = '{protocol}//{domain}/websocket?appId={appkey}&token={token}&apiVer={apiVer}&sdkVer=' + SDK_VERSION;
+  var MINI_CMP_URL_TPL = '{protocol}//{domain}/websocket?appId={appkey}&token={token}&apiVer={apiVer}&sdkVer=' + SDK_VERSION + '&platform={platform}';
   var COMET_REQ_HAS_TOPIC_URL_TPL = '{protocol}//{domain}/websocket?messageid={messageId}&header={headerCode}&sessionid={sessionId}&topic={topic}&targetid={targetId}&pid={pid}';
   var COMET_REQ_NO_TOPIC_URL_TPL = '{protocol}//{domain}/websocket?messageid={messageId}&header={headerCode}&sessionid={sessionId}&pid={pid}';
   var COMET_PULL_URL_TPL = '{protocol}//{domain}/pullmsg.js?sessionid={sessionId}&timestrap={timestamp}&pid={pid}';
@@ -406,6 +408,10 @@
     PENNDING: 'pendding',
     BUSY: 'busy',
     ENDING: 'ending'
+  };
+  var PLATFORM_TYPE = {
+    MINI: 'Miniprogram',
+    WEB: 'Web'
   };
 
   var UnKown = 'UnKown';
@@ -503,11 +509,11 @@
 
   var getProtocol = function getProtocol(global) {
     var location = global.location || {};
+    var isHttp = location.protocol === HTTP_PROTOCOL.HTTP || location.protocol === HTTP_PROTOCOL.FILE;
     var protocol = {
-      http: location.protocol || HTTP_PROTOCOL.HTTPS,
+      http: isHttp ? HTTP_PROTOCOL.HTTP : HTTP_PROTOCOL.HTTPS,
       ws: WS_PROTOCOL.WSS
     };
-    var isHttp = protocol.http === HTTP_PROTOCOL.HTTP;
 
     if (isHttp) {
       protocol.ws = WS_PROTOCOL.WS;
@@ -1011,7 +1017,7 @@
   var Socket$2 = isMini$3 ? Socket : Socket$1;
 
   /*!
-   基于 es6-promise
+   åŸºäºŽ es6-promise
    * Github: https://github.com/stefanpenner/es6-promise
    * @overview es6-promise - a tiny implementation of Promises/A+.
    * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
@@ -1074,7 +1080,7 @@
   var global$7 = env.global;
 
   var isXDomainRequest = function isXDomainRequest(xhr) {
-    return Object.prototype.toString.call(xhr) === '[object XDomainRequest]';
+    return Object.prototype.toString.call(xhr) === '[object XDomainRequest]' || typeof XDomainRequest === 'object';
   };
 
   var isValidRequest = function isValidRequest(obj) {
@@ -3387,18 +3393,28 @@
         connectType = option.connectType,
         protocol = option.protocol;
     var isComet = connectType === CONNECT_TYPE.COMET;
+    var cmpTpl = CMP_URL_TPL;
 
     if (isEmpty$1(protocol)) {
       protocol = isComet ? env.protocol.http : env.protocol.ws;
     }
 
-    return tplEngine$1(CMP_URL_TPL, {
+    var tplOption = {
       domain: domain,
       appkey: appkey,
       protocol: protocol,
       apiVer: getRandomNum$1(1e6),
       token: utils.encodeURI(token)
-    });
+    };
+
+    if (env.isMini) {
+      cmpTpl = MINI_CMP_URL_TPL;
+      utils.extend(tplOption, {
+        platform: PLATFORM_TYPE.MINI
+      });
+    }
+
+    return tplEngine$1(cmpTpl, tplOption);
   };
 
   var isGroup = function isGroup(type) {
@@ -3585,13 +3601,13 @@
 
   var RCStorage = function () {
     function RCStorage(suffix) {
-      var _utils$Cache;
+      var _ref;
 
       this._cache = void 0;
       this.STORAGE_KEY = void 0;
       var storageKey = suffix ? STORAGE_ROOT_KEY + suffix : STORAGE_ROOT_KEY;
       var localCache = utils.Storage.get(storageKey) || {};
-      this._cache = new utils.Cache((_utils$Cache = {}, _utils$Cache[storageKey] = localCache, _utils$Cache));
+      this._cache = new utils.Cache((_ref = {}, _ref[storageKey] = localCache, _ref));
       this.STORAGE_KEY = storageKey;
     }
 
@@ -3780,7 +3796,7 @@
     return navDomainList;
   };
 
-  var getCMPDomainList = function getCMPDomainList(option) {
+  var getCMPDomainList = function getCMPDomainList(option, customOption) {
     var server = option.server,
         backupServer = option.backupServer;
     server = server || '';
@@ -3797,6 +3813,11 @@
         cmpList.push(cmp);
       }
     });
+
+    if (!utils.isUndefined(customOption.customCMP)) {
+      cmpList = customOption.customCMP;
+    }
+
     return cmpList;
   };
 
@@ -3810,10 +3831,6 @@
   };
 
   var getConnectType = function getConnectType(option) {
-    if (env.isMini) {
-      return CONNECT_TYPE.COMET;
-    }
-
     var connectType = option.connectType;
     var isSpecifiedSocket = connectType === CONNECT_TYPE.WEBSOCKET;
     var isSocket = isSpecifiedSocket && utils.isSupportSocket();
@@ -4754,7 +4771,7 @@
   };
 
   var uploadFull = function uploadFull(uploadTimes, option, connectedTime) {
-    if (Option.isUploadToServer) {
+    if (!Option.isUploadToServer) {
       return;
     }
 
@@ -6681,7 +6698,7 @@
   }();
 
   var NAVIGATORS = ['nav.cn.ronghub.com', 'nav2-cn.ronghub.com'];
-  var MINI_SOCKET_DOMAIN_LIST = ['wsproxy.cn.ronghub.com'];
+  var MINI_SOCKET_DOMAIN_LIST = ['wsproxy.cn.ronghub.com', 'wsap-cn.ronghub.com'];
   var MINI_COMET_DOMAIN_LIST = ['cometproxy-cn.ronghub.com', 'mini-cn.ronghub.com'];
   var NETWORK_DETECT_OPTION = {
     url: 'https://cdn.ronghub.com/im_detecting',
@@ -7998,6 +8015,7 @@
       }
 
       if (isNeedReconnect) {
+        this.disconnect();
         this.reconnect();
       }
 
@@ -8055,33 +8073,32 @@
     };
 
     _proto.watch = function watch(watchers) {
+      var _events;
+
       var statusWatcher = watchers.status,
           messageWatcher = watchers.message,
           conversationWatcher = watchers.conversation;
-
-      this._imEventEmitter.on(IM_EVENT.STATUS, function (event) {
-        statusWatcher && statusWatcher(event);
-      });
-
-      this._imEventEmitter.on(IM_EVENT.MESSAGE, function (event) {
-        messageWatcher && messageWatcher(event);
-      });
-
-      this._imEventEmitter.on(IM_EVENT.CONVERSATION, function (event) {
-        conversationWatcher && conversationWatcher(event);
+      var self = this;
+      var events = (_events = {}, _events[IM_EVENT.STATUS] = statusWatcher, _events[IM_EVENT.MESSAGE] = messageWatcher, _events[IM_EVENT.CONVERSATION] = conversationWatcher, _events);
+      utils.forEach(events, function (event, eventName) {
+        utils.isFunction(event) && self._imEventEmitter.on(eventName, event);
       });
     };
 
     _proto.unwatch = function unwatch(watchers) {
       var _imEventEmitter = this._imEventEmitter;
+      var offEventNameObj = {
+        status: 'IM_EVENT.STATUS',
+        message: 'IM_EVENT.MESSAGE',
+        conversation: 'IM_EVENT.CONVERSATION'
+      };
 
       if (watchers) {
-        var statusWatcher = watchers.status,
-            messageWatcher = watchers.message,
-            conversationWatcher = watchers.conversation;
-        statusWatcher && _imEventEmitter.off(IM_EVENT.STATUS, statusWatcher);
-        messageWatcher && _imEventEmitter.off(IM_EVENT.MESSAGE, messageWatcher);
-        conversationWatcher && _imEventEmitter.off(IM_EVENT.CONVERSATION, conversationWatcher);
+        utils.forEach(watchers, function (val, key) {
+          if (offEventNameObj[key]) {
+            _imEventEmitter.off(key, val);
+          }
+        });
       } else {
         _imEventEmitter.clear();
       }
@@ -8120,7 +8137,7 @@
       self._naviManager = naviManager;
       var connectUser;
       return naviManager.get().then(function (configForNavi) {
-        var cmpDomainList = common.getCMPDomainList(configForNavi);
+        var cmpDomainList = common.getCMPDomainList(configForNavi, _option);
         Logger.setServerOption(configForNavi);
 
         _cmpManager.setDomainList(cmpDomainList);
@@ -8455,10 +8472,10 @@
   Type.Function = new Type('Function', utils.isFunction);
   Type.Object = new Type('Object', utils.isObject);
   Type.Array = new Type('Array', utils.isArray);
-  var conversationType = common.getConversationTypeList().join('、');
+  var conversationType = common.getConversationTypeList().join('ã€');
   Type.ConversationType = new Type(conversationType, common.isValidConversationType);
   Type.ChatRoomEntryKey = new Type('ChatRoomEntryKey', common.isValidChatRoomKey, {
-    errorInfo: 'ChatRoom Key length must be 1 - 128, Only letters、numbers、+、=、-、_ are supported'
+    errorInfo: 'ChatRoom Key length must be 1 - 128, Only lettersã€numbersã€+ã€=ã€-ã€_ are supported'
   });
   Type.ChatRoomEntryValue = new Type('ChatRoomEntryValue', common.isValidChatRoomValue, {
     errorInfo: 'ChatRoom Value length must be 1 - 4096'
