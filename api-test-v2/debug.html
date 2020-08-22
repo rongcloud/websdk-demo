@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Api 测试合集</title>
+  <style>
+    button {
+      margin: 20px 5px;
+      cursor: pointer;
+      padding: 8px 13px;
+      font-size: 14px;
+      border-radius: 3px;
+    }
+    .rong-debug-box {
+      display: inline-block;
+      width: 620px;
+      height: 395px;
+      position: relative;
+      color: blue;
+      overflow: hidden;
+    }
+    .rong-debug-box iframe {
+      transform: scale(0.7) translate(-20%, -23%);
+      width: 120%;
+      height: 123%;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <button id="start">运行所有</button>
+    <button id="stop">停止所有</button>
+  </div>
+
+  <div class="rong-debug-box">
+    <h3>导航 nav.cn.ronghub.com 测试</h3>
+    <iframe src="./index.html?navi=nav.cn.ronghub.com&encodeToken=pWpSohuml8zl31I89FO2Ya%2BYsUIoF3ojin3K277sfOmeZUaK52zRCqE2%2FMvHEnxtBfHuKrg2Jx%2FXWynmiU43mZYDJ4oFfrTzq12llTIt1oc%3D" frameborder="0"></iframe>
+  </div>
+
+  <div class="rong-debug-box">
+    <h3>导航 nav2-cn.ronghub.com 测试</h3>
+    <iframe src="./index.html?navi=nav2-cn.ronghub.com&encodeToken=NmPNp6RZpNTw3mUpZl2%2Fn3xpRjANxKgfakOnYLFljI%2FVMkWXFzTBZetEqJUsTBd2%2FmZy8eMejlxoxhf%2Bz6pcVHrxyf4fSupp" frameborder="0"></iframe>
+  </div>
+
+  <div class="rong-debug-box">
+    <h3>长轮训服务测试</h3>
+    <iframe src="./index.html?isPolling=true&encodeToken=Hm8Otq%2FG%2F2owz7vlMoRMcK%2BYsUIoF3ojin3K277sfOmeZUaK52zRCrvrhGPp1BQTQTst4S0rVibXWynmiU43mdfVsslWQf1Vq12llTIt1oc%3D" frameborder="0"></iframe>
+  </div>
+
+  <!-- <div class="rong-debug-box">
+    <h3>小程序服务测试</h3>
+    <iframe src="./index.html?cmpUrl=cometproxy-cn.ronghub.com&isPolling=true&isMini=true" frameborder="0"></iframe>
+  </div> -->
+</body>
+
+<script>
+  function getAllIframe() {
+    return document.querySelectorAll('iframe');
+  }
+  function runAll() {
+    var iframeList = getAllIframe();
+    iframeList.forEach(function (iframe) {
+      iframe.contentWindow.postMessage('start');
+    });
+  }
+  function pauseAll() {
+    var iframeList = getAllIframe();
+    iframeList.forEach(function (iframe) {
+      iframe.contentWindow.postMessage('pause');
+    });
+  }
+
+  document.getElementById('start').onclick = runAll;
+  document.getElementById('stop').onclick = pauseAll;
+
+</script>
+
+</html>

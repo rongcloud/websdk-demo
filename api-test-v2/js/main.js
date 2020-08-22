@@ -7,19 +7,27 @@
     utils = RongIM.Utils,
     ApiList = RongIM.ApiList,
     DefailtReadyApiQueue = RongIM.DefailtReadyApiQueue,
-    DefaultConfig = RongIM.config,
+    DefaultConfig = RongIM.config.im,
     Config = utils.copy(DefaultConfig),
     Storage = utils.Storage,
     StorageConfig = Storage.get(Storage.ConfigKey),
-    DefaultTargetId = Config.targetId;
+    DefaultTargetId = Config.targetId,
+    isDebug = RongIM.config.isDebug,
+    debugConf = RongIM.config.debugConf;
 
   DefailtReadyApiQueue.push([]);
 
+  var ValidStatus = [0, 1, 2, 6, 201, 202];
+  var ValidErrorCode = [23424, 23427, 23426, 23423];
+  var isStop = false;
+
   var isStorageConfig = false;
-  if (StorageConfig) {
+  if (StorageConfig && !isDebug) {
     isStorageConfig = true;
     Config = utils.copy(StorageConfig);
   }
+  var urlQueryConfig = utils.getRCUrlQuery();
+  Config = utils.extend(Config, urlQueryConfig);
 
   var ReceiveMsgTextTpl = '监听到{typeName} ({conversationType})消息. 发送者: {senderUserId}';
   var StatusTextTpl = '链接状态: {statusName} ({status})';
@@ -35,24 +43,31 @@
   
   var vueInstance;
 
-  function runAllApi(allRefs, currentIndex) {
+  function runAllApi(allRefs, currentIndex, finishCallback) {
     var total = allRefs.length;
-    var isFinished = total === currentIndex;
+    var isFinished = total === currentIndex || isStop;
     if (isFinished) {
-      return;
+      return finishCallback && finishCallback();
     }
     var refList = allRefs[currentIndex];
     var deferArr = [];
     utils.forEach(refList, function (instance) {
       deferArr.push(instance.run());
     });
-    return utils.Defer.all(deferArr).then(function () {
+    return utils.Defer.all(deferArr).then(function (result) {
+      result = result[0];
+      var isSuccess = result.isSuccess || ValidErrorCode.indexOf(result.data.result) !== -1;
+      if (isSuccess) {
+        vueInstance.runInfo.successApiCount++;
+      } else {
+        vueInstance.runInfo.failApiList.push(result.data);
+      }
       currentIndex++;
-      runAllApi(allRefs, currentIndex);
+      runAllApi(allRefs, currentIndex, finishCallback);
     });
   }
 
-  function runOneByOne() {
+  function runOneByOne(finishCallback) {
     var refs = vueInstance.$refs;
     var allRefs = [];
     utils.forEach(refs, function (subRefList) {
@@ -60,16 +75,16 @@
         allRefs.push([ ref ]);
       });
     });
-    runAllApi(allRefs, 0);
+    runAllApi(allRefs, 0, finishCallback);
   }
 
-  function runLineByLine() {
+  function runLineByLine(finishCallback) {
     var refs = vueInstance.$refs;
     var allRefs = [];
     utils.forEach(refs, function (ins) {
       allRefs.push(ins);
     });
-    runAllApi(allRefs, 0);
+    runAllApi(allRefs, 0, finishCallback);
   }
 
   function setConfig(config) {
@@ -88,9 +103,12 @@
       status: status,
       statusName: utils.StatusName[status]
     });
-    vueInstance.addOutput(title, status, 0, [], {
+    var output = vueInstance.addOutput(title, status, 0, [], {
       color: utils.TypeColor.STATUS
     });
+    if (ValidStatus.indexOf(status) === -1) {
+      vueInstance.runInfo.failApiList.push(output);
+    }
     var isSuccess = utils.SuccessStatus.indexOf(status) !== -1;
     var event = isSuccess ? vueInstance.$Message.success : vueInstance.$Message.error;
     event.call(vueInstance.$Message, {
@@ -99,7 +117,16 @@
     });
   }
 
+  function watchConversationStatus(status) {
+    vueInstance.addOutput('会话状态变更', status, 0, [], {
+      color: utils.TypeColor.MSG
+    });
+  }
+
   function watchMessage(message) {
+    if (RongIM.config.isDebug && !RongIM.config.debugConf.isShowMsg) {
+      return;
+    }
     var title = utils.tplEngine(ReceiveMsgTextTpl, {
       typeName: utils.ConversationName[message.conversationType],
       conversationType: message.conversationType,
@@ -111,6 +138,19 @@
     console.log('Reveice Msg', utils.toJSON(message));
   }
 
+  function autoRun() {
+    Vue.nextTick(function () {
+      runOneByOne(function () {
+        vueInstance.runInfo.runCount++;
+        localStorage.removeItem('rong_servers');
+        localStorage.removeItem('rong_fullnavi');
+        vueInstance.outputList = [];
+        vueInstance.allOutputList = [];
+        !isStop && autoRun();
+      });
+    });
+  }
+
   function loginSuccessEvent(userId, config) {
     vueInstance.$Message.success({
       background: true,
@@ -118,13 +158,17 @@
     });
     vueInstance.currentUserId = userId;
     vueInstance.isLogged = true;
+    if (isDebug && debugConf.autoRun) {
+      Vue.nextTick(autoRun);
+    }
   }
 
   function login(config) {
     setConfig(config);
     return Service.init(config, {
       status: watchStatus,
-      message: watchMessage
+      message: watchMessage,
+      conversationStatus: watchConversationStatus
     }).then(function (userId) {
       Storage.set(Storage.ConfigKey, config);
       loginSuccessEvent(userId, config);
@@ -133,6 +177,7 @@
         background: true,
         content: '链接失败 ' + error
       });
+      return utils.Defer.reject();
     });
   }
 
@@ -151,6 +196,7 @@
         output.time = utils.timestampToString();
         vueInstance.allOutputList.push(output);
         vueInstance.outputList.push(output);
+        return output;
       },
       clearOutput: function () {
         vueInstance.outputList = [];
@@ -188,7 +234,7 @@
       login: function(config) {
         var isEqualStorage = utils.isEqual(config, StorageConfig);
         var isEqualDefault = utils.isEqual(config, DefaultConfig);
-        if (isStorageConfig && isEqualStorage && !isEqualDefault) {
+        if (isStorageConfig && isEqualStorage && !isEqualDefault && !isDebug) {
           vueInstance.$Modal.confirm({
             title: '注意',
             content: '您目前使用的为上一次链接配置, 请确定配置是否可用 ?',
@@ -197,8 +243,16 @@
             }
           });
         } else {
-          login(config);
+          return login(config);
         }
+      },
+      alarm: function () {
+        if (!this.isAlarmMuted) {
+          vueInstance.$refs.alarm.play();
+        }
+      },
+      mute: function () {
+        vueInstance.$refs.alarm.pause();
       }
     };
   }
@@ -222,7 +276,15 @@
         alertJSON: null,
         isDragging: false,
         isShowRunType: false,
-        isShowOutList: false
+        isShowOutList: false,
+
+        isDebug: RongIM.config.isDebug,
+        runInfo: {
+          runCount: 0,
+          successApiCount: 0,
+          failApiList: []
+        },
+        isAlarmMuted: false
       };
     },
     computed: {
@@ -255,9 +317,26 @@
         if (outputList.length) {
           return outputList[outputList.length - 1];
         }
+      },
+      displayedOutputList: function () {
+        if (isDebug) {
+          return this.runInfo.failApiList;
+        } else {
+          return this.outputList;
+        }
       }
     },
     watch: {
+      'runInfo.failApiList': function (newList) {
+        if (newList.length > 20) {
+          this.alarm();
+        }
+      },
+      isAlarmMuted: function (isMuted) {
+        if (isMuted) {
+          this.mute();
+        }
+      }
     },
     components: {
       apiBtn: components.apiBtn,
@@ -271,6 +350,25 @@
   });
 
   RongIM.vueInstance = vueInstance;
+
+  (function () {
+    function start() {
+      isStop = false;
+      if (vueInstance.isLogged) {
+        autoRun();
+      } else {
+        vueInstance.login(vueInstance.globalConfig).then(autoRun);
+      }
+    }
+    window.addEventListener("message", function (event) {
+      var type = event.data;
+      if (type === 'start') {
+        start();
+      } else if (type === 'pause') {
+        isStop = true;
+      }
+    }, false);
+  })();
 
 })(window, {
   Vue: Vue,

@@ -36,7 +36,7 @@
     204: '请求 Navi 超时'
   };
 
-  var SuccessStatus = [0, 1, 202, 203, 204];
+  var SuccessStatus = [0, 1, 2, 4, 201, 202, 203, 204];
 
   var noop = function () {};
 
@@ -127,7 +127,7 @@
 
   function map(arr, event) {
     forEach(arr, function(item, index) {
-      item = event(item, index);
+      arr[index] = event(item, index);
     });
     return arr;
   }
@@ -321,6 +321,114 @@
     }
   };
 
+  function getUrlQuery() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf('?') != -1) {
+      var str = url.substr(1);
+      strs = str.split('&');
+      for (var i = 0; i < strs.length; i++) {
+        theRequest[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1]);
+      }
+    }
+    return theRequest;
+  }
+
+  function getRCUrlQuery() {
+    var theRequest = getUrlQuery();
+    var transMap = {
+      'true': true, 'false': false
+    };
+    map(theRequest, function (val, key) {
+      var transVal = transMap[val];
+      if (!isUndefined(transVal)) {
+        val = transVal;
+      }
+      return val;
+    });
+    forEach(theRequest, function (val, key) {
+      if (key === 'encodeToken') {
+        theRequest.token = decodeURIComponent(val);
+        delete theRequest.encodeToken;
+      }
+      if (key === 'isMini') {
+        delete theRequest.isMini;
+      }
+    });
+    return theRequest;
+  }
+
+  function deferNoop() {
+    return Defer.resolve();
+  }
+
+  var request = (function () {
+    const isValidRequest = function(obj) {
+      return typeof obj === 'function' || typeof obj === 'object';
+    };
+
+    const createXHR = function() {
+      let item = {
+        XMLHttpRequest: function() {
+          return new XMLHttpRequest();
+        },
+        XDomainRequest: function() {
+          return new XDomainRequest();
+        },
+        ActiveXObject: function() {
+          return new ActiveXObject('Microsoft.XMLHTTP');
+        }
+      };
+      let isXHR = isValidRequest(window.XMLHttpRequest);
+      let isXDR = isValidRequest(window.XDomainRequest);
+      let key = isXHR ? 'XMLHttpRequest' : isXDR ? 'XDomainRequest' : 'ActiveXObject';
+      return item[key]();
+    };
+
+    const isRequestSuccess = function(status) {
+      let responseStatus = status + ''; // test 仅 string 类型可调用
+      return /^(200|202)$/.test(responseStatus);
+    };
+
+    const request = function(option) {
+      var url = option.url,
+        method = option.method,
+        body = option.body,
+        headers = option.headers,
+        success = option.success,
+        fail = option.fail;
+      method = method || 'get';
+
+      let xhr = createXHR();
+      xhr.open(method, url);
+
+      if (headers && xhr.setRequestHeader) {
+        for (let key in headers) {
+          xhr.setRequestHeader(key, headers[key]);
+        }
+      }
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          let result = xhr.responseText,
+            status = xhr.status;
+          if (isRequestSuccess(status)) {
+            success(result, xhr);
+          } else {
+            fail(result, xhr, status);
+          }
+        }
+      };
+
+      xhr.onerror = function(error) {
+        fail(error);
+      };
+
+      xhr.send(body);
+    };
+
+    return request;
+  })();
+
   win.RongIM = win.RongIM || {};
   win.RongIM.Utils = {
     Storage: Storage,
@@ -329,6 +437,8 @@
     ConversationName: ConversationName,
     StatusName: StatusName,
     SuccessStatus: SuccessStatus,
+
+    request: request,
 
     EventEmitter: EventEmitter,
 
@@ -362,7 +472,10 @@
     queryDom: queryDom,
     queryAllDom: queryAllDom,
     getTemp: getTemp,
-    mountDialog: mountDialog
+    mountDialog: mountDialog,
+    getUrlQuery: getUrlQuery,
+    getRCUrlQuery: getRCUrlQuery,
+    deferNoop: deferNoop
   };
 
 })(window);

@@ -1,7 +1,10 @@
 (function(win) {
   var RongIMLib = win.RongIMLib,
+    RongIM = win.RongIM,
     RongIMClient = RongIMLib.RongIMClient,
-    utils = win.RongIM.Utils;
+    utils = RongIM.Utils;
+
+  var sendMsgTimeout = RongIM.config.isDebug ? 300 : 0;
 
   var selfUserId;
 
@@ -48,6 +51,7 @@
       var token = config.token;
       config = utils.clearUndefKey(config);
       config = utils.copy(config);
+      // config.cmpUrl = 'wsap-cn.ronghub.com';
       
       /* 
         初始化
@@ -56,8 +60,8 @@
       RongIMClient.init(appkey, null, config);
       RongIMClient.setConnectionStatusListener({
         onChanged: function (status) {
-          // 201、202 为请求导航过程状态码, 没有必要进行处理
-          var unHandleStatus = [ 201, 202 ];
+          // 不处理的状态码
+          var unHandleStatus = [];
           if (unHandleStatus.indexOf(status) === -1) {
             watcher.status(status);
           }
@@ -65,6 +69,10 @@
       });
       RongIMClient.setOnReceiveMessageListener({
         onReceived: watcher.message
+      });
+
+      RongIMClient.setConversationStatusListener && RongIMClient.setConversationStatusListener({
+        onChanged: watcher.conversationStatus
       });
 
       /*
@@ -265,16 +273,22 @@
     });
   }
 
-  function sendMessage(conversationType, targetId, msg) {
+  function sendMessage(conversationType, targetId, msg, disableNotification) {
     conversationType = Number(conversationType);
     return utils.defered(function (resolve, reject) {
-      RongIMClient.getInstance().sendMessage(conversationType, targetId, msg, {
+      let callbacks = {
         onSuccess: function (message) {
           CacheMsg.set(message);
           resolve(message);
         },
         onError: reject
-      });
+      };
+      let config = {
+        disableNotification: disableNotification
+      };
+      setTimeout(function() { // 开发者忽略 setTimeout
+        RongIMClient.getInstance().sendMessage(conversationType, targetId, msg, callbacks, null, null, null, null, config);
+      }, sendMsgTimeout);
     });
   }
 
@@ -289,12 +303,12 @@
    * @param {number} conversationType 会话类型
    * @param {string} targetId 目标 id (对方 id、群组 id、聊天室 id 等)
    */
-  function sendTextMessage(text, conversationType, targetId) {
+  function sendTextMessage(text, conversationType, targetId, disableNotification) {
     var content = {
       content: text // 文本内容
     };
     var msg = new RongIMLib.TextMessage(content);
-    return sendMessage(conversationType, targetId, msg);
+    return sendMessage(conversationType, targetId, msg, disableNotification);
   }
 
   /**
@@ -311,13 +325,13 @@
    * @param {string} base64 图片 base64 缩略图
    * @param {string} imageUri 图片上传后的 url
    */
-  function sendImageMessage(base64, imageUri, conversationType, targetId) {
+  function sendImageMessage(base64, imageUri, conversationType, targetId, disableNotification) {
     var content = {
       content: base64, // 压缩后的 base64 略缩图, 用来快速展示图片
       imageUri: imageUri // 上传到服务器的 url. 用来展示高清图片
     };
     var msg = new RongIMLib.ImageMessage(content);
-    return sendMessage(conversationType, targetId, msg);
+    return sendMessage(conversationType, targetId, msg, disableNotification);
   }
 
   /**
@@ -329,7 +343,7 @@
    * @param {string} fileType 文件类型
    * @param {string} fileUrl 文件上传后的 url
    */
-  function sendFileMessage(fileName, fileSize, fileType, fileUrl, conversationType, targetId) {
+  function sendFileMessage(fileName, fileSize, fileType, fileUrl, conversationType, targetId, disableNotification) {
     var content = {
       name: fileName, // 文件名
       size: fileSize, // 文件大小
@@ -337,7 +351,7 @@
       fileUrl: fileUrl // 文件地址
     };
     var msg = new RongIMLib.FileMessage(content);
-    return sendMessage(conversationType, targetId, msg);
+    return sendMessage(conversationType, targetId, msg, disableNotification);
   }
 
   /**
@@ -348,13 +362,13 @@
    * @param {string} remoteUrl 语音上传后的 url
    * @param {number} duration 语音时长
    */
-  function sendVoiceMessage(remoteUrl, duration, conversationType, targetId) {
+  function sendVoiceMessage(remoteUrl, duration, conversationType, targetId, disableNotification) {
     var content = {
       remoteUrl: remoteUrl, // 音频 url, 建议格式: aac
       duration: duration // 音频时长
     };
     var msg = new RongIMLib.HQVoiceMessage(content);
-    return sendMessage(conversationType, targetId, msg);
+    return sendMessage(conversationType, targetId, msg, disableNotification);
   }
 
   /**
@@ -365,7 +379,7 @@
    * @param {string} messageUId 撤回的消息 Uid
    * @param {number} sentTime 撤回的消息 sentTime
    */
-  function sendRecallMessage(messageUId, sentTime, conversationType, targetId) {
+  function sendRecallMessage(messageUId, sentTime, conversationType, targetId, disableNotification) {
     if (!messageUId || !sentTime) {
       return utils.Defer.reject('请先发送消息, 再进行撤回操作');
     }
@@ -376,11 +390,16 @@
       conversationType: conversationType,
       targetId: targetId
     };
+    
+    var config = {
+      disableNotification
+    }
     return utils.defered(function (resolve, reject) {
-      RongIMClient.getInstance().sendRecallMessage(recallMessage, {
+      var callbacks = {
         onSuccess: resolve,
         onError: reject
-      });
+      }
+      RongIMClient.getInstance().sendRecallMessage(recallMessage, callbacks, config);
     })
   }
 
@@ -391,7 +410,7 @@
    * @param {string} text 文字内容
    * @param {string} methiondId @ 对象的 id
    */
-  function sendAtMessage(text, methiondId, conversationType, targetId) {
+  function sendAtMessage(text, methiondId, conversationType, targetId, disableNotification) {
     conversationType = Number(conversationType);
 
     var isMentioned = true;
@@ -405,12 +424,14 @@
       mentionedInfo: mentioneds
     };
     var msg = new RongIMLib.TextMessage(content);
-
+    let config = {
+      disableNotification: disableNotification
+    };
     return utils.defered(function (resolve, reject) {
       RongIMClient.getInstance().sendMessage(conversationType, targetId, msg, {
         onSuccess: resolve,
         onError: reject
-      }, isMentioned);
+      }, isMentioned, null, null, null, config);
     });
   }
 
@@ -438,10 +459,10 @@
    * @param {string} messageType 注册消息的 Web 端类型名
    * @param {*} props 消息包含的字段集合
    */
-  function sendRegisterMessage(messageType, props, conversationType, targetId) {
+  function sendRegisterMessage(messageType, props, conversationType, targetId, disableNotification) {
     var content = props.split(',');
     var msg = new RongIMClient.RegisterMessage[messageType](content);
-    return sendMessage(conversationType, targetId, msg);
+    return sendMessage(conversationType, targetId, msg, disableNotification);
   }
 
   /**
@@ -456,7 +477,7 @@
    * @param {number} longitude 经度
    * @param {string} poi 位置信息
    */
-  function sendLocationMessage(base64, latitude, longitude, poi, conversationType, targetId) {
+  function sendLocationMessage(base64, latitude, longitude, poi, conversationType, targetId, disableNotification) {
     var msg = new RongIMLib.LocationMessage({
       latitude: latitude,
       longitude: longitude,
@@ -464,7 +485,7 @@
       content: base64
     });
 
-    return sendMessage(conversationType, targetId, msg);
+    return sendMessage(conversationType, targetId, msg, disableNotification);
   }
 
   /**
@@ -476,7 +497,7 @@
    * @param {number} imageUri 显示图片的 url(图片信息)
    * @param {string} url 点击图文后打开的 url
    */
-  function sendRichContentMessage(title, content, imageUri, url, conversationType, targetId) {
+  function sendRichContentMessage(title, content, imageUri, url, conversationType, targetId, disableNotification) {
     var msg = new RongIMLib.RichContentMessage({
       title: title,
       content: content,
@@ -484,7 +505,20 @@
       url: url
     });
 
-    return sendMessage(conversationType, targetId, msg);
+    return sendMessage(conversationType, targetId, msg, disableNotification);
+  }
+
+  /**
+   * 发送正在输入状态消息
+   * @param {number} conversationType
+   * @param {string} targetId
+   * @param {string} data
+   * @param {string} typingContentType
+  */
+
+  function sendTypingStatusMessage(conversationType, targetId, typingContentType, data, disableNotification) {
+    var msg = new RongIMLib.TypingStatusMessage({ typingContentType: typingContentType, data: data });
+    return sendMessage(conversationType, targetId, msg, disableNotification);
   }
 
   /**
@@ -627,6 +661,18 @@
     });
   }
 
+  function setConversationStatus(notificationStatus, isTop, conversationType, targetId) {
+    return utils.defered(function (resolve, reject) {
+      RongIMClient.getInstance().setConversationStatus(conversationType, targetId, {
+        notificationStatus: notificationStatus,
+        isTop: isTop
+      }, {
+        onSuccess: resolve,
+        onError: reject
+      });
+    });
+  }
+
   function getLastCacheMsgUId() {
     return CacheMsg.getLast().messageUId;
   }
@@ -661,6 +707,7 @@
     sendLocationMessage: sendLocationMessage,
     sendRichContentMessage: sendRichContentMessage,
     sendRecallMessage: sendRecallMessage,
+    sendTypingStatusMessage: sendTypingStatusMessage,
     
     getUnreadCount: getUnreadCount,
     getTotalUnreadCount: getTotalUnreadCount,
@@ -680,6 +727,7 @@
     getLastCacheMsgSentTime: getLastCacheMsgSentTime,
     getLastCacheMsgUId: getLastCacheMsgUId,
     getLastCacheMsgDirection: getLastCacheMsgDirection,
+    setConversationStatus: setConversationStatus,
     msgEmitter: CacheMsg.eventEmitter,
 
     changeUser: changeUser

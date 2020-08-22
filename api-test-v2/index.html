@@ -15,8 +15,7 @@
   <script src="./lib/js/es6-promise.js"></script>
   <script src="./lib/js/Sortable.min.js"></script>
   <script src="./lib/js/vuedraggable.umd.min.js"></script>
-  <script src="//cdn.ronghub.com/RongIMLib-2.5.4.js"></script>
-
+  <script src="https://cdn.ronghub.com/RongIMLib-2.5.10.js"></script>
   <script src="./config.js"></script>
   <script src="./js/common/utils.js"></script>
   <script src="./js/common/service.js"></script>
@@ -103,10 +102,15 @@
 
     <h1>
       Web SDK Demo
-      <a target="_blank" href="https://github.com/rongcloud/websdk-demo/tree/master/api-test/js/common/service.js" title="点击查看源码" class="get-source">示例源码</a>
+      <a target="_blank" href="https://github.com/rongcloud/websdk-demo/blob/master/api-test.html" title="点击查看源码" class="get-source">示例源码</a>
     </h1>
 
     <template v-if="isLogged">
+      <div class="rong-run-info" v-if="isDebug">
+        <p>成功次数: <b>{{runInfo.runCount}}</b></p>
+        <p>成功 Api 个数: <b>{{runInfo.successApiCount}}</b></p>
+        <p>失败 Api 个数: <b>{{runInfo.failApiList.length}}</b></p>
+      </div>
 
       <!-- <div class="rong-global-opt">
         <i-button class="rong-runall-btn" size="small" @click="runAllApi()">运行全部</i-button>
@@ -117,6 +121,7 @@
         <i-button class="rong-runall-btn" size="small" @click="isShowRunType=true">运行全部</i-button>
         <components class="rong-changeuser-btn" is="apiBtn"
           :api="changeUserApi" :isdragging="isDragging"></components>
+        <i-button v-if="isDebug" class="rong-runall-btn" size="small" type="error" @click="isAlarmMuted=!isAlarmMuted">{{ isAlarmMuted ? '取消静音' : '点击静音' }}</i-button>
       </div>
 
       <p class="rong-api-prompt">
@@ -157,9 +162,9 @@
             <i-button class="rong-out-list-display" size="small" @click="isShowOutList=!isShowOutList">{{ isShowOutList ? '隐藏' : '展开' }}</i-button>
           </div>
         </div>
-        <Collapse class="rong-out-list-content" v-if="outputList.length" v-show="isShowOutList">
-          <Panel v-for="(output, index) in reverse(outputList)" class="rong-out-panel" v-bind:key="output.id" :name="index + ''" :style="{ color: output.config.color }">
-            <span :title="output.title" class="rong-out-title">{{outputList.length - index}}. {{output.title}}</span>
+        <Collapse class="rong-out-list-content" v-if="displayedOutputList.length" v-show="isShowOutList">
+          <Panel v-for="(output, index) in reverse(displayedOutputList)" class="rong-out-panel" v-bind:key="output.id" :name="index + ''" :style="{ color: output.config.color }">
+            <span :title="output.title" class="rong-out-title">{{displayedOutputList.length - index}}. {{output.title}}</span>
             <div slot="content" class="rong-out-item">
               <p><b>时间:</b> {{output.time}}</p>
               <p v-if="output.consumedTime"><b>耗时:</b> {{output.consumedTime}} ms</p>
@@ -190,6 +195,8 @@
         <i-button type="success" @click="runAllApi();isShowRunType=false;">运行</i-button>
       </div>
     </Modal>
+
+    <audio ref="alarm" style="opacity: 0; position: absolute;" src="./styles/alarm.mp3"></audio>
 
   </div>
 </body>

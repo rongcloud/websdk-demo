@@ -70,6 +70,9 @@
         var params = [];
         var startTime = +new Date();
         utils.forEach(self.selfApi.params, function(item) {
+          if (item.type === 'number') {
+            item.value = Number(item.value);
+          }
           params.push(item.value);
         });
         var imInstance = RongIM.vueInstance;
@@ -82,14 +85,23 @@
           if (!isSuccess) {
             config.color = utils.TypeColor.FAILED;
           }
-          imInstance.addOutput(title, data, consumedTime, params, config);
           self.hideEditDialog();
+          return imInstance.addOutput(title, data, consumedTime, params, config);
         };
         return self.api.event.apply(void 0, params).then(function(data) {
-          addOutput(data, true);
+          var data = addOutput(data, true);
+          return {
+            isSuccess: true,
+            data: data
+          };
         }).catch(function(error) {
+          // TODO 报警
           error = utils.isNumber(error) ? error : error.toString();
-          addOutput(error, false);
+          var data = addOutput(error, false);
+          return {
+            isSuccess: false,
+            data: data
+          };
         });
       }
     },

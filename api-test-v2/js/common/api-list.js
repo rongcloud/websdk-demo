@@ -5,14 +5,19 @@
   var RongIM = dependencies.RongIM,
     utils = RongIM.Utils,
     Service = RongIM.Service,
-    config = RongIM.config;
+    config = RongIM.config.im,
+    urlQueryConfig = utils.getUrlQuery();
+
+  var MiniUnSupportEventList = [
+    'sendRecallMessage', 'deleteRemoteMessages', 'clearRemoteHistoryMessages'
+  ];
 
   var disconnect = {
     name: '断开链接',
     event: Service.disconnect,
     eventName: 'disconnect',
     desc: '断开链接',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/connect/#disconnect',
+    doc: 'https://docs.rongcloud.cn/v2/views/im/noui/guide/private/connection/disconnect/web.html',
     params: []
   };
 
@@ -21,7 +26,7 @@
     event: Service.reconnect,
     eventName: 'reconnect',
     desc: '重新链接',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/connect/#reconnect',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/connection/reconnect/web.html',
     params: [
       { name: '是否嗅探', type: 'boolean', value: true },
       { name: '嗅探 url', type: 'string', value: 'https://cdn.ronghub.com/RongIMLib-2.2.6.min.js?d=' + Date.now() },
@@ -34,7 +39,7 @@
     evnet: utils.noop,
     eventName: 'logout',
     desc: '切换用户',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/connect/#logout',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/connection/disconnect/web.html#logout',
     params: [
       { name: 'Token', type: 'string', value: '5JQlp5czM31GNl99DOZyI3xpRjANxKgfakOnYLFljI+TMvOF0hGaVtR1n9Qp4baLgKBGsyl3w5j4gAWBbNZ3nOKrvnVo8Ldl' }
     ]
@@ -45,7 +50,7 @@
     event: Service.registerMessage,
     eventName: 'registerMessageType',
     desc: '注册自定义消息',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#custom-register',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/msgsend/web.html#createcustom',
     params: [
       { name: 'messageType', type: 'string', value: 'PersonMessage' },
       { name: 'objectName', type: 'string', value: 's:person' },
@@ -60,7 +65,7 @@
     event: Service.getConversationList,
     eventName: 'getConversationList',
     desc: '获取会话列表',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/conversation/get-list/',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/conversation/getall/web.html',
     params: [
       { name: '数量', type: 'number', value: 1000 }
     ]
@@ -71,7 +76,7 @@
     event: Service.removeConversation,
     eventName: 'removeConversation',
     desc: '删除会话列表',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/conversation/remove/',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/conversation/clearall/web.html',
     params: [
       { name: '会话类型', type: 'number', value: 1 },
       { name: '对方 id', type: 'string', value: config.targetId }
@@ -83,10 +88,10 @@
     event: Service.getHistoryMessages,
     eventName: 'getHistoryMessages',
     desc: '获取历史消息',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-list/get-list',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/storage/web.html',
     params: [
       { name: '时间戳', type: 'number', value: 0 },
-      { name: '数量', type: 'count', value: 20 },
+      { name: '数量', type: 'number', value: 20 },
       { name: '会话类型', type: 'number', value: 1 },
       { name: '对方 id', type: 'string', value: config.targetId }
     ]
@@ -97,7 +102,7 @@
     event: Service.deleteRemoteMessages,
     eventName: 'deleteRemoteMessages',
     desc: '按消息删除指定历史消息',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-list/remove-list/#_2',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/delete/web.html#deletebyid',
     params: [
       { name: '消息 Uid', type: 'string', value: '', event: Service.getLastCacheMsgUId },
       { name: '发送时间', type: 'number', value: 0, event: Service.getLastCacheMsgSentTime },
@@ -112,7 +117,7 @@
     event: Service.clearHistoryMessages,
     eventName: 'clearRemoteHistoryMessages',
     desc: '按时间删除历史消息',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-list/remove-list/#_1',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/delete/web.html#delete',
     params: [
       { name: '删除时间戳', type: 'number', value: Date.now()  },
       { name: '会话类型', type: 'number', value: 1 },
@@ -125,11 +130,12 @@
     event: Service.sendTextMessage,
     eventName: 'sendMessage',
     desc: '发送文字消息(TextMessage)',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#text',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/msgsend/web.html#TxtMsg',
     params: [
       { name: '文字内容', type: 'string', value: '我是一条文字消息' },
       { name: '会话类型', type: 'number', value: 1 },
-      { name: '对方 id', type: 'string', value: config.targetId }
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
     ]
   };
 
@@ -138,12 +144,13 @@
     event: Service.sendImageMessage,
     eventName: 'sendMessage',
     desc: '发送图片消息(ImageMessage)',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#image',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/msgsend/web.html#ImgTextMsg',
     params: [
       { name: '缩略图', type: 'string', value: utils.getBase64Image() },
       { name: '原图 url', type: 'string', value: 'http://rongcloud.cn/images/newVersion/log_wx.png' },
       { name: '会话类型', type: 'number', value: 1 },
-      { name: '对方 id', type: 'string', value: config.targetId }
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
     ]
   };
 
@@ -152,14 +159,15 @@
     event: Service.sendFileMessage,
     eventName: 'sendMessage',
     desc: '发送文件消息(FileMessage)',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#file',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/msgsend/web.html#FileMsg',
     params: [
       { name: '文件名', type: 'string', value: 'logo_wx' },
-      { name: '文件大小', type: 'string', value: '20k' },
+      { name: '文件大小', type: 'number', value: 2000000000 },
       { name: '文件类型', type: 'string', value: 'png' },
       { name: '文件 url', type: 'string', value: 'http://rongcloud.cn/images/newVersion/log_wx.png' },
       { name: '会话类型', type: 'number', value: 1 },
-      { name: '对方 id', type: 'string', value: config.targetId }
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
     ]
   };
 
@@ -168,12 +176,13 @@
     event: Service.sendVoiceMessage,
     eventName: 'sendMessage',
     desc: '发送语音消息(HQVoiceMessage)',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#example',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/msgsend/web.html#HQVCMsg',
     params: [
-      { name: '语音 url', type: 'string', value: 'https://rongcloud-audio.cn.ronghub.com/FoBsJofHDUm0Lh96iEFtaHDpjP8M?e=1578910770&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:Eqr39NNM2Xd2Bie8rcnOQUpRaIM=' },
+      { name: '语音 url', type: 'string', value: 'https://rongcloud-audio.cn.ronghub.com/audio_amr__RC-2020-03-17_42_1584413950049.aac?e=1599965952&token=CddrKW5AbOMQaDRwc3ReDNvo3-sL_SO1fSUBKV3H:CDngyWj7ZApNmAfoecng7L_3SaU=' },
       { name: '语音时长', type: 'number', value: 7 },
       { name: '会话类型', type: 'number', value: 1 },
-      { name: '对方 id', type: 'string', value: config.targetId }
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
     ]
   };
 
@@ -182,12 +191,13 @@
     event: Service.sendRecallMessage,
     eventName: 'sendRecallMessage',
     desc: '发送撤回消息',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#recall',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/msgmanage/msgrecall/web.html',
     params: [
       { name: '消息 Uid', type: 'string', value: '', event: Service.getLastCacheMsgUId },
       { name: '发送时间', type: 'number', value: 0, event: Service.getLastCacheMsgSentTime },
       { name: '会话类型', type: 'number', value: 1 },
-      { name: '对方 id', type: 'string', value: config.targetId }
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
     ]
   };
 
@@ -196,12 +206,14 @@
     event: Service.sendAtMessage,
     eventName: 'sendMessage',
     desc: '发送 @ 消息',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#example',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/group/msgmanage/msgsend/web.html#at',
     params: [
       { name: '文字内容', type: 'string', value: '我是一条文本消息, 我 @ 了其他人' },
       { name: '@ 对象 id', type: 'string', value: config.targetId },
       { name: '会话类型', type: 'number', value: 3 },
-      { name: '群组 id', type: 'string', value: config.targetId }
+      { name: '群组 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
+      
     ]
   };
 
@@ -210,12 +222,13 @@
     event: Service.sendRegisterMessage,
     eventName: 'sendMessage',
     desc: '发送自定义消息(RegisterMessage)',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#custom-send',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/group/msgmanage/msgsend/web.html#send',
     params: [
       { name: '消息类型', type: 'string', value: 'PersonMessage' },
       { name: '属性值', type: 'string', value: 'name,age' },
       { name: '会话类型', type: 'number', value: 1 },
-      { name: '对方 id', type: 'string', value: config.targetId }
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
     ]
   };
 
@@ -224,14 +237,15 @@
     event: Service.sendLocationMessage,
     eventName: 'sendMessage',
     desc: '发送位置消息(sendLocationMessage)',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#location',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/group/msgmanage/msgsend/web.html#LBSMsg',
     params: [
+      { name: '位置缩略图', type: 'string', value: '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKE' },
       { name: '维度', type: 'number', value: 40.0317727 },
       { name: '经度', type: 'number', value: 116.4175057 },
-      { name: '位置缩略图', type: 'string', value: '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKE' },
       { name: '位置信息', type: 'string', value: '北苑路北辰·泰岳' },
       { name: '会话类型', type: 'number', value: 1 },
-      { name: '对方 id', type: 'string', value: config.targetId }
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
     ]
   };
 
@@ -240,14 +254,30 @@
     event: Service.sendRichContentMessage,
     eventName: 'sendMessage',
     desc: '发送富文本(图文)消息(sendRichContentMessage)',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/message-send/#rich-content',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/group/msgmanage/msgsend/web.html#ImgTextMsg',
     params: [
       { name: '图文标题', type: 'string', value: '标题: 融云' },
       { name: '图文内容', type: 'string', value: '为用户提供 IM 即时通讯和音视频通讯云服务' },
       { name: '图片信息', type: 'string', value: 'https://www.rongcloud.cn/images/newVersion/log_wx.png' },
       { name: '图文链接', type: 'string', value: 'https://developer.rongcloud.cn' },
       { name: '会话类型', type: 'number', value: 1 },
-      { name: '对方 id', type: 'string', value: config.targetId }
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '静默消息', type: 'boolean', value: false }
+    ]
+  };
+
+  var sendTypingStatusMessage = {
+    name: '发送正在输入状态消息',
+    event: Service.sendTypingStatusMessage,
+    eventName: 'sendMessage',
+    desc: '发送正在输入状态消息(sendTypingStatusMessage)',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/group/msgmanage/msgsend/web.html#TypSts',
+    params: [
+      { name: '会话类型', type: 'number', value: 1 },
+      { name: '对方 id', type: 'string', value: config.targetId },
+      { name: '消息 ObjectName', type: 'string', value: 'RC:TxtMsg' },
+      { name: '携带信息', type: 'string', value: '携带信息' },
+      { name: '静默消息', type: 'boolean', value: false }
     ]
   };
 
@@ -256,7 +286,7 @@
     event: Service.getUnreadCount,
     eventName: 'getUnreadCount',
     desc: '获取指定会话未读数',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/conversation/unreadcount/#get-one',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/group/conversation/unreadcount/web.html#one',
     params: [
       { name: '会话类型', type: 'number', value: 1 },
       { name: '对方 id', type: 'string', value: config.targetId }
@@ -268,7 +298,7 @@
     event: Service.getTotalUnreadCount,
     eventName: 'getTotalUnreadCount',
     desc: '获取会话未读总数',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/conversation/unreadcount/#get-all',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/group/conversation/unreadcount/web.html',
     params: [
     ]
   };
@@ -278,7 +308,7 @@
     event: Service.clearUnreadCount,
     eventName: 'clearUnreadCount',
     desc: '清除指定会话未读数',
-    doc: 'https://docs.rongcloud.cn/im/imlib/web/conversation/unreadcount/#clear',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/group/conversation/unreadcount/web.html#clear',
     params: [
       { name: '会话类型', type: 'number', value: 1 },
       { name: '对方 id', type: 'string', value: config.targetId }
@@ -293,7 +323,7 @@
     doc: 'https://docs.rongcloud.cn/im/imlib/web/chatroom/#join',
     params: [
       { name: '聊天室 id', type: 'string', value: config.targetId },
-      { name: '拉取消息数', type: 'number', value: 5 }
+      { name: '拉取消息数', type: 'number', value: 2 }
     ]
   };
 
@@ -417,18 +447,40 @@
     ]
   };
 
+  var setConversationStatus = {
+    name: '设置会话状态',
+    event: Service.setConversationStatus,
+    eventName: 'setConversationStatus',
+    desc: '设置会话状态',
+    doc: 'https://docs.rongcloud.cn/v3/views/im/noui/guide/private/conversation/notify/web.html',
+    params: [
+      { name: '免打扰', type: 'number', value: 1 },
+      { name: '置顶', type: 'boolean', value: true },
+      { name: '会话类型', type: 'number', value: 1 },
+      { name: '对方 id', type: 'string', value: config.targetId }
+    ]
+  };
+
   win.RongIM = win.RongIM || {};
   
-  win.RongIM.DefailtReadyApiQueue = [
+  var DefailtReadyApiQueue = [
     [disconnect, reconnect],
     [registerMessage],
-    [getConversationList, removeConversation, getUnreadCount, getTotalUnreadCount, clearUnreadCount],
-    [sendTextMessage, sendImageMessage, sendRecallMessage, sendFileMessage, sendVoiceMessage, sendRegisterMessage, sendAtMessage, sendLocationMessage, sendRichContentMessage],
+    [getConversationList, removeConversation, getUnreadCount, getTotalUnreadCount, clearUnreadCount, setConversationStatus],
+    [sendTextMessage, sendImageMessage, sendRecallMessage, sendFileMessage, sendVoiceMessage, sendRegisterMessage, sendAtMessage, sendLocationMessage, sendRichContentMessage, sendTypingStatusMessage],
     [getHistoryMessages, deleteRemoteMessages, clearHistoryMessages],
     [joinChatRoom, getChatRoomInfo, sendChatroomMessage],
     [setChatroomEntry, getChatroomEntry, forceSetChatroomEntry, getAllChatroomEntries, removeChatroomEntry, forceRemoveChatroomEntry],
     [quitChatRoom]
   ];
+  urlQueryConfig.isMini && utils.forEach(DefailtReadyApiQueue, function (list, i) {
+    utils.forEach(list, function (item, j) {
+      if (MiniUnSupportEventList.indexOf(item.eventName) !== -1) {
+        list.splice(j, 1);
+      }
+    }, { isReverse: true })
+  });
+  win.RongIM.DefailtReadyApiQueue = DefailtReadyApiQueue;
   
   win.RongIM.ApiList = [
     getConversationList

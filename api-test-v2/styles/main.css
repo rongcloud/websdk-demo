@@ -194,5 +194,10 @@ h1 {
 
   .get-source {
     display: inline-block; } }
+.rong-run-info {
+  position: absolute;
+  left: 400px;
+  top: 12px;
+  color: red; }
 
 /*# sourceMappingURL=main.css.map */
