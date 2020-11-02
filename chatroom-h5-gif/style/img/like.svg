@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="76px" height="76px" viewBox="0 0 76 76" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>点赞@2x</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#F86332" offset="0%"></stop>
+            <stop stop-color="#F81D43" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-2" points="0 0 40 0 40 42 0 42"></polygon>
+    </defs>
+    <g id="应用图标" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="挖财-首页" transform="translate(-634.000000, -1234.000000)">
+            <g id="点赞" transform="translate(634.000000, 1234.000000)">
+                <g id="编组-20" fill="url(#linearGradient-1)" fill-rule="nonzero">
+                    <circle id="椭圆形-copy-9" cx="38" cy="38" r="38"></circle>
+                </g>
+                <g id="dianzan1" transform="translate(18.000000, 15.000000)">
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <g id="Clip-2"></g>
+                    <path d="M37.2888946,16.8227648 L26.4995748,16.8227648 C30.6804051,0.817395003 23.6190253,0 23.6190253,0 C20.6262312,0 21.2466947,2.45312522 21.0203913,2.8621753 C21.0203913,10.6893642 13,16.8227648 13,16.8227648 L13,39.0198284 C13,41.2108701 15.8804928,42 17.0105358,42 L33.2214428,42 C34.7471766,42 35.9894642,37.8526165 35.9894642,37.8526165 C40,23.7162077 40,19.5102374 40,19.5102374 C40,16.589534 37.2888946,16.8227648 37.2888946,16.8227648 Z" id="Fill-1" fill="#FFFFFF" mask="url(#mask-3)"></path>
+                    <path d="M8.26377923,17 L1.4324931,17 C0.0217589336,17 0,18.3492642 0,18.3492642 L1.41073417,40.5848466 C1.41073417,42 2.86666457,42 2.86666457,42 L8.77940002,42 C10.0110276,42 10,41.0638602 10,41.0638602 L10,18.6862722 C10,16.978586 8.26377923,17 8.26377923,17 Z" id="Fill-3" fill="#FFFFFF" mask="url(#mask-3)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

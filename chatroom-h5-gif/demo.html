@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>挖财钱堂学院理财小白训练</title>
+	<meta name="screen-orientation" content="portrait">
+	<meta name="x5-orientation" content="portrait">
+	<link rel="stylesheet" href="./style/chatroom.css">
+
+	<meta name="viewport" id="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5">
+</head>
+
+<body>
+	<div id='view'>
+		<div class="rc-main">
+			<div class="rc-video-body"></div>
+		</div>
+
+		<div class="rc-chat">
+			<div class="rc-chat-main">
+				<img class="rc-chat-img" src="./style/img/logo.png">
+				<div class="rc-chat-info">
+					<span class="rc-chat-name">[直播回顾]</span>
+					<span class="rc-chat-num"><span class="rc-content-color">4208</span> 人次</span>
+				</div>
+			</div>
+		</div>
+		<div class="rc-user-join" id="rc-user-join"></div>
+		<div class="rc-chatroom">
+			<div class="rc-message-list-wrapper" id="rc-message-list-wrapper">
+				<div class="rc-message-list" id="rc-message-list"></div>
+			</div>
+
+			<div class="rc-chatroom-user">
+				<!-- <span class="rc-chatroom-emoji" id="rc-chatroom-emoji">😄</span> -->
+				<div class="rc-emoji-panel" id="rc-emoji-panel"></div>
+				<div>
+					<input class="rc-chatroom-input" id="rc-chatroom-input" type="search" placeholder="说点什么..."
+						onfocus="onFocus()" onblur="onBlur()">
+					<img class="rc-send" id='send' src="./style/img/send.png" alt="" onclick="send()">
+				</div>
+
+			</div>
+			<div class="rc-liker">
+				<canvas class="rc-hearts-canvas"></canvas>
+				<button class="rc-hearts-btn" onclick="clicLiker()"></button>
+			</div>
+		</div>
+	</div>
+	</div>
+	<script src="./js/RongIMLib-2.5.12.js"></script>
+	<!-- <script src="//cdn.ronghub.com/RongEmoji-2.2.6.js"></script> -->
+	<script src="./js/chatroom.js"></script>
+	<script src="./js/like.js"></script>
+	<script src="./js/render.js"></script>
+	<script src="./js/mock.js"></script>
+	<script src="./js/demo.js"></script>
+
+</body>
+
+<!-- <script src="//bb.img.qq.com/bbcdn/common/vconsole.min.js"></script>
+<script>
+	var vConsole = new VConsole();
+</script> -->
+
+</html>
