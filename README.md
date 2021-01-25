@@ -12,7 +12,9 @@
 
 # WebSDK demo
 
-WebSDK API 示例: [https://rongcloud.github.io/websdk-demo/api-test](https://rongcloud.github.io/websdk-demo/api-test/)
+WebSDK API 示例(基于 IM SDK V4): [https://rongcloud.github.io/websdk-demo/api-test-v4](https://rongcloud.github.io/websdk-demo/api-test-v4/)
+
+WebSDK API 示例(基于 IM SDK V3): [https://rongcloud.github.io/websdk-demo/api-test](https://rongcloud.github.io/websdk-demo/api-test/)
 
 SDK源码: [https://github.com/rongcloud/rongcloud-web-im-sdk-v2](https://github.com/rongcloud/rongcloud-web-im-sdk-v2)
 
