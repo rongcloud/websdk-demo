@@ -6,6 +6,10 @@
 
   var win = dependencies.win;
 
+  var RCRTC = dependencies.RCRTC;
+  var RCRTCAdapter = dependencies.RCRTCAdapter;
+  var im;
+
   /**
    * 
    * @param {string} params.appkey 融云 appKey
@@ -19,9 +23,9 @@
       token = params.token,
       navi = params.navi;
 
-    var im = RongIMLib.init({
+    im = RongIMLib.init({
       appkey: appKey,
-      navigators: [navi]
+      // navigators: [navi]
     });
 
     im.watch({
@@ -36,10 +40,13 @@
   };
 
   var initCallLib = function (userId) {
+    im.install(RongCallLib.installer)
+    const rtcClient = im.install(RCRTC.installer)
     var config = {
       RongIMLib: RongIMLib,
-      RongRTC: RongRTC,
-      currentUserId: userId
+      RongRTC: rtcClient,
+      currentUserId: userId,
+      RongRTCAdapter: RCRTCAdapter
     };
     // 初始化 CallLib
     RongCallLib = RongCallLib.init(config);
@@ -55,5 +62,7 @@
   win: window,
   RongIMLib: window.RongIMLib,
   RongCallLib: window.RongCallLib,
-  RongRTC: window.RongRTC
+  RongRTC: window.RongRTC,
+  RCRTC: window.RCRTC,
+  RCRTCAdapter: window.RCRTCAdapter
 });

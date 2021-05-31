@@ -16,7 +16,8 @@
   var CallStep = {
     READY_TO_CALL: 1, // 准备拨打(最初状态)
     INVITED_TO_ANSWER: 2, // 被邀请接听, 其他人拨打, 己方选择接听或拒绝
-    CALLING: 3 // 拨打中
+    CALLING: 3, // 拨打中
+    CALLS_ESTABLISH: 4 // 通话建立完成
   };
 
   var CallName = {};
@@ -133,6 +134,7 @@
   var videoChangedEvents = {
     added: function (detail, context) {
       context.userList.push(detail);
+      context.callStep = CallStep.CALLS_ESTABLISH;
     },
     removed: function (detail, context) {
       context.userList = utils.removeArray(detail, context.userList, 'userId');

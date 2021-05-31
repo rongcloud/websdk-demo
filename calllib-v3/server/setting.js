@@ -1,5 +1,5 @@
 module.exports = {
-  appkey: 'appkey',
-  secret: 'secret',
+  appkey: 'n19jmcy59f1q9',
+  secret: 'CuhqdZMeuLsKj',
   port: '9929'
 };

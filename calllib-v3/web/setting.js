@@ -24,7 +24,7 @@
   };
 
   return {
-    appkey: 'appkey',
+    appkey: 'n19jmcy59f1q9',
     navi: '',
     server: 'http://localhost:9929',
     

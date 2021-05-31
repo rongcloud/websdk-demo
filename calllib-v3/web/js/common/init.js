@@ -3,8 +3,11 @@
     RongIMClient = RongIMLib.RongIMClient,
     RongCallLib = dependencies.RongCallLib,
     RongRTC = dependencies.RongRTC;
+  var RCRTC = dependencies.RCRTC;
+  var RCRTCAdapter = dependencies.RCRTCAdapter;
 
   var win = dependencies.win;
+  var imClient;
 
   /**
    * 
@@ -58,12 +61,15 @@
       }, '');
     });
   };
-
+  
   var initCallLib = function (userId) {
+    RongIMClient.getInstance().install(RongCallLib.installer)
+    const rtcClient = RongIMClient.getInstance().install(RCRTC.installer)
     var config = {
       RongIMLib: RongIMLib,
-      RongRTC: RongRTC,
-      currentUserId: userId
+      RongRTC: rtcClient,
+      currentUserId: userId,
+      RongRTCAdapter: RCRTCAdapter
     };
     // 初始化 CallLib
     RongCallLib = RongCallLib.init(config);
@@ -79,5 +85,7 @@
   win: window,
   RongIMLib: window.RongIMLib,
   RongCallLib: window.RongCallLib,
-  RongRTC: window.RongRTC
+  RongRTC: window.RongRTC,
+  RCRTC: window.RCRTC,
+  RCRTCAdapter: window.RCRTCAdapter
 });
