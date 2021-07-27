@@ -12,9 +12,13 @@
 
   <script src="lib/vue-2.6.7.js"></script>
   <script src="lib/vue-router-3.0.2.js"></script>
-  <script src="//cdn.ronghub.com/RongRTC-3.2.6.js"></script>
-  <script src="//cdn.ronghub.com/RongIMLib-3.0.7-dev.js"></script>
-  <script src="//cdn.ronghub.com/RongCallLib.3.1.7.1.js"></script>
+
+   <!-- 适配 RTC 5.0 -->
+   <script src="https://cdn.ronghub.com/RongIMLib-4.4.1.prod.js"></script>
+   <script src="https://cdn.ronghub.com/RCRTC-5.1.1.prod.js"></script>
+   <script src="https://cdn.ronghub.com/RCRTCAdapter-1.0.5.prod.js"></script>
+   <script src="https://cdn.ronghub.com/RongCallLib.3.2.2.js"></script>
+
   
   <script src="js/common/utils.js"></script>
   <script src="js/common/init.js"></script>
@@ -60,8 +64,7 @@
           <button class="rong-call-video" title="点击进行视频通话" @click="startCall(false)"></button>
           <button class="rong-call-audio" title="点击进行音频通话" @click="startCall(true)"></button>
         </template>
-        <template v-else-if="callStep === CallStep.CALLING">
-          <button class="rong-call-hungup" title="点击挂断" @click="hungup"></button>
+        <template v-else-if="callStep === CallStep.CALLS_ESTABLISH">
           <button v-if="callType == 3" class="rong-call-invite" title="点击邀请" @click="invite"></button>
           <button class="rong-call-mute" title="点击开启/关闭音频" :closed="isMuted" @click="mute"></button>
           <button class="rong-call-video" closed title="点击开启/关闭视频" :closed="callInfo.mediaType !== 2" @click="setVideo"></button>
@@ -69,6 +72,9 @@
         <template v-else-if="callStep === CallStep.INVITED_TO_ANSWER">
           <button class="rong-call-accept" @click="accept"></button>
           <button class="rong-call-hungup" @click="reject"></button>
+        </template>
+        <template v-if="callStep === CallStep.CALLING || callStep === CallStep.CALLS_ESTABLISH">
+          <button class="rong-call-hungup" title="点击挂断" @click="hungup"></button>
         </template>
       </div>
     </div>

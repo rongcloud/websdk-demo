@@ -53,8 +53,6 @@ WebSDK SeaJS 示例: [https://rongcloud.github.io/websdk-demo/seajs.html](https:
 
 # 扩展组件 Component
 
-音视频: [https://github.com/rongcloud/websdk-demo/tree/master/calllib/agora](https://github.com/rongcloud/websdk-demo/tree/master/calllib/agora)
-
 Emoji: [https://rongcloud.github.io/websdk-demo/emoji.html](https://rongcloud.github.io/websdk-demo/emoji.html)
 
 视频播放(Video + Flash): [https://rongcloud.github.io/websdk-demo/video/player.html](https://rongcloud.github.io/websdk-demo/video/player.html)
