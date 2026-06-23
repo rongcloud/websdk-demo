@@ -1,3 +1,8 @@
+> [!WARNING]
+> ⚠️ **暂停维护说明**
+>
+> 该工程已不再维护。
+
 # 引导说明
 
 写给前端新手的工程管理建议: [https://support.rongcloud.cn/kb/NzUx](https://support.rongcloud.cn/kb/NzUx)
@@ -86,6 +91,3 @@ SealTalk Server: [https://github.com/sealtalk/sealtalk-server](https://github.co
 SealTalk Web: [https://github.com/sealtalk/sealtalk-web](https://github.com/sealtalk/sealtalk-web)
 
 SealTalk Desktop: [https://github.com/sealtalk/sealtalk-desktop](https://github.com/sealtalk/sealtalk-desktop)
-
-
-
